@@ -1,0 +1,30 @@
+## Interface: 110007
+## Title: WeeklyRewards
+## Notes: Track your weekly rewards progress across your characters
+## Version: @project-version@
+## IconTexture: Interface\AddOns\WeeklyRewards\Media\Icon.blp
+## SavedVariables: WeeklyRewardsDB, WeeklyRewardsArchive
+## X-Website: https://github.com/cybertk/WeeklyRewards
+## X-Curse-Project-ID: 1171512
+
+
+Embeds.xml
+
+Util.lua
+
+DB\Init.lua
+DB\TWW.lua
+DB\Timewalking.lua
+
+Core\Reward.lua
+Core\ActiveRewards.lua
+Core\Progress.lua
+Core\Character.lua
+Core\CharacterStore.lua
+
+GUI\Main.lua
+
+WeeklyRewards.lua
+
+Modules\SelectableLootScanner.lua
+Modules\AtomicContainerLootScanner.lua

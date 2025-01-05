@@ -1,0 +1,39 @@
+<Ui>
+  <!-- LibStub: https://www.wowace.com/projects/libstub -->
+  <Script file='Libs\LibStub\LibStub.lua' />
+
+  <!-- LibDataBroker: https://www.wowace.com/projects/libdatabroker-1-1 -->
+  <Script file='Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua' />
+
+  <!-- LibDBIcon:
+          URL: https://www.wowace.com/projects/libdbicon-1-0
+          Dependencies：LibDataBroker
+  -->
+  <Include file='Libs\LibDBIcon-1.0\lib.xml' />
+
+  <!-- CallbackHandler:
+          URL: https://www.wowace.com/projects/callbackhandler
+          Required By: AceEvent
+  -->
+  <Include file='Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml' />
+
+  <!-- Ace3 Libs: https://www.wowace.com/projects/ace3 -->
+  <Include file='Libs\Ace3\AceAddon-3.0\AceAddon-3.0.xml' />
+  <Include file='Libs\Ace3\AceBucket-3.0\AceBucket-3.0.xml' />
+  <Include file='Libs\Ace3\AceConfig-3.0\AceConfig-3.0.xml' />
+  <Include file='Libs\Ace3\AceConsole-3.0\AceConsole-3.0.xml' />
+  <Include file='Libs\Ace3\AceDB-3.0\AceDB-3.0.xml' />
+  <Include file='Libs\Ace3\AceDBOptions-3.0\AceDBOptions-3.0.xml' />
+  <Include file='Libs\Ace3\AceEvent-3.0\AceEvent-3.0.xml' />
+  <Include file='Libs\Ace3\AceGUI-3.0\AceGUI-3.0.xml' />
+
+
+  <!-- Archivist: https://github.com/emptyrivers/Archivist -->
+  <Include file="Embeds\Archivist\Archivist.xml" />
+
+  <!-- WeeklyKnowledge GUI: https://github.com/DennisRas/WeeklyKnowledge-->
+  <Script file='Embeds\WeeklyKnowledge\Types.lua' />
+  <Script file='Embeds\WeeklyKnowledge\Constants.lua' />
+  <Script file='Embeds\WeeklyKnowledge\Utils.lua' />
+  <Script file='Embeds\WeeklyKnowledge\Interface.lua' />
+</Ui>

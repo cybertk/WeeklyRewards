@@ -1,0 +1,6 @@
+# pkgmeta externals
+Libs/
+Embeds/
+
+# pkgmeta local
+.release/
