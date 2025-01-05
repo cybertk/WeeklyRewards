@@ -57,9 +57,13 @@ tools-used:
 ignore:
     - Makefile
     - Tests
+    - Screenshots
     - README.md
-    - "**/*.png"
-    - Embeds/WeeklyKnowledge/Libs/
-    - "*.png"
-    - "*.jpg"
-    - "*.psd"
+    # Ignore unused WeeklyKnowledge files to optimize pkg size
+    - Embeds/WeeklyKnowledge/Libs
+    - Embeds/WeeklyKnowledge/Media/*.png
+    - Embeds/WeeklyKnowledge/Media/*.jpg
+    - Embeds/WeeklyKnowledge/Media/*.psd
+    - Embeds/WeeklyKnowledge/Checklist.lua
+    - Embeds/WeeklyKnowledge/Data.lua
+    - Embeds/WeeklyKnowledge/Main.lua
