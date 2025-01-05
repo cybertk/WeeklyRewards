@@ -2,6 +2,8 @@
 
 WeeklyRewards offers a simple grid to track your weekly rewards progress across all characters. Quickly see what’s done and what needs attention. Stay organized and keep up with your progress effortlessly.
 
+![Screenshot](./Screenshots/screenshot-1.png)
+
 ## Slash Commands
 - `/wr` - Open or close the main window.
 - `/wr minimap` - Show or hide the minimap icon.
