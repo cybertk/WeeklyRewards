@@ -500,12 +500,16 @@ function Main:AddProgressToGameTooltip(progress)
 		)
 	elseif progress.startedAt then
 		GameTooltip:AddDoubleLine("Started At:", WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.startedAt)))
+		
+		if progress.rewards then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine("Rewards Received")
+		end
 	else
 		GameTooltip:AddLine("<Not Started>")
 	end
 
 	progress:ForEachRewardItem(function(item)
-		completed = true
 		GameTooltip:AddLine(Util.FormatItem(item))
 	end)
 
