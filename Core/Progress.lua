@@ -59,15 +59,21 @@ function RewardProgress:Init(reward)
 	for _, objective in ipairs(reward.objectives) do
 		if objective.questPool then
 			for i, quest in ipairs(objective.questPool) do
+				local unlockProfession = objective.unlockProfession and objective.unlockProfession[i]
+
 				if
 					WAPI_IsOnQuest(quest)
+					or unlockProfession and Util:IsProfessionLearned(unlockProfession)
 					or (objective.unlockQuest and WAPI_IsQuestFlaggedCompleted(
 						type(objective.unlockQuest) == "table" and objective.unlockQuest[i] or objective.unlockQuest
 					))
 					or (objective.factionMask and factionNameToEnum[UnitFactionGroup("player")] == objective.factionMask[i])
 					or factionNameToEnum[UnitFactionGroup("player")] == WAPI_GetQuestFactionGroup(quest)
 				then
-					table.insert(self.pendingObjectives, { quest = quest, items = { objective.items and objective.items[i] } or nil })
+					table.insert(
+						self.pendingObjectives,
+						{ quest = quest, items = { objective.items and objective.items[i] } or nil, profession = unlockProfession }
+					)
 				end
 			end
 		else
@@ -356,14 +362,17 @@ function RewardProgress:ForEachRewardItem(callback, showDrops)
 end
 
 function RewardProgress:GetCachedObjectiveName(objective)
-	local name = WAPI_GetQuestName(objective.quest)
-
-	if name ~= nil and #name > 0 then
-		return name
-	end
-
 	if objective.items and #objective.items > 0 then
 		return self:GetCachedItemName(objective.items[1])
+	end
+
+	local name = WAPI_GetQuestName(objective.quest)
+	if name ~= nil and #name > 0 then
+		if objective.profession then
+			name = CreateSimpleTextureMarkup(Util:GetProfessionIcon(objective.profession), 13, 13) .. " " .. name
+		end
+
+		return format("%s %s", CreateAtlasMarkup("quest-recurring-available", 13, 13), name)
 	end
 
 	return "Loading"

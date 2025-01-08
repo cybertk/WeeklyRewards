@@ -148,19 +148,32 @@ function ActiveRewards:_Remove(i)
 end
 
 function ActiveRewards:_FindCandidatesToScan(candidates)
-	local candidatesToScan = {}
 	local playerLevel = WAPI_UnitLevel("player")
+	local activeEvents = Util:GetCalendarActiveEvents()
 
-	for _, candidate in ipairs(candidates) do
-		if
-			playerLevel >= candidate.minimumLevel
-			and (Cache.rewardsCount[candidate.id] == nil or (candidate.trackRecords and Cache.rewardsCount[candidate.id] < candidate.pick))
-		then
-			table.insert(candidatesToScan, candidate)
+	return Util:Filter(candidates, function(candidate)
+		if playerLevel < candidate.minimumLevel then
+			Util:Debug("playerLevel is not qualified: ", candidate.id)
+			return false
 		end
-	end
 
-	return candidatesToScan
+		if candidate.unlockEvent and activeEvents[candidate.unlockEvent] == nil then
+			Util:Debug("Event is not active: ", candidate.id)
+			return false
+		end
+
+		if candidate.timeLeft == "end-of-event" then
+			-- Append actual event end time
+			candidate.timeLeft = function()
+				local eventEndTime = Util:GetTimestampFromCalendarTime(activeEvents[candidate.unlockEvent].endTime)
+				local now = Util:GetTimestampFromCalendarTime(C_DateAndTime.GetCurrentCalendarTime())
+
+				return eventEndTime - now
+			end
+		end
+
+		return Cache.rewardsCount[candidate.id] == nil or (candidate.trackRecords and Cache.rewardsCount[candidate.id] < candidate.pick)
+	end)
 end
 
 function ActiveRewards:Reset(teardown_func, force)

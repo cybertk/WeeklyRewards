@@ -218,7 +218,7 @@ function Reward:ForEachItem(callback)
 	if self.items then
 		local items = {}
 		for _, rewardItem in ipairs(self.items) do
-			local item
+			local item = rewardItem
 
 			if rewardItem.currency then
 				local currency = C_CurrencyInfo.GetCurrencyInfo(rewardItem.currency)
