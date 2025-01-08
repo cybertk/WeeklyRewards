@@ -22,23 +22,41 @@ function Util:Debug(...)
 	end
 end
 
-function Util:Filter(t, pattern, inplace)
-	local tableToReturn = inplace == true and t or {}
+function Util:Filter(t, pattern, inplace, asList)
+	asList = asList or true
 
 	if inplace then
-		for k, v in pairs(t) do
-			if pattern(v) == false then
-				t[k] = nil
+		for i = #t, 1, -1 do
+			if pattern(t[i]) == false then
+				table.remove(t, i)
+			end
+		end
+
+		if not asList then
+			for k, v in pairs(t) do
+				if pattern(v) == false then
+					t[k] = nil
+				end
 			end
 		end
 		return t
 	end
 
 	local newTable = {}
+	local indicesProcessed = {}
 
-	for k, v in pairs(t) do
+	for i, v in ipairs(t) do
 		if pattern(v) == true then
-			newTable[k] = v
+			table.insert(newTable, v)
+			indicesProcessed[i] = true
+		end
+	end
+
+	if not asList then
+		for k, v in pairs(t) do
+			if indicesProcessed[k] == nil and pattern(v) == true then
+				newTable[k] = v
+			end
 		end
 	end
 
