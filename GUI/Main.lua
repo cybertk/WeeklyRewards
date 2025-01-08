@@ -513,7 +513,7 @@ function Main:AddProgressToGameTooltip(progress)
 		GameTooltip:AddLine(Util.FormatItem(item))
 	end)
 
-	if progress.claimedAt and progress.drops and #progress.drops > 0 then
+	if progress.drops and #progress.drops > 0 then
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine("Drops")
 
