@@ -530,19 +530,11 @@ function Main:AddRewardToGameTooltip(reward)
 	else
 		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode(reward.description))
 	end
+	
 	GameTooltip:AddLine(" ")
-
 	GameTooltip:AddLine("Rewards")
-	local items = reward:ForEachItem(function(item)
-		GameTooltip:AddLine(
-			WHITE_FONT_COLOR:WrapTextInColorCode(
-				CreateSimpleTextureMarkup(item.texture, 13, 13)
-					.. ITEM_QUALITY_COLORS[item.quality].color:WrapTextInColorCode(format(" [%s]", item.name))
-					.. format(" x%d", item.amount)
-			)
-		)
-	end)
-
+	
+	local items = reward:ForEachItem(function(item) GameTooltip:AddLine(Util.FormatItem(item)) end)
 	if #items == 0 then
 		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode("Loading"))
 	end
