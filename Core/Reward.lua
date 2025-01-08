@@ -242,7 +242,7 @@ function Reward:ForEachItem(callback)
 	for _, objective in ipairs(self.objectives) do
 		for _, item in ipairs(GetCachedQuestRewardItems(objective.quest) or {}) do
 			if uniqueItems[item.id] then
-				uniqueItems[item.id].amount = item.amount
+				uniqueItems[item.id].amount = item.amount + uniqueItems[item.id].amount
 			else
 				-- copy
 				uniqueItems[item.id] = { id = item.id, name = item.name, texture = item.texture, amount = item.amount, quality = item.quality }
