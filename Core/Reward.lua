@@ -1,10 +1,17 @@
 local _, namespace = ...
 
+---@enum STATE
 local STATE = {
 	CONFIRMED = 0,
 	ANALYZING = 1,
 }
 
+---@class Reward
+---@field name string
+---@field group string
+---@field state STATE
+---@field description string
+---@field minimumLevel number
 local Reward = {
 	name = "",
 	id = "", -- id is unique, while name is not
