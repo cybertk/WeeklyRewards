@@ -124,6 +124,7 @@ function WeeklyRewards:OnEnable()
 			"CALENDAR_UPDATE_EVENT_LIST",
 			"PLAYER_LEVEL_CHANGED",
 			"QUEST_ACCEPTED",
+			"SKILL_LINES_CHANGED",
 		},
 		3,
 		function()
