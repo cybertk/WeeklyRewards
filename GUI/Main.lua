@@ -497,25 +497,42 @@ function Main:AddRewardColumns()
 			toggleHidden = true,
 			align = "CENTER",
 			cell = function(character)
+				local text, showTooltip
 				local progress = character.progress[reward.id]
-				if progress == nil then
-					return ""
-				end
 
-				local text = format("%d / %d", progress.position, progress.total)
-				if progress.hasClaimed and progress:hasClaimed() then
-					text = CreateAtlasMarkup("common-icon-checkmark", 15, 15)
-				elseif progress.hasStarted and progress:hasStarted() then
-					text = YELLOW_FONT_COLOR:WrapTextInColorCode(text)
+				if character.level < reward.minimumLevel then
+					text = ""
+					showTooltip = function(cellFrame)
+						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+						GameTooltip:AddLine("<Minimum Level Required: " .. reward.minimumLevel .. ">")
+						GameTooltip:Show()
+					end
+				elseif progress == nil then
+					-- text = "|cff808080-|r" -- Gray color
+					text = GRAY_FONT_COLOR:WrapTextInColorCode("-")
+					showTooltip = function(cellFrame)
+						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+						GameTooltip:AddLine("<Login to this character to update the data>")
+						-- GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode("Login to this charater fetch the data"))
+						GameTooltip:Show()
+					end
+				else
+					text = format("%d / %d", progress.position, progress.total)
+					if progress.hasClaimed and progress:hasClaimed() then
+						text = CreateAtlasMarkup("common-icon-checkmark", 15, 15)
+					elseif progress.hasStarted and progress:hasStarted() then
+						text = YELLOW_FONT_COLOR:WrapTextInColorCode(text)
+					end
+					showTooltip = function(cellFrame)
+						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+						self:AddProgressToGameTooltip(progress)
+						GameTooltip:Show()
+					end
 				end
 
 				return {
 					text = text,
-					onEnter = function(cellFrame)
-						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						self:AddProgressToGameTooltip(progress)
-						GameTooltip:Show()
-					end,
+					onEnter = showTooltip,
 					onLeave = function()
 						GameTooltip:Hide()
 					end,
