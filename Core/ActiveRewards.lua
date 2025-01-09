@@ -46,7 +46,7 @@ end
 local function RemoveRewardFromCache(reward)
 	do -- Update rewardsCount
 		local candidateID = string.gsub(reward.id, "([-%w+]):%d+", "%1")
-		Cache.rewardsCount[candidateID] = Cache.rewardsCount[candidateID] and Cache.rewardsCount[candidateID] - 1
+		Cache.rewardsCount[candidateID] = (Cache.rewardsCount[candidateID] or 0) > 1 and Cache.rewardsCount[candidateID] - 1 or nil
 	end
 
 	Cache.nameToReward[reward.name] = nil
