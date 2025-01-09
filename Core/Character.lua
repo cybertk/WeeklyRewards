@@ -175,15 +175,21 @@ function Character:UpdateRewardsGUID(quest)
 		for slotIndex = 1, C_Container.GetContainerNumSlots(containerIndex) do
 			local info = C_Container.GetContainerItemInfo(containerIndex, slotIndex)
 
-			if info and remainingItems[info.itemID] and (includeOldItems == true or C_NewItems.IsNewItem(containerIndex, slotIndex)) then
-				local item, progress = remainingItems[info.itemID][1], remainingItems[info.itemID][2]
+			if info and remainingItems[info.itemID] then
+				local item, progress = unpack(remainingItems[info.itemID])
 
-				item.guid = Item:CreateFromBagAndSlot(containerIndex, slotIndex):GetItemGUID()
+				if info.stackCount > 1 then
+					item.guid = false
+					found = true
+				elseif includeOldItems == true or C_NewItems.IsNewItem(containerIndex, slotIndex) then
+					item.guid = Item:CreateFromBagAndSlot(containerIndex, slotIndex):GetItemGUID()
+					Cache.lootToProgress[item.guid] = progress
+				end
 
-				Cache.lootToProgress[item.guid] = progress
-
-				found = true
-				Util:Debug("guid updated for ", info.hyperlink, containerIndex, slotIndex, item.guid)
+				if item.guid or item.guid == false then
+					found = true
+					Util:Debug("guid updated for ", info.hyperlink, containerIndex, slotIndex, item.guid)
+				end
 			end
 		end
 	end
