@@ -2,7 +2,7 @@ local _, Addon = ...
 
 local SelectableLootScanner = Addon:NewModule("SelectableLootScanner", {
 	session = nil, -- Currennt active loot session
-}, "AceHook-3.0", "AceEvent-3.0")
+}, "AceEvent-3.0")
 
 function SelectableLootScanner:OnEnable()
 	self:RegisterEvent("LOOT_READY")
