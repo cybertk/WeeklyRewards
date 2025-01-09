@@ -162,8 +162,7 @@ function Main:AddSettingsButton()
 		end)
 	end)
 
-	self.window.titlebar.SettingsButton.Icon =
-		self.window.titlebar:CreateTexture(self.window.titlebar.SettingsButton:GetName() .. "Icon", "ARTWORK")
+	self.window.titlebar.SettingsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.SettingsButton:GetName() .. "Icon", "ARTWORK")
 	self.window.titlebar.SettingsButton.Icon:SetPoint("CENTER", self.window.titlebar.SettingsButton, "CENTER")
 	self.window.titlebar.SettingsButton.Icon:SetSize(12, 12)
 	self.window.titlebar.SettingsButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Settings.blp")
@@ -188,8 +187,7 @@ function Main:AddCharactersButton()
 		Utils:SetBackgroundColor(self.window.titlebar.CharactersButton, 1, 1, 1, 0)
 		GameTooltip:Hide()
 	end)
-	self.window.titlebar.CharactersButton.Icon =
-		self.window.titlebar:CreateTexture(self.window.titlebar.CharactersButton:GetName() .. "Icon", "ARTWORK")
+	self.window.titlebar.CharactersButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.CharactersButton:GetName() .. "Icon", "ARTWORK")
 	self.window.titlebar.CharactersButton.Icon:SetPoint("CENTER", self.window.titlebar.CharactersButton, "CENTER")
 	self.window.titlebar.CharactersButton.Icon:SetSize(14, 14)
 	self.window.titlebar.CharactersButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Characters.blp")
@@ -276,8 +274,7 @@ function Main:AddRewardsFilterButton()
 		end
 	end)
 
-	self.window.titlebar.ColumnsButton.Icon =
-		self.window.titlebar:CreateTexture(self.window.titlebar.ColumnsButton:GetName() .. "Icon", "ARTWORK")
+	self.window.titlebar.ColumnsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.ColumnsButton:GetName() .. "Icon", "ARTWORK")
 	self.window.titlebar.ColumnsButton.Icon:SetPoint("CENTER", self.window.titlebar.ColumnsButton, "CENTER")
 	self.window.titlebar.ColumnsButton.Icon:SetSize(12, 12)
 	self.window.titlebar.ColumnsButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Columns.blp")
@@ -492,15 +489,11 @@ function Main:AddProgressToGameTooltip(progress)
 	GameTooltip:AddLine(" ")
 
 	if progress.claimedAt then
-		local duration = progress.startedAt and format(" (%s used)", Util.FormatTimeDuration(progress.claimedAt - progress.startedAt, true))
-			or ""
-		GameTooltip:AddDoubleLine(
-			"Rewards Received At:",
-			WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.claimedAt) .. duration)
-		)
+		local duration = progress.startedAt and format(" (%s used)", Util.FormatTimeDuration(progress.claimedAt - progress.startedAt, true)) or ""
+		GameTooltip:AddDoubleLine("Rewards Received At:", WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.claimedAt) .. duration))
 	elseif progress.startedAt then
 		GameTooltip:AddDoubleLine("Started At:", WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.startedAt)))
-		
+
 		if progress.rewards then
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine("Rewards Received")
@@ -530,11 +523,13 @@ function Main:AddRewardToGameTooltip(reward)
 	else
 		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode(reward.description))
 	end
-	
+
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddLine("Rewards")
-	
-	local items = reward:ForEachItem(function(item) GameTooltip:AddLine(Util.FormatItem(item)) end)
+
+	local items = reward:ForEachItem(function(item)
+		GameTooltip:AddLine(Util.FormatItem(item))
+	end)
 	if #items == 0 then
 		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode("Loading"))
 	end
@@ -542,9 +537,7 @@ function Main:AddRewardToGameTooltip(reward)
 	GameTooltip:AddLine(" ")
 
 	if reward.resetTime then
-		GameTooltip:AddLine(
-			"Time Left: " .. WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime()))
-		)
+		GameTooltip:AddLine("Time Left: " .. WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime())))
 	end
 end
 
