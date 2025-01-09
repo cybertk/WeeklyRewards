@@ -219,41 +219,6 @@ function RewardProgress:Update(completedQuest)
 	return false
 end
 
-function RewardProgress:_UpdateItemsGUID()
-	local itemsByID = {}
-	for _, rewardItem in ipairs(self.rewards) do
-		if rewardItem.item and rewardItem.guid == nil then
-			itemsByID[rewardItem.item] = rewardItem
-		end
-	end
-
-	for containerIndex = BACKPACK_CONTAINER, NUM_TOTAL_EQUIPPED_BAG_SLOTS do
-		for slotIndex = 1, C_Container.GetContainerNumSlots(containerIndex) do
-			local info = C_Container.GetContainerItemInfo(containerIndex, slotIndex)
-
-			if info then
-				Util:Debug(
-					format(
-						"<%d,%d>: %s guid=xx item=%d lootable=%s",
-						containerIndex,
-						slotIndex,
-						info.hyperlink,
-						info.itemID,
-						info.hasLoot == true and "yes" or "no"
-					)
-				)
-			end
-
-			if info and itemsByID[info.itemID] and C_NewItems.IsNewItem(containerIndex, slotIndex) then
-				local item = Item:CreateFromBagAndSlot(containerIndex, slotIndex)
-
-				itemsByID[info.itemID].guid = item:GetItemGUID()
-				Util:Debug("guid updated for ", info.hyperlink, containerIndex, slotIndex)
-			end
-		end
-	end
-end
-
 -- Handle uniqueness
 function RewardProgress:AddReward(currency, item, quantity, asDrops)
 	Util:Debug("RewardProgress:AddReward", currency, item, quantity, asDrops)

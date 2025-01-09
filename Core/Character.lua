@@ -76,20 +76,6 @@ function Character:_AddProgress(progress, name)
 	end
 end
 
--- function Character:_UpdateLootCache()
--- 	if UnitGUID("player") == self.GUID then
--- 		return
--- 	end
-
--- 	for _, progress in pairs(self.progress or {}) do
--- 		for _, item in ipairs(progress.rewards or {}) do
--- 			if item.item and item.guid then
--- 				Cache.lootToProgress[item.guid] = progress
--- 			end
--- 		end
--- 	end
--- end
-
 function Character:UpdateProgress(quest)
 	local changeSet = {}
 	local count = 0
@@ -163,7 +149,7 @@ function Character:UpdateRewardsGUID(quest)
 		end
 	end
 
-	Util:Debug("remaining count:", count)
+	Util:Debug("UpdateRewardsGUID:", quest, count)
 
 	if count == 0 then
 		return true
@@ -180,7 +166,6 @@ function Character:UpdateRewardsGUID(quest)
 
 				if info.stackCount > 1 then
 					item.guid = false
-					found = true
 				elseif includeOldItems == true or C_NewItems.IsNewItem(containerIndex, slotIndex) then
 					item.guid = Item:CreateFromBagAndSlot(containerIndex, slotIndex):GetItemGUID()
 					Cache.lootToProgress[item.guid] = progress
@@ -188,7 +173,7 @@ function Character:UpdateRewardsGUID(quest)
 
 				if item.guid or item.guid == false then
 					found = true
-					Util:Debug("guid updated for ", info.hyperlink, containerIndex, slotIndex, item.guid)
+					Util:Debug("guid updated for ", info.hyperlink, info.stackCount, containerIndex, slotIndex, item.guid)
 				end
 			end
 		end
