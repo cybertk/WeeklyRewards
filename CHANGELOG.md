@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.1.0 - 2025-01-10
+
+## New Features
+
+Supports tracking new rewards, including:
+
+- Darkmoon Faire Event
+    - Darkmoon Faire Daily Quests
+    - Darkmoon Faire Profession Quests
+    - Quest: Test Your Strength
+- Siren Isle
+    - Weekly Invasion and Storm Phase Quests
+    - Special Assignment: Storm's a Brewin
+
 ## v1.0.1 - 2025-01-09
 
 ### Fix
