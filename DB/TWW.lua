@@ -3,6 +3,7 @@ local _, namespace = ...
 local RewardsGroup = {
 	PINNACLE_CACHE = "Pinnacle Cache",
 	WEEKLY_CACHE = "Weekly Cache",
+	SIREN_ISLE = "Siren Isle",
 }
 
 namespace.DB.rewardCandidiates["tww"] = {
@@ -213,6 +214,57 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{ quest = 83459 }, -- The Dawnbreaker
 			{ quest = 83432 }, -- The Rookery
 			{ quest = 83457 }, -- The Stonevault
+		},
+	},
+	{
+		id = "tww-storm",
+		key = "SA:Storm",
+		group = RewardsGroup.SIREN_ISLE,
+		minimumLevel = 80,
+		entries = {
+			{
+				quest = 85113, -- Special Assignment: Storm's a Brewin
+				unlockQuest = 84850, -- Serpent's Wrath
+			},
+			{
+				quest = 85113, -- Special Assignment: Storm's a Brewin
+				unlockQuest = 84851, -- Tides of Greed
+			},
+			{
+				quest = 85113, -- Special Assignment: Storm's a Brewin
+				unlockQuest = 84852, -- Legacy of the Vrykul
+			},
+		},
+	},
+	{
+		id = "tww-invasion",
+		key = "Invasion",
+		description = "Siren Isle Invasion and Storm Weekly Quests",
+		group = RewardsGroup.SIREN_ISLE,
+		minimumLevel = 80,
+		pick = 7,
+		entries = {
+			-- Vrykul Invasion - Unlock by Legacy of the Vrykul
+			{ quest = 84248, unlockQuest = 84852 }, -- A Ritual of Runes
+			{ quest = 83932, unlockQuest = 84852 }, -- Historical Documents
+			{ quest = 84432, unlockQuest = 84852 }, -- Longship Landing
+			{ quest = 84680, unlockQuest = 84852 }, -- Rock 'n Stone Revival
+			{ quest = 84222, unlockQuest = 84852 }, -- Secure the Perimeter
+			-- Naga Invasion - Unlock by Serpent's Wrath
+			{ quest = 84252, unlockQuest = 84850 }, -- Peak Precision
+			{ quest = 84430, unlockQuest = 84850 }, -- Crystal Crusade
+			{ quest = 84627, unlockQuest = 84850 }, -- Three Heads of the Deep
+			{ quest = 85051, unlockQuest = 84850 }, -- Beach Comber
+			{ quest = 85589, unlockQuest = 84850 }, -- Ruffled Pages
+			-- Pirate Invasion - Unlock by Tides of Greed
+			{ quest = 83753, unlockQuest = 84851 }, -- Cannon Karma
+			{ quest = 83827, unlockQuest = 84851 }, -- Silence the Song
+			{ quest = 84001, unlockQuest = 84851 }, -- Cart Blanche
+			{ quest = 84299, unlockQuest = 84851 }, -- Pirate Plunder
+			{ quest = 84619, unlockQuest = 84851 }, -- Ooker Dooker Literature Club
+			-- Storm Active Phase: In Seafury Tempest
+			{ quest = 84225 }, -- Eggstinction
+			{ quest = 84241 }, -- Shoreline Stand
 		},
 	},
 }
