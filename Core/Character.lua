@@ -214,16 +214,26 @@ function Character:Scan(activeRewards)
 	-- Reset level and etc
 	self.level = UnitLevel("player")
 
-	for _, reward in ipairs(activeRewards) do
-		local name = reward.id
+	local rewardsToScan = Util:Filter(activeRewards, function(reward)
+		if self.level < reward.minimumLevel then
+			return false
+		end
 
-		if self.level >= reward.minimumLevel and self.progress[name] == nil then
-			local progress = RewardProgress:New()
+		if self.progress[reward.id] and next(self.progress[reward.id]) ~= nil then
+			return false
+		end
 
-			if progress:Init(reward) then
-				self:_AddProgress(progress, name)
-				Util:Debug("progress initalized: " .. name)
-			end
+		return true
+	end)
+
+	Util:Debug("Rewards to scan: " .. #rewardsToScan)
+
+	for _, reward in ipairs(rewardsToScan) do
+		local progress = RewardProgress:New()
+
+		if progress:Init(reward) then
+			self:_AddProgress(progress, reward.id)
+			Util:Debug("progress initalized: " .. reward.id)
 		end
 	end
 end
