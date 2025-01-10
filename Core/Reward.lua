@@ -72,7 +72,7 @@ function Reward:DetermineObjectives(entries, pick)
 
 				if
 					WAPI_IsOnQuest(quest)
-					or (entry.unlockQuest and WAPI_GetQuestObjectives(quest) == nil and WAPI_IsQuestFlaggedCompleted(quest)) -- i.e. Spider Pact
+					or (entry.unlockQuest and WAPI_IsQuestFlaggedCompleted(quest)) -- i.e. Spider Pact
 					or WAPI_GetQuestTimeLeftSeconds(quest)
 				then
 					confirmed = true
@@ -120,8 +120,17 @@ function Reward:DetermineResetTime(timeLeft)
 		return
 	end
 
-	-- Cannot always get valid reset time when just logged in
-	timeLeft = timeLeft or WAPI_GetQuestTimeLeftSeconds(self.objectives[1].unlockQuest or self.objectives[1].quest or 0)
+	if timeLeft == nil then
+		-- Cannot always get valid reset time when just logged in
+		for _, objective in ipairs(self.objectives) do
+			for _, quest in ipairs({ objective.quest, objective.unlockQuest }) do
+				timeLeft = WAPI_GetQuestTimeLeftSeconds(objective.quest)
+				if timeLeft then
+					break
+				end
+			end
+		end
+	end
 
 	if timeLeft == nil then
 		return

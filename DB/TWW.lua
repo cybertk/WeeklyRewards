@@ -242,6 +242,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		description = "Siren Isle Invasion and Storm Weekly Quests",
 		group = RewardsGroup.SIREN_ISLE,
 		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		pick = 7,
 		entries = {
 			-- Vrykul Invasion - Unlock by Legacy of the Vrykul
