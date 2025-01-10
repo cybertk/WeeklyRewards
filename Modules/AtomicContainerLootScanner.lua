@@ -2,7 +2,7 @@ local addonName, Addon = ...
 
 local AtomicContainerLootScanner = Addon:NewModule("AtomicContainerLootScanner", {
 	session = nil, -- Currennt active loot session
-}, "AceHook-3.0", "AceEvent-3.0")
+}, "AceEvent-3.0")
 
 function AtomicContainerLootScanner:OnEnable()
 	self:RegisterEvent("ITEM_LOCKED")
