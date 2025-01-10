@@ -129,6 +129,9 @@ function RewardProgress:_UpdateRecords()
 		end
 
 		local quest = reward.unlockQuest or reward.quest
+		if reward.unlockQuest and WAPI_IsQuestFlaggedCompleted(reward.unlockQuest) then
+			quest = reward.quest
+		end
 		for _, objective in ipairs(WAPI_GetQuestObjectives(quest) or {}) do
 			if
 				objective ~= nil
