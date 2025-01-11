@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.1 - 2025-01-11
+
+### Fix
+
+- Crash: Cannot find/load ACE lib when ACE3 is not installed by any other addons
+- Siren Isle Special Assignment progress is stuck at the unlock invasion quest
+
 ## v1.1.0 - 2025-01-10
 
 ## New Features
