@@ -2,6 +2,12 @@
   <!-- LibStub: https://www.wowace.com/projects/libstub -->
   <Script file='Libs\LibStub\LibStub.lua' />
 
+  <!-- CallbackHandler:
+          URL: https://www.wowace.com/projects/callbackhandler
+          Required By: AceEvent
+  -->
+  <Include file='Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml' />
+
   <!-- LibDataBroker: https://www.wowace.com/projects/libdatabroker-1-1 -->
   <Script file='Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua' />
 
@@ -10,12 +16,6 @@
           Dependencies：LibDataBroker
   -->
   <Include file='Libs\LibDBIcon-1.0\lib.xml' />
-
-  <!-- CallbackHandler:
-          URL: https://www.wowace.com/projects/callbackhandler
-          Required By: AceEvent
-  -->
-  <Include file='Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml' />
 
   <!-- Ace3 Libs: https://www.wowace.com/projects/ace3 -->
   <Include file='Libs\Ace3\AceAddon-3.0\AceAddon-3.0.xml' />
