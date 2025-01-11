@@ -165,7 +165,12 @@ end
 
 function Util.FormatItem(item)
 	local s = CreateSimpleTextureMarkup(item.texture or 0, 13, 13) -- There is hidden item, i.e. spark drops
-		.. ITEM_QUALITY_COLORS[item.quality].color:WrapTextInColorCode(format(" [%s]", item.name))
+
+	if item.quality then
+		s = s .. ITEM_QUALITY_COLORS[item.quality].color:WrapTextInColorCode(format(" [%s]", item.name))
+	else
+		s = s .. " " .. item.name
+	end
 
 	local quantity = item.quantity or item.amount or 0
 	if quantity > 1 then

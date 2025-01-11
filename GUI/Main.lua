@@ -476,7 +476,8 @@ function Main:AddProgressToGameTooltip(progress)
 			)
 		end)
 	else
-		GameTooltip:AddLine(YELLOW_FONT_COLOR:WrapTextInColorCode(QuestUtils_GetQuestName(progress:Quest())))
+		local questName = QuestUtils_GetQuestName(progress:Quest()) or ""
+		GameTooltip:AddLine(YELLOW_FONT_COLOR:WrapTextInColorCode(#questName > 0 and questName or progress.name))
 		-- Show objectives of single quest
 		progress:ForEachRecord(function(record, completed)
 			GameTooltip:AddDoubleLine(

@@ -14,7 +14,7 @@ local Character = {
 namespace.Character = Character
 
 local Util = namespace.Util
-local RewardProgress = namespace.RewardProgress
+local ProgressFactory = namespace.ProgressFactory
 
 local WAPI = {
 	GetServerTime = GetServerTime,
@@ -35,7 +35,7 @@ function Character:New(o)
 	end
 
 	for k, v in pairs(o.progress or {}) do
-		Character._AddProgress(o, RewardProgress:New(v), k)
+		Character._AddProgress(o, ProgressFactory:Create(v.type, v), k)
 	end
 
 	-- Character:_UpdateLootCache(o)
@@ -229,7 +229,7 @@ function Character:Scan(activeRewards)
 	Util:Debug("Rewards to scan: " .. #rewardsToScan)
 
 	for _, reward in ipairs(rewardsToScan) do
-		local progress = RewardProgress:New()
+		local progress = self.progress[reward.id] or ProgressFactory:Create(reward.objectives[1].progressType)
 
 		if progress:Init(reward) then
 			self:_AddProgress(progress, reward.id)
