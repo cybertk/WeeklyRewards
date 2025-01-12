@@ -22,18 +22,18 @@ function GreatVaultProgress:_UpdateRecords()
 	-- Update records
 	for type, template in pairs(rewardsDescriptionTemplate) do
 		for _, activity in ipairs(C_WeeklyRewards.GetActivities(type)) do
-			local record = {
-				text = format("%d / %d ", activity.progress, activity.threshold)
-					.. format(#template > 0 and template or activity.raidString, activity.threshold),
-				fulfilled = activity.progress,
-				required = activity.threshold,
-			}
+			local progress = activity.progress
 
-			if activity.progress == activity.threshold then
+			if progress >= activity.threshold then
+				progress = activity.threshold
 				position = position + 1
 			end
 
-			table.insert(self.records, record)
+			table.insert(self.records, {
+				text = format("%d / %d ", progress, activity.threshold) .. format(#template > 0 and template or activity.raidString, activity.threshold),
+				fulfilled = progress,
+				required = activity.threshold,
+			})
 		end
 	end
 
