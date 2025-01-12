@@ -43,6 +43,9 @@ externals:
     Libs/Ace3/AceGUI-3.0:
         url: https://repos.wowace.com/wow/ace3/trunk/AceGUI-3.0
         tag: latest
+    Libs/Ace3/AceTimer-3.0:
+        url: https://repos.wowace.com/wow/ace3/trunk/AceTimer-3.0
+        tag: latest
 
     Embeds/Archivist:
         url: https://github.com/emptyrivers/Archivist
