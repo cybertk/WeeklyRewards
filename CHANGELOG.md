@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.0 - 2025-01-12
+
+Supports tracking the Great Vault rewards.
+
 ## v1.1.1 - 2025-01-11
 
 ### Fix
