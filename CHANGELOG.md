@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.2.1 - 2025-01-13
+
+### Fix
+
+- Progress isn't marked as 100% for claimed rewards. i.e. Siren Isle Special Assignment quest
+- Drops aren't  linked to rewards in multi-reward quests sometimes.
+- New SA quest aren't recognized
+
 ## v1.2.0 - 2025-01-12
 
 Supports tracking the Great Vault rewards.
