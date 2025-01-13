@@ -22,6 +22,29 @@ function Util:Debug(...)
 	end
 end
 
+function Util:DebugQuest(questID)
+	if self.debug ~= true or questID == nil or questID == 0 then
+		return
+	end
+
+	local s = format(
+		"(%d)[%s]: IsOn=%s Completed=%s TimeLeft=%s Objectives:",
+		questID,
+		QuestUtils_GetQuestName(questID),
+		C_QuestLog.IsOnQuest(questID) == true and "YES" or "NO",
+		C_QuestLog.IsQuestFlaggedCompleted(questID) == true and "YES" or "NO",
+		C_TaskQuest.GetQuestTimeLeftSeconds(questID) or "unknown"
+	)
+
+	for i, objective in ipairs(C_QuestLog.GetQuestObjectives(questID) or {}) do
+		if objective then
+			s = s .. format("[%d] = ", i) .. objective.text
+		end
+	end
+
+	print(RED_FONT_COLOR:WrapTextInColorCode("DebugQuest:"), s)
+end
+
 function Util:Filter(t, pattern, inplace, asList)
 	asList = asList or true
 
