@@ -79,15 +79,8 @@ function Reward:DetermineObjectives(entries, pick)
 				end
 			end
 
-			Util:Debug(function()
-				local quest = entry.unlockQuest or entry.quest
-				return "Checking:",
-					quest,
-					WAPI_IsOnQuest(quest),
-					(entry.unlockQuest and WAPI_GetQuestObjectives(quest) == nil and WAPI_IsQuestFlaggedCompleted(quest)),
-					(entry.unlockAura and WAPI_GetPlayerAuraBySpellID(entry.unlockAura)),
-					WAPI_GetQuestTimeLeftSeconds(quest)
-			end)
+			Util:DebugQuest(entry.quest)
+			Util:DebugQuest(entry.unlockQuest)
 
 			if confirmed then
 				Util:Debug("Reward [" .. self.name .. "] confirmed: " .. QuestUtils_GetQuestName(entry.quest))
