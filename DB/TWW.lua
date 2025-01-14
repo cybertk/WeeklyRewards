@@ -153,8 +153,13 @@ namespace.DB.rewardCandidiates["tww"] = {
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 70,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		pick = 2,
 		rollover = true,
 		entries = {
+			{
+				quest = 80592, -- Forge a pact
+				removeOnCompletion = true,
+			},
 			{
 				quest = 80670,
 				questPool = {
