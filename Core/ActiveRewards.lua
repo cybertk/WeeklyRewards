@@ -94,20 +94,14 @@ function ActiveRewards.Get()
 	return Cache.instance
 end
 
-function ActiveRewards:_Sort()
-	table.sort(self, function(x, y)
-		if type(x) ~= "table" or type(y) ~= "table" then
-			return true
-		end
+function ActiveRewards:Sort()
+	local field = self.sortBy or "resetTime"
 
-		-- Sort by, resetTime and name, nil resetTime means max
-		if x.resetTime == y.resetTime then
-			return x.name < y.name
-		elseif x.resetTime and y.resetTime then
-			return x.resetTime < y.resetTime
-		else
-			return x.resetTime ~= nil
-		end
+	table.sort(self, function(x, y)
+		local xV = x[field] or "0"
+		local yV = y[field] or "0"
+
+		return xV .. x.name < yV .. y.name
 	end)
 end
 
@@ -232,7 +226,7 @@ function ActiveRewards:Update(candidates)
 		self:_Add(reward)
 	end
 
-	self:_Sort()
+	self:Sort()
 end
 
 function ActiveRewards:ToggleExclusion(rewardID)
