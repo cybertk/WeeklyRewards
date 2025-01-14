@@ -7,6 +7,7 @@
 ## X-Website: https://github.com/cybertk/WeeklyRewards
 ## X-Curse-Project-ID: 1171512
 ## X-Wago-ID: rN4VlYKD
+## X-WoWI-ID: 26890
 
 
 Embeds.xml
