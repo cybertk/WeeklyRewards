@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.2 - 2025-01-14
+
+### Fix
+
+- Spider Weekly progress is not shown until Pact quest is completed
+
 ## v1.2.1 - 2025-01-13
 
 ### Fix
