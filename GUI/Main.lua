@@ -281,6 +281,50 @@ function Main:AddRewardsFilterButton()
 	self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
 end
 
+function Main:AddSortButton()
+	self.window.titlebar.SortButton = CreateFrame("DropdownButton", "$parentSettingsButton", self.window.titlebar)
+	self.window.titlebar.SortButton:SetPoint("RIGHT", self.window.titlebar.ColumnsButton, "LEFT", 0, 0)
+	self.window.titlebar.SortButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
+	self.window.titlebar.SortButton:SetScript("OnEnter", function()
+		self.window.titlebar.SortButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
+		Utils:SetBackgroundColor(self.window.titlebar.SortButton, 1, 1, 1, 0.05)
+		---@diagnostic disable-next-line: param-type-mismatch
+		GameTooltip:SetOwner(self.window.titlebar.SortButton, "ANCHOR_TOP")
+		GameTooltip:SetText("Sort", 1, 1, 1, 1, true)
+		GameTooltip:AddLine("Select sorting options for Reward Columns.", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+		GameTooltip:Show()
+	end)
+	self.window.titlebar.SortButton:SetScript("OnLeave", function()
+		self.window.titlebar.SortButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
+		Utils:SetBackgroundColor(self.window.titlebar.SortButton, 1, 1, 1, 0)
+		GameTooltip:Hide()
+	end)
+	self.window.titlebar.SortButton:SetupMenu(function(_, rootMenu)
+		local activeRewards = ActiveRewards.Get()
+		local sortingFields = {
+			group = "Reward Group",
+			name = "Reward Name",
+			resetTime = "Time Left",
+		}
+		for field, name in pairs(sortingFields) do
+			rootMenu:CreateCheckbox(name, function()
+				return activeRewards.sortBy == field
+			end, function()
+				activeRewards.sortBy = field
+				activeRewards:Sort()
+				self:Redraw()
+			end)
+		end
+		-- end
+	end)
+
+	self.window.titlebar.SortButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.SortButton:GetName() .. "Icon", "ARTWORK")
+	self.window.titlebar.SortButton.Icon:SetPoint("CENTER", self.window.titlebar.SortButton, "CENTER")
+	self.window.titlebar.SortButton.Icon:SetSize(14, 14)
+	self.window.titlebar.SortButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Toggle.blp")
+	self.window.titlebar.SortButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
+end
+
 function Main:CreateWindow()
 	local frameName = addonName .. "MainWindow"
 	self.window = CreateFrame("Frame", frameName, UIParent)
@@ -350,6 +394,7 @@ function Main:CreateWindow()
 	self:AddSettingsButton()
 	self:AddCharactersButton()
 	self:AddRewardsFilterButton()
+	self:AddSortButton()
 
 	self.window.table = UI:CreateTableFrame({
 		header = {
