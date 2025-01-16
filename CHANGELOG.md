@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.2.3 - 2025-01-16
+
+### Fix
+
+- WoD Timewalking LFD is not recognized
+- Siren Isle Invasion is not recognized until Storm phase is activated
+
 ## v1.2.2 - 2025-01-14
 
 ### Fix
