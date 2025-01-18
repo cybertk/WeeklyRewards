@@ -275,6 +275,26 @@ namespace.DB.rewardCandidiates["tww"] = {
 		},
 	},
 	{
+		id = "tww-circlet",
+		key = "Circlet",
+		description = "|T6215518:12|t |cffa335ee[Cyrce's Circlet]|r|n|n"
+			.. "The ring starts at Item Level 642 by completing |cffffff00[A Radiant Vault]|r.|n|n"
+			.. "|T6215533:12|t |cffa335ee[Raw Singing Citrine]|r upgrades the ring to maximum Item Level 658.|n"
+			.. "It drops from all Siren Isle content.",
+		group = RewardsGroup.SIREN_ISLE,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		rollover = true,
+		entries = {
+			{
+				quest = 0,
+				unlockQuest = 84724, -- The Radiant Vault
+				progressType = 3,
+			},
+		},
+		items = { { item = 229365, amount = 1 } },
+	},
+	{
 		id = "tww-vault",
 		key = "GreatVault",
 		description = "Great Valut Rewards that provides you with 1 piece of loot from a pool of up to 9 items. |n|n"
