@@ -632,13 +632,17 @@ function Main:Redraw()
 
 	do -- Table Column config
 		Main:ForEachColumn(function(dataColumn)
+			local text = self.window:CreateFontString("$parentText", "OVERLAY")
+			text:SetFontObject("GameFontHighlightSmall")
+			text:SetText(dataColumn.name)
+
 			---@type WK_TableDataColumn
 			local column = {
-				width = dataColumn.width,
+				width = math.max(text:GetStringWidth() + 16, dataColumn.width),
 				align = dataColumn.align or "LEFT",
 			}
 			table.insert(tableData.columns, column)
-			tableWidth = tableWidth + dataColumn.width
+			tableWidth = tableWidth + column.width
 		end)
 	end
 
