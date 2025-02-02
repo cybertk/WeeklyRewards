@@ -18,7 +18,7 @@ DB\Init.lua
 DB\TWW.lua
 DB\Timewalking.lua
 DB\DarkmoonFaire.lua
-
+DB\LunarFestival.lua
 
 Core\Reward.lua
 Core\ActiveRewards.lua
