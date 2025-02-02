@@ -118,7 +118,7 @@ function Character:ResetProgress(reward)
 	return progress
 end
 
-function Character:ReceiveReward(quest, quantity, itemLink, currencyId)
+function Character:ReceiveReward(quest, quantity, item, currencyId)
 	local progress = Cache.questToProgress[quest]
 
 	Util:Debug("Character:ReceiveReward", quest, quantity, itemLink, currencyId, progress)
@@ -126,12 +126,12 @@ function Character:ReceiveReward(quest, quantity, itemLink, currencyId)
 		return
 	end
 
-	local item
-	if itemLink then
-		item, _ = C_Item.GetItemInfoInstant(itemLink)
+	local itemId = item
+	if type(item) == "string" then
+		itemId = C_Item.GetItemInfoInstant(item)
 	end
 
-	progress:AddReward(currencyId, item, quantity)
+	progress:AddReward(currencyId, itemId, quantity)
 end
 
 function Character:UpdateRewardsGUID(quest)

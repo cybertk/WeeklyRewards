@@ -24,6 +24,7 @@ Core\Reward.lua
 Core\ActiveRewards.lua
 Core\Progress.lua
 Core\GreatVaultProgress.lua
+Core\LFGProgress.lua
 Core\ProgressFactory.lua
 Core\Character.lua
 Core\CharacterStore.lua

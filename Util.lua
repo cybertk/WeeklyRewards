@@ -165,6 +165,10 @@ function Util:GetProfessionIcon(skillLineID)
 	return select(1, C_Spell.GetSpellTexture(professionSpells[skillLineID]))
 end
 
+function Util:DungeonToQuest(dungeonID)
+	return dungeonID + 9000000
+end
+
 function Util.FormatTimeDuration(seconds, useAbbreviation)
 	local minutes = seconds / 60
 	local hours = minutes / 60

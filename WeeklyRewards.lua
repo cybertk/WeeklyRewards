@@ -97,14 +97,23 @@ function WeeklyRewards:OnEnable()
 		character:UpdateProgress(questId)
 		self:Redraw()
 
-		local attempts = 0
-		C_Timer.NewTicker(0.5, function(timer)
-			attempts = attempts + 1
-			if character:UpdateRewardsGUID(questId) or attempts > 60 then
-				Util:Debug("canceled")
-				timer:Cancel()
+		self:UpdateRewardsGUIDSafe(character, questId)
+	end)
+
+	self:RegisterEvent("LFG_COMPLETION_REWARD", function(event)
+		local dungeon = select(10, GetInstanceInfo())
+		local quest = Util:DungeonToQuest(dungeon)
+
+		character:UpdateProgress(quest)
+		for i = 1, select(6, GetLFGDungeonRewards(dungeon)) do
+			local _, _, quantity, _, rewardType, item = GetLFGDungeonRewardInfo(dungeon, i)
+			if rewardType == "item" then
+				character:ReceiveReward(quest, quantity, item)
 			end
-		end)
+		end
+		self:Redraw()
+
+		self:UpdateRewardsGUIDSafe(character, quest)
 	end)
 
 	self:RegisterBucketEvent(
@@ -160,4 +169,18 @@ function WeeklyRewards:ExecuteChatCommands(command)
 	end
 
 	Main:ToggleWindow()
+end
+
+function WeeklyRewards:UpdateRewardsGUIDSafe(character, quest, attempts)
+	if attempts == nil then
+		attempts = 60
+	end
+
+	C_Timer.NewTicker(0.5, function(timer)
+		attempts = attempts - 1
+		if character:UpdateRewardsGUID(quest) or attempts < 0 then
+			Util:Debug("canceled")
+			timer:Cancel()
+		end
+	end)
 end

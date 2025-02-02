@@ -231,6 +231,14 @@ function Reward:ForEachItem(callback)
 					amount = rewardItem.amount,
 					quality = currency.quality,
 				}
+			elseif rewardItem.item then
+				item = {
+					id = rewardItem.item,
+					name = C_Item.GetItemNameByID(rewardItem.item) or "Loading",
+					texture = select(5, C_Item.GetItemInfoInstant(rewardItem.item)),
+					quantity = rewardItem.amount,
+					quality = C_Item.GetItemQualityByID(rewardItem.item) or Enum.ItemQuality.Common,
+				}
 			end
 
 			callback(item)
