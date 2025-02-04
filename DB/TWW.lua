@@ -129,6 +129,8 @@ namespace.DB.rewardCandidiates["tww"] = {
 		entries = {
 			{ quest = 82355, unlockQuest = 82146 }, -- Special Assignment: Cinderbee Surge
 			{ quest = 81647, unlockQuest = 82154 }, -- Special Assignment: Titanic Resurgence
+			{ quest = 81649, unlockQuest = 83069 }, -- Special Assignment: Titanic Resurgence
+			{ quest = 81650, unlockQuest = 83070 }, -- Special Assignment: Titanic Resurgence
 			{ quest = 81691, unlockQuest = 82155 }, -- Special Assignment: Shadows Below
 			{ quest = 83229, unlockQuest = 82156 }, -- Special Assignment: When the Deeps Stir
 			{ quest = 82787, unlockQuest = 82157 }, -- Special Assignment: Rise of the Colossals
