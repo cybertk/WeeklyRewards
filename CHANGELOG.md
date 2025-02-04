@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.4 - 2025-02-04
+
+### Fix
+
+- Cannot recognize Special Assignment: Titanic Resurgence
+
 ## v1.2.3 - 2025-01-16
 
 ### Fix
