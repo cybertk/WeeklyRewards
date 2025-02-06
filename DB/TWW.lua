@@ -129,6 +129,8 @@ namespace.DB.rewardCandidiates["tww"] = {
 		entries = {
 			{ quest = 82355, unlockQuest = 82146 }, -- Special Assignment: Cinderbee Surge
 			{ quest = 81647, unlockQuest = 82154 }, -- Special Assignment: Titanic Resurgence
+			{ quest = 81649, unlockQuest = 83069 }, -- Special Assignment: Titanic Resurgence
+			{ quest = 81650, unlockQuest = 83070 }, -- Special Assignment: Titanic Resurgence
 			{ quest = 81691, unlockQuest = 82155 }, -- Special Assignment: Shadows Below
 			{ quest = 83229, unlockQuest = 82156 }, -- Special Assignment: When the Deeps Stir
 			{ quest = 82787, unlockQuest = 82157 }, -- Special Assignment: Rise of the Colossals
@@ -153,8 +155,13 @@ namespace.DB.rewardCandidiates["tww"] = {
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 70,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		pick = 2,
 		rollover = true,
 		entries = {
+			{
+				quest = 80592, -- Forge a pact
+				removeOnCompletion = true,
+			},
 			{
 				quest = 80670,
 				questPool = {
@@ -239,11 +246,13 @@ namespace.DB.rewardCandidiates["tww"] = {
 	{
 		id = "tww-invasion",
 		key = "Invasion",
-		description = "Siren Isle Invasion and Storm Weekly Quests",
+		description = "Siren Isle Invasion Quests|n|n"
+			.. "Enemies cycle every week from a pool of three types:|n"
+			.. "|cffffff00Vrykul|r, |cffffff00Naga|r, and |cffffff00Pirate|r.",
 		group = RewardsGroup.SIREN_ISLE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		pick = 7,
+		pick = 5,
 		entries = {
 			-- Vrykul Invasion - Unlock by Legacy of the Vrykul
 			{ quest = 84248, unlockQuest = 84852 }, -- A Ritual of Runes
@@ -263,9 +272,6 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{ quest = 84001, unlockQuest = 84851 }, -- Cart Blanche
 			{ quest = 84299, unlockQuest = 84851 }, -- Pirate Plunder
 			{ quest = 84619, unlockQuest = 84851 }, -- Ooker Dooker Literature Club
-			-- Storm Active Phase: In Seafury Tempest
-			{ quest = 84225 }, -- Eggstinction
-			{ quest = 84241 }, -- Shoreline Stand
 		},
 	},
 	{

@@ -67,14 +67,16 @@ function Reward:DetermineObjectives(entries, pick)
 				if WAPI_GetPlayerAuraBySpellID(entry.unlockAura) then
 					confirmed = true
 				end
-			else
-				local quest = entry.unlockQuest or entry.quest
-
+			elseif entry.unlockQuest then
 				if
-					WAPI_IsOnQuest(quest)
-					or (entry.unlockQuest and WAPI_IsQuestFlaggedCompleted(quest)) -- i.e. Spider Pact
-					or WAPI_GetQuestTimeLeftSeconds(quest)
+					WAPI_IsOnQuest(entry.unlockQuest)
+					or WAPI_GetQuestTimeLeftSeconds(entry.unlockQuest)
+					or (WAPI_IsQuestFlaggedCompleted(entry.unlockQuest) and WAPI_IsOnQuest(entry.quest)) -- i.e. Spider Pact
 				then
+					confirmed = true
+				end
+			else
+				if WAPI_IsOnQuest(entry.quest) or WAPI_GetQuestTimeLeftSeconds(entry.quest) then
 					confirmed = true
 				end
 			end
@@ -104,7 +106,7 @@ function Reward:DetermineState(pick)
 	if #self.objectives == pick and self.resetTime then
 		self.state = STATE.CONFIRMED
 	else
-		Util:Debug("Cannot determine reset time for " .. self.name)
+		Util:Debug("Cannot determine reset time for " .. self.name, #self.objectives, self.resetTime)
 	end
 end
 
@@ -117,7 +119,7 @@ function Reward:DetermineResetTime(timeLeft)
 		-- Cannot always get valid reset time when just logged in
 		for _, objective in ipairs(self.objectives) do
 			for _, quest in ipairs({ objective.quest, objective.unlockQuest }) do
-				timeLeft = WAPI_GetQuestTimeLeftSeconds(objective.quest)
+				timeLeft = WAPI_GetQuestTimeLeftSeconds(quest)
 				if timeLeft then
 					break
 				end

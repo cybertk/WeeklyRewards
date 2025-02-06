@@ -48,7 +48,7 @@ namespace.DB.rewardCandidiates["timewalking"] = {
 					167921,
 					167922,
 				},
-				unlockAura = 335150, -- Sign of Iron
+				unlockAura = 335152, -- Sign of Iron
 				questPool = {
 					55498, --[WoD] Alliance: The Shimmering Crystal
 					55499, --[WoD] Horde: The Shimmering Crystal er

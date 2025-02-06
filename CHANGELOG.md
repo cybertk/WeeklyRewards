@@ -1,5 +1,32 @@
 # Changelog
 
+## v1.2.4 - 2025-02-04
+
+### Fix
+
+- Cannot recognize Special Assignment: Titanic Resurgence
+
+## v1.2.3 - 2025-01-16
+
+### Fix
+
+- WoD Timewalking LFD is not recognized
+- Siren Isle Invasion is not recognized until Storm phase is activated
+
+## v1.2.2 - 2025-01-14
+
+### Fix
+
+- Spider Weekly progress is not shown until Pact quest is completed
+
+## v1.2.1 - 2025-01-13
+
+### Fix
+
+- Progress isn't marked as 100% for claimed rewards. i.e. Siren Isle Special Assignment quest
+- Drops aren't  linked to rewards in multi-reward quests sometimes.
+- New SA quest aren't recognized
+
 ## v1.2.0 - 2025-01-12
 
 Supports tracking the Great Vault rewards.

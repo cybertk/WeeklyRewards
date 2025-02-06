@@ -156,7 +156,7 @@ function Character:UpdateRewardsGUID(quest)
 	end
 
 	local includeOldItems = quest == nil
-	local found = false
+	local found = 0
 	for containerIndex = BACKPACK_CONTAINER, NUM_TOTAL_EQUIPPED_BAG_SLOTS do
 		for slotIndex = 1, C_Container.GetContainerNumSlots(containerIndex) do
 			local info = C_Container.GetContainerItemInfo(containerIndex, slotIndex)
@@ -172,14 +172,14 @@ function Character:UpdateRewardsGUID(quest)
 				end
 
 				if item.guid or item.guid == false then
-					found = true
+					found = found + 1
 					Util:Debug("guid updated for ", info.hyperlink, info.stackCount, containerIndex, slotIndex, item.guid)
 				end
 			end
 		end
 	end
 
-	return found
+	return found == count
 end
 
 function Character:ReceiveDrop(guid, quantity, itemId, currencyId)

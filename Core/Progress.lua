@@ -106,6 +106,16 @@ function RewardProgress:_AddRecord(record)
 	table.insert(self.records, record)
 end
 
+-- Mark records as done manualy, we cannot get progress=100% update sometime before
+function RewardProgress:_FinalizeRecords()
+	for _, record in ipairs(self.records or {}) do
+		if record.fulfilled ~= record.required then
+			record.text = string.gsub(record.text, record.fulfilled, record.required)
+			record.fulfilled = record.required
+		end
+	end
+end
+
 function RewardProgress:_UpdateRecords()
 	-- Reset progress
 	self.position = 0
@@ -190,8 +200,17 @@ function RewardProgress:Update(completedQuest)
 		end
 	end
 
+	for i, objective in ipairs(self.fulfilledObjectives) do
+		if objective.removeOnCompletion then
+			table.remove(self.fulfilledObjectives, i)
+			Util:Debug("Removed completed objective: ", self.name)
+		end
+	end
+
 	if #self.pendingObjectives == 0 then
 		newState = PROGRESS_STATE.CLAIMED
+		-- Cannot update the records here since the progress is already lost
+		self:_FinalizeRecords()
 	elseif #self.fulfilledObjectives > 0 then
 		-- Multi rewards scenerio
 		newState = PROGRESS_STATE.IN_PROGRESS
