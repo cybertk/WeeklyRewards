@@ -19,6 +19,7 @@ DB\TWW.lua
 DB\Timewalking.lua
 DB\DarkmoonFaire.lua
 DB\LunarFestival.lua
+DB\LoveIsInTheAir.lua
 
 Core\Reward.lua
 Core\ActiveRewards.lua
