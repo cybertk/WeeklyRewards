@@ -76,8 +76,12 @@ function Reward:DetermineObjectives(entries, pick)
 					confirmed = true
 				end
 			else
-				if WAPI_IsOnQuest(entry.quest) or WAPI_GetQuestTimeLeftSeconds(entry.quest) then
-					confirmed = true
+				local quests = entry.questPool and entry.questPool or { entry.quest }
+
+				for _, quest in ipairs(quests) do
+					if WAPI_IsOnQuest(quest) or WAPI_GetQuestTimeLeftSeconds(quest) then
+						confirmed = true
+					end
 				end
 			end
 
