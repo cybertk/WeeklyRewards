@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.3.0 - 2025-02-14
+
+## New Features
+
+- Add new rewards support
+    - Love is in the Air Event
+        - Love is in the Air one-time Mainline Quests
+        - Love is in the Air Daily Quests
+        - Daily Shadowfang Keep Dungeon Boss: Crown Chemical Co. Trio
+        - Donate gold to the Artisan's Consortium to support the Gala of Gifts
+    - Lunar Festival Event
+        - Quest: Lunar Preservation
+        - Visiting the Elders across Azeroth
+- New button to sort rewards columns, by Reward Group, Reward Name or Time Left
+- Optimize UI to prevent reward name truncating
+
 ## v1.2.4 - 2025-02-04
 
 ### Fix
