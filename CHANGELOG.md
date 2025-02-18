@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.1 - 2025-02-18
+
+### Fix
+
+- Crash: Tooltip for completed Spider Pact progress
+
 ## v1.3.0 - 2025-02-14
 
 ## New Features
