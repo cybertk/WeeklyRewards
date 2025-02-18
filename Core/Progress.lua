@@ -176,6 +176,27 @@ function RewardProgress:_UpdateTimestamp()
 	end
 end
 
+function RewardProgress:_RemoveExpiredObjectives()
+	local indexToRemove = {}
+
+	for i, objective in ipairs(self.fulfilledObjectives) do
+		if objective.removeOnCompletion then
+			table.insert(indexToRemove, 1, i)
+		end
+	end
+
+	if #indexToRemove == 0 or self:ObjectivesCount() == #indexToRemove then
+		return
+	end
+
+	for _, i in ipairs(indexToRemove) do
+		local objective = self.fulfilledObjectives[i]
+
+		table.remove(self.fulfilledObjectives, i)
+		Util:Debug("Removed completed objective: ", self.name, objective.quest)
+	end
+end
+
 -- Return true indictes there is an update
 -- completedQuest - quest has been marked as completed
 function RewardProgress:Update(completedQuest)
@@ -200,12 +221,7 @@ function RewardProgress:Update(completedQuest)
 		end
 	end
 
-	for i, objective in ipairs(self.fulfilledObjectives) do
-		if objective.removeOnCompletion then
-			table.remove(self.fulfilledObjectives, i)
-			Util:Debug("Removed completed objective: ", self.name)
-		end
-	end
+	self:_RemoveExpiredObjectives()
 
 	if #self.pendingObjectives == 0 then
 		newState = PROGRESS_STATE.CLAIMED

@@ -204,7 +204,19 @@ function Character:Scan(activeRewards)
 			return false
 		end
 
-		if self.progress[reward.id] and next(self.progress[reward.id]) ~= nil then
+		local progress = self.progress[reward.id]
+		if progress == nil or next(progress) == nil or progress:ObjectivesCount() == 0 then
+			return true
+		end
+
+		if progress:hasStarted() then
+			return false
+		end
+
+		local objectivesToRemove = Util:Filter(progress.fulfilledObjectives, function(objective)
+			return objective.removeOnCompletion
+		end)
+		if #objectivesToRemove < #progress.fulfilledObjectives then
 			return false
 		end
 
