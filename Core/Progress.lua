@@ -77,6 +77,11 @@ function RewardProgress:Init(reward)
 				end
 			end
 		else
+			if objective.unlockQuest and objective.unlockUntilReset and not WAPI_IsQuestFlaggedCompleted(objective.unlockQuest) then
+				Util:Debug("Track only UnlockQuest:", reward.name)
+
+				objective = { quest = objective.unlockQuest }
+			end
 			table.insert(self.pendingObjectives, objective)
 		end
 	end
