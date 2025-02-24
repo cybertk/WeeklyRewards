@@ -42,15 +42,6 @@ function WeeklyRewards:Redraw()
 	Main:Redraw()
 end
 
-function WeeklyRewards:MigrateDB()
-	for _, reward in ipairs(self.db.global.activeRewards) do
-		if reward.id == "tww-archives" and reward.objectives[1].unlockUntilReset ~= true then
-			Util:Debug("v1.3.2: Upgrade tww-archives scheme")
-			reward.resetTime = 0
-		end
-	end
-end
-
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"
 	self:RegisterChatCommand("wr", "ExecuteChatCommands")
@@ -80,8 +71,6 @@ function WeeklyRewards:OnInitialize()
 	})
 	LibDBIcon:Register(addonName, WRLDB, self.db.global.minimap)
 	LibDBIcon:AddButtonToCompartment(addonName)
-
-	self:MigrateDB()
 end
 
 function WeeklyRewards:OnEnable()
