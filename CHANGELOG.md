@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.3.2 - 2025-02-21
+
+### Fix
+
+- The First Disc progress is always displayed as Seeking History 0/100.
+
+## v1.3.1 - 2025-02-18
+
+### Fix
+
+- Crash: Tooltip for completed Spider Pact progress
+
 ## v1.3.0 - 2025-02-14
 
 ## New Features

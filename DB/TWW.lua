@@ -47,8 +47,11 @@ namespace.DB.rewardCandidiates["tww"] = {
 		rollover = true,
 		minimumLevel = 70,
 		entries = {
-			{ quest = 82679 }, -- Archives: Seeking History
-			{ quest = 82678 }, -- Archives: The First Disc
+			{
+				quest = 82679, -- Archives: Seeking History
+				unlockQuest = 82678, -- Archives: The First Disc
+				unlockUntilReset = true,
+			},
 		},
 	},
 	{
