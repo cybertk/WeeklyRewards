@@ -420,7 +420,6 @@ function Main:AddCharacterColumns()
 		{
 			name = "Name",
 			width = 90,
-			toggleHidden = true,
 			cell = function(character)
 				return { text = Util.WrapTextInClassColor(character.class, character.name) }
 			end,
@@ -428,7 +427,6 @@ function Main:AddCharacterColumns()
 		{
 			name = "Realm",
 			width = 90,
-			toggleHidden = true,
 			cell = function(character)
 				return { text = character.realmName }
 			end,
@@ -436,7 +434,6 @@ function Main:AddCharacterColumns()
 		{
 			name = "Level",
 			width = 50,
-			toggleHidden = true,
 			align = "CENTER",
 			cell = function(character)
 				return { text = character.level }
@@ -445,10 +442,19 @@ function Main:AddCharacterColumns()
 		{
 			name = "Fraction",
 			width = 60,
-			toggleHidden = true,
 			align = "CENTER",
 			cell = function(character)
 				return { text = character.factionName }
+			end,
+		},
+		{
+			name = "LastUpdate",
+			width = 60,
+			align = "CENTER",
+			cell = function(character)
+				return {
+					text = Util.FormatTimeDuration(GetServerTime() - character.lastUpdate, true),
+				}
 			end,
 		},
 	}
