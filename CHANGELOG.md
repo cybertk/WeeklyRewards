@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.0 - 2025-02-24
+
+## New Features
+
+- Add new rewards support: Cyrce Circlet
+- Upgrade TOC to 11.1
+- Add new column LastUpdate, characters were sorted by LastUpdate in descending order.
+
 ## v1.3.2 - 2025-02-21
 
 ### Fix
