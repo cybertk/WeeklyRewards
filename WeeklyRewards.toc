@@ -1,4 +1,4 @@
-## Interface: 110007
+## Interface: 110007, 110100
 ## Title: WeeklyRewards
 ## Notes: Track your weekly rewards progress across your characters
 ## Version: @project-version@
