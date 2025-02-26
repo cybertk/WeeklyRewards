@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.0 - 2025-02-26
+
+## New Features
+
+- Left-clicking the reward header now sorts characters (rows) by the selected reward. A second click reverses the sort order.
+
 ## v1.4.0 - 2025-02-24
 
 ## New Features
