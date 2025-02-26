@@ -4,6 +4,7 @@ local RewardsGroup = {
 	PINNACLE_CACHE = "Pinnacle Cache",
 	WEEKLY_CACHE = "Weekly Cache",
 	SIREN_ISLE = "Siren Isle",
+	UNDERMINE = "Undermine",
 }
 
 namespace.DB.rewardCandidiates["tww"] = {
@@ -321,6 +322,62 @@ namespace.DB.rewardCandidiates["tww"] = {
 				name = "6 |cffa335ee[Algari Token of Meritz]|r for 3+ Great Vault slots",
 				texture = 2744751,
 			},
+		},
+	},
+	{
+		id = "tww-sa-um",
+		key = "SA:Underm",
+		group = RewardsGroup.WEEKLY_CACHE,
+		minimumLevel = 80,
+		entries = {
+			{
+				quest = 85487, -- Special Assignment: Boom! Headshot!
+				unlockQuest = 85489, -- Special Assignment: Capstone 1 - Unlock
+			},
+			{
+				quest = 85488, -- Special Assignment: Security Detail
+				unlockQuest = 85490, -- Special Assignment: Capstone 2 - Unlock
+			},
+		},
+	},
+	{
+		id = "tww-surge",
+		key = "Surge",
+		group = RewardsGroup.WEEKLY_CACHE,
+		minimumLevel = 80,
+		entries = {
+			{ quest = 86775 }, -- Urge to Surge
+		},
+	},
+	{
+		id = "tww-gig",
+		key = "SideGig",
+		group = RewardsGroup.UNDERMINE,
+		minimumLevel = 80,
+		pick = 4,
+		entries = {
+			{ quest = 85554 }, -- Side Gig: It's Always Sunny Side Up
+			{ quest = 86177 }, -- Side Gig: The Tides Provide
+			{ quest = 86178 }, -- Side Gig: Cleanin' the Coast
+			{ quest = 86179 }, -- Side Gig: Lucky Break's Big Break
+		},
+	},
+	{
+		id = "tww-snh",
+		key = "Shipping",
+		group = RewardsGroup.UNDERMINE,
+		minimumLevel = 80,
+		entries = {
+			{ quest = 85869 }, -- Many Jobs, Handle It!
+		},
+	},
+	{
+		id = "tww-scrap",
+		key = "SCRAP",
+		group = RewardsGroup.UNDERMINE,
+		minimumLevel = 80,
+		entries = {
+			{ quest = 85879 }, -- Reduce, Reuse, Resell
 		},
 	},
 }
