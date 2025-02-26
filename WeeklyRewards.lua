@@ -151,6 +151,7 @@ function WeeklyRewards:OnEnable()
 			"PLAYER_LEVEL_CHANGED",
 			"QUEST_ACCEPTED",
 			"SKILL_LINES_CHANGED",
+			"PLAYER_ENTERING_WORLD",
 		},
 		3,
 		function()
