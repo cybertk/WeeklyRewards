@@ -33,10 +33,29 @@ local PROGRESS_STATE = {
 	["IN_PROGRESS"] = 2,
 }
 
+function RewardProgress.__eq(a, b)
+	return a.position == b.position and a.state == b.state
+end
+
+function RewardProgress.__lt(a, b)
+	if a.position == b.position then
+		local s1 = a.state == PROGRESS_STATE.CLAIMED and 99 or a.state
+		local s2 = b.state == PROGRESS_STATE.CLAIMED and 99 or b.state
+		return s1 < s2
+	end
+
+	return a.position < b.position
+end
+
 function RewardProgress:New(o)
 	o = o or {}
 	self.__index = self
 	setmetatable(o, self)
+
+	if self ~= RewardProgress then
+		self.__eq = RewardProgress.__eq
+		self.__lt = RewardProgress.__lt
+	end
 
 	return o
 end

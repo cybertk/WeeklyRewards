@@ -419,6 +419,7 @@ function Main:AddCharacterColumns()
 	local columns = {
 		{
 			name = "Name",
+			key = "name",
 			width = 90,
 			cell = function(character)
 				return { text = Util.WrapTextInClassColor(character.class, character.name) }
@@ -426,6 +427,7 @@ function Main:AddCharacterColumns()
 		},
 		{
 			name = "Realm",
+			key = "realmName",
 			width = 90,
 			cell = function(character)
 				return { text = character.realmName }
@@ -433,6 +435,7 @@ function Main:AddCharacterColumns()
 		},
 		{
 			name = "Level",
+			key = "level",
 			width = 50,
 			align = "CENTER",
 			cell = function(character)
@@ -441,6 +444,7 @@ function Main:AddCharacterColumns()
 		},
 		{
 			name = "Fraction",
+			key = "factionName",
 			width = 60,
 			align = "CENTER",
 			cell = function(character)
@@ -449,6 +453,7 @@ function Main:AddCharacterColumns()
 		},
 		{
 			name = "LastUpdate",
+			key = "lastUpdate",
 			width = 60,
 			align = "CENTER",
 			cell = function(character)
@@ -460,6 +465,14 @@ function Main:AddCharacterColumns()
 	}
 
 	for _, column in ipairs(columns) do
+		column.onEnter = function(cellFrame)
+			GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+			GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode("<Left Click to Sort>"))
+			GameTooltip:Show()
+		end
+		column.onLeave = function()
+			GameTooltip:Hide()
+		end
 		table.insert(self.columns, column)
 	end
 end
@@ -569,7 +582,7 @@ function Main:AddProgressToGameTooltip(progress)
 end
 
 function Main:AddRewardToGameTooltip(reward)
-	GameTooltip:SetText(YELLOW_FONT_COLOR:WrapTextInColorCode(reward.name))
+	GameTooltip:AddDoubleLine(reward.name, GREEN_FONT_COLOR:WrapTextInColorCode("|A:NPE_LeftClick:16:16|a(Sort)"))
 	if reward.group then
 		GameTooltip:AddLine(reward.group .. ": " .. WHITE_FONT_COLOR:WrapTextInColorCode(reward.description))
 	else
@@ -591,6 +604,48 @@ function Main:AddRewardToGameTooltip(reward)
 	if reward.resetTime then
 		GameTooltip:AddLine("Time Left: " .. WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime())))
 	end
+end
+
+function Main:UpdateSortArrow()
+	local sortOrder, ascending = CharacterStore.Get():GetSortOrder()
+
+	local i = 0
+	Main:ForEachColumn(function(column)
+		i = i + 1
+
+		local cellFrame = self.window.table.rows[1].columns[i]
+		local characterField = column.key or column.reward.id
+
+		cellFrame.data.onClick = function()
+			CharacterStore.Get():SetSortOrder(characterField)
+			self:Redraw()
+		end
+
+		if cellFrame.Arrow == nil then
+			local t = cellFrame:CreateTexture()
+
+			local offset = cellFrame.text:GetStringWidth() - cellFrame.text:GetWidth()
+			if cellFrame.text:GetJustifyH() == "CENTER" then
+				offset = offset / 2
+			end
+
+			t:SetAtlas("auctionhouse-ui-sortarrow", true)
+			t:SetPoint("LEFT", cellFrame.text, "RIGHT", offset, 0)
+
+			cellFrame.Arrow = t
+			cellFrame:SetHighlightTexture("auctionhouse-ui-row-highlight", "ADD")
+		end
+
+		cellFrame.Arrow:SetShown(sortOrder == characterField)
+
+		if sortOrder == characterField then
+			if ascending then
+				cellFrame.Arrow:SetTexCoord(0, 1, 0, 1)
+			else
+				cellFrame.Arrow:SetTexCoord(0, 1, 1, 0)
+			end
+		end
+	end)
 end
 
 function Main:ForEachColumn(callback, visibleOnly)
@@ -661,6 +716,7 @@ function Main:Redraw()
 				text = NORMAL_FONT_COLOR:WrapTextInColorCode(dataColumn.name),
 				onEnter = dataColumn.onEnter,
 				onLeave = dataColumn.onLeave,
+				onClick = dataColumn.onClick,
 			}
 			table.insert(row.columns, cell)
 		end)
@@ -688,4 +744,6 @@ function Main:Redraw()
 	self.window:SetHeight(math.min(tableHeight + Constants.TITLEBAR_HEIGHT, Constants.MAX_WINDOW_HEIGHT) + 2)
 	self.window:SetClampRectInsets(self.window:GetWidth() / 2, self.window:GetWidth() / -2, 0, self.window:GetHeight() / 2)
 	self.window:SetScale(WeeklyRewards.db.global.main.windowScale / 100)
+
+	self:UpdateSortArrow()
 end

@@ -12,13 +12,53 @@ local WAPI = {
 
 local Cache = {
 	instance = nil, -- Singleton
+	sortOrder = "lastUpdate",
+	secondarySortOrder = "name",
+	ascending = true,
+	secondaryAscending = true,
 }
 
-local function DefaultCharacterSorter(a, b)
-	if type(a.lastUpdate) == "number" and type(b.lastUpdate) == "number" then
-		return a.lastUpdate > b.lastUpdate
+local function CharacterComparator(lhs, rhs, field)
+	if lhs == rhs then
+		return 0
+	elseif lhs == nil then
+		return -1
+	elseif rhs == nil then
+		return -1
 	end
-	return strcmputf8i(a.name, b.name) < 0
+
+	if Cache.instance:CurrentPlayer()[field] then
+		if lhs[field] == rhs[field] then
+			return 0
+		elseif lhs[field] == nil then
+			return -1
+		elseif rhs[field] == nil then
+			return 1
+		end
+
+		return lhs[field] < rhs[field] and -1 or 1
+	end
+
+	if lhs.progress[field] == rhs.progress[field] then
+		return 0
+	elseif lhs.progress[field] == nil then
+		return -1
+	elseif rhs.progress[field] == nil then
+		return 1
+	end
+
+	return lhs.progress[field] < rhs.progress[field] and -1 or 1
+end
+
+local function CreateCharacterSorter(primary, secondary, ascending, secondaryAscending)
+	return function(a, b)
+		local result = NegateIf(CharacterComparator(a, b, primary), ascending)
+		if result == 0 then
+			return NegateIf(CharacterComparator(a, b, secondary), secondaryAscending) < 0
+		else
+			return result < 0
+		end
+	end
 end
 
 function CharacterStore.Get()
@@ -65,21 +105,36 @@ function CharacterStore:CurrentPlayer()
 	return self[id]
 end
 
-function CharacterStore:ForEach(callback, filter, sorter)
+function CharacterStore:GetSortOrder()
+	return Cache.sortOrder, Cache.ascending
+end
+
+function CharacterStore:SetSortOrder(field)
+	if Cache.sortOrder == field then
+		Cache.ascending = not Cache.ascending
+	else
+		Cache.secondarySortOrder = Cache.sortOrder
+		Cache.secondaryAscending = Cache.ascending
+	end
+
+	Cache.sortOrder = field
+
+	Util:Debug("Sorting:", Cache.sortOrder, Cache.secondarySortOrder, Cache.ascending, Cache.secondaryAscending)
+end
+
+function CharacterStore:ForEach(callback, filter)
 	local characters = {}
 
 	filter = filter or function(x)
 		return x.enabled
 	end
-	sorter = sorter or DefaultCharacterSorter
-
 	for _, character in pairs(self) do
 		if filter(character) then
 			table.insert(characters, 1, character)
 		end
 	end
 
-	table.sort(characters, sorter)
+	table.sort(characters, CreateCharacterSorter(Cache.sortOrder, Cache.secondarySortOrder, Cache.ascending))
 
 	for _, character in ipairs(characters) do
 		callback(character)
