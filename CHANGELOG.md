@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.6.0 - 2025-03-01
+
+## New Features
+
+- Add Undermine rewards support
+    - Weekly Caches: Urge to Surge and Special Assignment
+    - Side Gig Quests
+    - Shipping & Handling Jobs
+    - Weekly S.C.R.A.P. Quest
+
 ## v1.5.0 - 2025-02-26
 
 ## New Features
