@@ -4,6 +4,15 @@
 ## Version: @project-version@
 ## IconTexture: Interface\AddOns\WeeklyRewards\Media\Icon.blp
 ## SavedVariables: WeeklyRewardsDB, WeeklyRewardsArchive
+## Category-enUS: Data Broker
+## Category-deDE: Datenbroker
+## Category-esES: Intermediario de Datos
+## Category-esMX: Intermediario de Datos
+## Category-frFR: Courtier de Données
+## Category-ptBR: Corretor de Dados
+## Category-ruRU: Посредник данных
+## Category-zhCN: 数据管理
+## Category-zhTW: 資料管理
 ## X-Website: https://github.com/cybertk/WeeklyRewards
 ## X-Curse-Project-ID: 1171512
 ## X-Wago-ID: rN4VlYKD
