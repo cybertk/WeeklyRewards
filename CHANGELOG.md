@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.6.1 - 2025-03-03
+
+### Fix
+
+- Spider progress now will not display rewards received time after Pact completion.
+- Resolved a Tooltip crash that occasionally occurred when hovering over the reward header.
+- The progress of or "The Theater Troupe" and "Rollin' Down in the Deeps" now can rollover after weekly reset.
+
 ## v1.6.0 - 2025-03-01
 
 ## New Features
