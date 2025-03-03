@@ -72,6 +72,8 @@ function RewardProgress:Init(reward)
 	self.state = PROGRESS_STATE.NOT_STARTED
 	self.pendingObjectives = {}
 	self.fulfilledObjectives = {}
+	self.startedAt = nil
+	self.claimedAt = nil
 
 	local factionNameToEnum = { ["Alliance"] = 1, ["Horde"] = 2 }
 
