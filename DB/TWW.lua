@@ -186,6 +186,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "Troupe",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
+		rollover = true,
 		entries = {
 			{ quest = 83240 }, -- The Theater Troupe
 		},
