@@ -207,6 +207,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		description = "Collect wax for Kobolds",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
+		rollover = true,
 		entries = {
 			{ quest = 82946 }, -- Rollin' Down in the Deeps
 		},
