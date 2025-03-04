@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.6.2 - 2025-03-04
+
+### Fix
+
+- Worldsoul quest now can recognize new Undermine tasks.
+- Delves: Worldwide Research can be tracked now.
+
 ## v1.6.1 - 2025-03-03
 
 ### Fix
