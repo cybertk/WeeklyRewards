@@ -61,15 +61,17 @@ namespace.DB.rewardCandidiates["tww"] = {
 		description = "Delves Meta Quest",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 70,
+		timeLeft = function()
+			local questDuration = 21 * SECONDS_PER_DAY
+			local questWeek = time({ year = 2025, month = 2, day = 24 })
+
+			local now = GetServerTime()
+			local timeStarted = questWeek + ((now + C_DateAndTime.GetSecondsUntilWeeklyReset() - questWeek) % (7 * SECONDS_PER_DAY))
+
+			return questDuration - ((now - timeStarted) % questDuration)
+		end,
 		entries = {
-			{ quest = 82746 }, -- Delves: Breaking Tough to Loot Stuff
-			{ quest = 82707 }, -- Delves: Earthen Defense
-			{ quest = 82710 }, -- Delves: Empire-ical Exploration
-			{ quest = 82706 }, -- Delves: Khaz Algar Research
-			{ quest = 82711 }, -- Delves: Lost and Found
-			{ quest = 82708 }, -- Delves: Nerubian Menace
-			{ quest = 82709 }, -- Delves: Percussive Archaeology
-			{ quest = 82712 }, -- Delves: Trouble Up and Down Khaz Algar
+			{ quest = 82706 }, -- Delves: Worldwide Research
 		},
 	},
 	{
