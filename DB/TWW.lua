@@ -121,6 +121,11 @@ namespace.DB.rewardCandidiates["tww"] = {
 					82509, -- Worldsoul: Nerub-ar Palace [LFR]
 					82659, -- Worldsoul: Nerub-ar Palace [N]
 					82510, -- Worldsoul: Nerub-ar Palace [H]
+					87417, -- Worldsoul: Dungeons
+					87419, -- Worldsoul: Delves
+					87422, -- Worldsoul: Undermine World Quests
+					87423, -- Worldsoul: Undermine Explorer
+					87424, -- Worldsoul: World Bosses
 				},
 			},
 		},
