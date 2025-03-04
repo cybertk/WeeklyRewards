@@ -38,7 +38,7 @@ function Main:AddCloseButton()
 		self.window.titlebar.closeButton.Icon:SetVertexColor(1, 1, 1, 1)
 		Utils:SetBackgroundColor(self.window.titlebar.closeButton, 1, 0, 0, 0.2)
 		GameTooltip:SetOwner(self.window.titlebar.closeButton, "ANCHOR_TOP")
-		GameTooltip:SetText("Close the window", 1, 1, 1, 1, true)
+		GameTooltip:SetText(CLOSE_CHAT_WINDOW, 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.closeButton:SetScript("OnLeave", function()
@@ -63,8 +63,7 @@ function Main:AddSettingsButton()
 		Utils:SetBackgroundColor(self.window.titlebar.SettingsButton, 1, 1, 1, 0.05)
 		---@diagnostic disable-next-line: param-type-mismatch
 		GameTooltip:SetOwner(self.window.titlebar.SettingsButton, "ANCHOR_TOP")
-		GameTooltip:SetText("Settings", 1, 1, 1, 1, true)
-		GameTooltip:AddLine("Let's customize things a bit", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+		GameTooltip:SetText(SETTINGS, 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.SettingsButton:SetScript("OnLeave", function()
@@ -73,30 +72,23 @@ function Main:AddSettingsButton()
 		GameTooltip:Hide()
 	end)
 	self.window.titlebar.SettingsButton:SetupMenu(function(_, rootMenu)
-		local showMinimapIcon = rootMenu:CreateCheckbox("Show the minimap button", function()
+		rootMenu:CreateTitle(MINIMAP_LABEL) -- Minimap
+		local showMinimapIcon = rootMenu:CreateCheckbox(ENABLE, function()
 			return not WeeklyRewards.db.global.minimap.hide
 		end, function()
 			WeeklyRewards.db.global.minimap.hide = not WeeklyRewards.db.global.minimap.hide
 			LibDBIcon:Refresh(addonName, WeeklyRewards.db.global.minimap)
 		end)
-		showMinimapIcon:SetTooltip(function(tooltip, elementDescription)
-			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
-			GameTooltip_AddNormalLine(tooltip, "It does get crowded around the minimap sometimes.")
-		end)
 
-		local lockMinimapIcon = rootMenu:CreateCheckbox("Lock the minimap button", function()
+		local lockMinimapIcon = rootMenu:CreateCheckbox(LOCK, function()
 			return WeeklyRewards.db.global.minimap.lock
 		end, function()
 			WeeklyRewards.db.global.minimap.lock = not WeeklyRewards.db.global.minimap.lock
 			LibDBIcon:Refresh(addonName, WeeklyRewards.db.global.minimap)
 		end)
-		lockMinimapIcon:SetTooltip(function(tooltip, elementDescription)
-			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
-			GameTooltip_AddNormalLine(tooltip, "No more moving the button around accidentally!")
-		end)
 
-		rootMenu:CreateTitle("Window")
-		local windowScale = rootMenu:CreateButton("Scaling")
+		rootMenu:CreateTitle(HUD_EDIT_MODE_SETTINGS_CATEGORY_TITLE_FRAMES) -- Frames
+		local windowScale = rootMenu:CreateButton(RENDER_SCALE) -- Render Scale
 		for i = 80, 200, 10 do
 			windowScale:CreateRadio(i .. "%", function()
 				return WeeklyRewards.db.global.main.windowScale == i
@@ -150,11 +142,11 @@ function Main:AddSettingsButton()
 			end,
 			hasOpacity = 1,
 		}
-		rootMenu:CreateColorSwatch("Background color", function()
+		rootMenu:CreateColorSwatch(BACKGROUND .. " - " .. COLOR, function()
 			ColorPickerFrame:SetupColorPickerAndShow(colorInfo)
 		end, colorInfo)
 
-		rootMenu:CreateCheckbox("Show the border", function()
+		rootMenu:CreateCheckbox(DISPLAY_BORDERS, function()
 			return WeeklyRewards.db.global.main.windowBorder
 		end, function()
 			WeeklyRewards.db.global.main.windowBorder = not WeeklyRewards.db.global.main.windowBorder
@@ -178,8 +170,7 @@ function Main:AddCharactersButton()
 		Utils:SetBackgroundColor(self.window.titlebar.CharactersButton, 1, 1, 1, 0.05)
 		---@diagnostic disable-next-line: param-type-mismatch
 		GameTooltip:SetOwner(self.window.titlebar.CharactersButton, "ANCHOR_TOP")
-		GameTooltip:SetText("Characters", 1, 1, 1, 1, true)
-		GameTooltip:AddLine("Enable/Disable your characters.", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+		GameTooltip:SetText(CHARACTER_INFO, 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.CharactersButton:SetScript("OnLeave", function()
@@ -221,8 +212,8 @@ function Main:AddRewardsFilterButton()
 		Utils:SetBackgroundColor(self.window.titlebar.ColumnsButton, 1, 1, 1, 0.05)
 		---@diagnostic disable-next-line: param-type-mismatch
 		GameTooltip:SetOwner(self.window.titlebar.ColumnsButton, "ANCHOR_TOP")
-		GameTooltip:SetText("Columns", 1, 1, 1, 1, true)
-		GameTooltip:AddLine("Enable/Disable Tracking Rewards.", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+		GameTooltip:SetText(TRACKING .. " - " .. REWARDS .. "/" .. INFO, 1, 1, 1, 1, true)
+		-- GameTooltip:AddLine(REWARDS.."/" .. TRACKING, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.ColumnsButton:SetScript("OnLeave", function()
@@ -290,8 +281,7 @@ function Main:AddSortButton()
 		Utils:SetBackgroundColor(self.window.titlebar.SortButton, 1, 1, 1, 0.05)
 		---@diagnostic disable-next-line: param-type-mismatch
 		GameTooltip:SetOwner(self.window.titlebar.SortButton, "ANCHOR_TOP")
-		GameTooltip:SetText("Sort", 1, 1, 1, 1, true)
-		GameTooltip:AddLine("Select sorting options for Reward Columns.", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+		GameTooltip:SetText(STABLE_FILTER_BUTTON_LABEL, 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.SortButton:SetScript("OnLeave", function()
@@ -302,9 +292,9 @@ function Main:AddSortButton()
 	self.window.titlebar.SortButton:SetupMenu(function(_, rootMenu)
 		local activeRewards = ActiveRewards.Get()
 		local sortingFields = {
-			group = "Reward Group",
-			name = "Reward Name",
-			resetTime = "Time Left",
+			group = CLUB_FINDER_LOOKING_FOR_CLASS_SPEC:format(REWARD, TYPE),
+			name = CLUB_FINDER_LOOKING_FOR_CLASS_SPEC:format(REWARD, NAME),
+			resetTime = CLOSES_IN,
 		}
 		for field, name in pairs(sortingFields) do
 			rootMenu:CreateCheckbox(name, function()
@@ -418,7 +408,7 @@ end
 function Main:AddCharacterColumns()
 	local columns = {
 		{
-			name = "Name",
+			name = NAME,
 			key = "name",
 			width = 90,
 			cell = function(character)
@@ -426,7 +416,9 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = "Realm",
+			-- string.gsub(reward.id, "(%w)(:%d+)$", "%1")
+			-- /dump FRIENDS_LIST_REALM
+			name = FRIENDS_LIST_REALM:gsub("(%w)(:.*)$", "%1"),
 			key = "realmName",
 			width = 90,
 			cell = function(character)
@@ -434,7 +426,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = "Level",
+			name = LEVEL,
 			key = "level",
 			width = 50,
 			align = "CENTER",
@@ -443,7 +435,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = "Faction",
+			name = FACTION,
 			key = "factionName",
 			width = 60,
 			align = "CENTER",
@@ -452,13 +444,13 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = "LastUpdate",
+			name = UPDATE .. TIME_LABEL:gsub("(%w)(:.*)$", "%1"),
 			key = "lastUpdate",
 			width = 60,
 			align = "CENTER",
 			cell = function(character)
 				return {
-					text = Util.FormatTimeDuration(GetServerTime() - character.lastUpdate, true),
+					text = Util.FormatLastUpdateTime(character.lastUpdate),
 				}
 			end,
 		},
@@ -562,7 +554,7 @@ function Main:AddProgressToGameTooltip(progress)
 		-- Show objectives of single quest
 		progress:ForEachRecord(function(record, completed)
 			GameTooltip:AddDoubleLine(
-				WHITE_FONT_COLOR:WrapTextInColorCode("- " .. record.text or "Loading"),
+				WHITE_FONT_COLOR:WrapTextInColorCode("- " .. record.text or LFG_LIST_LOADING),
 				CreateAtlasMarkup(completed and "common-icon-checkmark" or "common-icon-redx", 12, 12)
 			)
 		end)
@@ -571,17 +563,24 @@ function Main:AddProgressToGameTooltip(progress)
 	GameTooltip:AddLine(" ")
 
 	if progress.claimedAt then
-		local duration = progress.startedAt and format(" (%s used)", Util.FormatTimeDuration(progress.claimedAt - progress.startedAt, true)) or ""
-		GameTooltip:AddDoubleLine("Rewards Received At:", WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.claimedAt) .. duration))
+		-- CRITERIA_COMPLETED_DATE
+		local duration = progress.startedAt and format(GARRISON_MISSION_TIME_TOTAL, Util.FormatTimeDuration(progress.claimedAt - progress.startedAt, true))
+			or ""
+		GameTooltip:AddDoubleLine(
+			ACHIEVEMENTFRAME_FILTER_COMPLETED,
+			WHITE_FONT_COLOR:WrapTextInColorCode(format("%s (%s)", date("%Y-%m-%d %H:%M", progress.claimedAt), duration))
+		)
 	elseif progress.startedAt then
-		GameTooltip:AddDoubleLine("Started At:", WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.startedAt)))
+		local duration = Util.FormatTimeDuration(GetServerTime() - progress.startedAt)
+		GameTooltip:AddDoubleLine(TIME_ELAPSED, WHITE_FONT_COLOR:WrapTextInColorCode(duration))
 
 		if progress.rewards then
 			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine("Rewards Received")
+			GameTooltip:AddLine(WEEKLY_REWARDS_CURRENT_REWARD)
 		end
 	else
 		GameTooltip:AddLine("<Not Started>")
+		GameTooltip:AddLine(QUEST_LOG_NO_QUESTS)
 	end
 
 	progress:ForEachRewardItem(function(item)
@@ -590,7 +589,7 @@ function Main:AddProgressToGameTooltip(progress)
 
 	if progress.drops and #progress.drops > 0 then
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("Drops")
+		GameTooltip:AddLine(BATTLE_PET_SOURCE_1)
 
 		progress:ForEachRewardItem(function(item)
 			GameTooltip:AddLine(Util.FormatItem(item))
@@ -599,7 +598,7 @@ function Main:AddProgressToGameTooltip(progress)
 end
 
 function Main:AddRewardToGameTooltip(reward)
-	GameTooltip:AddDoubleLine(reward.name, GREEN_FONT_COLOR:WrapTextInColorCode("|A:NPE_LeftClick:16:16|a(Sort)"))
+	GameTooltip:AddDoubleLine(reward.name, GREEN_FONT_COLOR:WrapTextInColorCode("|A:NPE_LeftClick:16:16|a(" .. STABLE_FILTER_BUTTON_LABEL .. ")"))
 	if reward.group then
 		GameTooltip:AddLine(reward.group .. ": " .. WHITE_FONT_COLOR:WrapTextInColorCode(reward.description))
 	else
@@ -607,19 +606,19 @@ function Main:AddRewardToGameTooltip(reward)
 	end
 
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddLine("Rewards")
+	GameTooltip:AddLine(REWARDS)
 
 	local items = reward:ForEachItem(function(item)
 		GameTooltip:AddLine(Util.FormatItem(item))
 	end)
 	if #items == 0 then
-		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode("Loading"))
+		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode(LFG_LIST_LOADING))
 	end
 
 	GameTooltip:AddLine(" ")
 
 	if reward.resetTime then
-		GameTooltip:AddLine("Time Left: " .. WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime())))
+		GameTooltip:AddLine(format(MAP_TOOLTIP_TIME_LEFT, WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime()))))
 	end
 end
 

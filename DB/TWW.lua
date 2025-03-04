@@ -10,7 +10,7 @@ local RewardsGroup = {
 namespace.DB.rewardCandidiates["tww"] = {
 	{
 		id = "tww-worldboss",
-		key = "WorldBoss",
+		key = MAP_LEGEND_WORLDBOSS:gsub(" ", ""),
 		description = "Weekly World Boss",
 		minimumLevel = 80,
 		entries = {

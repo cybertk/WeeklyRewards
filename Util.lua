@@ -190,6 +190,28 @@ function Util.FormatTimeDuration(seconds, useAbbreviation)
 	return format("%d%s %d%s", days, unitD, hours % 24, unitH)
 end
 
+function Util.FormatLastUpdateTime(time)
+	local seconds = GetServerTime() - time
+	local minutes = seconds / 60
+	local hours = minutes / 60
+	local days = hours / 24
+
+	if minutes < 1 then
+		return LASTONLINE_SECS
+	end
+
+	if hours < 1 then
+		-- Round up to 1 min
+		return LASTONLINE_MINUTES:format(minutes)
+	end
+
+	if days < 1 then
+		return LASTONLINE_HOURS:format(hours)
+	end
+
+	return LASTONLINE_DAYS:format(days)
+end
+
 function Util.FormatItem(item)
 	local s = CreateSimpleTextureMarkup(item.texture or 0, 13, 13) -- There is hidden item, i.e. spark drops
 

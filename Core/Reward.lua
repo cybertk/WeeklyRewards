@@ -216,6 +216,9 @@ local function GetCachedQuestRewardItems(quest)
 				})
 			end
 		end
+		if quest == 85879 then
+			Util:Debug("ccccc", numCurrencies, #items)
+		end
 
 		if #items == numCurrencies then
 			questRewardItemsCache[quest].currencies = items
