@@ -354,6 +354,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "Surge",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
+		rollover = true,
 		entries = {
 			{ quest = 86775 }, -- Urge to Surge
 		},
@@ -386,6 +387,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "Shipping",
 		group = RewardsGroup.UNDERMINE,
 		minimumLevel = 80,
+		rollover = true,
 		entries = {
 			{ quest = 85869 }, -- Many Jobs, Handle It!
 		},
@@ -395,6 +397,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "SCRAP",
 		group = RewardsGroup.UNDERMINE,
 		minimumLevel = 80,
+		rollover = true,
 		entries = {
 			{ quest = 85879 }, -- Reduce, Reuse, Resell
 		},
