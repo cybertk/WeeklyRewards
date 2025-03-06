@@ -369,6 +369,16 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{ quest = 86177 }, -- Side Gig: The Tides Provide
 			{ quest = 86178 }, -- Side Gig: Cleanin' the Coast
 			{ quest = 86179 }, -- Side Gig: Lucky Break's Big Break
+
+			{ quest = 85914 }, -- Side Gig: Coolant Matters
+			{ quest = 85944 }, -- Side Gig: Blood Type
+			{ quest = 85945 }, -- Side Gig: Blood-B-Gone
+			{ quest = 85960 }, -- Side Gig: Lost in the Sauce
+
+			{ quest = 85553 }, -- Side Gig: Feeling Crabby
+			{ quest = 85913 }, -- Side Gig: Cleanup Detail
+			{ quest = 85962 }, -- Side Gig: Unseemly Reagents
+			{ quest = 86180 }, -- Side Gig: Infested Waters
 		},
 	},
 	{
