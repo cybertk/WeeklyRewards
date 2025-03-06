@@ -338,14 +338,23 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "SA:Underm",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		pick = 2,
 		entries = {
 			{
-				quest = 85487, -- Special Assignment: Boom! Headshot!
-				unlockQuest = 85489, -- Special Assignment: Capstone 1 - Unlock
+				quest = 84948, -- Contract Work
+				removeOnCompletion = true,
 			},
 			{
-				quest = 85488, -- Special Assignment: Security Detail
-				unlockQuest = 85490, -- Special Assignment: Capstone 2 - Unlock
+				quest = 85487,
+				questPool = {
+					85487, -- Special Assignment: Boom! Headshot!
+					85488, -- Special Assignment: Security Detail
+				},
+				unlockQuest = {
+					85489, -- Special Assignment: Capstone 1 - Unlock
+					85490, -- Special Assignment: Capstone 2 - Unlock
+				},
 			},
 		},
 	},
