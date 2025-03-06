@@ -443,7 +443,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = "Fraction",
+			name = "Faction",
 			key = "factionName",
 			width = 60,
 			align = "CENTER",
