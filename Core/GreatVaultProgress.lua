@@ -37,6 +37,14 @@ function GreatVaultProgress:_UpdateRecords()
 		end
 	end
 
+	if C_WeeklyRewards.HasAvailableRewards() then
+		table.insert(self.records, {
+			text = format("HasAvailableRewards"),
+			fulfilled = 0,
+			required = 1,
+		})
+	end
+
 	self.position = position
 	self.total = #self.records
 end
