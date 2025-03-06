@@ -160,6 +160,16 @@ function Reward:HasConfirmed()
 	return self.state == STATE.CONFIRMED
 end
 
+function Reward:HasQuestPool()
+	for _, o in ipairs(self.objectives) do
+		if o.questPool then
+			return true
+		end
+	end
+
+	return false
+end
+
 local questRewardItemsCache = {}
 local function GetCachedQuestRewardItems(quest)
 	questRewardItemsCache[quest] = questRewardItemsCache[quest] or {}
