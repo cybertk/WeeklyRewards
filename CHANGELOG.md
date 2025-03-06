@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.6.3 - 2025-03-06
+
+### Fix
+
+- Undermine quests can roll over progress after weekly reset
+- Side Gig quests rotations are now correctly identified and tracked
+
 ## v1.6.2 - 2025-03-04
 
 ### Fix
