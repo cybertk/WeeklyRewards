@@ -411,4 +411,14 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{ quest = 85879 }, -- Reduce, Reuse, Resell
 		},
 	},
+	{
+		id = "tww-gobfather",
+		key = "Gobfather",
+		group = RewardsGroup.UNDERMINE,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 85088 }, -- The Main Event
+		},
+	},
 }
