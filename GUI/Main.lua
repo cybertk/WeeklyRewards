@@ -452,6 +452,15 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
+			name = "Location",
+			key = "location",
+			width = 90,
+			align = "CENTER",
+			cell = function(character)
+				return { text = character.location }
+			end,
+		},
+		{
 			name = "LastUpdate",
 			key = "lastUpdate",
 			width = 60,

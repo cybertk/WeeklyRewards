@@ -10,6 +10,7 @@ local Character = {
 	level = 0,
 	factionName = "",
 	class = "",
+	location = "",
 }
 namespace.Character = Character
 
@@ -55,6 +56,7 @@ function Character:_Init()
 	self.class = classFile
 	self.progress = {}
 	self.lastUpdate = WAPI.GetServerTime()
+	self.location = GetZoneText()
 
 	Util:Debug("Initialized new character:", self.name)
 end
@@ -245,4 +247,8 @@ function Character:ForEachProgress(callback, completedOnly)
 			callback(progress)
 		end
 	end
+end
+
+function Character:UpdateLocation()
+	self.location = GetZoneText()
 end

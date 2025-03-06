@@ -116,6 +116,10 @@ function WeeklyRewards:OnEnable()
 		self:UpdateRewardsGUIDSafe(character, quest)
 	end)
 
+	self:RegisterEvent("ZONE_CHANGED", function(event)
+		character:UpdateLocation()
+	end)
+
 	self:RegisterBucketEvent(
 		{
 			"ITEM_PUSH",
