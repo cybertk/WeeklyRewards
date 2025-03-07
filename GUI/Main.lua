@@ -570,7 +570,10 @@ function Main:AddProgressToGameTooltip(progress)
 				WHITE_FONT_COLOR:WrapTextInColorCode(format("%s (%s)", date("%Y-%m-%d %H:%M", progress.claimedAt), duration))
 			)
 		else
-			GameTooltip:AddDoubleLine(ACHIEVEMENTFRAME_FILTER_COMPLETED, WHITE_FONT_COLOR:WrapTextInColorCode(GARRISON_MISSION_TIME_TOTAL:format(TIME_UNKNOWN)))
+			GameTooltip:AddDoubleLine(
+				ACHIEVEMENTFRAME_FILTER_COMPLETED,
+				WHITE_FONT_COLOR:WrapTextInColorCode(format("(%s)", GARRISON_MISSION_TIME_TOTAL:format(TIME_UNKNOWN)))
+			)
 		end
 	elseif progress.startedAt then
 		local duration = Util.FormatTimeDuration(GetServerTime() - progress.startedAt)
