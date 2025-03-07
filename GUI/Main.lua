@@ -142,7 +142,7 @@ function Main:AddSettingsButton()
 			end,
 			hasOpacity = 1,
 		}
-		rootMenu:CreateColorSwatch(BACKGROUND .. " - " .. COLOR, function()
+		rootMenu:CreateColorSwatch(BACKGROUND, function()
 			ColorPickerFrame:SetupColorPickerAndShow(colorInfo)
 		end, colorInfo)
 
@@ -418,7 +418,7 @@ function Main:AddCharacterColumns()
 		{
 			-- string.gsub(reward.id, "(%w)(:%d+)$", "%1")
 			-- /dump FRIENDS_LIST_REALM
-			name = FRIENDS_LIST_REALM:gsub("(%w)(:.*)$", "%1"),
+			name = Util.Minify(FRIENDS_LIST_REALM),
 			key = "realmName",
 			width = 90,
 			cell = function(character)
@@ -444,7 +444,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = UPDATE .. TIME_LABEL:gsub("(%w)(:.*)$", "%1"),
+			name = Util.Minify(UPDATE .. TIME_LABEL),
 			key = "lastUpdate",
 			width = 60,
 			align = "CENTER",

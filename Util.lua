@@ -236,3 +236,7 @@ function Util.WrapTextInClassColor(classFile, ...)
 
 	return ...
 end
+
+function Util.Minify(s)
+	return s:gsub("[：%p%s]", "")
+end
