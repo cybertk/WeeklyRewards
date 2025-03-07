@@ -565,7 +565,7 @@ function Main:AddProgressToGameTooltip(progress)
 	if progress.claimedAt then
 		-- CRITERIA_COMPLETED_DATE
 		local duration = progress.startedAt and format(GARRISON_MISSION_TIME_TOTAL, Util.FormatTimeDuration(progress.claimedAt - progress.startedAt, true))
-			or ""
+			or TIME_UNKNOWN
 		GameTooltip:AddDoubleLine(
 			ACHIEVEMENTFRAME_FILTER_COMPLETED,
 			WHITE_FONT_COLOR:WrapTextInColorCode(format("%s (%s)", date("%Y-%m-%d %H:%M", progress.claimedAt), duration))
