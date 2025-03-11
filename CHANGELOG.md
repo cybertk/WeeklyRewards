@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.7.0 - 2025-03-11
+
+## New Features
+
+- Added Location column to display character's area.
+- Added support for tracking re-accepted quests after abandonment.
+- Added support for new rewards: Undermine Wordboss Gobfather.
+
 ## v1.6.3 - 2025-03-06
 
 ### Fix
