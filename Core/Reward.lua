@@ -169,24 +169,6 @@ local function GetCachedQuestRewardItems(quest)
 
 	if #questRewardItemsCache[quest] > 0 then
 		return questRewardItemsCache[quest]
-	elseif questRewardItemsCache[quest].items and questRewardItemsCache[quest].currencies then
-		local items = {}
-		for _, item in ipairs(questRewardItemsCache[quest].items) do
-			table.insert(items, item)
-		end
-		for _, item in ipairs(questRewardItemsCache[quest].currencies) do
-			table.insert(items, item)
-		end
-
-		questRewardItemsCache[quest].items = nil
-		questRewardItemsCache[quest].currencies = nil
-
-		questRewardItemsCache[quest] = items
-		return items
-	elseif questRewardItemsCache[quest].items then
-		return questRewardItemsCache[quest].items
-	elseif questRewardItemsCache[quest].currencies then
-		return questRewardItemsCache[quest].currencies
 	end
 
 	if questRewardItemsCache[quest].items == nil then
@@ -217,18 +199,35 @@ local function GetCachedQuestRewardItems(quest)
 
 		for i = 1, numCurrencies do
 			local currency = C_QuestLog.GetQuestRewardCurrencyInfo(quest, i, numChoice > 0)
-			table.insert(items, {
-				id = currency.currencyID,
-				name = currency.name,
-				texture = currency.texture,
-				amount = currency.bonusRewardAmount ~= 0 and currency.bonusRewardAmount or currency.baseRewardAmount,
-				quality = currency.quality,
-			})
+			if currency then
+				table.insert(items, {
+					id = currency.currencyID,
+					name = currency.name,
+					texture = currency.texture,
+					amount = currency.bonusRewardAmount ~= 0 and currency.bonusRewardAmount or currency.baseRewardAmount,
+					quality = currency.quality,
+				})
+			end
 		end
 
-		if numCurrencies > 0 then
+		if #items == numCurrencies then
 			questRewardItemsCache[quest].currencies = items
 		end
+	end
+
+	do
+		local items = {}
+		for _, item in ipairs(questRewardItemsCache[quest].items or {}) do
+			table.insert(items, item)
+		end
+		for _, item in ipairs(questRewardItemsCache[quest].currencies or {}) do
+			table.insert(items, item)
+		end
+
+		if questRewardItemsCache[quest].items and questRewardItemsCache[quest].currencies then
+			questRewardItemsCache[quest] = items
+		end
+		return items
 	end
 end
 

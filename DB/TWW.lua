@@ -61,15 +61,17 @@ namespace.DB.rewardCandidiates["tww"] = {
 		description = "Delves Meta Quest",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 70,
+		timeLeft = function()
+			local questDuration = 21 * SECONDS_PER_DAY
+			local questWeek = time({ year = 2025, month = 2, day = 24 })
+
+			local now = GetServerTime()
+			local timeStarted = questWeek + ((now + C_DateAndTime.GetSecondsUntilWeeklyReset() - questWeek) % (7 * SECONDS_PER_DAY))
+
+			return questDuration - ((now - timeStarted) % questDuration)
+		end,
 		entries = {
-			{ quest = 82746 }, -- Delves: Breaking Tough to Loot Stuff
-			{ quest = 82707 }, -- Delves: Earthen Defense
-			{ quest = 82710 }, -- Delves: Empire-ical Exploration
-			{ quest = 82706 }, -- Delves: Khaz Algar Research
-			{ quest = 82711 }, -- Delves: Lost and Found
-			{ quest = 82708 }, -- Delves: Nerubian Menace
-			{ quest = 82709 }, -- Delves: Percussive Archaeology
-			{ quest = 82712 }, -- Delves: Trouble Up and Down Khaz Algar
+			{ quest = 82706 }, -- Delves: Worldwide Research
 		},
 	},
 	{
@@ -119,6 +121,11 @@ namespace.DB.rewardCandidiates["tww"] = {
 					82509, -- Worldsoul: Nerub-ar Palace [LFR]
 					82659, -- Worldsoul: Nerub-ar Palace [N]
 					82510, -- Worldsoul: Nerub-ar Palace [H]
+					87417, -- Worldsoul: Dungeons
+					87419, -- Worldsoul: Delves
+					87422, -- Worldsoul: Undermine World Quests
+					87423, -- Worldsoul: Undermine Explorer
+					87424, -- Worldsoul: World Bosses
 				},
 			},
 		},
@@ -186,6 +193,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "Troupe",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
+		rollover = true,
 		entries = {
 			{ quest = 83240 }, -- The Theater Troupe
 		},
@@ -206,6 +214,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		description = "Collect wax for Kobolds",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
+		rollover = true,
 		entries = {
 			{ quest = 82946 }, -- Rollin' Down in the Deeps
 		},
@@ -345,6 +354,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "Surge",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
+		rollover = true,
 		entries = {
 			{ quest = 86775 }, -- Urge to Surge
 		},
@@ -360,6 +370,16 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{ quest = 86177 }, -- Side Gig: The Tides Provide
 			{ quest = 86178 }, -- Side Gig: Cleanin' the Coast
 			{ quest = 86179 }, -- Side Gig: Lucky Break's Big Break
+
+			{ quest = 85914 }, -- Side Gig: Coolant Matters
+			{ quest = 85944 }, -- Side Gig: Blood Type
+			{ quest = 85945 }, -- Side Gig: Blood-B-Gone
+			{ quest = 85960 }, -- Side Gig: Lost in the Sauce
+
+			{ quest = 85553 }, -- Side Gig: Feeling Crabby
+			{ quest = 85913 }, -- Side Gig: Cleanup Detail
+			{ quest = 85962 }, -- Side Gig: Unseemly Reagents
+			{ quest = 86180 }, -- Side Gig: Infested Waters
 		},
 	},
 	{
@@ -367,6 +387,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "Shipping",
 		group = RewardsGroup.UNDERMINE,
 		minimumLevel = 80,
+		rollover = true,
 		entries = {
 			{ quest = 85869 }, -- Many Jobs, Handle It!
 		},
@@ -376,6 +397,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "SCRAP",
 		group = RewardsGroup.UNDERMINE,
 		minimumLevel = 80,
+		rollover = true,
 		entries = {
 			{ quest = 85879 }, -- Reduce, Reuse, Resell
 		},

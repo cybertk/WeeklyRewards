@@ -42,6 +42,21 @@ function WeeklyRewards:Redraw()
 	Main:Redraw()
 end
 
+function WeeklyRewards:MigrateDB()
+	local candidates = {}
+	for _, candidate in ipairs(DB:GetAllCandidates()) do
+		candidates[candidate.id] = candidate
+	end
+
+	for _, reward in ipairs(self.db.global.activeRewards) do
+		local candidate = candidates[reward.id]
+		if candidate and reward.rollover ~= candidate.rollover then
+			reward.rollover = candidate.rollover
+			Util:Debug("v1.6.3: Rewards rollover migrated: ", reward.id, reward.rollover)
+		end
+	end
+end
+
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"
 	self:RegisterChatCommand("wr", "ExecuteChatCommands")
@@ -71,6 +86,8 @@ function WeeklyRewards:OnInitialize()
 	})
 	LibDBIcon:Register(addonName, WRLDB, self.db.global.minimap)
 	LibDBIcon:AddButtonToCompartment(addonName)
+
+	self:MigrateDB()
 end
 
 function WeeklyRewards:OnEnable()

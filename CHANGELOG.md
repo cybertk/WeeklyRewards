@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.6.3 - 2025-03-06
+
+### Fix
+
+- Undermine quests can roll over progress after weekly reset
+- Side Gig quests rotations are now correctly identified and tracked
+
+## v1.6.2 - 2025-03-04
+
+### Fix
+
+- Worldsoul quest now can recognize new Undermine tasks.
+- Delves: Worldwide Research can be tracked now.
+
+## v1.6.1 - 2025-03-03
+
+### Fix
+
+- Spider progress now will not display rewards received time after Pact completion.
+- Resolved a Tooltip crash that occasionally occurred when hovering over the reward header.
+- The progress of or "The Theater Troupe" and "Rollin' Down in the Deeps" now can rollover after weekly reset.
+
 ## v1.6.0 - 2025-03-01
 
 ## New Features
