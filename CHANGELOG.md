@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.7.1 - 2025-03-12
+
+### Fix
+
+- Crash: When encountering a new character for the first time.
+
 ## v1.7.0 - 2025-03-11
 
 ## New Features
