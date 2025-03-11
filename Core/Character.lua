@@ -207,11 +207,11 @@ function Character:Scan(activeRewards)
 		end
 
 		local progress = self.progress[reward.id]
-		if reward:HasQuestPool() and not progress:hasClaimed() then
+		if progress == nil or next(progress) == nil or progress:ObjectivesCount() == 0 then
 			return true
 		end
 
-		if progress == nil or next(progress) == nil or progress:ObjectivesCount() == 0 then
+		if reward:HasQuestPool() and not progress:hasClaimed() then
 			return true
 		end
 
