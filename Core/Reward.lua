@@ -153,9 +153,9 @@ function Reward:HasConfirmed()
 	return self.state == STATE.CONFIRMED
 end
 
-function Reward:HasQuestPool()
+function Reward:HasQuestPool(includeLocked)
 	for _, o in ipairs(self.objectives) do
-		if o.questPool then
+		if o.questPool and (includeLocked or o.unlockQuest == nil) then
 			return true
 		end
 	end
