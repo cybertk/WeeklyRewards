@@ -153,6 +153,7 @@ function WeeklyRewards:OnEnable()
 		{
 			"CALENDAR_UPDATE_EVENT_LIST",
 			"PLAYER_LEVEL_CHANGED",
+			"PLAYER_ENTERING_WORLD",
 			"QUEST_ACCEPTED",
 		},
 		3,
