@@ -414,4 +414,16 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{ quest = 85088 }, -- The Main Event
 		},
 	},
+	{
+		id = "tww-dmap",
+		key = "DelveMap",
+		description = "Weekly Delver's Bounty Map",
+		group = RewardsGroup.DELVE,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 86371, items = { 233071 } },
+		},
+		items = { { item = 233071, amount = 1 } },
+	},
 }
