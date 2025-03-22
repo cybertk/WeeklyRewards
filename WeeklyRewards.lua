@@ -42,7 +42,14 @@ function WeeklyRewards:Redraw()
 	Main:Redraw()
 end
 
-function WeeklyRewards:MigrateDB() end
+function WeeklyRewards:MigrateDB()
+	for _, reward in ipairs(self.db.global.activeRewards) do
+		if reward.id == "tww-keys" then
+			reward.group = "Delve"
+			Util:Debug("v1.8.0: Delves group migrated")
+		end
+	end
+end
 
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"

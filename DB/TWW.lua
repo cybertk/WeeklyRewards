@@ -5,6 +5,7 @@ local RewardsGroup = {
 	WEEKLY_CACHE = "Weekly Cache",
 	SIREN_ISLE = "Siren Isle",
 	UNDERMINE = "Undermine",
+	DELVE = "Delve",
 }
 
 namespace.DB.rewardCandidiates["tww"] = {
@@ -24,6 +25,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		id = "tww-keys",
 		key = "DelveKeys",
 		description = "Weekly Delve Keys",
+		group = RewardsGroup.DELVE,
 		pick = 4,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
