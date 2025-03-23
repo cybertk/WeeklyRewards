@@ -206,8 +206,8 @@ function Main:AddCharactersButton()
 				character.enabled = not character.enabled
 				self:Redraw()
 			end)
-		end, function()
-			return true
+		end, function(character)
+			return not CharacterStore.IsCurrentPlayer(character)
 		end)
 	end)
 end
@@ -743,6 +743,8 @@ function Main:Redraw()
 
 			table.insert(tableData.rows, row)
 			tableHeight = tableHeight + self.window.table.config.rows.height
+		end, function(character) -- filter
+			return CharacterStore.IsCurrentPlayer(character) or character.enabled
 		end)
 	end
 

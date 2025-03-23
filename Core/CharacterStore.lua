@@ -105,6 +105,10 @@ function CharacterStore:CurrentPlayer()
 	return self[id]
 end
 
+function CharacterStore.IsCurrentPlayer(character)
+	return character.GUID == UnitGUID("player")
+end
+
 function CharacterStore:GetSortOrder()
 	return Cache.sortOrder, Cache.ascending
 end
