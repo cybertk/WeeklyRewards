@@ -45,7 +45,14 @@ end
 function WeeklyRewards:MigrateDB()
 	for _, reward in ipairs(self.db.global.activeRewards) do
 		if reward.id == "tww-keys" then
+			reward.id = "tww-dkeys"
 			reward.group = "Delve"
+			for _, c in pairs(self.db.global.characters) do
+				if c.progress and c.progress["tww-keys"] then
+					c.progress["tww-dkeys"] = c.progress["tww-keys"]
+					c.progress["tww-keys"] = nil
+				end
+			end
 			Util:Debug("v1.8.0: Delves group migrated")
 		end
 	end

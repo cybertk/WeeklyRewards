@@ -22,7 +22,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		},
 	},
 	{
-		id = "tww-keys",
+		id = "tww-dkeys",
 		key = "DelveKeys",
 		description = "Weekly Delve Keys",
 		group = RewardsGroup.DELVE,
