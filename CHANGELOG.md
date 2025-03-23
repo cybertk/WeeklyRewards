@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.7.2 - 2025-03-13
+
+### Fix
+
+- Archives quest progress is stuck at First Disc.
+- Cannot recognize Dungeon reward when Operation: Floodgate is the active quest.
+- Spider progress failed to rollover before signing a pact.
+- Active rewards occasionally failed to update after reset.
+
+## v1.7.1 - 2025-03-12
+
+### Fix
+
+- Crash: When encountering a new character for the first time.
+
 ## v1.7.0 - 2025-03-11
 
 ## New Features

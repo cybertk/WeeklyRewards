@@ -98,7 +98,12 @@ function RewardProgress:Init(reward)
 				end
 			end
 		else
-			if objective.unlockQuest and objective.unlockUntilReset and not WAPI_IsQuestFlaggedCompleted(objective.unlockQuest) then
+			if
+				objective.unlockQuest
+				and objective.unlockUntilReset
+				and not WAPI_IsQuestFlaggedCompleted(objective.unlockQuest)
+				and not WAPI_IsOnQuest(objective.quest)
+			then
 				Util:Debug("Track only UnlockQuest:", reward.name)
 
 				objective = { quest = objective.unlockQuest }
@@ -165,7 +170,7 @@ function RewardProgress:_UpdateRecords()
 		end
 
 		local quest = reward.unlockQuest or reward.quest
-		if reward.unlockQuest and WAPI_IsQuestFlaggedCompleted(reward.unlockQuest) then
+		if reward.unlockQuest and (WAPI_IsQuestFlaggedCompleted(reward.unlockQuest) or WAPI_IsOnQuest(reward.quest)) then
 			quest = reward.quest
 		end
 		for _, objective in ipairs(WAPI_GetQuestObjectives(quest) or {}) do
