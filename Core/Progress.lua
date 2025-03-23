@@ -246,6 +246,16 @@ function RewardProgress:Update(completedQuest)
 			fulfilled = true
 		end
 
+		if objective.itemsMaxCount then
+			fulfilled = true
+			for i, item in ipairs(objective.items) do
+				if WAPI_GetItemCount(item) ~= objective.itemsMaxCount[i] then
+					fulfilled = false
+				end
+			end
+			Util:Debug("itemsMaxCount:", fulfilled, objective.quest)
+		end
+
 		if fulfilled then
 			table.insert(self.fulfilledObjectives, objective)
 			table.remove(self.pendingObjectives, i)
