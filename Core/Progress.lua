@@ -93,7 +93,7 @@ function RewardProgress:Init(reward)
 				then
 					table.insert(
 						self.pendingObjectives,
-						{ quest = quest, items = { objective.items and objective.items[i] } or nil, profession = unlockProfession }
+						{ quest = quest, items = objective.items and { objective.items[i] } or nil, profession = unlockProfession }
 					)
 				end
 			end
