@@ -416,6 +416,41 @@ namespace.DB.rewardCandidiates["tww"] = {
 		},
 	},
 	{
+		id = "tww-chett",
+		key = "C.H.E.T.T.",
+		description = "Weekly C.H.E.T.T. List",
+		group = RewardsGroup.UNDERMINE,
+		minimumLevel = 80,
+		rollover = true,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		pick = 2,
+		entries = {
+			{ quest = 87296, items = { 236682, 235053 }, itemsMaxCount = { 0, 1 }, removeOnCompletion = true },
+			{
+				quest = 0,
+				questPool = {
+					86915, -- Side with a Cartel
+					86917, -- Ship Right
+					86918, -- Reclaimed Scrap
+					86919, -- Side Gig
+					86920, -- War Mode Violence
+					86923, -- Go Fish
+					86924, -- Gotta Catch at Least a Few
+					87302, -- Rare Rivals
+					87303, -- Clean the Sidestreets
+					87304, -- Time to Vacate
+					87305, -- Desire to D.R.I.V.E.
+					87306, -- Kaja Cruising
+					87307, -- Garbage Day
+				},
+			},
+		},
+		items = {
+			{ currency = 3008, amount = 1 },
+			{ item = 235053, amount = 1 },
+		},
+	},
+	{
 		id = "tww-dmap",
 		key = "DelveMap",
 		description = "Weekly Delver's Bounty Map",
