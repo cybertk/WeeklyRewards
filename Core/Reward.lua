@@ -153,16 +153,6 @@ function Reward:HasConfirmed()
 	return self.state == STATE.CONFIRMED
 end
 
-function Reward:HasQuestPool(includeLocked)
-	for _, o in ipairs(self.objectives) do
-		if o.questPool and (includeLocked or o.unlockQuest == nil) then
-			return true
-		end
-	end
-
-	return false
-end
-
 local questRewardItemsCache = {}
 local function GetCachedQuestRewardItems(quest)
 	questRewardItemsCache[quest] = questRewardItemsCache[quest] or {}

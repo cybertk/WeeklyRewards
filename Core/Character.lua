@@ -211,10 +211,6 @@ function Character:Scan(activeRewards)
 			return true
 		end
 
-		if reward:HasQuestPool() and not progress:hasClaimed() then
-			return true
-		end
-
 		if progress:hasStarted() then
 			return false
 		end
