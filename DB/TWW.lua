@@ -87,6 +87,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{
 				quest = 82511,
 				unlockQuest = 82449, -- The Call of the Worldsoul
+				maxCompletion = 1,
 				questPool = {
 					82511, -- Worldsoul: Awakening Machine
 					82453, -- Worldsoul: Encore!
@@ -428,6 +429,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{ quest = 87296, items = { 236682, 235053 }, itemsMaxCount = { 0, 1 }, removeOnCompletion = true },
 			{
 				quest = 0,
+				maxCompletion = 4,
 				questPool = {
 					86915, -- Side with a Cartel
 					86917, -- Ship Right

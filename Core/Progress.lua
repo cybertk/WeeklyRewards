@@ -8,6 +8,7 @@ local RewardProgress = {
 	records = nil,
 	pendingObjectives = nil,
 	fulfilledObjectives = nil,
+	numObjectives = nil,
 	startedAt = nil,
 	claimedAt = nil,
 	rewards = nil,
@@ -69,20 +70,28 @@ function RewardProgress:Init(reward)
 	end
 
 	self.name = reward.name
-	self.state = PROGRESS_STATE.NOT_STARTED
+	self.state = self.state or PROGRESS_STATE.NOT_STARTED
 	self.pendingObjectives = {}
 	self.fulfilledObjectives = {}
-	self.startedAt = nil
-	self.claimedAt = nil
+	self.numObjectives = #reward.objectives
 
 	local factionNameToEnum = { ["Alliance"] = 1, ["Horde"] = 2 }
 
 	for _, objective in ipairs(reward.objectives) do
 		if objective.questPool then
+			local numObjectives = 0
+			local numCompleted = 0
+
 			for i, quest in ipairs(objective.questPool) do
 				local unlockProfession = objective.unlockProfession and objective.unlockProfession[i]
 
-				if
+				if objective.maxCompletion and WAPI_IsQuestFlaggedCompleted(quest) then
+					table.insert(self.fulfilledObjectives, { quest = quest, prior = true })
+					numCompleted = numCompleted + 1
+					if numCompleted >= objective.maxCompletion then
+						break
+					end
+				elseif
 					WAPI_IsOnQuest(quest)
 					or unlockProfession and Util:IsProfessionLearned(unlockProfession)
 					or (objective.unlockQuest and WAPI_IsQuestFlaggedCompleted(
@@ -95,8 +104,11 @@ function RewardProgress:Init(reward)
 						self.pendingObjectives,
 						{ quest = quest, items = objective.items and { objective.items[i] } or nil, profession = unlockProfession }
 					)
+					numObjectives = numObjectives + 1
 				end
 			end
+
+			self.numObjectives = self.numObjectives - 1 + (objective.maxCompletion or numObjectives)
 		else
 			if
 				objective.unlockQuest
@@ -112,9 +124,9 @@ function RewardProgress:Init(reward)
 		end
 	end
 
-	self.total = #self.pendingObjectives
+	self.total = self.numObjectives
 
-	return self.total > 0
+	return #self.pendingObjectives > 0 or #self.fulfilledObjectives > 0
 end
 
 function RewardProgress:NeedTrackPosition()
@@ -226,6 +238,13 @@ function RewardProgress:_RemoveExpiredObjectives()
 		table.remove(self.fulfilledObjectives, i)
 		Util:Debug("Removed completed objective: ", self.name, objective.quest)
 	end
+
+	if self.numObjectives and self.numObjectives > 1 then
+		self.numObjectives = self.numObjectives - #indexToRemove
+		self.total = self.total - 1
+	end
+
+	return true
 end
 
 -- Return true indictes there is an update
@@ -262,12 +281,16 @@ function RewardProgress:Update(completedQuest)
 		end
 	end
 
-	self:_RemoveExpiredObjectives()
+	if self:_RemoveExpiredObjectives() then
+		newState = PROGRESS_STATE.IN_PROGRESS
+	end
 
-	if #self.pendingObjectives == 0 then
+	if #self.fulfilledObjectives == self.numObjectives or (#self.pendingObjectives == 0 and self.numObjectives == nil) then
 		newState = PROGRESS_STATE.CLAIMED
 		-- Cannot update the records here since the progress is already lost
 		self:_FinalizeRecords()
+		-- Drop remaining optional objectives
+		self.pendingObjectives = {}
 	elseif #self.fulfilledObjectives > 0 then
 		-- Multi rewards scenerio
 		newState = PROGRESS_STATE.IN_PROGRESS
@@ -277,10 +300,13 @@ function RewardProgress:Update(completedQuest)
 		self:_UpdateRecords()
 		if self.position > 0 or WAPI_IsOnQuest(self.pendingObjectives[1].quest) then
 			newState = PROGRESS_STATE.IN_PROGRESS
+		else
+			newState = PROGRESS_STATE.NOT_STARTED
 		end
 
 		if self.total == 0 then
 			-- No records were found in this case, fallback to track rewards count
+			Util:Debug("No objectives found:", self.name)
 			self.total = 1
 		end
 	end
