@@ -109,6 +109,17 @@ function CharacterStore.IsCurrentPlayer(character)
 	return character.GUID == UnitGUID("player")
 end
 
+function CharacterStore:RemoveCharacter(id)
+	if not self[id] then
+		return false
+	end
+
+	Util:Debug("Removed character: ", self[id].name)
+
+	self[id] = nil
+	return true
+end
+
 function CharacterStore:GetSortOrder()
 	return Cache.sortOrder, Cache.ascending
 end

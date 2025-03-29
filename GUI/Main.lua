@@ -180,6 +180,8 @@ function Main:AddCharactersButton()
 		GameTooltip:SetOwner(self.window.titlebar.CharactersButton, "ANCHOR_TOP")
 		GameTooltip:SetText("Characters", 1, 1, 1, 1, true)
 		GameTooltip:AddLine("Enable/Disable your characters.", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine("<Ctrl click to remove a character>", GREEN_FONT_COLOR.r, GREEN_FONT_COLOR.g, GREEN_FONT_COLOR.b)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.CharactersButton:SetScript("OnLeave", function()
@@ -203,6 +205,11 @@ function Main:AddCharactersButton()
 			local characterButton = rootMenu:CreateCheckbox(Util.WrapTextInClassColor(character.class, name), function()
 				return character.enabled or false
 			end, function()
+				if IsControlKeyDown() then
+					self:RemoveRow(character)
+					return
+				end
+
 				character.enabled = not character.enabled
 				self:Redraw()
 			end)
@@ -413,6 +420,17 @@ function Main:CreateWindow()
 	self.window.table:SetPoint("BOTTOMRIGHT", self.window, "BOTTOMRIGHT", 0, 0)
 
 	table.insert(UISpecialFrames, frameName)
+end
+
+function Main:RemoveRow(character)
+	Util:Debug("Removing row:", character.name)
+
+	local text = CONFIRM_DESTROY_CHARACTER_COMMUNITY:gsub(CLUB_FINDER_COMMUNITY_TYPE:lower(), PVP_PROGRESS_REWARDS_HEADER:lower())
+
+	StaticPopup_ShowGenericConfirmation(text:gsub("|n.*$", ""):format(character.name), function()
+		CharacterStore:Get():RemoveCharacter(character.GUID)
+		self:Redraw()
+	end)
 end
 
 function Main:AddCharacterColumns()
