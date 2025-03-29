@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.8.0 - 2025-03-29
+
+## New Features
+
+- Ctrl+Click progress cell of current player forces progress reset
+- Ctrl+Click character name in settings removes all its progress
+- Always show progress of current playing character (even when disabled by others)
+- Added new reward support:
+    - Weekly C.H.E.T.T list
+    - Weekly Delver's Bounty map
+- Added new group "Delve": includes DelveKeys and DelveMap
+
 ## v1.7.2 - 2025-03-13
 
 ### Fix
