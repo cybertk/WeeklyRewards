@@ -433,6 +433,19 @@ function Main:RemoveRow(character)
 	end)
 end
 
+function Main:ResetCell(character, reward)
+	Util:Debug("Reseting cell:", character.name, reward.id)
+
+	local text = CONFIRM_DESTROY_CHARACTER_COMMUNITY:gsub(CLUB_FINDER_COMMUNITY_TYPE:lower(), PVP_PROGRESS_REWARDS_HEADER:lower())
+
+	StaticPopup_ShowGenericConfirmation(text:gsub("|n.*$", ""):format(reward.name), function()
+		character:ResetProgress(reward, true)
+		character:Scan({ reward })
+		character:UpdateProgress()
+		self:Redraw()
+	end)
+end
+
 function Main:AddCharacterColumns()
 	local columns = {
 		{
@@ -541,10 +554,27 @@ function Main:AddRewardColumns()
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
 						self:AddProgressToGameTooltip(progress)
+						cellFrame.hasInstructions = nil
 						GameTooltip:Show()
 					end,
 					onLeave = function()
 						GameTooltip:Hide()
+					end,
+					onClick = function(rowFrame, cellFrame)
+						if not CharacterStore.IsCurrentPlayer(character) then
+							return
+						end
+
+						if not cellFrame.hasInstructions then
+							GameTooltip:AddLine(" ")
+							GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode("<Ctrl click to reset the progress>"))
+							GameTooltip:Show()
+							cellFrame.hasInstructions = true
+						end
+
+						if IsControlKeyDown() then
+							self:ResetCell(character, reward)
+						end
 					end,
 				}
 			end,

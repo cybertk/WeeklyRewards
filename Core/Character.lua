@@ -101,14 +101,14 @@ function Character:UpdateProgress(quest)
 	end
 end
 
-function Character:ResetProgress(reward)
+function Character:ResetProgress(reward, force)
 	local progress = self.progress[reward.id]
 
 	if progress == nil then
 		return
 	end
 
-	if reward.rollover and progress:hasStarted() then
+	if not force and reward.rollover and progress:hasStarted() then
 		-- skip reset if: rollover and started.  OR progress.started > rewarwd.started
 		Util:Debug(format("progress of [%s] has been rollovered for character: %s ", reward.name, self.name))
 		return
