@@ -54,6 +54,15 @@ function WeeklyRewards:MigrateDB()
 				end
 			end
 			Util:Debug("v1.8.0: Delves group migrated")
+		elseif reward.id == "tww-chett" and #reward.objectives == 2 and reward.objectives[2].unlockItem == nil then
+			reward.objectives[2].unlockItem = 235053
+			for _, c in pairs(self.db.global.characters) do
+				if c.progress and c.progress["tww-chett"] and c.progress["tww-chett"].position == 4 and c.progress["tww-chett"].total == 5 then
+					c.progress["tww-chett"] = nil
+					Util:Debug("v1.8.1: tww-chett reset:", c.name)
+				end
+			end
+			Util:Debug("v1.8.1: tww-chett migrated")
 		end
 	end
 end
