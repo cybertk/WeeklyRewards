@@ -81,7 +81,6 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "Worldsoul",
 		description = "The Call of the Worldsoul",
 		group = RewardsGroup.PINNACLE_CACHE,
-		rollover = true,
 		minimumLevel = 70,
 		entries = {
 			{
