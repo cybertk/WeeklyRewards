@@ -147,6 +147,10 @@ function WeeklyRewards:OnEnable()
 		character:UpdateLocation()
 	end)
 
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", function(event)
+		character:UpdateLocation()
+	end)
+
 	self:RegisterBucketEvent(
 		{
 			"ITEM_PUSH",
