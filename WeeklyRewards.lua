@@ -34,6 +34,9 @@ local defaultDB = {
 			windowBackgroundColor = { r = 0.11372549019, g = 0.14117647058, b = 0.16470588235, a = 1 },
 			windowBorder = true,
 		},
+		utils = {
+			untrackQuests = false,
+		},
 		dbVersion = 8,
 	},
 }
@@ -136,6 +139,16 @@ function WeeklyRewards:OnEnable()
 
 	self:RegisterEvent("ZONE_CHANGED", function(event)
 		character:UpdateLocation()
+	end)
+
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", function(event, isInitialLogin, isReloadingUi)
+		if isInitialLogin == false and isReloadingUi == false then
+			return
+		end
+
+		if self.db.global.utils.untrackQuests then
+			character:RemoveQuestsWatch()
+		end
 	end)
 
 	self:RegisterBucketEvent(
