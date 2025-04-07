@@ -304,8 +304,6 @@ function RewardProgress:Update(completedQuest)
 		self:_UpdateRecords()
 		if self.position > 0 or WAPI_IsOnQuest(self.pendingObjectives[1].quest) then
 			newState = PROGRESS_STATE.IN_PROGRESS
-		else
-			newState = PROGRESS_STATE.NOT_STARTED
 		end
 
 		if self.total == 0 then
