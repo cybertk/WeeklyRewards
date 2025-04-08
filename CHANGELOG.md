@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.8.2 - 2025-04-08
+
+### Fix
+
+- Crash when Cyrce Circlet is not equipped.
+- Progress "Started At" is set to now sometimes.
+
 ## v1.8.1 - 2025-04-03
 
 ### Fix
