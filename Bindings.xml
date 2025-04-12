@@ -1,0 +1,5 @@
+<Bindings>
+    <Binding name="WEEKLY REWARDS" category="WeeklyRewards">
+        TOGGLE_WEEKLY_REWARDS_WINDOW()
+    </Binding>
+</Bindings>

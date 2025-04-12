@@ -60,6 +60,7 @@ end
 
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"
+	_G["TOGGLE_WEEKLY_REWARDS_WINDOW"] = function() Main:ToggleWindow() end
 	self:RegisterChatCommand("wr", "ExecuteChatCommands")
 	self:RegisterChatCommand("WeeklyRewards", "ExecuteChatCommands")
 
