@@ -1,5 +1,5 @@
 <Bindings>
-    <Binding name="WEEKLY REWARDS" category="WeeklyRewards">
-        TOGGLE_WEEKLY_REWARDS_WINDOW()
+    <Binding name="WeeklyRewards" category="WeeklyRewards">
+        WeeklyRewards:ExecuteChatCommands()
     </Binding>
 </Bindings>
