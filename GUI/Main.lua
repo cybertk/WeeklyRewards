@@ -508,9 +508,7 @@ function Main:AddCharacterColumns()
 			width = 60,
 			align = "CENTER",
 			cell = function(character)
-				return {
-					text = Util.FormatTimeDuration(GetServerTime() - character.lastUpdate, true),
-				}
+				return { text = Util.FormatLastUpdateTime(character.lastUpdate) }
 			end,
 		},
 	}
