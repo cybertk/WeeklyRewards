@@ -45,30 +45,7 @@ function WeeklyRewards:Redraw()
 	Main:Redraw()
 end
 
-function WeeklyRewards:MigrateDB()
-	for _, reward in ipairs(self.db.global.activeRewards) do
-		if reward.id == "tww-keys" then
-			reward.id = "tww-dkeys"
-			reward.group = "Delve"
-			for _, c in pairs(self.db.global.characters) do
-				if c.progress and c.progress["tww-keys"] then
-					c.progress["tww-dkeys"] = c.progress["tww-keys"]
-					c.progress["tww-keys"] = nil
-				end
-			end
-			Util:Debug("v1.8.0: Delves group migrated")
-		elseif reward.id == "tww-chett" and #reward.objectives == 2 and reward.objectives[2].unlockItem == nil then
-			reward.objectives[2].unlockItem = 235053
-			for _, c in pairs(self.db.global.characters) do
-				if c.progress and c.progress["tww-chett"] and c.progress["tww-chett"].position == 4 and c.progress["tww-chett"].total == 5 then
-					c.progress["tww-chett"] = nil
-					Util:Debug("v1.8.1: tww-chett reset:", c.name)
-				end
-			end
-			Util:Debug("v1.8.1: tww-chett migrated")
-		end
-	end
-end
+function WeeklyRewards:MigrateDB() end
 
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"
