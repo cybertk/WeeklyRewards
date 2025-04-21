@@ -4,7 +4,7 @@ local CharacterStore = {}
 namespace.CharacterStore = CharacterStore
 
 local Util = namespace.Util
-local Character = namespace.Character
+local Character
 
 local WAPI = {
 	GetServerTime = GetServerTime,
@@ -78,6 +78,10 @@ function CharacterStore.Load(characters)
 	for k, v in pairs(characters) do
 		store[k] = Character:New(v)
 	end
+end
+
+function CharacterStore:SetCharacterTemplate(o)
+	Character = o
 end
 
 -- Load

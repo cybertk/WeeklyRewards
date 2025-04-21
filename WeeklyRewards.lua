@@ -104,6 +104,7 @@ function WeeklyRewards:OnInitialize()
 end
 
 function WeeklyRewards:OnEnable()
+	CharacterStore:SetCharacterTemplate(namespace.Character)
 	CharacterStore:SetFlatField("progress")
 
 	local characterStore = CharacterStore.Load(self.db.global.characters)
@@ -151,7 +152,6 @@ function WeeklyRewards:OnEnable()
 	self:RegisterEvent("ZONE_CHANGED", function(event)
 		character:UpdateLocation()
 	end)
-
 
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", function(event)
 		character:UpdateLocation()
