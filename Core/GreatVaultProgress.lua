@@ -19,6 +19,14 @@ function GreatVaultProgress:_UpdateRecords()
 	self.position = 0
 	self.total = 0
 
+	if C_WeeklyRewards.HasAvailableRewards() then
+		table.insert(self.records, {
+			text = RED_FONT_COLOR:WrapTextInColorCode(WEEKLY_REWARDS_UNCLAIMED_TITLE),
+			fulfilled = 0,
+			required = 1,
+		})
+	end
+
 	-- Update records
 	for type, template in pairs(rewardsDescriptionTemplate) do
 		for _, activity in ipairs(C_WeeklyRewards.GetActivities(type)) do
