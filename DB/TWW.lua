@@ -81,7 +81,6 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "Worldsoul",
 		description = "The Call of the Worldsoul",
 		group = RewardsGroup.PINNACLE_CACHE,
-		rollover = true,
 		minimumLevel = 70,
 		entries = {
 			{
@@ -430,6 +429,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{
 				quest = 0,
 				maxCompletion = 4,
+				unlockItem = 235053,
 				questPool = {
 					86915, -- Side with a Cartel
 					86917, -- Ship Right

@@ -85,14 +85,18 @@ function RewardProgress:Init(reward)
 			for i, quest in ipairs(objective.questPool) do
 				local unlockProfession = objective.unlockProfession and objective.unlockProfession[i]
 
-				if objective.maxCompletion and WAPI_IsQuestFlaggedCompleted(quest) then
+				if
+					objective.maxCompletion
+					and WAPI_IsQuestFlaggedCompleted(quest)
+					and (objective.unlockItem == nil or WAPI_GetItemCount(objective.unlockItem) > 0)
+				then
 					table.insert(self.fulfilledObjectives, { quest = quest, prior = true })
 					numCompleted = numCompleted + 1
 					if numCompleted >= objective.maxCompletion then
 						break
 					end
 				elseif
-					WAPI_IsOnQuest(quest)
+					WAPI_IsOnQuest(quest) and (objective.unlockItem == nil or WAPI_GetItemCount(objective.unlockItem) > 0)
 					or unlockProfession and Util:IsProfessionLearned(unlockProfession)
 					or (objective.unlockQuest and WAPI_IsQuestFlaggedCompleted(
 						type(objective.unlockQuest) == "table" and objective.unlockQuest[i] or objective.unlockQuest
@@ -300,8 +304,6 @@ function RewardProgress:Update(completedQuest)
 		self:_UpdateRecords()
 		if self.position > 0 or WAPI_IsOnQuest(self.pendingObjectives[1].quest) then
 			newState = PROGRESS_STATE.IN_PROGRESS
-		else
-			newState = PROGRESS_STATE.NOT_STARTED
 		end
 
 		if self.total == 0 then

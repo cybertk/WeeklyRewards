@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.8.2 - 2025-04-08
+
+### Fix
+
+- Crash when Cyrce Circlet is not equipped.
+- Progress "Started At" is set to now sometimes.
+
+## v1.8.1 - 2025-04-03
+
+### Fix
+
+- Player location is not updated when switching to a new map.
+- C.H.E.T.T progress is stuck at 4/5.
+- Worldsoul meta quest is not rollover-able in 11.1.
+
 ## v1.8.0 - 2025-03-29
 
 ## New Features

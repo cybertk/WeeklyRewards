@@ -36,7 +36,7 @@ local function GetRingItemLevel()
 	end
 
 	if not item then
-		Debug("Cannot find the ring")
+		Util:Debug("Cannot find the ring")
 		return 0
 	end
 
@@ -64,8 +64,8 @@ function CyrceCircletProgress:_UpdateRecords()
 	local iLvl = GetRingItemLevel()
 	self.position, self.total = GetRingRank(iLvl)
 	table.insert(self.records, {
-		text = format("%s (%d)", self:GetCachedItemName(RING_ITEM_ID), iLvl),
-		fulfilled = 1,
+		text = self:GetCachedItemName(RING_ITEM_ID) .. (iLvl > 0 and format(" (%d)", iLvl) or ""),
+		fulfilled = iLvl > 0 and 1 or 0,
 		required = 1,
 	})
 
