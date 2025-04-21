@@ -464,4 +464,21 @@ namespace.DB.rewardCandidiates["tww"] = {
 		},
 		items = { { item = 233071, amount = 1 } },
 	},
+	{
+		id = "tww-dstash",
+		key = "GildedStash",
+		description = "Weekly Gilded Stash in Delves",
+		group = RewardsGroup.DELVE,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 0, progressType = 4 },
+		},
+		items = {
+			{
+				name = "3 |cffffffff[Gilded Stash]|r",
+				texture = 5872049, -- Gilded Stash
+			},
+		},
+	},
 }
