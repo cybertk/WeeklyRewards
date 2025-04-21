@@ -104,6 +104,8 @@ function WeeklyRewards:OnInitialize()
 end
 
 function WeeklyRewards:OnEnable()
+	CharacterStore:SetFlatField("progress")
+
 	local characterStore = CharacterStore.Load(self.db.global.characters)
 	local character = characterStore:CurrentPlayer()
 	local activeRewards = ActiveRewards:New(self.db.global.activeRewards)

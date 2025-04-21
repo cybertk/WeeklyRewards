@@ -16,6 +16,7 @@ local Cache = {
 	secondarySortOrder = "name",
 	ascending = true,
 	secondaryAscending = true,
+	flatField = "",
 }
 
 local function CharacterComparator(lhs, rhs, field)
@@ -39,15 +40,17 @@ local function CharacterComparator(lhs, rhs, field)
 		return lhs[field] < rhs[field] and -1 or 1
 	end
 
-	if lhs.progress[field] == rhs.progress[field] then
+	local flatField = Cache.flatField
+
+	if lhs[flatField][field] == rhs[flatField][field] then
 		return 0
-	elseif lhs.progress[field] == nil then
+	elseif lhs[flatField][field] == nil then
 		return -1
-	elseif rhs.progress[field] == nil then
+	elseif rhs[flatField][field] == nil then
 		return 1
 	end
 
-	return lhs.progress[field] < rhs.progress[field] and -1 or 1
+	return lhs[flatField][field] < rhs[flatField][field] and -1 or 1
 end
 
 local function CreateCharacterSorter(primary, secondary, ascending, secondaryAscending)
@@ -135,6 +138,10 @@ function CharacterStore:SetSortOrder(field)
 	Cache.sortOrder = field
 
 	Util:Debug("Sorting:", Cache.sortOrder, Cache.secondarySortOrder, Cache.ascending, Cache.secondaryAscending)
+end
+
+function CharacterStore:SetFlatField(field)
+	Cache.flatField = field
 end
 
 function CharacterStore:ForEach(callback, filter)
