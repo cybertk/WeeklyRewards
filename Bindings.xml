@@ -1,0 +1,5 @@
+<Bindings>
+    <Binding name="WeeklyRewards" category="WeeklyRewards">
+        WeeklyRewards:ExecuteChatCommands()
+    </Binding>
+</Bindings>

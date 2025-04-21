@@ -160,6 +160,17 @@ function Main:AddSettingsButton()
 			WeeklyRewards.db.global.main.windowBorder = not WeeklyRewards.db.global.main.windowBorder
 			self:Redraw()
 		end)
+
+		rootMenu:CreateTitle("Utility")
+		local untrackQuests = rootMenu:CreateCheckbox("Auto untrack quests", function()
+			return WeeklyRewards.db.global.utils.untrackQuests
+		end, function()
+			WeeklyRewards.db.global.utils.untrackQuests = not WeeklyRewards.db.global.utils.untrackQuests
+		end)
+		untrackQuests:SetTooltip(function(tooltip, elementDescription)
+			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
+			GameTooltip_AddNormalLine(tooltip, "Untrack all WeeklyRewards-managed quests on login, which could provide a cleaner quest log panel")
+		end)
 	end)
 
 	self.window.titlebar.SettingsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.SettingsButton:GetName() .. "Icon", "ARTWORK")
@@ -497,9 +508,7 @@ function Main:AddCharacterColumns()
 			width = 60,
 			align = "CENTER",
 			cell = function(character)
-				return {
-					text = Util.FormatTimeDuration(GetServerTime() - character.lastUpdate, true),
-				}
+				return { text = Util.FormatLastUpdateTime(character.lastUpdate) }
 			end,
 		},
 	}

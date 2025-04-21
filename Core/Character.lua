@@ -237,6 +237,16 @@ function Character:Scan(activeRewards)
 	end
 end
 
+function Character:RemoveQuestsWatch()
+	for quest, _ in pairs(Cache.questToProgress) do
+		local watchType = C_QuestLog.GetQuestWatchType(quest)
+		if watchType then
+			C_QuestLog.RemoveQuestWatch(quest)
+			Util:Debug("RemoveQuestWatch:", quest, watchType, QuestUtils_GetQuestName(quest))
+		end
+	end
+end
+
 function Character:ForEachProgress(callback, completedOnly)
 	for _, progress in pairs(self.progress) do
 		if completedOnly ~= true or progress:hasClaimed() then

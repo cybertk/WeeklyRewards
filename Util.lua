@@ -170,24 +170,29 @@ function Util:DungeonToQuest(dungeonID)
 end
 
 function Util.FormatTimeDuration(seconds, useAbbreviation)
+	return WorldQuestsSecondsFormatter:Format(seconds, useAbbreviation and SecondsFormatter.Abbreviation.OneLetter)
+end
+
+function Util.FormatLastUpdateTime(time)
+	local seconds = GetServerTime() - time
 	local minutes = seconds / 60
 	local hours = minutes / 60
 	local days = hours / 24
 
-	useAbbreviation = useAbbreviation or false
-
-	local unitD, unitH, unitM = useAbbreviation and "d" or " Days", useAbbreviation and "h" or " Hours", useAbbreviation and "m" or " Minutes"
+	if minutes < 1 then
+		return LASTONLINE_SECS
+	end
 
 	if hours < 1 then
 		-- Round up to 1 min
-		return format("%d%s", minutes >= 1 and minutes or 1, unitM)
+		return LASTONLINE_MINUTES:format(minutes)
 	end
 
 	if days < 1 then
-		return format("%d%s", hours % 24, unitH)
+		return LASTONLINE_HOURS:format(hours)
 	end
 
-	return format("%d%s %d%s", days, unitD, hours % 24, unitH)
+	return LASTONLINE_DAYS:format(days)
 end
 
 function Util.FormatItem(item)
