@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.9.0 - 2025-04-21
+
+## New Features
+
+- Upgraded TOC to 11.1.5
+- Added new reward support:
+    - Delve Gilded Stash
+    - Unclaimed Great Vault rewards - GreatVault progress now shows as x/10 for unclaimed rewards
+    - Noblegarden Event
+- Added Keybindings support - Credit to [@marklabrecque](https://github.com/marklabrecque/)
+- Optmized status text for LastUpdate column
+- Added support to untrack all WeeklyRewards-managed quests on login - Now the Quest Objective panel is super clean
+
 ## v1.8.2 - 2025-04-08
 
 ### Fix
