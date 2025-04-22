@@ -102,7 +102,11 @@ function WeeklyRewards:OnEnable()
 		self:Redraw()
 	end)
 
-	self:RegisterEvent("QUEST_TURNED_IN", function(event, questId)
+	self:RegisterEvent("QUEST_TURNED_IN", function(event, questId, xp, money)
+		if money and money > 0 then
+			Util:Debug("Received money:", GetMoneyString(money))
+			character:ReceiveReward(questId, money, nil, Util.MONEY_CURRENCY_ID)
+		end
 		-- C_QuestLog.IsQuestFlaggedCompleted() might returns false in this context
 		character:UpdateProgress(questId)
 		self:Redraw()

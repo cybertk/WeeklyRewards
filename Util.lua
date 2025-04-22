@@ -195,7 +195,13 @@ function Util.FormatLastUpdateTime(time)
 	return LASTONLINE_DAYS:format(days)
 end
 
+-- item: name, texture, quality, quantity/amount
+Util.MONEY_CURRENCY_ID = 0
 function Util.FormatItem(item)
+	if item.id == Util.MONEY_CURRENCY_ID then
+		return GetMoneyString(item.quantity or item.amount)
+	end
+
 	local s = CreateSimpleTextureMarkup(item.texture or 0, 13, 13) -- There is hidden item, i.e. spark drops
 
 	if item.quality then

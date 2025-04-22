@@ -92,6 +92,8 @@ function SelectableLootScanner:Start()
 				uniqueSources[sources[i]].currency = currencyID
 			elseif slotType == Enum.LootSlotType.Item then
 				uniqueSources[sources[i]].item = itemID
+			elseif slotType == Enum.LootSlotType.Money then
+				uniqueSources[sources[i]].currency = 0
 			end
 		end
 

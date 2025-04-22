@@ -123,7 +123,7 @@ end
 function Character:ReceiveReward(quest, quantity, item, currencyId)
 	local progress = Cache.questToProgress[quest]
 
-	Util:Debug("Character:ReceiveReward", quest, quantity, itemLink, currencyId, progress)
+	Util:Debug("Character:ReceiveReward", quest, quantity, item, currencyId, progress)
 	if progress == nil then
 		return
 	end

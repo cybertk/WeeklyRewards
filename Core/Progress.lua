@@ -349,6 +349,10 @@ function RewardProgress:AddReward(currency, item, quantity, asDrops)
 	elseif item then
 		table.insert(items, { item = item, quantity = quantity })
 	end
+
+	table.sort(items, function(a, b)
+		return a.quantity < b.quantity
+	end)
 end
 
 function RewardProgress:hasClaimed()
@@ -410,7 +414,12 @@ function RewardProgress:ForEachRewardItem(callback, showDrops)
 
 	for _, rewardItem in ipairs(items) do
 		local item
-		if rewardItem.currency then
+		if rewardItem.currency == Util.MONEY_CURRENCY_ID then
+			item = {
+				quantity = rewardItem.quantity,
+				id = Util.MONEY_CURRENCY_ID,
+			}
+		elseif rewardItem.currency then
 			local currency = C_CurrencyInfo.GetCurrencyInfo(rewardItem.currency)
 			item = {
 				id = rewardItem.currency,

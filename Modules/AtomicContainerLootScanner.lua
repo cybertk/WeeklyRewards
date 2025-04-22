@@ -73,6 +73,8 @@ function AtomicContainerLootScanner:UpdateLoot(typeIdentifier, itemLink, quantit
 		item.item = select(1, C_Item.GetItemInfoInstant(itemLink))
 	elseif typeIdentifier == "currency" then
 		item.currency = C_CurrencyInfo.GetCurrencyInfoFromLink(itemLink).currencyID
+	elseif typeIdentifier == "money" then
+		item.currency = 0
 	end
 
 	self:Debug(RED_FONT_COLOR:WrapTextInColorCode("=== LOOTED:"), item.source, itemLink, item.quantity, item.item, item.currency)
