@@ -8,6 +8,7 @@ function AtomicContainerLootScanner:OnEnable()
 	self:RegisterEvent("ITEM_LOCKED")
 	self:RegisterEvent("ITEM_UNLOCKED")
 	self:RegisterEvent("SHOW_LOOT_TOAST")
+	self:RegisterEvent("SHOW_LOOT_TOAST_UPGRADE")
 	self:RegisterEvent("LOOT_CLOSED")
 end
 
@@ -24,6 +25,11 @@ end
 function AtomicContainerLootScanner:SHOW_LOOT_TOAST(event, ...)
 	self:Debug("SHOW_LOOT_TOAST", ...)
 	self:UpdateLoot(...)
+end
+
+function AtomicContainerLootScanner:SHOW_LOOT_TOAST_UPGRADE(event, itemLink, quantity, specID, sex, baseQuality, personalLootToast, lessAwesome)
+	self:Debug("SHOW_LOOT_TOAST_UPGRADE", itemLink, quantity, specID, sex, baseQuality, personalLootToast, lessAwesome)
+	self:UpdateLoot("item", itemLink, quantity, specID, sex, personalLootToast, 3)
 end
 
 function AtomicContainerLootScanner:LOOT_CLOSED()
@@ -62,7 +68,7 @@ function AtomicContainerLootScanner:Stop()
 	self.session = nil
 end
 
-function AtomicContainerLootScanner:UpdateLoot(typeIdentifier, itemLink, quantity, specID, sex, isPersonal, toastMethod, lessAwesome, upgraded, corrupted)
+function AtomicContainerLootScanner:UpdateLoot(typeIdentifier, itemLink, quantity, specID, sex, isPersonal, toastMethod)
 	if self.session == nil or toastMethod ~= 3 then
 		self:Debug("no active container loot session", toastMethod)
 		return
