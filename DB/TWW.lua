@@ -6,6 +6,7 @@ local RewardsGroup = {
 	SIREN_ISLE = "Siren Isle",
 	UNDERMINE = "Undermine",
 	DELVE = "Delve",
+	NIGHTFALL = "Nightfall",
 }
 
 namespace.DB.rewardCandidiates["tww"] = {
@@ -478,6 +479,39 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{
 				name = "3 |cffffffff[Gilded Stash]|r",
 				texture = 5872049, -- Gilded Stash
+			},
+		},
+	},
+	{
+		id = "tww-incursion",
+		key = "Incursion",
+		description = "Daily incursions in Hollowfall or Azj-Kahet",
+		group = RewardsGroup.NIGHTFALL,
+		minimumLevel = 70,
+		pick = 3,
+		entries = {
+			{ quest = 87475 }, -- Sureki Incursion: Hold the Wall
+			{ quest = 87477 }, -- Sureki Incursion: Southern Swarm
+			{ quest = 87480 }, -- Sureki Incursion: The Eastern Assault
+
+			{ quest = 88711 }, -- Radiant Incursion: Toxins and Pheromones
+			{ quest = 88916 }, -- Radiant Incursion: Sureki's End
+			{ quest = 88945 }, -- Radiant Incursion: Rak-Zakaz
+		},
+	},
+	{
+		id = "tww-nightfall",
+		key = "Nightfall",
+		group = RewardsGroup.NIGHTFALL,
+		minimumLevel = 70,
+		entries = {
+			{
+				quest = 91173, -- The Flame Burns Eternal
+				loot = {
+					237743, -- Arathi Soldier's Coffer
+					237759, -- Arathi Cleric's Chest
+					237760, -- Arathi Champion's Spoils
+				},
 			},
 		},
 	},
