@@ -442,6 +442,19 @@ function RewardProgress:ForEachRewardItem(callback, showDrops)
 	end
 end
 
+function RewardProgress:ForEachRewardLoot(callback)
+	local objects = {}
+
+	self:ForEachObjective(function(objective, completed)
+		for i, loot in ipairs(objective.loot or {}) do
+			table.insert(objects, loot)
+			callback(loot, objective.loot.name and objective.loot.name[i] or loot)
+		end
+	end)
+
+	return objects
+end
+
 function RewardProgress:GetCachedObjectiveName(objective)
 	if objective.items and #objective.items > 0 then
 		return self:GetCachedItemName(objective.items[1])

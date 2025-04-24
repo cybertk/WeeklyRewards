@@ -24,6 +24,7 @@ local WAPI = {
 local Cache = {
 	questToProgress = {}, -- k,v
 	lootToProgress = {}, -- k,v
+	objectToProgress = {}, -- k, {v, itemID}
 }
 
 function Character:New(o)
@@ -68,6 +69,10 @@ function Character:_AddProgress(progress, name)
 	if UnitGUID("player") == self.GUID then
 		progress:ForEachRewardQuest(function(quest)
 			Cache.questToProgress[quest] = progress
+		end)
+
+		progress:ForEachRewardLoot(function(loot, item)
+			Cache.objectToProgress[loot] = { progress, item }
 		end)
 
 		for _, item in ipairs(progress.rewards or {}) do
@@ -185,8 +190,18 @@ function Character:UpdateRewardsGUID(quest)
 end
 
 function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
-	local progress = Cache.lootToProgress[guid]
+	local objectId = C_Item.GetItemIDByGUID(guid) or tonumber(select(6, string.split("-", guid)) or nil)
 
+	if Cache.objectToProgress[objectId] and Cache.lootToProgress[guid] == nil then
+		local progress, itemId = unpack(Cache.objectToProgress[objectId])
+
+		progress:AddReward(nil, itemId, 1)
+		progress.rewards[#progress.rewards].guid = guid
+
+		Cache.lootToProgress[guid] = progress
+	end
+
+	local progress = Cache.lootToProgress[guid]
 	if progress == nil then
 		return
 	end

@@ -115,9 +115,11 @@ function SelectableLootScanner:Stop()
 
 	self:Debug("<<<<< Loot Session Stop", GetNumLootItems())
 
-	for slot, _ in pairs(self.session) do
-		self:Debug("Update remaining slot", slot)
-		self:UpdateSlot(slot)
+	if GetNumLootItems() > 0 then
+		for slot, _ in pairs(self.session) do
+			self:Debug("Update remaining slot", slot)
+			self:UpdateSlot(slot)
+		end
 	end
 
 	self.session = nil
