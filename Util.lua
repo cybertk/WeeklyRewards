@@ -165,6 +165,10 @@ function Util:GetProfessionIcon(skillLineID)
 	return select(1, C_Spell.GetSpellTexture(professionSpells[skillLineID]))
 end
 
+function Util:GetQuestLink(qusetID)
+	return format("|cffffff00|Hquest:%d:0|h[%s]|h|r", qusetID, C_QuestLog.GetTitleForQuestID(qusetID))
+end
+
 function Util:DungeonToQuest(dungeonID)
 	return dungeonID + 9000000
 end

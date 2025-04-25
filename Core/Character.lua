@@ -25,6 +25,7 @@ local Cache = {
 	questToProgress = {}, -- k,v
 	lootToProgress = {}, -- k,v
 	objectToProgress = {}, -- k, {v, itemID}
+	progressNameToRewardID = {},
 }
 
 function Character:New(o)
@@ -80,12 +81,13 @@ function Character:_AddProgress(progress, name)
 				Cache.lootToProgress[item.guid] = progress
 			end
 		end
+
+		Cache.progressNameToRewardID[progress.name] = name
 	end
 end
 
 function Character:UpdateProgress(quest)
-	local changeSet = {}
-	local count = 0
+	local completionSet = {}
 
 	if self.progress == nil then
 		return
@@ -95,15 +97,20 @@ function Character:UpdateProgress(quest)
 
 	local progressList = quest and { Cache.questToProgress[quest] } or self.progress
 
-	for name, progress in pairs(progressList) do
+	for _, progress in pairs(progressList) do
 		local updated = progress:Update(quest)
 
 		if updated then
-			table.insert(changeSet, 1, name)
-			Util:Debug("progress updated: " .. name)
+			Util:Debug("progress updated:", progress.name, progress:hasClaimed())
 		end
-		count = count + 1
+
+		if updated and progress:hasClaimed() then
+			local rewardID = Cache.progressNameToRewardID[progress.name]
+			completionSet[rewardID] = progress
+		end
 	end
+
+	return completionSet
 end
 
 function Character:ResetProgress(reward, force)
