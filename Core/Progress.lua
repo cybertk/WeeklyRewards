@@ -128,6 +128,13 @@ function RewardProgress:Init(reward)
 		end
 	end
 
+	for _, objective in ipairs(reward.rolloverObjectives or {}) do
+		if WAPI_IsOnQuest(objective.quest) then
+			table.insert(self.pendingObjectives, objective)
+			self.numObjectives = self.numObjectives + 1
+		end
+	end
+
 	self.total = self.numObjectives
 
 	return #self.pendingObjectives > 0 or #self.fulfilledObjectives > 0

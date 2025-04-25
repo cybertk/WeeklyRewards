@@ -214,7 +214,7 @@ function ActiveRewards:Update(candidates)
 			reward.name = reward.name .. ":#1"
 		end
 
-		reward:DetermineObjectives(entries, pick)
+		reward:DetermineObjectives(entries, pick, candidate.rollover == true)
 		reward:DetermineResetTime(candidate.timeLeft and candidate.timeLeft() or nil)
 		reward:DetermineState(pick)
 		reward:UpdateDescription()

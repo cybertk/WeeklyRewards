@@ -488,6 +488,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		description = "Daily incursions in Hollowfall or Azj-Kahet",
 		group = RewardsGroup.NIGHTFALL,
 		minimumLevel = 70,
+		rollover = true,
 		pick = 3,
 		entries = {
 			{ quest = 87475 }, -- Sureki Incursion: Hold the Wall

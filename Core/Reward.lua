@@ -12,6 +12,7 @@ local Reward = {
 	state = STATE.ANALYZING,
 	description = nil,
 	objectives = {},
+	rolloverObjectives = nil,
 	minimumLevel = "",
 	resetTime = nil,
 	startTime = nil,
@@ -40,7 +41,7 @@ function Reward:New(o)
 	return o
 end
 
-function Reward:DetermineObjectives(entries, pick)
+function Reward:DetermineObjectives(entries, pick, isRollover)
 	if self.state == STATE.CONFIRMED then
 		return
 	end
@@ -79,7 +80,7 @@ function Reward:DetermineObjectives(entries, pick)
 				local quests = entry.questPool and entry.questPool or { entry.quest }
 
 				for _, quest in ipairs(quests) do
-					if WAPI_IsOnQuest(quest) or WAPI_GetQuestTimeLeftSeconds(quest) then
+					if (WAPI_IsOnQuest(quest) and not isRollover) or WAPI_GetQuestTimeLeftSeconds(quest) then
 						confirmed = true
 					end
 				end
@@ -97,6 +98,20 @@ function Reward:DetermineObjectives(entries, pick)
 				end
 			end
 		end
+	end
+
+	-- Scenario: Rollover candidates
+	if isRollover and pick > 1 then
+		local active = {}
+
+		for _, o in ipairs(self.objectives) do
+			active[o.quest] = true
+		end
+
+		self.rolloverObjectives = Util:Filter(entries, function(o)
+			return active[o.quest] == nil
+		end)
+		Util:Debug("Reward [" .. self.name .. "] rollover objectives: " .. #self.rolloverObjectives)
 	end
 end
 
