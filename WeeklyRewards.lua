@@ -45,7 +45,25 @@ function WeeklyRewards:Redraw()
 	Main:Redraw()
 end
 
-function WeeklyRewards:MigrateDB() end
+function WeeklyRewards:MigrateDB()
+	for guid, c in pairs(self.db.global.characters) do
+		for n, p in pairs(c.progress) do
+			if n == "tww-dkeys" then
+				local objective = p.pendingObjectives[#p.pendingObjectives] or p.fulfilledObjectives[#p.fulfilledObjectives]
+				if UnitGUID("player") == guid and objective.loot == nil then
+					objective.loot = { 413590, name = { 228942 } }
+					Util:Debug("v1.9.0: tww-dkeys loot migrated")
+				end
+			elseif n == "tww-dmap" then
+				local objective = p.pendingObjectives[#p.pendingObjectives] or p.fulfilledObjectives[#p.fulfilledObjectives]
+				if UnitGUID("player") == guid and objective.loot == nil then
+					objective.loot = { 461482, name = { 235559 } }
+					Util:Debug("v1.9.0: tww-dmap loot migrated")
+				end
+			end
+		end
+	end
+end
 
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"
