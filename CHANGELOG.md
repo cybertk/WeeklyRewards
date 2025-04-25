@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.10.0 - 2025-04-25
+
+## New Features
+
+- Added new reward group "Nightfall": includes Nightfall weekly and daily quests
+- Added support to track looted upgraded gears from rewards
+- Added support to track looted money of each reward
+
 ## v1.9.0 - 2025-04-21
 
 ## New Features
