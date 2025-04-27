@@ -62,6 +62,12 @@ function WeeklyRewards:MigrateDB()
 					objective.loot = { 461482, name = { 235559 } }
 					Util:Debug("v1.9.0: tww-dmap loot migrated")
 				end
+			elseif n == "tww-surge" then
+				local objective = p.pendingObjectives[#p.pendingObjectives] or p.fulfilledObjectives[#p.fulfilledObjectives]
+				if UnitGUID("player") == guid and objective.loot == nil then
+					objective.loot = { 236756, 236757, 236758 }
+					print("v1.9.0: tww-surge loot migrated")
+				end
 			end
 		end
 	end
