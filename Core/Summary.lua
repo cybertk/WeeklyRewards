@@ -91,21 +91,7 @@ function RewardSummary:Create(rewardID)
 	do
 		local progress = self.character.progress[rewardID]
 
-		o.name = progress:ObjectivesCount() == 1 and Util:GetQuestLink(progress:Quest()) or format("<%s>", progress.name)
-
-		local x = "x"
-		if progress:ObjectivesCount() == 1 then
-			-- GetQuestLink(91173)  C_QuestLog.GetTitleForQuestID(91173)
-			x = GetQuestLink(progress:Quest())
-		end
-
-		print(
-			" name",
-			x,
-			o.name,
-			progress:ObjectivesCount() == 1,
-			progress:ObjectivesCount() == 1 and GetQuestLink(progress:Quest()) or format("<%s>", progress.name)
-		)
+		o.name = progress:ObjectivesCount() == 1 and GetQuestLink(progress:Quest()) or format("<%s>", progress.name)
 	end
 
 	Util:Debug("Created summary", rewardID, o.name, self.character.progress[rewardID]:ObjectivesCount())
