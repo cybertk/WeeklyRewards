@@ -164,7 +164,7 @@ end
 function RewardProgress:_FinalizeRecords()
 	for _, record in ipairs(self.records or {}) do
 		if record.fulfilled ~= record.required then
-			record.text = string.gsub(record.text, record.fulfilled, record.required)
+			record.text = record.text:gsub(record.fulfilled .. "([/%%])", record.required .. "%1")
 			record.fulfilled = record.required
 		end
 	end
