@@ -19,7 +19,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{ quest = 81624 }, -- Orta, the Broken Mountain
 			{ quest = 81630 }, -- Kordac, the Dormant Protector
 			{ quest = 81653 }, -- Shurrai, Atrocity of the Undersea
-			{ quest = 83466, unlockQuest = 82653 }, -- Aggregation of Horrors
+			{ quest = 82653 }, -- Aggregation of Horrors
 		},
 	},
 	{
