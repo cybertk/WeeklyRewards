@@ -121,7 +121,7 @@ function RewardSummary:Broadcast(channel)
 	local messages = {}
 	for _, o in pairs(self.currencies) do
 		if C_CurrencyInfo.IsAccountTransferableCurrency(o.currency) then
-			table.insert(messages, format("%s x%d", C_CurrencyInfo.GetCurrencyLink(o.currency), o.quantity))
+			table.insert(messages, format("%sx%d", C_CurrencyInfo.GetCurrencyLink(o.currency), o.quantity))
 		end
 	end
 
@@ -130,7 +130,7 @@ function RewardSummary:Broadcast(channel)
 		local r = {}
 
 		table.insert(r, #self.gears > 0 and format("装备%d件", #self.gears) or nil)
-		table.insert(r, self.money >= COPPER_PER_GOLD and format("%d金", math.floor(self.money / COPPER_PER_GOLD)) or nil)
+		table.insert(r, self.money >= COPPER_PER_GOLD and format("金币%d", math.floor(self.money / COPPER_PER_GOLD)) or nil)
 		table.insert(r, #messages > 0 and "战团货币: " or nil)
 
 		if #r > 0 then
