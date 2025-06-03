@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.10.2 - 2025-06-03
+
+### Fix
+
+- The progress of ignored/disabled characters are NOT reset automatically
+
 ## v1.10.1 - 2025-04-29
 
 ### Fix
