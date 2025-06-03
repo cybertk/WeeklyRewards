@@ -176,7 +176,7 @@ function WeeklyRewards:OnEnable()
 						local store = archive:Load("RawData", x.GUID)
 						table.insert(store, outdatedProgress)
 					end
-				end)
+				end, next)
 			end, {})
 
 			activeRewards:Update(DB:GetAllCandidates())
