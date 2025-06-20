@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.10.2 - 2025-06-03
+
+### Fix
+
+- The progress of ignored/disabled characters are NOT reset automatically
+
+## v1.10.1 - 2025-04-29
+
+### Fix
+
+- The Delve map icon is NOT appearing as green box for completed DelveMap
+- The rewards of worldboss Aggregation of Horrors could be tracked now
+
 ## v1.10.0 - 2025-04-25
 
 ## New Features
