@@ -45,7 +45,24 @@ function WeeklyRewards:Redraw()
 	Main:Redraw()
 end
 
-function WeeklyRewards:MigrateDB() end
+function WeeklyRewards:MigrateDB()
+	for i = #self.db.global.activeRewards, 1, -1 do
+		local r = self.db.global.activeRewards[i]
+		if r.id == "tww-circlet" and r.objectives[1] and r.objectives[1].upgradeItem == nil then
+			table.remove(self.db.global.activeRewards, i)
+			break
+		end
+	end
+
+	local playerGUID = UnitGUID("player")
+	if self.db.global.characters[playerGUID] == nil then
+		return
+	end
+
+	if self.db.global.characters[playerGUID].progress["tww-circlet"] and self.db.global.characters[playerGUID].progress["tww-circlet"].state ~= 0 then
+		self.db.global.characters[playerGUID].progress["tww-circlet"] = nil
+	end
+end
 
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"

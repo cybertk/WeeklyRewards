@@ -169,6 +169,53 @@ function Util:DungeonToQuest(dungeonID)
 	return dungeonID + 9000000
 end
 
+local equipLocToInvSlot = {
+	INVTYPE_HEAD = { INVSLOT_HEAD },
+	INVTYPE_NECK = { INVSLOT_NECK },
+	INVTYPE_SHOULDER = { INVSLOT_SHOULDER },
+	INVTYPE_BODY = { INVSLOT_BODY },
+	INVTYPE_CHEST = { INVSLOT_CHEST },
+	INVTYPE_ROBE = { INVSLOT_CHEST },
+	INVTYPE_WAIST = { INVSLOT_WAIST },
+	INVTYPE_LEGS = { INVSLOT_LEGS },
+	INVTYPE_FEET = { INVSLOT_FEET },
+	INVTYPE_WRIST = { INVSLOT_WRIST },
+	INVTYPE_HAND = { INVSLOT_HAND },
+	INVTYPE_FINGER = { INVSLOT_FINGER1, INVSLOT_FINGER2 },
+	INVTYPE_TRINKET = { INVSLOT_TRINKET1, INVSLOT_TRINKET2 },
+	INVTYPE_CLOAK = { INVSLOT_BACK },
+	INVTYPE_WEAPON = { INVSLOT_MAINHAND, INVSLOT_OFFHAND },
+	INVTYPE_2HWEAPON = { INVSLOT_MAINHAND },
+	INVTYPE_WEAPONMAINHAND = { INVSLOT_MAINHAND },
+	INVTYPE_WEAPONOFFHAND = { INVSLOT_OFFHAND },
+	INVTYPE_HOLDABLE = { INVSLOT_OFFHAND },
+	INVTYPE_SHIELD = { INVSLOT_OFFHAND },
+	INVTYPE_RANGED = { INVSLOT_RANGED },
+	INVTYPE_RANGEDRIGHT = { INVSLOT_RANGED },
+	INVTYPE_THROWN = { INVSLOT_RANGED },
+	INVTYPE_RELIC = { INVSLOT_RANGED },
+	INVTYPE_TABARD = { INVSLOT_TABARD },
+}
+function Util:FindEquippedItem(itemIDs)
+	local slots, items = {}, {}
+
+	for _, itemID in ipairs(itemIDs) do
+		for _, slot in ipairs(equipLocToInvSlot[select(4, C_Item.GetItemInfoInstant(itemID))]) do
+			slots[slot] = true
+		end
+
+		items[itemID] = true
+	end
+
+	for slot in pairs(slots) do
+		if items[GetInventoryItemID("player", slot)] then
+			return Item:CreateFromEquipmentSlot(slot)
+		end
+	end
+
+	Util:Debug("GetItemLevelByItemID: Cannot find the item")
+end
+
 function Util.FormatTimeDuration(seconds, useAbbreviation)
 	return WorldQuestsSecondsFormatter:Format(seconds, useAbbreviation and SecondsFormatter.Abbreviation.OneLetter)
 end

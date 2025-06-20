@@ -307,6 +307,9 @@ namespace.DB.rewardCandidiates["tww"] = {
 				quest = 0,
 				unlockQuest = 84724, -- The Radiant Vault
 				progressType = 3,
+				items = { 228411 }, -- Cyrce's Circlet
+				upgradeItem = 229365, -- Raw Singing Citrine
+				itemLevelRange = { 642, 645, 649, 652, 655, 658 },
 			},
 		},
 		items = { { item = 229365, amount = 1 } },
@@ -515,5 +518,27 @@ namespace.DB.rewardCandidiates["tww"] = {
 				},
 			},
 		},
+	},
+	{
+		id = "tww-belt",
+		key = "D.I.S.C.",
+		description = "|T6883015:12|t |cffa335ee[Durable Information Securing Container]|r(D.I.S.C. Belt)|n|n"
+			.. "The belt starts at Item Level 691 by completing the quest offered by Dagran II in Dornogal.|n|n"
+			.. "|T134394:12|t |cffa335ee[Titan Memory Card]|r upgrades the belt to maximum Item Level 707 by 5 times.",
+		group = RewardsGroup.DELVE,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		rollover = true,
+		entries = {
+			{
+				quest = 0,
+				unlockQuest = 91009, -- Durable Information Securing Container
+				progressType = 3,
+				items = { 242664, 245964, 245965, 245966 },
+				upgradeItem = 244311, -- Titan Memory Card
+				itemLevelRange = { 691, 694, 697, 701, 704, 707 },
+			},
+		},
+		items = { { item = 244311, amount = 1 }, { item = 244696, amount = 1 } },
 	},
 }
