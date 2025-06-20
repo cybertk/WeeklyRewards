@@ -56,6 +56,19 @@ namespace.DB.rewardCandidiates["timewalking"] = {
 				factionMask = { 1, 2 },
 			}, -- [WoD]
 			{ quest = 64710, items = { 187611 }, unlockAura = 359082 }, -- [Legion] Whispering Felflame Crystal - [Aura] Sign of the Legion
+			{
+				quest = 89223,
+				items = {
+					238790, -- Alliance: Remnant of Azeroth
+					238791, -- Horde: Remnant of Azeroth
+				},
+				unlockAura = 1223878, -- Sign of the Azeroth
+				questPool = {
+					89222, -- Alliance: Remnant of Azeroth
+					89223, -- Horde: Remnant of Azeroth
+				},
+				factionMask = { 1, 2 },
+			}, -- [BfA]
 		},
 	},
 }
