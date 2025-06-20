@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.11.0 - 2025-06-20
+
+## New Features
+
+- Upgraded TOC to 11.1.7
+- Added new reward support:
+    - BfA Timewalking quest: Remnant of Azeroth
+    - The D.I.S.C. Belt in group Delve
+- Added support to track rewards dropped from bountiful and hidden chests
+
 ## v1.10.2 - 2025-06-03
 
 ### Fix
