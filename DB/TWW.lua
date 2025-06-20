@@ -31,7 +31,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 84736, items = { 224172 } }, -- Restored Coffer Key
+			{ quest = 84736, items = { 224172 }, loot = { 413590, name = { 228942 } } }, -- Bountiful Coffer
 			{ quest = 84737, items = { 224172 } }, -- Restored Coffer Key
 			{ quest = 84738, items = { 224172 } }, -- Restored Coffer Key
 			{ quest = 84739, items = { 224172 } }, -- Restored Coffer Key
@@ -464,7 +464,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 86371, items = { 233071 } },
+			{ quest = 86371, items = { 233071 }, loot = { 461482, name = { 235559 } } }, -- Hidden Trove
 		},
 		items = { { item = 233071, amount = 1 } },
 	},
