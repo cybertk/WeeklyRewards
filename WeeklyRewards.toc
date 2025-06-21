@@ -30,6 +30,7 @@ DB\DarkmoonFaire.lua
 DB\LunarFestival.lua
 DB\LoveIsInTheAir.lua
 DB\Noblegarden.lua
+DB\Midsummer.lua
 
 Core\Reward.lua
 Core\ActiveRewards.lua
