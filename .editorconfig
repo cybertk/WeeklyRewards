@@ -1,3 +1,5 @@
 [*.lua]
 indent_style = tab
 indent_size = 8
+max_line_length = 170
+
