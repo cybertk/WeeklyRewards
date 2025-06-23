@@ -363,7 +363,14 @@ namespace.DB.rewardCandidiates["tww"] = {
 		minimumLevel = 80,
 		rollover = true,
 		entries = {
-			{ quest = 86775 }, -- Urge to Surge
+			{
+				quest = 86775, -- Urge to Surge
+				loot = {
+					236756, -- Socially Expected Tip Chest
+					236757, -- Generous Tip Chest
+					236758, -- Extravagant Tip Chest
+				},
+			},
 		},
 	},
 	{
