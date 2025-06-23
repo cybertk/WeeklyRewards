@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.12.0 - 2025-06-23
+
+## New Features
+
+- Added new reward support: Midsummer Fire Festival
+- Added support to broadcast total recived rewards
+- Added support to track the Tip Chests dropped from Surge quest
+
 ## v1.11.0 - 2025-06-20
 
 ## New Features
