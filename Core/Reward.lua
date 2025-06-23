@@ -34,11 +34,28 @@ local WAPI_GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 local WAPI_GetServerTime = GetServerTime
 local WAPI_UnitLevel = UnitLevel
 
+local RewardObjective = {}
+RewardObjective.__index = RewardObjective
+
+function RewardObjective:GetQuest()
+	return self.quest or self.questPool[1]
+end
+
 function Reward:New(o)
 	o = o or {}
 	self.__index = self
 	setmetatable(o, self)
+
+	for _, objective in ipairs(o.objectives) do
+		setmetatable(objective, RewardObjective)
+	end
+
 	return o
+end
+
+function Reward:AddObjective(objective)
+	setmetatable(objective, RewardObjective)
+	table.insert(self.objectives, objective)
 end
 
 function Reward:DetermineObjectives(entries, pick, isRollover)
@@ -53,7 +70,7 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 	-- Scenario: Fixed target
 	if pick == #entries then
 		for _, entry in ipairs(entries) do
-			table.insert(self.objectives, entry)
+			self:AddObjective(entry)
 		end
 
 		return
@@ -90,8 +107,8 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 			Util:DebugQuest(entry.unlockQuest)
 
 			if confirmed then
-				Util:Debug("Reward [" .. self.name .. "] confirmed: " .. QuestUtils_GetQuestName(entry.quest))
-				table.insert(self.objectives, entry)
+				Util:Debug("Reward [" .. self.name .. "] confirmed: " .. QuestUtils_GetQuestName(entry.quest or 0))
+				self:AddObjective(entry)
 				if #self.objectives == pick then
 					Util:Debug("Reward [" .. self.name .. "] all confirmed: " .. pick)
 					break
@@ -137,7 +154,7 @@ function Reward:DetermineResetTime(timeLeft)
 	if timeLeft == nil then
 		-- Cannot always get valid reset time when just logged in
 		for _, objective in ipairs(self.objectives) do
-			for _, quest in ipairs({ objective.quest, objective.unlockQuest }) do
+			for _, quest in ipairs({ objective:GetQuest(), objective.unlockQuest }) do
 				timeLeft = WAPI_GetQuestTimeLeftSeconds(quest)
 				if timeLeft then
 					break
@@ -160,7 +177,7 @@ function Reward:UpdateDescription()
 	end
 
 	if self.objectives and #self.objectives > 0 then
-		self.description = WAPI_GetQuestName(self.objectives[1].quest)
+		self.description = WAPI_GetQuestName(self.objectives[1]:GetQuest())
 	end
 end
 
@@ -270,7 +287,7 @@ function Reward:ForEachItem(callback)
 	local uniqueItems = {}
 	local items = {}
 	for _, objective in ipairs(self.objectives) do
-		for _, item in ipairs(GetCachedQuestRewardItems(objective.quest) or {}) do
+		for _, item in ipairs(GetCachedQuestRewardItems(objective:GetQuest()) or {}) do
 			if uniqueItems[item.id] then
 				uniqueItems[item.id].amount = item.amount + uniqueItems[item.id].amount
 			else
