@@ -12,6 +12,7 @@ local DB = namespace.DB
 local Util = namespace.Util
 local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
+local RewardSummary = namespace.RewardSummary
 local Main = namespace.GUIMain
 
 _G.WeeklyRewards = WeeklyRewards
@@ -36,6 +37,7 @@ local defaultDB = {
 		},
 		utils = {
 			untrackQuests = false,
+			broadcastRewards = true,
 		},
 		dbVersion = 8,
 	},
@@ -128,6 +130,10 @@ function WeeklyRewards:OnEnable()
 	local activeRewards = ActiveRewards:New(self.db.global.activeRewards)
 	local archive = Archivist:Initialize(WeeklyRewardsArchive)
 
+	RewardSummary:Init(characterStore)
+
+	self.character = character
+
 	self:RegisterMessage("WR_LOOT_SCANNER_ITEM_LOOTED", function(message, source, quantity, itemID, currencyID)
 		character:ReceiveDrop(source, quantity, itemID, currencyID)
 	end)
@@ -147,7 +153,7 @@ function WeeklyRewards:OnEnable()
 			character:ReceiveReward(questId, money, nil, Util.MONEY_CURRENCY_ID)
 		end
 		-- C_QuestLog.IsQuestFlaggedCompleted() might returns false in this context
-		character:UpdateProgress(questId)
+		self:UpdateProgress(questId)
 		self:Redraw()
 
 		self:UpdateRewardsGUIDSafe(character, questId)
@@ -255,4 +261,29 @@ function WeeklyRewards:UpdateRewardsGUIDSafe(character, quest, attempts)
 			timer:Cancel()
 		end
 	end)
+end
+
+function WeeklyRewards:UpdateProgress(quest)
+	local completion = self.character:UpdateProgress(quest)
+
+	if self.db.global.utils.broadcastRewards ~= true then
+		return
+	end
+
+	local lastClaimed
+	for rewardID, _ in pairs(completion) do
+		self:Broadcast(rewardID)
+		lastClaimed = rewardID
+	end
+
+	self.lastClaimed = lastClaimed or self.lastClaimed
+end
+
+function WeeklyRewards:Broadcast(rewardID, channel)
+	rewardID = rewardID or self.lastClaimed
+
+	if rewardID == nil then
+		return
+	end
+	RewardSummary:Create(rewardID):Broadcast(channel)
 end

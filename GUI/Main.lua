@@ -171,6 +171,19 @@ function Main:AddSettingsButton()
 			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
 			GameTooltip_AddNormalLine(tooltip, "Untrack all WeeklyRewards-managed quests on login, which could provide a cleaner quest log panel")
 		end)
+
+		local broadcastRewards = rootMenu:CreateCheckbox("Broadcast rewards", function()
+			return WeeklyRewards.db.global.utils.broadcastRewards
+		end, function()
+			WeeklyRewards.db.global.utils.broadcastRewards = not WeeklyRewards.db.global.utils.broadcastRewards
+		end)
+		broadcastRewards:SetTooltip(function(tooltip, elementDescription)
+			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
+			GameTooltip_AddNormalLine(
+				tooltip,
+				"Broadcast your Warband rewards summary once claimed. The chat channel is automatically selected with the largest audience."
+			)
+		end)
 	end)
 
 	self.window.titlebar.SettingsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.SettingsButton:GetName() .. "Icon", "ARTWORK")
