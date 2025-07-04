@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.13.0 - 2025-07-04
+
+## New Features
+
+- Added new reward support: Collector's Bounty - All legacy mounts with increased drop rates
+- Added settings **Max Width** to prevent window expansion beyond visible area, and with horizontal scrollbar support for oversized window - Defaults to 80% of the fullscreen
+
 ## v1.12.0 - 2025-06-23
 
 ## New Features
