@@ -106,6 +106,17 @@ function Main:AddSettingsButton()
 			end, i)
 		end
 
+		local windowMaxWidth = rootMenu:CreateButton("Max Width")
+		windowMaxWidth:CreateTitle("% of fullscreen")
+		for i = 20, 100, 10 do
+			windowMaxWidth:CreateRadio(i .. "%", function()
+				return WeeklyRewards.db.global.main.windowMaxRelativeWidth == i
+			end, function(data)
+				WeeklyRewards.db.global.main.windowMaxRelativeWidth = data
+				self:Redraw()
+			end, i)
+		end
+
 		local colorInfo = {
 			r = WeeklyRewards.db.global.main.windowBackgroundColor.r,
 			g = WeeklyRewards.db.global.main.windowBackgroundColor.g,
@@ -430,7 +441,6 @@ function Main:CreateWindow()
 	self.window.table = UI:CreateTableFrame({
 		header = {
 			enabled = true,
-			sticky = true,
 			height = Constants.TABLE_HEADER_HEIGHT,
 		},
 		rows = {
@@ -818,13 +828,15 @@ function Main:Redraw()
 		end)
 	end
 
-	self.window.titlebar.title:SetShown(tableWidth > minWindowWidth)
+	local windowScale = WeeklyRewards.db.global.main.windowScale / 100
+
 	self.window.border:SetShown(WeeklyRewards.db.global.main.windowBorder)
 	self.window.table:SetData(tableData)
-	self.window:SetWidth(math.max(tableWidth, minWindowWidth))
+	self.window:SetWidth(math.min(math.max(tableWidth, minWindowWidth), GetScreenWidth() * WeeklyRewards.db.global.main.windowMaxRelativeWidth / 100 / windowScale))
 	self.window:SetHeight(math.min(tableHeight + Constants.TITLEBAR_HEIGHT, Constants.MAX_WINDOW_HEIGHT) + 2)
 	self.window:SetClampRectInsets(self.window:GetWidth() / 2, self.window:GetWidth() / -2, 0, self.window:GetHeight() / 2)
-	self.window:SetScale(WeeklyRewards.db.global.main.windowScale / 100)
+	self.window:SetScale(windowScale)
+	self.window.titlebar.title:SetShown(self.window:GetWidth() > (240 / windowScale))
 
 	self:UpdateSortArrow()
 end
