@@ -8,6 +8,7 @@ local GreatVaultProgress = namespace.GreatVaultProgress
 local LFGProgress = namespace.LFGProgress
 local CyrceCircletProgress = namespace.CyrceCircletProgress
 local GildedStashProgress = namespace.GildedStashProgress
+local EncounterProgress = namespace.EncounterProgress
 
 local PROGRESS_TYPE = {
 	Quest = 0,
@@ -15,6 +16,7 @@ local PROGRESS_TYPE = {
 	LFG = 2,
 	CyrceCirclet = 3,
 	GildedStash = 4,
+	Encounter = 5,
 }
 
 function ProgressFactory:Create(type, o)
@@ -28,6 +30,8 @@ function ProgressFactory:Create(type, o)
 		instance = CyrceCircletProgress:New(o)
 	elseif type == PROGRESS_TYPE.GildedStash then
 		instance = GildedStashProgress:New(o)
+	elseif type == PROGRESS_TYPE.Encounter then
+		instance = EncounterProgress:New(o)
 	else
 		instance = RewardProgress:New(o)
 	end

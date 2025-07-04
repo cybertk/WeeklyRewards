@@ -216,6 +216,62 @@ function Util:FindEquippedItem(itemIDs)
 	Util:Debug("GetItemLevelByItemID: Cannot find the item")
 end
 
+Util.SavedInstances = {}
+function Util.SavedInstances:Init()
+	self.frame = CreateFrame("Frame")
+
+	self.frame:SetScript("OnEvent", function(self, event, ...)
+		if event == "ENCOUNTER_END" then
+			local _, bossName, difficultyID, _, success = ...
+			if not success then
+				return
+			end
+
+			local instanceID = select(8, GetInstanceInfo())
+
+			Util.SavedInstances:Add(instanceID, bossName, difficultyID)
+		end
+	end)
+
+	self.frame:RegisterEvent("ENCOUNTER_END")
+
+	self.claimed = {}
+end
+
+function Util.SavedInstances:Add(instanceID, bossName, difficultyID)
+	self.claimed[instanceID] = self.claimed[instanceID] or {}
+	self.claimed[instanceID][bossName] = self.claimed[instanceID][bossName] or {}
+
+	table.insert(self.claimed[instanceID][bossName], difficultyID)
+end
+
+function Util.SavedInstances:Update()
+	for i = 1, GetNumSavedInstances() do
+		local _, _, reset, difficultyID, _, _, _, _, _, _, numEncounters, _, _, instanceID = GetSavedInstanceInfo(i)
+		if reset ~= 0 then
+			for j = 1, numEncounters do
+				local bossName, _, isKilled = GetSavedInstanceEncounterInfo(i, j)
+				if isKilled then
+					self:Add(instanceID, bossName, difficultyID)
+				end
+			end
+		end
+	end
+end
+
+function Util.SavedInstances:FindByBossName(name, instanceID)
+	if not self.claimed then
+		self:Init()
+		self:Update()
+	end
+
+	if not self.claimed[instanceID] then
+		return
+	end
+
+	return self.claimed[instanceID][name]
+end
+
 function Util.FormatTimeDuration(seconds, useAbbreviation)
 	return WorldQuestsSecondsFormatter:Format(seconds, useAbbreviation and SecondsFormatter.Abbreviation.OneLetter)
 end
