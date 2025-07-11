@@ -1,4 +1,12 @@
+
+
 # Changelog
+
+## v1.13.1 - 2025-07-11
+
+### Fix
+
+- Dungeons Mounts now can be tracked correctly - Credit to [@amoone1](https://github.com/amoone1)
 
 ## v1.13.0 - 2025-07-04
 
