@@ -10,6 +10,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Rivendare's Deathcharger",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 69, dungeon = 329, difficulties = { 1 }, journals = { 484 }, encounters = { 456 } }, -- Lord Aurius Rivendare
 		},
@@ -48,6 +49,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Raven Lord",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 185, dungeon = 556, difficulties = { 2 }, journals = { 1904 }, encounters = { 542 } }, -- Anzu
 		},
@@ -60,6 +62,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Swift White Hawkstrider",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 213, dungeon = 585, difficulties = { 2 }, journals = { 1894 }, encounters = { 533 } }, -- Kael'thas Sunstrider
 		},
@@ -98,6 +101,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Blue Proto-Drake",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 264, dungeon = 575, difficulties = { 2 }, journals = { 2029 }, encounters = { 643 } }, -- Skadi the Ruthless
 		},
@@ -170,6 +174,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Drake of the North Wind",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 395, dungeon = 657, difficulties = { 1, 2 }, journals = { 1041 }, encounters = { 115 } }, -- Altairus
 		},
@@ -195,6 +200,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Vitreous Stone Drake",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 397, dungeon = 725, difficulties = { 1, 2 }, journals = { 1059 }, encounters = { 111 } }, -- Slabhide
 		},
@@ -207,6 +213,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Armored Razzashi Raptor",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 410, dungeon = 859, difficulties = { 2 }, journals = { 1179 }, encounters = { 176 } }, -- Bloodlord Mandokir
 		},
@@ -219,6 +226,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Swift Zulian Panther",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 411, dungeon = 859, difficulties = { 2 }, journals = { 1180 }, encounters = { 181 } }, -- High Priestess Kilnara
 		},
@@ -400,6 +408,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Midnight",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 875, dungeon = 1651, difficulties = { 23 }, journals = { 1960 }, encounters = { 1835 } }, -- Attumen the Huntsman
 		},
@@ -451,6 +460,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Sharkbait",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 995, dungeon = 1754, difficulties = { 23 }, journals = { 2096 }, encounters = { 2095 } }, -- Lord Harlan Sweete
 		},
@@ -463,6 +473,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Tomb Stalker",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 1040, dungeon = 1762, difficulties = { 23 }, journals = { 2143 }, encounters = { 2172 } }, -- King Dazar
 		},
@@ -475,6 +486,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Underrot Crawg",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 1053, dungeon = 1841, difficulties = { 23 }, journals = { 2123 }, encounters = { 2158 } }, -- Unbound Abomination
 		},
@@ -526,6 +538,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Marrowfang",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 1406, dungeon = 2286, difficulties = { 23 }, journals = { 2390 }, encounters = { 2396 } }, -- Nalthor the Rimebinder
 		},
@@ -551,6 +564,7 @@ namespace.DB.rewardCandidiates["collectors-bounty"] = {
 		key = "Cartel Master's Gearglider",
 		group = RewardsGroup.COLLECTORS_BOUNTY_EVENT,
 		minimumLevel = 1,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = {
 			{ quest = 0, progressType = 5, mount = 1481, dungeon = 2441, difficulties = { 2, 23 }, journals = { 2442 }, encounters = { 2455 } }, -- So'leah
 		},
