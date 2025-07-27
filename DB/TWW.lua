@@ -140,6 +140,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		minimumLevel = 70,
 		pick = 2,
 		trackRecords = true,
+		rollover = true,
 		entries = {
 			{ quest = 82355, unlockQuest = 82146 }, -- Special Assignment: Cinderbee Surge
 			{ quest = 81647, unlockQuest = 82154 }, -- Special Assignment: Titanic Resurgence
