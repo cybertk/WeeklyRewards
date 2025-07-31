@@ -120,8 +120,8 @@ function Character:ResetProgress(reward, force)
 		return
 	end
 
-	if not force and reward.rollover and progress:hasStarted() then
-		-- skip reset if: rollover and started.  OR progress.started > rewarwd.started
+	if not force and reward.rollover and not progress:hasClaimed() then
+		-- skip reset if: rollover and unclaimed
 		Util:Debug(format("progress of [%s] has been rollovered for character: %s ", reward.name, self.name))
 		return
 	end
