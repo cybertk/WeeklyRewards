@@ -2,6 +2,16 @@
 
 # Changelog
 
+## v1.13.2 - 2025-07-31
+
+### Fix
+
+- D.I.S.C Belt now correctly limited to 3 upgrades
+- Pending upgrades (x0) were always shown for completed upgradable rewards, now properly hidden
+- Enhanced rollover rewards recognition, including:
+    - Special Assignment quests
+    - Weekly Timewalking Raids and Dungeons quest
+
 ## v1.13.1 - 2025-07-11
 
 ### Fix
