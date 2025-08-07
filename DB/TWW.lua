@@ -7,6 +7,7 @@ local RewardsGroup = {
 	UNDERMINE = "Undermine",
 	DELVE = "Delve",
 	NIGHTFALL = "Nightfall",
+	KARESH = "K'aresh",
 }
 
 namespace.DB.rewardCandidiates["tww"] = {
@@ -548,5 +549,49 @@ namespace.DB.rewardCandidiates["tww"] = {
 			},
 		},
 		items = { { item = 244311, amount = 1 }, { item = 244696, amount = 1 } },
+	},
+	{
+		id = "tww-sa-ka",
+		key = "SA:K'aresh",
+		group = RewardsGroup.WEEKLY_CACHE,
+		minimumLevel = 80,
+		entries = {
+			{
+				quest = 89293, -- Special Assignment: Overshadowed
+				unlockQuest = 91193, -- Special Assignment: Capstone 1 - Unlock
+			},
+			{
+				quest = 89294, -- Special Assignment: Aligned Views
+				unlockQuest = 91203, -- Special Assignment: Capstone 2 - Unlock
+			},
+		},
+	},
+	{
+		id = "tww-dome",
+		key = "Dome",
+		group = RewardsGroup.WEEKLY_CACHE,
+		minimumLevel = 80,
+		entries = {
+			{ quest = 85460 }, -- Ecological Succession
+		},
+	},
+	{
+		id = "tww-diving",
+		key = "PhaseDiving",
+		group = RewardsGroup.KARESH,
+		minimumLevel = 80,
+		entries = {
+			{ quest = 91093 }, -- More Than Just a Phase
+		},
+	},
+	{
+		id = "tww-reshanor",
+		key = "Reshanor",
+		group = RewardsGroup.KARESH,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 87354 }, -- Reshanor, the Untethered
+		},
 	},
 }
