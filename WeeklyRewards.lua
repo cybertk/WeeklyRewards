@@ -48,55 +48,7 @@ function WeeklyRewards:Redraw()
 	Main:Redraw()
 end
 
-function WeeklyRewards:MigrateDB()
-	for i = #self.db.global.activeRewards, 1, -1 do
-		local r = self.db.global.activeRewards[i]
-		if r.id == "tww-circlet" and r.objectives[1] and r.objectives[1].upgradeItem == nil then
-			table.remove(self.db.global.activeRewards, i)
-			break
-		elseif r.id == "tww-belt" and r.objectives[1] and r.objectives[1].itemLevelRange and #r.objectives[1].itemLevelRange ~= 4 then
-			table.remove(self.db.global.activeRewards, i)
-			Util:Debug("v1.13.2: tww-belt migrated")
-		end
-	end
-
-	local playerGUID = UnitGUID("player")
-	if self.db.global.characters[playerGUID] == nil then
-		return
-	end
-
-	if self.db.global.characters[playerGUID].progress["tww-circlet"] and self.db.global.characters[playerGUID].progress["tww-circlet"].state ~= 0 then
-		self.db.global.characters[playerGUID].progress["tww-circlet"] = nil
-	end
-
-	for n, p in pairs(self.db.global.characters[playerGUID].progress) do
-		if n == "tww-dkeys" then
-			local objective = p.pendingObjectives[#p.pendingObjectives] or p.fulfilledObjectives[#p.fulfilledObjectives]
-			if objective.loot == nil then
-				objective.loot = { 413590, name = { 228942 } }
-				Util:Debug("v1.11.0: tww-dkeys loot migrated")
-			end
-		elseif n == "tww-dmap" then
-			local objective = p.pendingObjectives[#p.pendingObjectives] or p.fulfilledObjectives[#p.fulfilledObjectives]
-			if objective.loot == nil then
-				objective.loot = { 461482, name = { 235559 } }
-				Util:Debug("v1.11.0: tww-dmap loot migrated")
-			end
-		elseif n == "tww-surge" then
-			local objective = p.pendingObjectives[#p.pendingObjectives] or p.fulfilledObjectives[#p.fulfilledObjectives]
-			if objective.loot == nil then
-				objective.loot = { 236756, 236757, 236758 }
-				Util:Debug("v1.12.0: tww-surge loot migrated")
-			end
-		elseif n == "tww-belt" then
-			local objective = p.pendingObjectives[1]
-			if objective and #objective.itemLevelRange ~= 4 then
-				objective.itemLevelRange = { 691, 694, 697, 701 }
-				Util:Debug("v1.13.2: tww-belt progress migrated")
-			end
-		end
-	end
-end
+function WeeklyRewards:MigrateDB() end
 
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"
