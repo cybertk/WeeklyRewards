@@ -51,6 +51,15 @@ namespace.DB.rewardCandidiates["tww"] = {
 		group = RewardsGroup.PINNACLE_CACHE,
 		rollover = true,
 		minimumLevel = 70,
+		timeLeft = function()
+			local questDuration = 21 * SECONDS_PER_DAY
+			local questWeek = time({ year = 2025, month = 8, day = 4 })
+
+			local now = GetServerTime()
+			local timeStarted = questWeek + ((now + C_DateAndTime.GetSecondsUntilWeeklyReset() - questWeek) % (7 * SECONDS_PER_DAY))
+
+			return questDuration - ((now - timeStarted) % questDuration)
+		end,
 		entries = {
 			{
 				quest = 82679, -- Archives: Seeking History
