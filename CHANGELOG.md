@@ -2,6 +2,16 @@
 
 # Changelog
 
+## v1.14.0 - 2025-08-07
+
+## New Features
+
+- Upgraded TOC to 11.2.0
+- Added K'aresh rewards support:
+    - Weekly Phase Diving
+    - Special Assignment Quests
+    - World Boss: Reshanor
+
 ## v1.13.2 - 2025-07-31
 
 ### Fix
