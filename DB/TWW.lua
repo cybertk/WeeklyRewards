@@ -140,6 +140,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		minimumLevel = 70,
 		pick = 2,
 		trackRecords = true,
+		rollover = true,
 		entries = {
 			{ quest = 82355, unlockQuest = 82146 }, -- Special Assignment: Cinderbee Surge
 			{ quest = 81647, unlockQuest = 82154 }, -- Special Assignment: Titanic Resurgence
@@ -531,7 +532,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "D.I.S.C.",
 		description = "|T6883015:12|t |cffa335ee[Durable Information Securing Container]|r(D.I.S.C. Belt)|n|n"
 			.. "The belt starts at Item Level 691 by completing the quest offered by Dagran II in Dornogal.|n|n"
-			.. "|T134394:12|t |cffa335ee[Titan Memory Card]|r upgrades the belt to maximum Item Level 707 by 5 times.",
+			.. "|T134394:12|t |cffa335ee[Titan Memory Card]|r upgrades the belt to maximum Item Level 701 by 3 times.",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -543,7 +544,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 				progressType = 3,
 				items = { 242664, 245964, 245965, 245966 },
 				upgradeItem = 244311, -- Titan Memory Card
-				itemLevelRange = { 691, 694, 697, 701, 704, 707 },
+				itemLevelRange = { 691, 694, 697, 701 },
 			},
 		},
 		items = { { item = 244311, amount = 1 }, { item = 244696, amount = 1 } },

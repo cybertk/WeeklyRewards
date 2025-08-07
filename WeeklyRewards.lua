@@ -54,6 +54,9 @@ function WeeklyRewards:MigrateDB()
 		if r.id == "tww-circlet" and r.objectives[1] and r.objectives[1].upgradeItem == nil then
 			table.remove(self.db.global.activeRewards, i)
 			break
+		elseif r.id == "tww-belt" and r.objectives[1] and r.objectives[1].itemLevelRange and #r.objectives[1].itemLevelRange ~= 4 then
+			table.remove(self.db.global.activeRewards, i)
+			Util:Debug("v1.13.2: tww-belt migrated")
 		end
 	end
 
@@ -84,6 +87,12 @@ function WeeklyRewards:MigrateDB()
 			if objective.loot == nil then
 				objective.loot = { 236756, 236757, 236758 }
 				Util:Debug("v1.12.0: tww-surge loot migrated")
+			end
+		elseif n == "tww-belt" then
+			local objective = p.pendingObjectives[1]
+			if objective and #objective.itemLevelRange ~= 4 then
+				objective.itemLevelRange = { 691, 694, 697, 701 }
+				Util:Debug("v1.13.2: tww-belt progress migrated")
 			end
 		end
 	end

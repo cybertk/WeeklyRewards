@@ -51,9 +51,11 @@ function CyrceCircletProgress:_UpdateRecords()
 		self.position = self.position + numInBag
 	end
 
-	table.insert(self.records, {
-		text = format("%s x%d", self:GetCachedItemName(reward.upgradeItem), self.total - self.position),
-		fulfilled = 0,
-		required = self.total - self.position,
-	})
+	if self.position < self.total then
+		table.insert(self.records, {
+			text = format("%s x%d", self:GetCachedItemName(reward.upgradeItem), self.total - self.position),
+			fulfilled = 0,
+			required = self.total - self.position,
+		})
+	end
 end

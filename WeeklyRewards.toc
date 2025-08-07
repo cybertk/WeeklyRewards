@@ -31,7 +31,6 @@ DB\LunarFestival.lua
 DB\LoveIsInTheAir.lua
 DB\Noblegarden.lua
 DB\Midsummer.lua
-DB\CollectorsBounty.lua
 
 Core\Reward.lua
 Core\ActiveRewards.lua

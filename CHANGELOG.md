@@ -1,4 +1,29 @@
+
+
 # Changelog
+
+## v1.13.2 - 2025-07-31
+
+### Fix
+
+- D.I.S.C Belt now correctly limited to 3 upgrades
+- Pending upgrades (x0) were always shown for completed upgradable rewards, now properly hidden
+- Enhanced rollover rewards recognition, including:
+    - Special Assignment quests
+    - Weekly Timewalking Raids and Dungeons quest
+
+## v1.13.1 - 2025-07-11
+
+### Fix
+
+- Dungeons Mounts now can be tracked correctly - Credit to [@amoone1](https://github.com/amoone1)
+
+## v1.13.0 - 2025-07-04
+
+## New Features
+
+- Added new reward support: Collector's Bounty - All legacy mounts with increased drop rates
+- Added settings **Max Width** to prevent window expansion beyond visible area, and with horizontal scrollbar support for oversized window - Defaults to 80% of the fullscreen
 
 ## v1.12.0 - 2025-06-23
 
