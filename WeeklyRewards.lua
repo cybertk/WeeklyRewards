@@ -38,7 +38,7 @@ local defaultDB = {
 		},
 		utils = {
 			untrackQuests = false,
-			broadcastRewards = true,
+			broadcastRewards = false,
 		},
 		dbVersion = 8,
 	},
