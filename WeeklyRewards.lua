@@ -48,7 +48,15 @@ function WeeklyRewards:Redraw()
 	Main:Redraw()
 end
 
-function WeeklyRewards:MigrateDB() end
+function WeeklyRewards:MigrateDB()
+	for i = #self.db.global.activeRewards, 1, -1 do
+		local r = self.db.global.activeRewards[i]
+		if r.id == "tww-worldsoul" and r.objectives[1] and r.objectives[1].questPool and #r.objectives[1].questPool ~= 42 then
+			table.remove(self.db.global.activeRewards, i)
+			Util:Debug("v1.14.1: tww-worldsoul migrated")
+		end
+	end
+end
 
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"

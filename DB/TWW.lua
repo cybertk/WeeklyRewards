@@ -139,6 +139,8 @@ namespace.DB.rewardCandidiates["tww"] = {
 					87422, -- Worldsoul: Undermine World Quests
 					87423, -- Worldsoul: Undermine Explorer
 					87424, -- Worldsoul: World Bosses
+					89514, -- Worldsoul: Horrific Visions Revisited
+					91855, -- Worldsoul: K'aresh World Quests
 				},
 			},
 		},
