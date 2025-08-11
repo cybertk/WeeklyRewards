@@ -2,6 +2,14 @@
 
 # Changelog
 
+## v1.14.1 - 2025-08-11
+
+### Fix
+
+- Adopt Season 3 new Delve Key mechanism, 8 objectives are required now(4 for keys and 4 for shards) - Credit to [@Dolsze](https://www.curseforge.com/members/dolsze/projects)
+- 11.2 new Worldsoul quests can be recognized now
+- Disable rewards announcement by default - Credit to [@Saltkakan](https://www.curseforge.com/members/saltkakan)
+
 ## v1.14.0 - 2025-08-07
 
 ## New Features
