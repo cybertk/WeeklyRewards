@@ -464,7 +464,7 @@ end
 
 function RewardProgress:GetCachedObjectiveName(objective)
 	if objective.items and #objective.items > 0 then
-		return self:GetCachedItemName(objective.items[1])
+		return self:GetCachedItemName(objective.items[1], objective.items.amount and objective.items.amount > 1 and objective.items.amount)
 	end
 
 	local name = WAPI_GetQuestName(objective.quest)
@@ -479,10 +479,12 @@ function RewardProgress:GetCachedObjectiveName(objective)
 	return "Loading"
 end
 
-function RewardProgress:GetCachedItemName(item)
+function RewardProgress:GetCachedItemName(item, amount)
 	local name, icon, quality = C_Item.GetItemNameByID(item), C_Item.GetItemIconByID(item), C_Item.GetItemQualityByID(item)
 	if name and icon and quality then
-		return CreateSimpleTextureMarkup(icon, 13, 13) .. ITEM_QUALITY_COLORS[quality].color:WrapTextInColorCode(format(" [%s]", name))
+		return CreateSimpleTextureMarkup(icon, 13, 13)
+			.. ITEM_QUALITY_COLORS[quality].color:WrapTextInColorCode(format(" [%s]", name))
+			.. (amount and (" x" .. amount) or "")
 	else
 		return "Loading"
 	end

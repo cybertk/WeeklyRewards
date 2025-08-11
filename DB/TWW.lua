@@ -28,20 +28,22 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "DelveKeys",
 		description = "Weekly Delve Keys",
 		group = RewardsGroup.DELVE,
-		pick = 4,
+		pick = 8,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 84736, items = { 224172 }, loot = { 413590, name = { 228942 } } }, -- Bountiful Coffer
-			{ quest = 84737, items = { 224172 } }, -- Restored Coffer Key
-			{ quest = 84738, items = { 224172 } }, -- Restored Coffer Key
-			{ quest = 84739, items = { 224172 } }, -- Restored Coffer Key
+			{ quest = 91175, items = { 238527 }, loot = { 413590, name = { 228942 } } }, -- Bountiful Coffer
+			{ quest = 91176, items = { 238527 } }, -- Restored Coffer Key
+			{ quest = 91177, items = { 238527 } }, -- Restored Coffer Key
+			{ quest = 91178, items = { 238527 } }, -- Restored Coffer Key
+			{ quest = 84736, items = { 245653, amount = 50 } }, -- Coffer Key Shard
+			{ quest = 84737, items = { 245653, amount = 50 } }, -- Coffer Key Shard
+			{ quest = 84738, items = { 245653, amount = 50 } }, -- Coffer Key Shard
+			{ quest = 84739, items = { 245653, amount = 50 } }, -- Coffer Key Shard
 		},
 		items = {
-			{
-				currency = 3028, -- Restored Coffer Key
-				amount = 4,
-			},
+			{ currency = 3028, amount = 4 }, -- Restored Coffer Key
+			{ item = 245653, amount = 200 }, -- Coffer Key Shard
 		},
 	},
 	{

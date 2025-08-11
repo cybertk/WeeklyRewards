@@ -54,7 +54,22 @@ function WeeklyRewards:MigrateDB()
 		if r.id == "tww-worldsoul" and r.objectives[1] and r.objectives[1].questPool and #r.objectives[1].questPool ~= 42 then
 			table.remove(self.db.global.activeRewards, i)
 			Util:Debug("v1.14.1: tww-worldsoul migrated")
+		elseif r.id == "tww-dkeys" and #r.objectives ~= 8 then
+			table.remove(self.db.global.activeRewards, i)
+			Util:Debug("v1.14.1: tww-dkeys migrated")
+			print("v1.14.1: tww-dkeys migrated")
 		end
+	end
+
+	local playerGUID = UnitGUID("player")
+	if self.db.global.characters[playerGUID] == nil then
+		return
+	end
+
+	if self.db.global.characters[playerGUID].progress["tww-dkeys"] and self.db.global.characters[playerGUID].progress["tww-dkeys"].numObjectives ~= 8 then
+		self.db.global.characters[playerGUID].progress["tww-dkeys"] = nil
+		Util:Debug("v1.14.1: tww-dkeys progress migrated")
+		print("v1.14.1: tww-dkeys progress migrated")
 	end
 end
 
