@@ -2,6 +2,14 @@
 
 # Changelog
 
+## v1.14.2 - 2025-08-14
+
+### Fix
+
+- PhaseDiving weekly quest([More Than Just a Phase]) is now marked as rolloverable
+- PhaseDiving([More Than Just a Phase]) is not recognized after reset
+- Oasis([Ecological Succession]) is not recognized after reset
+
 ## v1.14.1 - 2025-08-11
 
 ### Fix
