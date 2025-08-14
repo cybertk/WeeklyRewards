@@ -594,6 +594,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "PhaseDiving",
 		group = RewardsGroup.KARESH,
 		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 91093 }, -- More Than Just a Phase
 		},
