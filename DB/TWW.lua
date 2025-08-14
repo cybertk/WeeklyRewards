@@ -580,10 +580,11 @@ namespace.DB.rewardCandidiates["tww"] = {
 		},
 	},
 	{
-		id = "tww-dome",
-		key = "Dome",
+		id = "tww-oasis",
+		key = "Oasis",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 85460 }, -- Ecological Succession
 		},
