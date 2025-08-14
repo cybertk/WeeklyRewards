@@ -595,6 +595,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		group = RewardsGroup.KARESH,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		rollover = true,
 		entries = {
 			{ quest = 91093 }, -- More Than Just a Phase
 		},
