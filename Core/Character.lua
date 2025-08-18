@@ -277,6 +277,17 @@ function Character:ForEachProgress(callback, completedOnly)
 	end
 end
 
+function Character:GetAllQuests()
+	local quests = {}
+	for questID, progress in pairs(Cache.questToProgress) do
+		if progress:hasStarted() then
+			table.insert(quests, questID)
+		end
+	end
+
+	return quests
+end
+
 function Character:UpdateLocation()
 	self.location = GetZoneText()
 end
