@@ -486,9 +486,9 @@ namespace.DB.rewardCandidiates["tww"] = {
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 86371, items = { 233071 }, loot = { 461482, name = { 235559 } } }, -- Hidden Trove
+			{ quest = 86371, items = { 248142 }, loot = { 461482, name = { 235559 } } }, -- Hidden Trove
 		},
-		items = { { item = 233071, amount = 1 } },
+		items = { { item = 248142, amount = 1 } },
 	},
 	{
 		id = "tww-dstash",

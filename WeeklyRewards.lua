@@ -60,6 +60,9 @@ function WeeklyRewards:MigrateDB()
 		elseif r.id == "tww-oasis" and not r.rollover then
 			r.rollover = true
 			Util:Debug("v1.14.3: tww-oasis migrated")
+		elseif r.id == "tww-dmap" and r.items[1].item ~= 248142 then
+			r.items[1] = { item = 248142, amount = 1 }
+			Util:Debug("v1.14.3: tww-dmap migrated")
 		end
 	end
 
