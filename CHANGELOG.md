@@ -2,6 +2,13 @@
 
 # Changelog
 
+## v1.14.3 - 2025-08-27
+
+### Fix
+
+- Delver's Bounty icon is not grayed out anymore
+- Oasis([Ecological Succession]) progress is rolloverable
+
 ## v1.14.2 - 2025-08-14
 
 ### Fix
