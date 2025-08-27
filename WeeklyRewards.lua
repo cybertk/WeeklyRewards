@@ -57,7 +57,9 @@ function WeeklyRewards:MigrateDB()
 		elseif r.id == "tww-dkeys" and #r.objectives ~= 8 then
 			table.remove(self.db.global.activeRewards, i)
 			Util:Debug("v1.14.1: tww-dkeys migrated")
-			print("v1.14.1: tww-dkeys migrated")
+		elseif r.id == "tww-oasis" and not r.rollover then
+			r.rollover = true
+			Util:Debug("v1.14.3: tww-oasis migrated")
 		end
 	end
 

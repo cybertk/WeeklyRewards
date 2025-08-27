@@ -585,6 +585,7 @@ namespace.DB.rewardCandidiates["tww"] = {
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		rollover = true,
 		entries = {
 			{ quest = 85460 }, -- Ecological Succession
 		},
