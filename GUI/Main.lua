@@ -38,7 +38,7 @@ function Main:AddCloseButton()
 		self.window.titlebar.closeButton.Icon:SetVertexColor(1, 1, 1, 1)
 		Utils:SetBackgroundColor(self.window.titlebar.closeButton, 1, 0, 0, 0.2)
 		GameTooltip:SetOwner(self.window.titlebar.closeButton, "ANCHOR_TOP")
-		GameTooltip:SetText("Close the window", 1, 1, 1, 1, true)
+		GameTooltip:SetText(L["close_button_tooltip"], 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.closeButton:SetScript("OnLeave", function()
@@ -63,8 +63,8 @@ function Main:AddSettingsButton()
 		Utils:SetBackgroundColor(self.window.titlebar.SettingsButton, 1, 1, 1, 0.05)
 		---@diagnostic disable-next-line: param-type-mismatch
 		GameTooltip:SetOwner(self.window.titlebar.SettingsButton, "ANCHOR_TOP")
-		GameTooltip:SetText("Settings", 1, 1, 1, 1, true)
-		GameTooltip:AddLine("Let's customize things a bit", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+		GameTooltip:SetText(L["settings_button_tooltip"], 1, 1, 1, 1, true)
+		GameTooltip:AddLine(L["settings_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.SettingsButton:SetScript("OnLeave", function()
@@ -73,7 +73,7 @@ function Main:AddSettingsButton()
 		GameTooltip:Hide()
 	end)
 	self.window.titlebar.SettingsButton:SetupMenu(function(_, rootMenu)
-		local showMinimapIcon = rootMenu:CreateCheckbox("Show the minimap button", function()
+		local showMinimapIcon = rootMenu:CreateCheckbox(L["settings_show_minimap_button"], function()
 			return not WeeklyRewards.db.global.minimap.hide
 		end, function()
 			WeeklyRewards.db.global.minimap.hide = not WeeklyRewards.db.global.minimap.hide
@@ -81,10 +81,10 @@ function Main:AddSettingsButton()
 		end)
 		showMinimapIcon:SetTooltip(function(tooltip, elementDescription)
 			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
-			GameTooltip_AddNormalLine(tooltip, "It does get crowded around the minimap sometimes.")
+			GameTooltip_AddNormalLine(tooltip, L["settings_show_minimap_tooltip"])
 		end)
 
-		local lockMinimapIcon = rootMenu:CreateCheckbox("Lock the minimap button", function()
+		local lockMinimapIcon = rootMenu:CreateCheckbox(L["settings_lock_minimap_button"], function()
 			return WeeklyRewards.db.global.minimap.lock
 		end, function()
 			WeeklyRewards.db.global.minimap.lock = not WeeklyRewards.db.global.minimap.lock
@@ -92,11 +92,11 @@ function Main:AddSettingsButton()
 		end)
 		lockMinimapIcon:SetTooltip(function(tooltip, elementDescription)
 			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
-			GameTooltip_AddNormalLine(tooltip, "No more moving the button around accidentally!")
+			GameTooltip_AddNormalLine(tooltip, L["settings_lock_minimap_tooltip"])
 		end)
 
-		rootMenu:CreateTitle("Window")
-		local windowScale = rootMenu:CreateButton("Scaling")
+		rootMenu:CreateTitle(L["settings_window_title"])
+		local windowScale = rootMenu:CreateButton(L["settings_scaling"])
 		for i = 80, 200, 10 do
 			windowScale:CreateRadio(i .. "%", function()
 				return WeeklyRewards.db.global.main.windowScale == i
@@ -106,8 +106,8 @@ function Main:AddSettingsButton()
 			end, i)
 		end
 
-		local windowMaxWidth = rootMenu:CreateButton("Max Width")
-		windowMaxWidth:CreateTitle("% of fullscreen")
+		local windowMaxWidth = rootMenu:CreateButton(L["settings_max_width"])
+		windowMaxWidth:CreateTitle(L["settings_max_width_percent"])
 		for i = 20, 100, 10 do
 			windowMaxWidth:CreateRadio(i .. "%", function()
 				return WeeklyRewards.db.global.main.windowMaxRelativeWidth == i
@@ -161,39 +161,36 @@ function Main:AddSettingsButton()
 			end,
 			hasOpacity = 1,
 		}
-		rootMenu:CreateColorSwatch("Background color", function()
+		rootMenu:CreateColorSwatch(L["settings_background_color"], function()
 			ColorPickerFrame:SetupColorPickerAndShow(colorInfo)
 		end, colorInfo)
 
-		rootMenu:CreateCheckbox("Show the border", function()
+		rootMenu:CreateCheckbox(L["settings_show_border"], function()
 			return WeeklyRewards.db.global.main.windowBorder
 		end, function()
 			WeeklyRewards.db.global.main.windowBorder = not WeeklyRewards.db.global.main.windowBorder
 			self:Redraw()
 		end)
 
-		rootMenu:CreateTitle("Utility")
-		local untrackQuests = rootMenu:CreateCheckbox("Auto untrack quests", function()
+		rootMenu:CreateTitle(L["settings_utility_title"])
+		local untrackQuests = rootMenu:CreateCheckbox(L["settings_auto_untrack_quests"], function()
 			return WeeklyRewards.db.global.utils.untrackQuests
 		end, function()
 			WeeklyRewards.db.global.utils.untrackQuests = not WeeklyRewards.db.global.utils.untrackQuests
 		end)
 		untrackQuests:SetTooltip(function(tooltip, elementDescription)
 			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
-			GameTooltip_AddNormalLine(tooltip, "Untrack all WeeklyRewards-managed quests on login, which could provide a cleaner quest log panel")
+			GameTooltip_AddNormalLine(tooltip, L["settings_auto_untrack_quests_tooltip"])
 		end)
 
-		local broadcastRewards = rootMenu:CreateCheckbox("Broadcast rewards", function()
+		local broadcastRewards = rootMenu:CreateCheckbox(L["settings_broadcast_rewards"], function()
 			return WeeklyRewards.db.global.utils.broadcastRewards
 		end, function()
 			WeeklyRewards.db.global.utils.broadcastRewards = not WeeklyRewards.db.global.utils.broadcastRewards
 		end)
 		broadcastRewards:SetTooltip(function(tooltip, elementDescription)
 			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
-			GameTooltip_AddNormalLine(
-				tooltip,
-				"Broadcast your Warband rewards summary once claimed. The chat channel is automatically selected with the largest audience."
-			)
+			GameTooltip_AddNormalLine(tooltip, L["settings_broadcast_rewards_tooltip"])
 		end)
 	end)
 
@@ -213,10 +210,10 @@ function Main:AddCharactersButton()
 		Utils:SetBackgroundColor(self.window.titlebar.CharactersButton, 1, 1, 1, 0.05)
 		---@diagnostic disable-next-line: param-type-mismatch
 		GameTooltip:SetOwner(self.window.titlebar.CharactersButton, "ANCHOR_TOP")
-		GameTooltip:SetText("Characters", 1, 1, 1, 1, true)
-		GameTooltip:AddLine("Enable/Disable your characters.", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+		GameTooltip:SetText(L["characters_button_tooltip"], 1, 1, 1, 1, true)
+		GameTooltip:AddLine(L["characters_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("<Ctrl click to remove a character>", GREEN_FONT_COLOR.r, GREEN_FONT_COLOR.g, GREEN_FONT_COLOR.b)
+		GameTooltip:AddLine(L["characters_button_remove_hint"], GREEN_FONT_COLOR.r, GREEN_FONT_COLOR.g, GREEN_FONT_COLOR.b)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.CharactersButton:SetScript("OnLeave", function()
@@ -263,8 +260,8 @@ function Main:AddRewardsFilterButton()
 		Utils:SetBackgroundColor(self.window.titlebar.ColumnsButton, 1, 1, 1, 0.05)
 		---@diagnostic disable-next-line: param-type-mismatch
 		GameTooltip:SetOwner(self.window.titlebar.ColumnsButton, "ANCHOR_TOP")
-		GameTooltip:SetText("Columns", 1, 1, 1, 1, true)
-		GameTooltip:AddLine("Enable/Disable Tracking Rewards.", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+		GameTooltip:SetText(L["columns_button_tooltip"], 1, 1, 1, 1, true)
+		GameTooltip:AddLine(L["columns_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.ColumnsButton:SetScript("OnLeave", function()
@@ -332,8 +329,8 @@ function Main:AddSortButton()
 		Utils:SetBackgroundColor(self.window.titlebar.SortButton, 1, 1, 1, 0.05)
 		---@diagnostic disable-next-line: param-type-mismatch
 		GameTooltip:SetOwner(self.window.titlebar.SortButton, "ANCHOR_TOP")
-		GameTooltip:SetText("Sort", 1, 1, 1, 1, true)
-		GameTooltip:AddLine("Select sorting options for Reward Columns.", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+		GameTooltip:SetText(L["sort_button_tooltip"], 1, 1, 1, 1, true)
+		GameTooltip:AddLine(L["sort_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.SortButton:SetScript("OnLeave", function()
@@ -344,9 +341,9 @@ function Main:AddSortButton()
 	self.window.titlebar.SortButton:SetupMenu(function(_, rootMenu)
 		local activeRewards = ActiveRewards.Get()
 		local sortingFields = {
-			group = "Reward Group",
-			name = "Reward Name",
-			resetTime = "Time Left",
+			group = L["sort_reward_group"],
+			name = L["sort_reward_name"],
+			resetTime = L["sort_time_left"],
 		}
 		for field, name in pairs(sortingFields) do
 			rootMenu:CreateCheckbox(name, function()
@@ -483,7 +480,7 @@ end
 function Main:AddCharacterColumns()
 	local columns = {
 		{
-			name = "Name",
+			name = L["column_name"],
 			key = "name",
 			width = 90,
 			cell = function(character)
@@ -491,7 +488,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = "Realm",
+			name = L["column_realm"],
 			key = "realmName",
 			width = 90,
 			cell = function(character)
@@ -499,7 +496,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = "Level",
+			name = L["column_level"],
 			key = "level",
 			width = 50,
 			align = "CENTER",
@@ -508,7 +505,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = "Faction",
+			name = L["column_faction"],
 			key = "factionName",
 			width = 60,
 			align = "CENTER",
@@ -517,7 +514,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = "Location",
+			name = L["column_location"],
 			key = "location",
 			width = 90,
 			align = "CENTER",
@@ -526,7 +523,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = "LastUpdate",
+			name = L["column_last_update"],
 			key = "lastUpdate",
 			width = 60,
 			align = "CENTER",
@@ -539,7 +536,7 @@ function Main:AddCharacterColumns()
 	for _, column in ipairs(columns) do
 		column.onEnter = function(cellFrame)
 			GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-			GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode("<Left Click to Sort>"))
+			GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(L["table_sort_hint"]))
 			GameTooltip:Show()
 		end
 		column.onLeave = function()
@@ -599,7 +596,7 @@ function Main:AddRewardColumns()
 
 						if not cellFrame.hasInstructions then
 							GameTooltip:AddLine(" ")
-							GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode("<Ctrl click to reset the progress>"))
+							GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(L["table_reset_progress_hint"]))
 							GameTooltip:Show()
 							cellFrame.hasInstructions = true
 						end
@@ -644,16 +641,16 @@ function Main:AddProgressToGameTooltip(progress)
 
 	if progress.claimedAt then
 		local duration = progress.startedAt and format(" (%s used)", Util.FormatTimeDuration(progress.claimedAt - progress.startedAt, true)) or ""
-		GameTooltip:AddDoubleLine("Rewards Received At:", WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.claimedAt) .. duration))
+		GameTooltip:AddDoubleLine(L["progress_rewards_received_at"], WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.claimedAt) .. duration))
 	elseif progress.startedAt then
-		GameTooltip:AddDoubleLine("Started At:", WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.startedAt)))
+		GameTooltip:AddDoubleLine(L["progress_started_at"], WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.startedAt)))
 
 		if progress.rewards then
 			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine("Rewards Received")
+			GameTooltip:AddLine(L["progress_rewards_received"])
 		end
 	else
-		GameTooltip:AddLine("<Not Started>")
+		GameTooltip:AddLine(L["progress_not_started"])
 	end
 
 	progress:ForEachRewardItem(function(item)
@@ -662,7 +659,7 @@ function Main:AddProgressToGameTooltip(progress)
 
 	if progress.drops and #progress.drops > 0 then
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("Drops")
+		GameTooltip:AddLine(L["progress_drops"])
 
 		progress:ForEachRewardItem(function(item)
 			GameTooltip:AddLine(Util.FormatItem(item))
@@ -671,7 +668,7 @@ function Main:AddProgressToGameTooltip(progress)
 end
 
 function Main:AddRewardToGameTooltip(reward)
-	GameTooltip:AddDoubleLine(reward.name, GREEN_FONT_COLOR:WrapTextInColorCode("|A:NPE_LeftClick:16:16|a(Sort)"))
+	GameTooltip:AddDoubleLine(reward.name, GREEN_FONT_COLOR:WrapTextInColorCode(L["reward_sort_hint"]))
 	if reward.group then
 		GameTooltip:AddLine(reward.group .. ": " .. WHITE_FONT_COLOR:WrapTextInColorCode(reward.description))
 	else
@@ -679,19 +676,19 @@ function Main:AddRewardToGameTooltip(reward)
 	end
 
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddLine("Rewards")
+	GameTooltip:AddLine(L["reward_rewards"])
 
 	local items = reward:ForEachItem(function(item)
 		GameTooltip:AddLine(Util.FormatItem(item))
 	end)
 	if #items == 0 then
-		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode("Loading"))
+		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode(L["reward_loading"]))
 	end
 
 	GameTooltip:AddLine(" ")
 
 	if reward.resetTime then
-		GameTooltip:AddLine("Time Left: " .. WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime())))
+		GameTooltip:AddLine(L["reward_time_left"] .. WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime())))
 	end
 end
 

@@ -79,7 +79,7 @@ function WeeklyRewards:MigrateDB()
 end
 
 function WeeklyRewards:OnInitialize()
-	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"
+	_G["BINDING_NAME_WeeklyRewards"] = L["BINDING_NAME_WeeklyRewards"]
 	self:RegisterChatCommand("wr", "ExecuteChatCommands")
 	self:RegisterChatCommand("WeeklyRewards", "ExecuteChatCommands")
 
@@ -97,10 +97,10 @@ function WeeklyRewards:OnInitialize()
 		end,
 		OnTooltipShow = function(tooltip)
 			tooltip:SetText(addonName, 1, 1, 1)
-			tooltip:AddLine("|cff00ff00Left click|r to open WeeklyRewards.", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-			local dragText = "|cff00ff00Drag|r to move this icon"
+			tooltip:AddLine(L["minimap_tooltip_left_click"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+			local dragText = L["minimap_tooltip_drag"]
 			if self.db.global.minimap.lock then
-				dragText = dragText .. " |cffff0000(locked)|r"
+				dragText = dragText .. L["minimap_tooltip_locked"]
 			end
 			tooltip:AddLine(dragText .. ".", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		end,
