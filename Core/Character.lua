@@ -26,6 +26,7 @@ local Cache = {
 	lootToProgress = {}, -- k,v
 	objectToProgress = {}, -- k, {v, itemID}
 	progressNameToRewardID = {},
+	covenantNames = {},
 }
 
 function Character:New(o)
@@ -59,6 +60,8 @@ function Character:_Init()
 	self.progress = {}
 	self.lastUpdate = WAPI.GetServerTime()
 	self.location = GetZoneText()
+
+	self:UpdateCovenant()
 
 	Util:Debug("Initialized new character:", self.name)
 end
@@ -290,4 +293,16 @@ end
 
 function Character:UpdateLocation()
 	self.location = GetZoneText()
+end
+
+function Character:UpdateCovenant()
+	self.covenant = C_Covenants.GetActiveCovenantID()
+end
+
+function Character:GetCovenantName()
+	if Cache.covenantNames[self.covenant] == nil then
+		Cache.covenantNames[self.covenant] = C_Covenants.GetCovenantData(self.covenant).name
+	end
+
+	return Cache.covenantNames[self.covenant]
 end
