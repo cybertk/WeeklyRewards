@@ -226,6 +226,8 @@ function Character:Scan(activeRewards)
 	-- Reset level and etc
 	self.level = UnitLevel("player")
 
+	self:UpdateCovenant()
+
 	local rewardsToScan = Util:Filter(activeRewards, function(reward)
 		if self.level < reward.minimumLevel then
 			return false
@@ -295,11 +297,24 @@ function Character:UpdateLocation()
 	self.location = GetZoneText()
 end
 
-function Character:UpdateCovenant()
+function Character:UpdateCovenant(force)
+	if not force and self.covenant ~= nil then
+		return
+	end
+
 	self.covenant = C_Covenants.GetActiveCovenantID()
+	Util:Debug("Covenant updated:", self.covenant)
 end
 
 function Character:GetCovenantName()
+	if self.covenant == nil then
+		return ""
+	end
+
+	if self.covenant == 0 then
+		return "-"
+	end
+
 	if Cache.covenantNames[self.covenant] == nil then
 		Cache.covenantNames[self.covenant] = C_Covenants.GetCovenantData(self.covenant).name
 	end

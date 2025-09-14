@@ -77,10 +77,11 @@ function WeeklyRewards:MigrateDB()
 		print("v1.14.1: tww-dkeys progress migrated")
 	end
 
-	if self.db.global.characters[playerGUID].covenant == nil then
-		Character.UpdateCovenant(self.db.global.characters[playerGUID])
-		Util:Debug("v1.15.0: covenant migrated")
-	end
+	-- if self.db.global.characters[playerGUID].covenant == 0 or self.db.global.characters[playerGUID].covenant == nil then
+	-- 	namespace.Character.UpdateCovenant(self.db.global.characters[playerGUID])
+	-- 	Util:Debug("v1.15.0: covenant migrated")
+	-- 	print("v1.15.0: covenant migrated")
+	-- end
 end
 
 function WeeklyRewards:OnInitialize()
@@ -179,7 +180,7 @@ function WeeklyRewards:OnEnable()
 	end)
 
 	self:RegisterEvent("COVENANT_CHOSEN", function(event)
-		character:UpdateCovenant()
+		character:UpdateCovenant(true)
 	end)
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", function(event, isInitialLogin, isReloadingUi)
