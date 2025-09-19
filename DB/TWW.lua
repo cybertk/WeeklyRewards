@@ -51,7 +51,6 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "Archives",
 		description = "Archives Meta Quest",
 		group = RewardsGroup.PINNACLE_CACHE,
-		rollover = true,
 		minimumLevel = 70,
 		timeLeft = function()
 			local questDuration = 21 * SECONDS_PER_DAY
