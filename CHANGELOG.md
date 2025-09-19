@@ -2,6 +2,12 @@
 
 # Changelog
 
+## v1.14.4 - 2025-09-19
+
+### Fix
+
+- Archives Meta Quest is no longer rolloverable since 11.2
+
 ## v1.14.3 - 2025-08-27
 
 ### Fix
