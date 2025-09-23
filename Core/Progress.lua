@@ -463,7 +463,9 @@ function RewardProgress:ForEachRewardLoot(callback)
 end
 
 function RewardProgress:GetCachedObjectiveName(objective)
-	if objective.items and #objective.items > 0 then
+	if objective.name then
+		return Util:ResolveTags(objective.name)
+	elseif objective.items and #objective.items > 0 then
 		return self:GetCachedItemName(objective.items[1])
 	end
 
