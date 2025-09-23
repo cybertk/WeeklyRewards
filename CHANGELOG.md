@@ -2,6 +2,14 @@
 
 # Changelog
 
+## v1.15.0 - 2025-09-23
+
+## New Features
+
+- Added Brewfest festival support
+- Added K'aresh rewards support: Devourer Attack
+- Added Shadowlands Covenant column
+
 ## v1.14.4 - 2025-09-19
 
 ### Fix
