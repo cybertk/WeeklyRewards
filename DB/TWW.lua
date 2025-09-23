@@ -28,20 +28,22 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "DelveKeys",
 		description = "Weekly Delve Keys",
 		group = RewardsGroup.DELVE,
-		pick = 4,
+		pick = 8,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 84736, items = { 224172 }, loot = { 413590, name = { 228942 } } }, -- Bountiful Coffer
-			{ quest = 84737, items = { 224172 } }, -- Restored Coffer Key
-			{ quest = 84738, items = { 224172 } }, -- Restored Coffer Key
-			{ quest = 84739, items = { 224172 } }, -- Restored Coffer Key
+			{ quest = 91175, items = { 238527 }, loot = { 413590, name = { 228942 } } }, -- Bountiful Coffer
+			{ quest = 91176, items = { 238527 } }, -- Restored Coffer Key
+			{ quest = 91177, items = { 238527 } }, -- Restored Coffer Key
+			{ quest = 91178, items = { 238527 } }, -- Restored Coffer Key
+			{ quest = 84736, items = { 245653, amount = 50 } }, -- Coffer Key Shard
+			{ quest = 84737, items = { 245653, amount = 50 } }, -- Coffer Key Shard
+			{ quest = 84738, items = { 245653, amount = 50 } }, -- Coffer Key Shard
+			{ quest = 84739, items = { 245653, amount = 50 } }, -- Coffer Key Shard
 		},
 		items = {
-			{
-				currency = 3028, -- Restored Coffer Key
-				amount = 4,
-			},
+			{ currency = 3028, amount = 4 }, -- Restored Coffer Key
+			{ item = 245653, amount = 200 }, -- Coffer Key Shard
 		},
 	},
 	{
@@ -49,7 +51,6 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "Archives",
 		description = "Archives Meta Quest",
 		group = RewardsGroup.PINNACLE_CACHE,
-		rollover = true,
 		minimumLevel = 70,
 		timeLeft = function()
 			local questDuration = 21 * SECONDS_PER_DAY
@@ -139,6 +140,8 @@ namespace.DB.rewardCandidiates["tww"] = {
 					87422, -- Worldsoul: Undermine World Quests
 					87423, -- Worldsoul: Undermine Explorer
 					87424, -- Worldsoul: World Bosses
+					89514, -- Worldsoul: Horrific Visions Revisited
+					91855, -- Worldsoul: K'aresh World Quests
 				},
 			},
 		},
@@ -482,9 +485,9 @@ namespace.DB.rewardCandidiates["tww"] = {
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 86371, items = { 233071 }, loot = { 461482, name = { 235559 } } }, -- Hidden Trove
+			{ quest = 86371, items = { 248142 }, loot = { 461482, name = { 235559 } } }, -- Hidden Trove
 		},
-		items = { { item = 233071, amount = 1 } },
+		items = { { item = 248142, amount = 1 } },
 	},
 	{
 		id = "tww-dstash",
@@ -576,10 +579,12 @@ namespace.DB.rewardCandidiates["tww"] = {
 		},
 	},
 	{
-		id = "tww-dome",
-		key = "Dome",
+		id = "tww-oasis",
+		key = "Oasis",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		rollover = true,
 		entries = {
 			{ quest = 85460 }, -- Ecological Succession
 		},
@@ -589,6 +594,8 @@ namespace.DB.rewardCandidiates["tww"] = {
 		key = "PhaseDiving",
 		group = RewardsGroup.KARESH,
 		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		rollover = true,
 		entries = {
 			{ quest = 91093 }, -- More Than Just a Phase
 		},

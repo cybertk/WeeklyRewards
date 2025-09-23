@@ -38,7 +38,7 @@ local defaultDB = {
 		},
 		utils = {
 			untrackQuests = false,
-			broadcastRewards = true,
+			broadcastRewards = false,
 		},
 		dbVersion = 8,
 	},
@@ -48,7 +48,35 @@ function WeeklyRewards:Redraw()
 	Main:Redraw()
 end
 
-function WeeklyRewards:MigrateDB() end
+function WeeklyRewards:MigrateDB()
+	for i = #self.db.global.activeRewards, 1, -1 do
+		local r = self.db.global.activeRewards[i]
+		if r.id == "tww-worldsoul" and r.objectives[1] and r.objectives[1].questPool and #r.objectives[1].questPool ~= 42 then
+			table.remove(self.db.global.activeRewards, i)
+			Util:Debug("v1.14.1: tww-worldsoul migrated")
+		elseif r.id == "tww-dkeys" and #r.objectives ~= 8 then
+			table.remove(self.db.global.activeRewards, i)
+			Util:Debug("v1.14.1: tww-dkeys migrated")
+		elseif r.id == "tww-oasis" and not r.rollover then
+			r.rollover = true
+			Util:Debug("v1.14.3: tww-oasis migrated")
+		elseif r.id == "tww-dmap" and r.items[1].item ~= 248142 then
+			r.items[1] = { item = 248142, amount = 1 }
+			Util:Debug("v1.14.3: tww-dmap migrated")
+		end
+	end
+
+	local playerGUID = UnitGUID("player")
+	if self.db.global.characters[playerGUID] == nil then
+		return
+	end
+
+	if self.db.global.characters[playerGUID].progress["tww-dkeys"] and self.db.global.characters[playerGUID].progress["tww-dkeys"].numObjectives ~= 8 then
+		self.db.global.characters[playerGUID].progress["tww-dkeys"] = nil
+		Util:Debug("v1.14.1: tww-dkeys progress migrated")
+		print("v1.14.1: tww-dkeys progress migrated")
+	end
+end
 
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = "Show/Hide the window"

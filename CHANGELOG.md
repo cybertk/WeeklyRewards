@@ -2,6 +2,35 @@
 
 # Changelog
 
+## v1.14.4 - 2025-09-19
+
+### Fix
+
+- Archives Meta Quest is no longer rolloverable since 11.2
+
+## v1.14.3 - 2025-08-27
+
+### Fix
+
+- Delver's Bounty icon is not grayed out anymore
+- Oasis([Ecological Succession]) progress is rolloverable
+
+## v1.14.2 - 2025-08-14
+
+### Fix
+
+- PhaseDiving weekly quest([More Than Just a Phase]) is now marked as rolloverable
+- PhaseDiving([More Than Just a Phase]) is not recognized after reset
+- Oasis([Ecological Succession]) is not recognized after reset
+
+## v1.14.1 - 2025-08-11
+
+### Fix
+
+- Adopt Season 3 new Delve Key mechanism, 8 objectives are required now(4 for keys and 4 for shards) - Credit to [@Dolsze](https://www.curseforge.com/members/dolsze/projects)
+- 11.2 new Worldsoul quests can be recognized now
+- Disable rewards announcement by default - Credit to [@Saltkakan](https://www.curseforge.com/members/saltkakan)
+
 ## v1.14.0 - 2025-08-07
 
 ## New Features
