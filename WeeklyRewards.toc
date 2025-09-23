@@ -21,6 +21,8 @@
 
 Embeds.xml
 
+Locales\Locales.xml
+
 Util.lua
 
 DB\Init.lua
