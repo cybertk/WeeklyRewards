@@ -328,3 +328,41 @@ function Util.WrapTextInClassColor(classFile, ...)
 
 	return ...
 end
+
+Util.TagCache = {}
+function Util:ResolveTags(s)
+	local resolvedString = s:gsub("{(%l+):(%d+)(%l*)}", function(type, id, suffix)
+		id = tonumber(id)
+		if self.TagCache[id] then
+			return self.TagCache[id]
+		end
+
+		local name
+
+		if type == "npc" then
+			local tooltipData = C_TooltipInfo.GetHyperlink("unit:Creature-0-0-0-0-" .. id .. "-0")
+			if tooltipData and tooltipData.lines and tooltipData.lines[1] then
+				name = tooltipData.lines[1].leftText
+			else
+				name = UNKNOWN
+			end
+		elseif type == "currency" then
+			local info = C_CurrencyInfo.GetCurrencyInfo(id)
+			if info then
+				name = info.name
+			end
+		elseif type == "map" then
+			name = C_Map.GetMapInfo(id).name
+		elseif type == "area" then
+			name = C_Map.GetAreaInfo(id)
+		elseif type == "quest" then
+			name = C_QuestLog.GetTitleForQuestID(id)
+		end
+
+		self.TagCache[id] = name
+
+		return self.TagCache[id]
+	end)
+
+	return resolvedString
+end

@@ -517,6 +517,15 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
+			name = "Covenant",
+			key = "covenantName",
+			width = 60,
+			align = "CENTER",
+			cell = function(character)
+				return { text = character:GetCovenantName() }
+			end,
+		},
+		{
 			name = "Location",
 			key = "location",
 			width = 90,
