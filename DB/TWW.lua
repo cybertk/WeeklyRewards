@@ -610,4 +610,24 @@ namespace.DB.rewardCandidiates["tww"] = {
 			{ quest = 87354 }, -- Reshanor, the Untethered
 		},
 	},
+	{
+		id = "tww-devourer",
+		key = "Devourer",
+		group = RewardsGroup.KARESH,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		pick = 4,
+		entries = {
+			{ quest = 85722, name = "{quest:84993}" }, -- Devourer Attack: The Oasis
+			{ quest = 89061, name = "{quest:86447}" }, -- Devourer Attack: Eco-dome: Primus
+			{ quest = 89062, name = "{quest:86464}" }, -- Devourer Attack: The Atrium
+			{ quest = 89063, name = "{quest:86465}" }, -- Devourer Attack: Tazavesh
+		},
+		items = {
+			{ item = 232467 },
+			{ item = 238663 },
+			{ item = 238664 },
+			{ item = 238665 },
+		},
+	},
 }
