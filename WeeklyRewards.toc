@@ -27,6 +27,7 @@ Util.lua
 
 DB\Init.lua
 DB\TWW.lua
+DB\Shadowlands.lua
 DB\Timewalking.lua
 DB\DarkmoonFaire.lua
 DB\LunarFestival.lua
