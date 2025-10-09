@@ -2,6 +2,19 @@
 
 # Changelog
 
+## v1.16.0 - 2025-10-09
+
+## New Features
+
+- Upgraded TOC to 11.2.5
+- Added Shadowlands rewards support:
+    - Replenish the Reservoir
+    - Shaping Fate from Death's Advance
+    - Lost Research in Rift phase
+    - Tormentor's Cache
+    - Patterns Within Patterns
+    - Covenant's Assault
+
 ## v1.15.0 - 2025-09-23
 
 ## New Features
