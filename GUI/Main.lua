@@ -516,7 +516,7 @@ function Main:AddCharacterColumns()
 		},
 		{
 			name = L["column_covenant"],
-			key = "covenantName",
+			key = "covenant",
 			width = 60,
 			align = "CENTER",
 			cell = function(character)
