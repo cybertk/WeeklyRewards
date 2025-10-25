@@ -2,6 +2,13 @@
 
 # Changelog
 
+## v1.16.1 - 2025-10-25
+
+### Fix
+
+- Necrolord covenant name is no longer truncated
+- Covenant sorting now works properly
+
 ## v1.16.0 - 2025-10-09
 
 ## New Features
