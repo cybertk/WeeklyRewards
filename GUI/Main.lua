@@ -517,7 +517,7 @@ function Main:AddCharacterColumns()
 		{
 			name = L["column_covenant"],
 			key = "covenant",
-			width = 60,
+			width = 70,
 			align = "CENTER",
 			cell = function(character)
 				return { text = character:GetCovenantName() }
