@@ -1,8 +1,14 @@
-local addonName, Addon = ...
+local _, ns = ...
 
-local AtomicContainerLootScanner = Addon:NewModule("AtomicContainerLootScanner", {
-	session = nil, -- Currennt active loot session
-}, "AceEvent-3.0")
+local AtomicContainerLootScanner = CreateFrame("Frame")
+
+function AtomicContainerLootScanner:OnEvent(...)
+	local event = select(1, ...)
+
+	if self[event] ~= nil then
+		self[event](self, ...)
+	end
+end
 
 function AtomicContainerLootScanner:OnEnable()
 	self:RegisterEvent("ITEM_LOCKED")
@@ -10,6 +16,8 @@ function AtomicContainerLootScanner:OnEnable()
 	self:RegisterEvent("SHOW_LOOT_TOAST")
 	self:RegisterEvent("SHOW_LOOT_TOAST_UPGRADE")
 	self:RegisterEvent("LOOT_CLOSED")
+
+	self:SetScript("OnEvent", self.OnEvent)
 end
 
 function AtomicContainerLootScanner:ITEM_LOCKED(event, containerIndex, slotIndex)
@@ -38,11 +46,11 @@ function AtomicContainerLootScanner:LOOT_CLOSED()
 end
 
 function AtomicContainerLootScanner:Debug(...)
-	if type(Addon.debug) == "function" then
-		return Addon.debug(...)
+	if type(ns.debug) == "function" and ns.verbose then
+		return ns.debug(...)
 	end
 
-	if Addon.debug == true then
+	if ns.debug == true then
 		print(...)
 	end
 end
@@ -85,5 +93,10 @@ function AtomicContainerLootScanner:UpdateLoot(typeIdentifier, itemLink, quantit
 
 	self:Debug(RED_FONT_COLOR:WrapTextInColorCode("=== LOOTED:"), item.source, itemLink, item.quantity, item.item, item.currency)
 
-	self:SendMessage("WR_LOOT_SCANNER_ITEM_LOOTED", item.source, item.quantity, item.item, item.currency)
+	EventRegistry:TriggerEvent("CK_LOOT_SCANNER_ITEM_LOOTED", item.source, item.quantity, item.item, item.currency)
+end
+
+if _G["AtomicContainerLootScanner"] == nil then
+	_G["AtomicContainerLootScanner"] = AtomicContainerLootScanner
+	AtomicContainerLootScanner:OnEnable()
 end

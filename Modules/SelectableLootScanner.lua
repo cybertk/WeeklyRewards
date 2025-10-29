@@ -1,8 +1,14 @@
-local _, Addon = ...
+local _, ns = ...
 
-local SelectableLootScanner = Addon:NewModule("SelectableLootScanner", {
-	session = nil, -- Currennt active loot session
-}, "AceEvent-3.0")
+local SelectableLootScanner = CreateFrame("Frame")
+
+function SelectableLootScanner:OnEvent(...)
+	local event = select(1, ...)
+
+	if self[event] ~= nil then
+		self[event](self, ...)
+	end
+end
 
 function SelectableLootScanner:OnEnable()
 	self:RegisterEvent("LOOT_READY")
@@ -10,6 +16,8 @@ function SelectableLootScanner:OnEnable()
 	self:RegisterEvent("LOOT_SLOT_CHANGED")
 	self:RegisterEvent("LOOT_SLOT_CLEARED")
 	self:RegisterEvent("LOOT_CLOSED")
+
+	self:SetScript("OnEvent", self.OnEvent)
 end
 
 function SelectableLootScanner:LOOT_READY()
@@ -38,11 +46,11 @@ function SelectableLootScanner:LOOT_CLOSED()
 end
 
 function SelectableLootScanner:Debug(...)
-	if type(Addon.debug) == "function" then
-		return Addon.debug(...)
+	if type(ns.debug) == "function" and ns.verbose then
+		return ns.debug(...)
 	end
 
-	if Addon.debug == true then
+	if ns.debug == true then
 		print(...)
 	end
 end
@@ -165,6 +173,11 @@ function SelectableLootScanner:UpdateSlot(slot)
 			item.item,
 			item.currency
 		)
-		self:SendMessage("WR_LOOT_SCANNER_ITEM_LOOTED", item.source, item.quantity, item.item, item.currency)
+		EventRegistry:TriggerEvent("CK_LOOT_SCANNER_ITEM_LOOTED", item.source, item.quantity, item.item, item.currency)
 	end
+end
+
+if _G["SelectableLootScanner"] == nil then
+	_G["SelectableLootScanner"] = SelectableLootScanner
+	SelectableLootScanner:OnEnable()
 end
