@@ -23,6 +23,7 @@ function Main:ToggleWindow()
 	if self.window:IsVisible() then
 		self.window:Hide()
 	else
+		CharacterStore.Get():CurrentPlayer():UpdateProgress()
 		self.window:Show()
 		self:Redraw()
 	end

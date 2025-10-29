@@ -173,10 +173,18 @@ end
 function ActiveRewards:Reset(teardown_func, force)
 	local now = WAPI_GetServerTime()
 
+	if self.nextResetTime ~= nil and self.nextResetTime > now then
+		Util:Debug("Already reset in this hour")
+		return
+	end
+
+	now = now - 10
+	self.nextResetTime = now - now % 3600 + 3600 -- 1 hour buffer
+
 	-- Iterate in reserve order to ensure safe deleting
 	for i = #self, 1, -1 do
 		local reward = self[i]
-		if force[reward.name] or (reward.resetTime and reward.resetTime < now) then
+		if (force and force[reward.name]) or (reward.resetTime and reward.resetTime < now) then
 			Util:Debug("Reset: " .. reward.name)
 			self:_Remove(i)
 			teardown_func(reward)

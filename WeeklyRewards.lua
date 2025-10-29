@@ -45,9 +45,9 @@ local defaultDB = {
 	},
 }
 
-function WeeklyRewards:Redraw()
-	Main:Redraw()
-end
+-- function WeeklyRewards:Redraw()
+-- 	Main:Redraw()
+-- end
 
 function WeeklyRewards:MigrateDB()
 	for i = #self.db.global.activeRewards, 1, -1 do
@@ -124,6 +124,8 @@ function WeeklyRewards:OnEnable()
 	RewardSummary:Init(characterStore)
 
 	self.character = character
+	self.activeRewards = activeRewards
+	self.archive = archive
 
 	EventRegistry:RegisterCallback("CK_LOOT_SCANNER_ITEM_LOOTED", function(self, source, quantity, itemID, currencyID)
 		character:ReceiveDrop(source, quantity, itemID, currencyID)
@@ -131,11 +133,9 @@ function WeeklyRewards:OnEnable()
 
 	self:RegisterEvent("QUEST_CURRENCY_LOOT_RECEIVED", function(event, questId, currencyId, quantity)
 		character:ReceiveReward(questId, quantity, nil, currencyId)
-		self:Redraw()
 	end)
 	self:RegisterEvent("QUEST_LOOT_RECEIVED", function(event, questId, itemLink, quantity)
 		character:ReceiveReward(questId, quantity, itemLink)
-		self:Redraw()
 	end)
 
 	self:RegisterEvent("QUEST_TURNED_IN", function(event, questId, xp, money)
@@ -145,7 +145,6 @@ function WeeklyRewards:OnEnable()
 		end
 		-- C_QuestLog.IsQuestFlaggedCompleted() might returns false in this context
 		self:UpdateProgress(questId)
-		self:Redraw()
 
 		self:UpdateRewardsGUIDSafe(character, questId)
 	end)
@@ -161,7 +160,6 @@ function WeeklyRewards:OnEnable()
 				character:ReceiveReward(quest, quantity, item)
 			end
 		end
-		self:Redraw()
 
 		self:UpdateRewardsGUIDSafe(character, quest)
 	end)
@@ -186,45 +184,58 @@ function WeeklyRewards:OnEnable()
 		if self.db.global.utils.untrackQuests then
 			character:RemoveQuestsWatch()
 		end
+
+		self:UpdateActiveRewards()
 	end)
 
-	self:RegisterBucketEvent(
-		{
-			"ITEM_PUSH",
-			"QUEST_LOG_UPDATE",
-		},
-		5,
-		function()
-			character:UpdateProgress()
-			self:Redraw()
-		end
-	)
+	self:RegisterEvent("PLAYER_LEAVING_WORLD", function()
+		character:UpdateProgress()
+	end)
 
-	self:RegisterBucketEvent(
-		{
-			"CALENDAR_UPDATE_EVENT_LIST",
-			"PLAYER_LEVEL_CHANGED",
-			"PLAYER_ENTERING_WORLD",
-			"QUEST_ACCEPTED",
-		},
-		3,
-		function()
-			activeRewards:Reset(function(outdatedReward)
-				characterStore:ForEach(function(x)
-					local outdatedProgress = x:ResetProgress(outdatedReward)
-					if outdatedProgress then
-						local store = archive:Load("RawData", x.GUID)
-						table.insert(store, outdatedProgress)
-					end
-				end, next)
-			end, {})
+	self:RegisterEvent("PLAYER_LEVEL_CHANGED", function()
+		character:Scan(activeRewards)
+	end)
 
-			activeRewards:Update(DB:GetAllCandidates())
-			character:Scan(activeRewards)
-			character:UpdateRewardsGUID()
-			self:Redraw()
-		end
-	)
+	-- self:RegisterBucketEvent(
+	-- 	{
+	-- 		"ITEM_PUSH",
+	-- 		"QUEST_LOG_UPDATE",
+	-- 	},
+	-- 	5,
+	-- 	function()
+	-- 		character:UpdateProgress()
+	-- 		self:Redraw()
+	-- 	end
+	-- )
+	self:RegisterEvent("QUEST_ACCEPTED", function()
+		self:UpdateActiveRewards()
+	end)
+
+	-- self:RegisterBucketEvent(
+	-- 	{
+	-- 		"CALENDAR_UPDATE_EVENT_LIST",
+	-- 		"PLAYER_LEVEL_CHANGED",
+	-- 		"PLAYER_ENTERING_WORLD",
+	-- 		"QUEST_ACCEPTED",
+	-- 	},
+	-- 	3,
+	-- 	function()
+	-- 		activeRewards:Reset(function(outdatedReward)
+	-- 			characterStore:ForEach(function(x)
+	-- 				local outdatedProgress = x:ResetProgress(outdatedReward)
+	-- 				if outdatedProgress then
+	-- 					local store = archive:Load("RawData", x.GUID)
+	-- 					table.insert(store, outdatedProgress)
+	-- 				end
+	-- 			end, next)
+	-- 		end, {})
+
+	-- 		activeRewards:Update(DB:GetAllCandidates())
+	-- 		character:Scan(activeRewards)
+	-- 		character:UpdateRewardsGUID()
+	-- 		self:Redraw()
+	-- 	end
+	-- )
 end
 
 function WeeklyRewards:OnDisable()
@@ -242,6 +253,26 @@ function WeeklyRewards:ExecuteChatCommands(command)
 	end
 
 	Main:ToggleWindow()
+end
+
+function WeeklyRewards:UpdateActiveRewards()
+	-- if self.archive == nil then
+	-- 	self.archive = Archivist:Initialize(WeeklyRewardsArchive)
+	-- end
+
+	self.activeRewards:Reset(function(outdatedReward)
+		CharacterStore.Get():ForEach(function(x)
+			local outdatedProgress = x:ResetProgress(outdatedReward)
+			if outdatedProgress then
+				local store = self.archive:Load("RawData", x.GUID)
+				table.insert(store, outdatedProgress)
+			end
+		end, next)
+	end)
+
+	self.activeRewards:Update(DB:GetAllCandidates())
+	self.character:Scan(self.activeRewards)
+	self.character:UpdateRewardsGUID()
 end
 
 function WeeklyRewards:UpdateRewardsGUIDSafe(character, quest, attempts)
