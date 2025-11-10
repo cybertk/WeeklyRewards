@@ -125,7 +125,7 @@ function WeeklyRewards:OnEnable()
 
 	self.character = character
 
-	self:RegisterMessage("WR_LOOT_SCANNER_ITEM_LOOTED", function(message, source, quantity, itemID, currencyID)
+	EventRegistry:RegisterCallback("CK_LOOT_SCANNER_ITEM_LOOTED", function(self, source, quantity, itemID, currencyID)
 		character:ReceiveDrop(source, quantity, itemID, currencyID)
 	end)
 
