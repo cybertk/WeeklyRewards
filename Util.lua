@@ -366,3 +366,15 @@ function Util:ResolveTags(s)
 
 	return resolvedString
 end
+
+Util.pendingExecution = {}
+function Util:InvokeAfter(delay, callback, owner)
+	if self.pendingExecution[callback] then
+		return
+	end
+
+	self.pendingExecution[callback] = C_Timer.NewTimer(delay, function()
+		self.pendingExecution[callback] = nil
+		callback(owner)
+	end)
+end
