@@ -172,6 +172,10 @@ function WeeklyRewards:OnEnable()
 		character:UpdateCovenant(true)
 	end)
 
+	self:RegisterEvent("GARRISON_TALENT_COMPLETE", function(event)
+		character:UpdateCovenant(true)
+	end)
+
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", function(event, isInitialLogin, isReloadingUi)
 		if isInitialLogin == false and isReloadingUi == false then
 			return

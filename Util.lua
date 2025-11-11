@@ -329,6 +329,54 @@ function Util.WrapTextInClassColor(classFile, ...)
 	return ...
 end
 
+Util.CovenantSanctumTalentTree = {
+	{ 308, 312, 316, 320 }, -- Transport Network
+	{ 309, 314, 317, 324 }, -- Anima Conductor
+	{ 307, 311, 315, 319 }, -- Command Table
+	{ 310, 313, 318, 321 }, -- Sanctum Specific, i.e. Path of Ascension
+}
+function Util:GetCovenantSanctumUpgrade(covenant)
+	local function GetCurrentTier(talents)
+		local currentTier = 0
+		for i, talentInfo in ipairs(talents) do
+			if talentInfo.talentAvailability == Enum.GarrisonTalentAvailability.Unavailable then
+				return
+			elseif talentInfo.talentAvailability == Enum.GarrisonTalentAvailability.UnavailableAlreadyHave then
+				currentTier = currentTier + 1
+			end
+		end
+		return currentTier
+	end
+
+	if covenant == 0 or covenant == nil then
+		return
+	end
+
+	local upgrade = {}
+	for _, treeID in ipairs(self.CovenantSanctumTalentTree[covenant]) do
+		local tier = GetCurrentTier(C_Garrison.GetTalentTreeInfo(treeID).talents)
+		if tier then
+			table.insert(upgrade, tier)
+		end
+	end
+
+	return #upgrade == 4 and upgrade or nil
+end
+
+function Util:AddCovenantSanctumUpgradeToTooltip(tooltip, covenant, upgrade)
+	tooltip:AddLine(COVENANT_PREVIEW_SANCTUM_FEATURE, NORMAL_FONT_COLOR:GetRGB())
+
+	for i, treeID in ipairs(self.CovenantSanctumTalentTree[covenant]) do
+		local tree = C_Garrison.GetTalentTreeInfo(treeID)
+
+		tooltip:AddDoubleLine(
+			format("|T%d:12|t %s", tree.talents[1].icon, tree.title),
+			format("|cn%s_FONT_COLOR:%d/%d|r", upgrade[i] == 0 and "RED" or upgrade[i] == #tree.talents and "GREEN" or "WHITE", upgrade[i], #tree.talents),
+			WHITE_FONT_COLOR:GetRGB()
+		)
+	end
+end
+
 Util.TagCache = {}
 function Util:ResolveTags(s)
 	local resolvedString = s:gsub("{(%l+):(%d+)(%l*)}", function(type, id, suffix)

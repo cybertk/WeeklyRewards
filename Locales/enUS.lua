@@ -46,9 +46,14 @@ L["column_covenant"] = "Covenant"
 L["column_location"] = "Location"
 L["column_last_update"] = "LastUpdate"
 
+-- Covenant tooltips
+L["covenant_sanctum_unknown"] = "Sanctum Upgrade status is unknown"
+L["covenant_not_joined"] = "This character has not join any Covenant"
+
 -- Table tooltips
 L["table_sort_hint"] = "<Left Click to Sort>"
 L["table_reset_progress_hint"] = "<Ctrl click to reset the progress>"
+L["table_alts_collect_hint"] = "Log in with this character to collect it"
 
 -- Progress tooltips
 L["progress_rewards_received_at"] = "Rewards Received At:"

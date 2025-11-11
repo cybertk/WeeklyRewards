@@ -521,7 +521,32 @@ function Main:AddCharacterColumns()
 			width = 60,
 			align = "CENTER",
 			cell = function(character)
-				return { text = character:GetCovenantName() }
+				return {
+					text = character:GetCovenantName(),
+					onEnter = function(cellFrame)
+						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+						GameTooltip:SetText(L["column_covenant"], YELLOW_FONT_COLOR:GetRGB())
+						GameTooltip:AddLine(" ")
+
+						if CharacterStore.IsCurrentPlayer(character) then
+							character:UpdateCovenant(true)
+						end
+						if character.covenantSanctum then
+							Util:AddCovenantSanctumUpgradeToTooltip(GameTooltip, character.covenant, character.covenantSanctum)
+						elseif character.covenant ~= 0 then
+							GameTooltip:AddLine(L["covenant_sanctum_unknown"], RED_FONT_COLOR:GetRGB())
+							GameTooltip:AddLine(" ")
+							GameTooltip:AddLine(L["table_alts_collect_hint"], GREEN_FONT_COLOR:GetRGB())
+						else
+							GameTooltip:AddLine(L["covenant_not_joined"])
+						end
+
+						GameTooltip:Show()
+					end,
+					onLeave = function()
+						GameTooltip:Hide()
+					end,
+				}
 			end,
 		},
 		{

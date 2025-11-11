@@ -295,11 +295,12 @@ function Character:UpdateLocation()
 end
 
 function Character:UpdateCovenant(force)
-	if not force and self.covenant ~= nil then
+	if not force and self.covenant ~= nil and self.covenantSanctum ~= nil then
 		return
 	end
 
 	self.covenant = C_Covenants.GetActiveCovenantID()
+	self.covenantSanctum = Util:GetCovenantSanctumUpgrade(self.covenant)
 	Util:Debug("Covenant updated:", self.covenant)
 end
 
