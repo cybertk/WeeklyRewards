@@ -591,11 +591,18 @@ function Main:AddRewardColumns()
 			name = reward.name,
 			reward = reward,
 			onEnter = function(cellFrame)
-				GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-				self:AddRewardToGameTooltip(reward)
-				GameTooltip:Show()
+				local function updateTooltip()
+					GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+					self:AddRewardToGameTooltip(reward)
+					GameTooltip:Show()
+				end
+				cellFrame:RegisterEvent("MODIFIER_STATE_CHANGED")
+				cellFrame:SetScript("OnEvent", updateTooltip)
+				updateTooltip()
 			end,
-			onLeave = function()
+			onLeave = function(cellFrame)
+				cellFrame:UnregisterEvent("MODIFIER_STATE_CHANGED")
+				cellFrame:SetScript("OnEvent", nil)
 				GameTooltip:Hide()
 			end,
 			width = 70,
@@ -704,7 +711,7 @@ function Main:AddProgressToGameTooltip(progress)
 end
 
 function Main:AddRewardToGameTooltip(reward)
-	GameTooltip:AddDoubleLine(reward.name, "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. STABLE_FILTER_BUTTON_LABEL .. ")|r")
+	GameTooltip:AddDoubleLine(reward.name, "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. (IsControlKeyDown() and HIDE or STABLE_FILTER_BUTTON_LABEL) .. ")|r")
 	if reward.group then
 		GameTooltip:AddLine(reward.group .. ": " .. WHITE_FONT_COLOR:WrapTextInColorCode(reward.description))
 	else
@@ -739,7 +746,16 @@ function Main:UpdateSortArrow()
 		local characterField = column.key or column.reward.id
 
 		cellFrame.data.onClick = function()
-			CharacterStore.Get():SetSortOrder(characterField)
+			if IsControlKeyDown() then
+				if column.reward then
+					ActiveRewards.Get():ToggleExclusion(column.reward.id)
+				else
+					WeeklyRewards.db.global.main.hiddenColumns[column.name] = true
+				end
+			else
+				CharacterStore.Get():SetSortOrder(characterField)
+			end
+
 			self:Redraw()
 		end
 
