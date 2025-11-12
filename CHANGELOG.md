@@ -2,6 +2,15 @@
 
 # Changelog
 
+## v1.17.0 - 2025-11-12
+
+## New Features
+
+- Now Ctrl+Click can quickly hide reward columns
+- Added Shadowlands Covenant Sanctum upgrade support
+- Optimized AddOn CPU and Memory usage
+- Added Russian localization support
+
 ## v1.16.1 - 2025-10-25
 
 ### Fix
