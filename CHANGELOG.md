@@ -2,6 +2,14 @@
 
 # Changelog
 
+## v1.18.0 - 2025-12-04
+
+## New Features
+
+- Upgraded TOC to 11.2.7
+- Improved the tracking characters UI
+- Updated the table row highlight color to be brighter
+
 ## v1.17.0 - 2025-11-12
 
 ## New Features
