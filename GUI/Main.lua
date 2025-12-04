@@ -874,6 +874,13 @@ function Main:Redraw()
 				table.insert(row.columns, dataColumn.cell(character))
 			end)
 
+			row.onEnter = function(data, columnFrame)
+				local rowFrame = columnFrame:GetParent()
+				if rowFrame.Highlight then
+					rowFrame.Highlight:SetVertexColor(0.3, 0.3, 0.7, 0.2)
+				end
+			end
+
 			table.insert(tableData.rows, row)
 			tableHeight = tableHeight + self.window.table.config.rows.height
 		end, function(character) -- filter
