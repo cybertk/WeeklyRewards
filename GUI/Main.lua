@@ -212,10 +212,8 @@ function Main:AddCharactersButton()
 		Utils:SetBackgroundColor(self.window.titlebar.CharactersButton, 1, 1, 1, 0.05)
 		---@diagnostic disable-next-line: param-type-mismatch
 		GameTooltip:SetOwner(self.window.titlebar.CharactersButton, "ANCHOR_TOP")
-		GameTooltip:SetText(L["characters_button_tooltip"], 1, 1, 1, 1, true)
+		GameTooltip:SetText(L["characters_button_title"], 1, 1, 1, 1, true)
 		GameTooltip:AddLine(L["characters_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(L["characters_button_remove_hint"], GREEN_FONT_COLOR.r, GREEN_FONT_COLOR.g, GREEN_FONT_COLOR.b)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.CharactersButton:SetScript("OnLeave", function()
@@ -229,6 +227,9 @@ function Main:AddCharactersButton()
 	self.window.titlebar.CharactersButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Characters.blp")
 	self.window.titlebar.CharactersButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
 	self.window.titlebar.CharactersButton:SetupMenu(function(_, rootMenu)
+		rootMenu:CreateTitle():AddInitializer(function(frame, description, menu)
+			frame.fontString:SetText(format("|cnWHITE_FONT_COLOR:%s (%d)|r", L["characters_button_title"], CharacterStore.Get():GetNumEnabledCharacters()))
+		end)
 		CharacterStore.Get():ForEach(function(character)
 			local name = character.name
 
@@ -250,6 +251,9 @@ function Main:AddCharactersButton()
 		end, function(character)
 			return not CharacterStore.IsCurrentPlayer(character)
 		end)
+
+		rootMenu:CreateSpacer()
+		rootMenu:CreateTitle(GREEN_FONT_COLOR:WrapTextInColorCode(L["characters_button_remove_hint"]))
 	end)
 end
 

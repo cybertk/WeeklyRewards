@@ -168,3 +168,19 @@ function CharacterStore:ForEach(callback, filter)
 
 	return characters
 end
+
+function CharacterStore:GetNumEnabledCharacters()
+	local charactersEnabled = {}
+
+	for _, character in pairs(self) do
+		if character.enabled or CharacterStore.IsCurrentPlayer(character) then
+			table.insert(charactersEnabled, character)
+		end
+	end
+
+	return #charactersEnabled
+end
+
+function CharacterStore:GetNumCharacters()
+	return #GetKeysArray(self)
+end
