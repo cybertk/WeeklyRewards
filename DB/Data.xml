@@ -1,0 +1,12 @@
+<Ui>
+    <Script file="Init.lua" />
+    <Script file="TWW.lua" />
+    <Script file="Shadowlands.lua" />
+    <Script file="Timewalking.lua" />
+    <Script file="DarkmoonFaire.lua" />
+    <Script file="LunarFestival.lua" />
+    <Script file="LoveIsInTheAir.lua" />
+    <Script file="Noblegarden.lua" />
+    <Script file="Midsummer.lua" />
+    <Script file="Brewfest.lua" />
+</Ui>

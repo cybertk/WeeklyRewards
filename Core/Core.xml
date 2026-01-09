@@ -1,0 +1,14 @@
+<Ui>
+    <Script file="Reward.lua" />
+    <Script file="ActiveRewards.lua" />
+    <Script file="Progress.lua" />
+    <Script file="GreatVaultProgress.lua" />
+    <Script file="LFGProgress.lua" />
+    <Script file="CyrceCircletProgress.lua" />
+    <Script file="GildedStashProgress.lua" />
+    <Script file="EncounterProgress.lua" />
+    <Script file="ProgressFactory.lua" />
+    <Script file="Character.lua" />
+    <Script file="CharacterStore.lua" />
+    <Script file="Summary.lua" />
+</Ui>
