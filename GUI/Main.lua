@@ -445,6 +445,7 @@ function Main:CreateWindow()
 		header = {
 			enabled = true,
 			height = Constants.TABLE_HEADER_HEIGHT,
+			sticky = true,
 		},
 		rows = {
 			height = Constants.TABLE_ROW_HEIGHT,
@@ -455,6 +456,16 @@ function Main:CreateWindow()
 	self.window.table:SetParent(self.window)
 	self.window.table:SetPoint("TOPLEFT", self.window, "TOPLEFT", 0, -Constants.TITLEBAR_HEIGHT)
 	self.window.table:SetPoint("BOTTOMRIGHT", self.window, "BOTTOMRIGHT", 0, 0)
+
+	self.window.table.scrollFrame:HookScript("OnMouseWheel", function(frame, _)
+		if IsModifierKeyDown() or not frame.scrollbarV:IsVisible() then
+			self:LayoutHeader()
+		end
+	end)
+
+	hooksecurefunc(self.window.table, "RenderTable", function()
+		C_Timer.After(0, GenerateClosure(self.LayoutHeader, self, true))
+	end)
 
 	table.insert(UISpecialFrames, frameName)
 end
@@ -794,6 +805,26 @@ function Main:UpdateSortArrow()
 	end)
 end
 
+function Main:LayoutHeader(force)
+	local header = self.window.table.rows[1]
+	if not header then
+		return
+	end
+
+	local anchor = header.columns[1] or nil
+	local offset = anchor and -self.window.table.scrollFrame.scrollbarH:GetValue() - select(4, anchor:GetPointByName("TOPLEFT")) or 0
+
+	print("LayoutHeader", force, offset, self.window.table.scrollFrame.scrollbarH:GetValue(), select(4, anchor:GetPointByName("TOPLEFT")))
+	if offset ~= 0 or force then
+		for _, column in ipairs({ header:GetChildren() }) do
+			AnchorUtil.AdjustPointByName(column, "TOPLEFT", offset, 0)
+			AnchorUtil.AdjustPointByName(column, "BOTTOMLEFT", offset, 0)
+		end
+	end
+
+	header:SetClipsChildren(true)
+end
+
 function Main:ForEachColumn(callback, visibleOnly)
 	local activeRewards = ActiveRewards.Get()
 
@@ -903,4 +934,5 @@ function Main:Redraw()
 	self.window.titlebar.title:SetShown(self.window:GetWidth() > (240 / windowScale))
 
 	self:UpdateSortArrow()
+	self:LayoutHeader(true)
 end
