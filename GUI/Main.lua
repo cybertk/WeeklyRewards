@@ -766,16 +766,20 @@ function Main:UpdateSortArrow()
 		if cellFrame.Arrow == nil then
 			local t = cellFrame:CreateTexture()
 
+			t:SetAtlas("auctionhouse-ui-sortarrow", true)
+
+			cellFrame.Arrow = t
+			cellFrame:SetHighlightTexture("auctionhouse-ui-row-highlight", "ADD")
+		end
+
+		if cellFrame.Arrow.text ~= cellFrame.text:GetText() then
 			local offset = cellFrame.text:GetStringWidth() - cellFrame.text:GetWidth()
 			if cellFrame.text:GetJustifyH() == "CENTER" then
 				offset = offset / 2
 			end
 
-			t:SetAtlas("auctionhouse-ui-sortarrow", true)
-			t:SetPoint("LEFT", cellFrame.text, "RIGHT", offset, 0)
-
-			cellFrame.Arrow = t
-			cellFrame:SetHighlightTexture("auctionhouse-ui-row-highlight", "ADD")
+			cellFrame.Arrow:SetPoint("LEFT", cellFrame.text, "RIGHT", offset, 1)
+			cellFrame.Arrow.text = cellFrame.text:GetText()
 		end
 
 		cellFrame.Arrow:SetShown(sortOrder == characterField)
