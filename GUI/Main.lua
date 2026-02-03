@@ -29,6 +29,14 @@ function Main:ToggleWindow()
 	end
 end
 
+function Main:SetTooltipOwner(tooltip, owner)
+	if GetScreenHeight() / self.window:GetScale() - self.window:GetTop() < 50 then
+		tooltip:SetOwner(owner, "ANCHOR_BOTTOM")
+	else
+		tooltip:SetOwner(owner, "ANCHOR_TOP")
+	end
+end
+
 function Main:AddCloseButton()
 	self.window.titlebar.closeButton = CreateFrame("Button", "$parentCloseButton", self.window.titlebar)
 	self.window.titlebar.closeButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
@@ -39,7 +47,7 @@ function Main:AddCloseButton()
 	self.window.titlebar.closeButton:SetScript("OnEnter", function()
 		self.window.titlebar.closeButton.Icon:SetVertexColor(1, 1, 1, 1)
 		Utils:SetBackgroundColor(self.window.titlebar.closeButton, 1, 0, 0, 0.2)
-		GameTooltip:SetOwner(self.window.titlebar.closeButton, "ANCHOR_TOP")
+		self:SetTooltipOwner(GameTooltip, self.window.titlebar.closeButton)
 		GameTooltip:SetText(L["close_button_tooltip"], 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end)
@@ -63,8 +71,7 @@ function Main:AddSettingsButton()
 	self.window.titlebar.SettingsButton:SetScript("OnEnter", function()
 		self.window.titlebar.SettingsButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
 		Utils:SetBackgroundColor(self.window.titlebar.SettingsButton, 1, 1, 1, 0.05)
-		---@diagnostic disable-next-line: param-type-mismatch
-		GameTooltip:SetOwner(self.window.titlebar.SettingsButton, "ANCHOR_TOP")
+		self:SetTooltipOwner(GameTooltip, self.window.titlebar.SettingsButton)
 		GameTooltip:SetText(L["settings_button_tooltip"], 1, 1, 1, 1, true)
 		GameTooltip:AddLine(L["settings_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		GameTooltip:Show()
@@ -117,6 +124,19 @@ function Main:AddSettingsButton()
 				WeeklyRewards.db.global.main.windowMaxRelativeWidth = data
 				self:Redraw()
 			end, i)
+		end
+
+		local windowMaxRows = rootMenu:CreateButton(L["settings_max_rows"])
+		windowMaxRows:CreateTitle(HUD_EDIT_MODE_SETTING_ACTION_BAR_NUM_ROWS)
+		for i = 5, 70, 5 do
+			if i < 40 or i % 10 == 0 then
+				windowMaxRows:CreateRadio(i, function()
+					return WeeklyRewards.db.global.main.windowMaxRows == i
+				end, function(data)
+					WeeklyRewards.db.global.main.windowMaxRows = data
+					self:Redraw()
+				end, i)
+			end
 		end
 
 		local colorInfo = {
@@ -210,8 +230,7 @@ function Main:AddCharactersButton()
 	self.window.titlebar.CharactersButton:SetScript("OnEnter", function()
 		self.window.titlebar.CharactersButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
 		Utils:SetBackgroundColor(self.window.titlebar.CharactersButton, 1, 1, 1, 0.05)
-		---@diagnostic disable-next-line: param-type-mismatch
-		GameTooltip:SetOwner(self.window.titlebar.CharactersButton, "ANCHOR_TOP")
+		self:SetTooltipOwner(GameTooltip, self.window.titlebar.CharactersButton)
 		GameTooltip:SetText(L["characters_button_title"], 1, 1, 1, 1, true)
 		GameTooltip:AddLine(L["characters_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		GameTooltip:Show()
@@ -264,8 +283,7 @@ function Main:AddRewardsFilterButton()
 	self.window.titlebar.ColumnsButton:SetScript("OnEnter", function()
 		self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
 		Utils:SetBackgroundColor(self.window.titlebar.ColumnsButton, 1, 1, 1, 0.05)
-		---@diagnostic disable-next-line: param-type-mismatch
-		GameTooltip:SetOwner(self.window.titlebar.ColumnsButton, "ANCHOR_TOP")
+		self:SetTooltipOwner(GameTooltip, self.window.titlebar.ColumnsButton)
 		GameTooltip:SetText(L["columns_button_tooltip"], 1, 1, 1, 1, true)
 		GameTooltip:AddLine(L["columns_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		GameTooltip:Show()
@@ -333,8 +351,7 @@ function Main:AddSortButton()
 	self.window.titlebar.SortButton:SetScript("OnEnter", function()
 		self.window.titlebar.SortButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
 		Utils:SetBackgroundColor(self.window.titlebar.SortButton, 1, 1, 1, 0.05)
-		---@diagnostic disable-next-line: param-type-mismatch
-		GameTooltip:SetOwner(self.window.titlebar.SortButton, "ANCHOR_TOP")
+		self:SetTooltipOwner(GameTooltip, self.window.titlebar.SortButton)
 		GameTooltip:SetText(L["sort_button_tooltip"], 1, 1, 1, 1, true)
 		GameTooltip:AddLine(L["sort_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		GameTooltip:Show()
@@ -460,6 +477,13 @@ function Main:CreateWindow()
 	self.window.table.scrollFrame:HookScript("OnMouseWheel", function(frame, _)
 		if IsModifierKeyDown() or not frame.scrollbarV:IsVisible() then
 			self:LayoutHeader()
+		end
+	end)
+
+	-- bugfix: horizontal scroll is always triggerd by mousewheel after adjusting window scale
+	hooksecurefunc(self.window.table.scrollFrame, "RenderScrollFrame", function(frame)
+		if not frame.scrollbarH:IsShown() then
+			frame.scrollbarH:SetMinMaxValues(0, 0)
 		end
 	end)
 
@@ -923,11 +947,14 @@ function Main:Redraw()
 	end
 
 	local windowScale = WeeklyRewards.db.global.main.windowScale / 100
+	local desiredTableHeight = WeeklyRewards.db.global.main.windowMaxRows * Constants.TABLE_ROW_HEIGHT + Constants.TABLE_HEADER_HEIGHT
 
 	self.window.border:SetShown(WeeklyRewards.db.global.main.windowBorder)
 	self.window.table:SetData(tableData)
+
 	self.window:SetWidth(math.min(math.max(tableWidth, minWindowWidth), GetScreenWidth() * WeeklyRewards.db.global.main.windowMaxRelativeWidth / 100 / windowScale))
-	self.window:SetHeight(math.min(tableHeight + Constants.TITLEBAR_HEIGHT, Constants.MAX_WINDOW_HEIGHT) + 2)
+	self.window:SetHeight(math.min(GetScreenHeight() / windowScale, math.min(tableHeight, desiredTableHeight) + Constants.TITLEBAR_HEIGHT + 2))
+
 	self.window:SetClampRectInsets(self.window:GetWidth() / 2, self.window:GetWidth() / -2, 0, self.window:GetHeight() / 2)
 	self.window:SetScale(windowScale)
 	self.window.titlebar.title:SetShown(self.window:GetWidth() > (240 / windowScale))
