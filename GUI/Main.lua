@@ -814,7 +814,6 @@ function Main:LayoutHeader(force)
 	local anchor = header.columns[1] or nil
 	local offset = anchor and -self.window.table.scrollFrame.scrollbarH:GetValue() - select(4, anchor:GetPointByName("TOPLEFT")) or 0
 
-	print("LayoutHeader", force, offset, self.window.table.scrollFrame.scrollbarH:GetValue(), select(4, anchor:GetPointByName("TOPLEFT")))
 	if offset ~= 0 or force then
 		for _, column in ipairs({ header:GetChildren() }) do
 			AnchorUtil.AdjustPointByName(column, "TOPLEFT", offset, 0)
