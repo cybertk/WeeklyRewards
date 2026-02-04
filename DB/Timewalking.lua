@@ -71,6 +71,24 @@ namespace.DB.rewardCandidiates["timewalking"] = {
 				},
 				factionMask = { 1, 2 },
 			}, -- [BfA]
+			{ quest = 92650, items = { 253517 }, unlockAura = 1256081 }, -- [SL] - [Quest] The Flickering Anima - [Aura] Sign of Azeroth
+		},
+	},
+	{
+		id = "tw-path",
+		key = "TW:Path",
+		group = RewardsGroup.TIMEWALKING_EVENTS,
+		minimumLevel = 80,
+		entries = {
+			{ quest = 86731, unlockAura = 452307 }, -- An Original Path Through Time - Clapths
+			{ quest = 83363, unlockAura = 335148 }, -- A Burning Path Through Time - TBC
+			{ quest = 83365, unlockAura = 335149 }, -- A Frozen Path Through Time - WLK
+			{ quest = 83359, unlockAura = 335150 }, -- A Shattered Path Through Time - Cat
+			{ quest = 83362, unlockAura = 335151 }, -- A Shrouded Path Through Time - MoP
+			{ quest = 83364, unlockAura = 335152 }, -- A Savage Path Through Time - WoD
+			{ quest = 83360, unlockAura = 359082 }, -- A Fel Path Through Time - Legion
+			{ quest = 88805, unlockAura = 1223878 }, -- A Scarred Path Through Time - BFA
+			{ quest = 92649, unlockAura = 1256081 }, -- A Shadowed Path Through Time - SL
 		},
 	},
 }
