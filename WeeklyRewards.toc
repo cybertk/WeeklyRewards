@@ -4,6 +4,7 @@
 ## Title: WeeklyRewards
 
 ## Notes: Track your weekly rewards progress across your characters
+## Notes-ruRU: Позволяет отслеживать прогресс получения еженедельных наград всеми вашими персонажами
 ## Author: cybertk
 
 ## Category-enUS: Quests
@@ -44,3 +45,4 @@ WeeklyRewards.lua
 
 Modules\SelectableLootScanner.lua
 Modules\AtomicContainerLootScanner.lua
+
