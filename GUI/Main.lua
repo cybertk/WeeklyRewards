@@ -14,6 +14,7 @@ local L = namespace.L
 local Util = namespace.Util
 local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
+local RewardSummary = namespace.RewardSummary
 
 function Main:ToggleWindow()
 	if not self.window then
@@ -758,20 +759,13 @@ function Main:AddRewardToGameTooltip(reward)
 	end
 
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddLine(L["reward_rewards"])
-
-	local items = reward:ForEachItem(function(item)
-		GameTooltip:AddLine(Util.FormatItem(item))
-	end)
-	if #items == 0 then
-		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode(LFG_LIST_LOADING))
-	end
-
-	GameTooltip:AddLine(" ")
 
 	if reward.resetTime then
 		GameTooltip:AddLine(L["reward_time_left"] .. WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime())))
 	end
+
+	GameTooltip:AddLine(" ")
+	RewardSummary:Create(reward.id):AddToTooltip(GameTooltip)
 end
 
 function Main:UpdateSortArrow()

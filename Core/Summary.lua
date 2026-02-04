@@ -1,5 +1,6 @@
 local _, namespace = ...
 
+local L = namespace.L
 local Util = namespace.Util
 
 local RewardSummary = {}
@@ -30,13 +31,16 @@ function RewardSummary:_AggregateObjects(aggregated, objects)
 			local slot = select(4, C_Item.GetItemInfoInstant(o.item))
 			if slot and slot ~= "INVTYPE_NON_EQUIP_IGNORE" then
 				table.insert(self.gears, o.item)
+			else
+				if self.items[o.item] == nil then
+					self.items[o.item] = { item = o.item, quantity = 0 }
+				end
+				self.items[o.item].quantity = self.items[o.item].quantity + o.quantity
 			end
 
 			if aggregated[o.item] == nil then
 				aggregated[o.item] = { item = o.item, quantity = 0 }
-				table.insert(self.items, o.item)
 			end
-
 			uniqueObject = aggregated[o.item]
 		end
 
@@ -109,16 +113,16 @@ function RewardSummary:Broadcast(channel)
 		end
 	end
 
-	local header = format("%s has completed %d times this week", self.name, self.count)
+	local header = L["summary_completed_count"]:format(self.name, self.count)
 	do
 		local r = {}
 
-		table.insert(r, #self.gears > 0 and format("%d equipments", #self.gears) or nil)
-		table.insert(r, self.money >= COPPER_PER_GOLD and format("%d gold", math.floor(self.money / COPPER_PER_GOLD)) or nil)
-		table.insert(r, #messages > 0 and "Warband Currencies: " or nil)
+		table.insert(r, #self.gears > 0 and RESISTANCE_TEMPLATE:format(#self.gears, BAG_FILTER_EQUIPMENT) or nil)
+		table.insert(r, self.money >= COPPER_PER_GOLD and GOLD_AMOUNT:format(math.floor(self.money / COPPER_PER_GOLD)) or nil)
+		table.insert(r, #messages > 0 and ACCOUNT_LEVEL_CURRENCY .. ": " or nil)
 
 		if #r > 0 then
-			header = header .. ". Total received " .. r[1]
+			header = header .. ". " .. L["summary_rewards_received"] .. r[1]
 		end
 
 		for i = 2, #r do
@@ -140,6 +144,56 @@ function RewardSummary:Broadcast(channel)
 	end
 
 	Util:Debug("Broadcast done", #messages, channel)
+end
+
+function RewardSummary:AddToTooltip(tooltip)
+	local total = self.charactersStore:GetNumEnabledCharacters()
+	GameTooltip_AddColoredDoubleLine(
+		tooltip,
+		L["summary_progress"],
+		format("%d/%d", self.count, total),
+		NORMAL_FONT_COLOR,
+		self.count == total and GREEN_FONT_COLOR or YELLOW_FONT_COLOR
+	)
+
+	if self.count == 0 then
+		return
+	end
+
+	GameTooltip_AddColoredDoubleLine(
+		tooltip,
+		L["summary_rewards_received"],
+		#self.gears > 0 and format("|cnLIGHTBLUE_FONT_COLOR:%s:|r %d", BAG_FILTER_EQUIPMENT, #self.gears) or nil,
+		NORMAL_FONT_COLOR,
+		WHITE_FONT_COLOR
+	)
+
+	for _, o in pairs(self.items) do
+		local item = Item:CreateFromItemID(o.item)
+		GameTooltip_AddColoredDoubleLine(
+			tooltip,
+			item:IsItemDataCached() and format("|T%d:12|t %s", item:GetItemIcon(), item:GetItemName()) or LFG_LIST_LOADING,
+			o.quantity,
+			C_ColorOverrides.GetColorForQuality(item:GetItemQuality() or Enum.ItemQuality.Common),
+			WHITE_FONT_COLOR
+		)
+	end
+
+	for _, o in pairs(self.currencies) do
+		local currency = C_CurrencyInfo.GetCurrencyInfo(o.currency)
+		local type = C_CurrencyInfo.IsAccountTransferableCurrency(o.currency) and CreateAtlasMarkup("warbands-icon") or ""
+		GameTooltip_AddColoredDoubleLine(
+			tooltip,
+			(currency and format("|T%d:12|t %s", currency.iconFileID, currency.name) or LFG_LIST_LOADING) .. type,
+			o.quantity,
+			currency and C_ColorOverrides.GetColorForQuality(currency.quality) or WHITE_FONT_COLOR,
+			WHITE_FONT_COLOR
+		)
+	end
+
+	if self.money > 0 then
+		tooltip:AddLine(GetMoneyString(math.floor(self.money / COPPER_PER_GOLD) * COPPER_PER_GOLD))
+	end
 end
 
 namespace.RewardSummary = RewardSummary
