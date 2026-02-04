@@ -67,6 +67,11 @@ L["progress_drops"] = "Drops"
 L["reward_rewards"] = "Rewards"
 L["reward_time_left"] = "Time Left: "
 
+-- Summary
+L["summary_completed_count"] = "%s completed %d times this week"
+L["summary_progress"] = "Warband Progress:"
+L["summary_rewards_received"] = "Total Rewards Received: "
+
 -- Sorting options
 L["sort_reward_group"] = "Reward Group"
 L["sort_reward_name"] = "Reward Name"
