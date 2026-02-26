@@ -34,8 +34,9 @@ L["settings_window_title"] = "Окно"
 L["settings_scaling"] = "Масштаб"
 L["settings_max_width"] = "Макс. ширина"
 L["settings_max_width_percent"] = "% от полного экрана"
+L["settings_max_rows"] = "Макс. кол-во строк"
 L["settings_background_color"] = "Цвет фона"
-L["settings_show_border"] = "Показывать рамку"
+L["settings_show_border"] = "Показывать границу"
 L["settings_utility_title"] = "Утилиты"
 L["settings_auto_untrack_quests"] = "Отключение заданий"
 L["settings_auto_untrack_quests_tooltip"] = "Отключить отслеживание всех заданий, управляемых WeeklyRewards, при входе в игру, что позволит сделать панель журнала заданий более удобной."
@@ -55,6 +56,7 @@ L["covenant_not_joined"] = "Этот персонаж не вступал ни �
 -- Table tooltips
 L["table_sort_hint"] = "<ЛКМ - сортировка>"
 L["table_reset_progress_hint"] = "<Ctrl+ЛКМ - сброс прогресса>"
+L["table_alts_collect_hint"] = "Войдите в игру этим персонажем, чтобы получить его данные"
 
 -- Progress tooltips
 L["progress_rewards_received_at"] = "Награды получены:"
