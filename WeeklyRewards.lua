@@ -46,7 +46,26 @@ local defaultDB = {
 	},
 }
 
-function WeeklyRewards:MigrateDB() end
+function WeeklyRewards:MigrateDB()
+	local candidatesMap = {}
+	for _, candidate in ipairs(DB:GetAllCandidates()) do
+		candidatesMap[candidate.id] = candidate
+	end
+
+	for _, reward in ipairs(self.db.global.activeRewards) do
+		local candidateID = string.gsub(reward.id, "([-%w+]):%d+", "%1")
+		local candidate = candidatesMap[candidateID]
+
+		if candidate then
+			reward.group = candidate.group
+			reward.expansion = candidate.expansion
+		end
+
+		if reward.id == "tww-vault" then
+			reward.id = "vault"
+		end
+	end
+end
 
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = L["BINDING_NAME_WeeklyRewards"]

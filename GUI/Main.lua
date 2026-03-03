@@ -302,8 +302,6 @@ function Main:AddRewardsFilterButton()
 		local hidden = WeeklyRewards.db.global.main.hiddenColumns
 		local activeRewards = ActiveRewards.Get()
 
-		local groupButtons = {}
-
 		for _, column in ipairs(self.columns) do
 			if column.reward == nil then
 				rootMenu:CreateCheckbox(column.name, function()
@@ -312,30 +310,17 @@ function Main:AddRewardsFilterButton()
 					hidden[columnName] = not hidden[columnName]
 					self:Redraw()
 				end, column.name)
-			else
-				local reward = column.reward
-
-				-- level 1
-				if reward.group and groupButtons[reward.group] == nil then
-					groupButtons[reward.group] = rootMenu:CreateCheckbox(reward.group, function()
-						return not activeRewards:IsGroupExcluded(reward.group)
-					end, function(columnName)
-						activeRewards:ToggleExclusionByGroup(reward.group)
-						self:Redraw()
-					end, column.name)
-				end
-
-				local groupButton = reward.group and groupButtons[reward.group] or rootMenu
-
-				-- level 2
-				groupButton:CreateCheckbox(reward.name, function()
-					return not activeRewards:IsExcluded(reward.id)
-				end, function()
-					activeRewards:ToggleExclusion(reward.id)
-					self:Redraw()
-				end, column.name)
 			end
 		end
+
+		local groups, legacyExpansions = activeRewards:GetAllGroups()
+
+		rootMenu:CreateDivider()
+		rootMenu:CreateTitle(REWARDS)
+		self:AddRewardsFilterToMenu(rootMenu, groups)
+
+		rootMenu:CreateTitle(LFG_LIST_LEGACY)
+		self:AddRewardsFilterToMenu(rootMenu, legacyExpansions, true)
 	end)
 
 	self.window.titlebar.ColumnsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.ColumnsButton:GetName() .. "Icon", "ARTWORK")
@@ -343,6 +328,44 @@ function Main:AddRewardsFilterButton()
 	self.window.titlebar.ColumnsButton.Icon:SetSize(12, 12)
 	self.window.titlebar.ColumnsButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Columns.blp")
 	self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
+end
+
+function Main:AddRewardsFilterToMenu(rootMenu, expansions, isLegacy)
+	local activeRewards = ActiveRewards.Get()
+
+	for name, expansion in pairs(expansions) do
+		local button = rootMenu
+
+		if isLegacy then
+			button = rootMenu:CreateButton(_G["EXPANSION_NAME" .. name])
+		elseif name ~= "" then
+			button = rootMenu:CreateCheckbox(name, function()
+				return not activeRewards:IsGroupExcluded(name)
+			end, function()
+				activeRewards:ToggleExclusionByGroup(name)
+				self:Redraw()
+			end)
+		end
+
+		for group, rewards in pairs(expansion) do
+			if isLegacy and group ~= "" then
+				button:CreateTitle(group)
+			end
+
+			for _, reward in ipairs(rewards) do
+				button:CreateCheckbox(reward.name, function()
+					return not activeRewards:IsExcluded(reward.id)
+				end, function()
+					activeRewards:ToggleExclusion(reward.id)
+					self:Redraw()
+				end)
+			end
+
+			if isLegacy and group ~= "" then
+				button:QueueDivider()
+			end
+		end
+	end
 end
 
 function Main:AddSortButton()

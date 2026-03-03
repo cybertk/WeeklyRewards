@@ -10,7 +10,7 @@ local RewardsGroup = {
 	KARESH = "K'aresh",
 }
 
-namespace.DB.rewardCandidiates["tww"] = {
+namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 	{
 		id = "tww-worldboss",
 		key = "WorldBoss",
@@ -327,32 +327,6 @@ namespace.DB.rewardCandidiates["tww"] = {
 			},
 		},
 		items = { { item = 229365, amount = 1 } },
-	},
-	{
-		id = "tww-vault",
-		key = "GreatVault",
-		description = "Great Valut Rewards that provides you with 1 piece of loot from a pool of up to 9 items. |n|n"
-			.. "The item level of rewards depends on your highest runs of the week.|n"
-			.. "You could select the |cffa335ee[Algari Token of Merit]|r instead of loots.",
-		minimumLevel = 80,
-		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = {
-			{ quest = 0, progressType = 1 },
-		},
-		items = {
-			{
-				name = "2 |cffa335ee[Algari Token of Meritz]|r for 1 Great Vault slot",
-				texture = 2744751, -- Algari Token of Meritz
-			},
-			{
-				name = "4 |cffa335ee[Algari Token of Meritz]|r for 2 Great Vault slots",
-				texture = 2744751,
-			},
-			{
-				name = "6 |cffa335ee[Algari Token of Meritz]|r for 3+ Great Vault slots",
-				texture = 2744751,
-			},
-		},
 	},
 	{
 		id = "tww-sa-um",

@@ -2,6 +2,7 @@
     <Script file="Init.lua" />
     <Script file="TWW.lua" />
     <Script file="Shadowlands.lua" />
+    <Script file="GreatVault.lua" />
     <Script file="Timewalking.lua" />
     <Script file="DarkmoonFaire.lua" />
     <Script file="LunarFestival.lua" />

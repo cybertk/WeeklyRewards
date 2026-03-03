@@ -170,6 +170,26 @@ function ActiveRewards:_FindCandidatesToScan(candidates)
 	end)
 end
 
+function ActiveRewards:GetAllGroups()
+	local current, legacy = {}, {}
+
+	local function GetOrAdd(d, k)
+		local k = k or ""
+		d[k] = d[k] or {}
+		return d[k]
+	end
+
+	for _, reward in ipairs(self) do
+		if reward.expansion then
+			table.insert(GetOrAdd(GetOrAdd(legacy, reward.expansion), reward.group), reward)
+		else
+			table.insert(GetOrAdd(GetOrAdd(current, reward.group), nil), reward)
+		end
+	end
+
+	return current, legacy
+end
+
 function ActiveRewards:Reset(teardown_func, force)
 	local now = WAPI_GetServerTime()
 
@@ -207,6 +227,7 @@ function ActiveRewards:Update(candidates)
 			name = candidate.key,
 			description = candidate.description,
 			group = candidate.group,
+			expansion = candidate.expansion,
 			minimumLevel = candidate.minimumLevel,
 			rollover = candidate.rollover,
 			items = candidate.items,
