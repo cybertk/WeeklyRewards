@@ -677,7 +677,8 @@ function Main:AddRewardColumns()
 					return ""
 				end
 
-				local text = format("%d / %d", progress.position, progress.total)
+				local text = progress.total < 100 and format("%d / %d", progress.position, progress.total)
+					or format("%.0f%%", progress.position / progress.total * 100)
 				if progress.hasClaimed and progress:hasClaimed() then
 					text = CreateAtlasMarkup("common-icon-checkmark", 15, 15)
 				elseif progress.hasStarted and progress:hasStarted() then
