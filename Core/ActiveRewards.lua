@@ -217,6 +217,8 @@ function ActiveRewards:Update(candidates)
 
 	Util:Debug("Scanning candidates: ", #candidatesToScan)
 
+	self:ApplyLegacyExpansionExclusions(candidates)
+
 	if #candidatesToScan == 0 then
 		return
 	end
@@ -285,6 +287,18 @@ function ActiveRewards:IsGroupExcluded(group)
 		end
 	end
 	return true
+end
+
+function ActiveRewards:ApplyLegacyExpansionExclusions(candidates)
+	if #self > 0 then
+		return
+	end
+
+	for _, candidate in ipairs(candidates) do
+		if type(candidate.expansion) == "number" then
+			self.excluded[candidate.id] = true
+		end
+	end
 end
 
 function ActiveRewards:ScanJournal()
