@@ -147,27 +147,6 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		},
 	},
 	{
-		id = "tww-sa",
-		key = "SA",
-		group = RewardsGroup.WEEKLY_CACHE,
-		minimumLevel = 70,
-		pick = 2,
-		trackRecords = true,
-		rollover = true,
-		entries = {
-			{ quest = 82355, unlockQuest = 82146 }, -- Special Assignment: Cinderbee Surge
-			{ quest = 81647, unlockQuest = 82154 }, -- Special Assignment: Titanic Resurgence
-			{ quest = 81649, unlockQuest = 83069 }, -- Special Assignment: Titanic Resurgence
-			{ quest = 81650, unlockQuest = 83070 }, -- Special Assignment: Titanic Resurgence
-			{ quest = 81691, unlockQuest = 82155 }, -- Special Assignment: Shadows Below
-			{ quest = 83229, unlockQuest = 82156 }, -- Special Assignment: When the Deeps Stir
-			{ quest = 82787, unlockQuest = 82157 }, -- Special Assignment: Rise of the Colossals
-			{ quest = 82852, unlockQuest = 82158 }, -- Special Assignment: Lynx Rescue
-			{ quest = 82414, unlockQuest = 82159 }, -- Special Assignment: A Pound of Cure
-			{ quest = 82531, unlockQuest = 82161 }, -- Special Assignment: Bombs From Behind
-		},
-	},
-	{
 		id = "tww-light",
 		key = "Light",
 		group = RewardsGroup.WEEKLY_CACHE,
