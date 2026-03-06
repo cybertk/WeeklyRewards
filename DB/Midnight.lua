@@ -28,7 +28,6 @@ namespace.DB.rewardCandidiates["MN"] = {
 					93912, -- Midnight: Raid
 					93913, -- Midnight: World Boss
 					94457, -- Midnight: Battlegrounds
-					95468, -- Hope in the Darkest Corners
 				},
 			},
 		},
