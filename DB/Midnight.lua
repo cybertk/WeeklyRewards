@@ -2,6 +2,7 @@ local _, namespace = ...
 
 local RewardsGroup = {
 	PINNACLE_CACHE = "Pinnacle Cache",
+	PVP = "PvP",
 }
 
 namespace.DB.rewardCandidiates["MN"] = {
@@ -14,6 +15,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{
+				quest = 93744, -- Unity Against the Void
 				questPool = {
 					93766, -- Midnight: World Quests
 					93767, -- Midnight: Arcantina
@@ -76,6 +78,38 @@ namespace.DB.rewardCandidiates["MN"] = {
 					90576, -- Fortify the Runestones: Shades of the Row
 				},
 			},
+		},
+	},
+	{
+		id = "mn-legends",
+		key = "Legends",
+		group = RewardsGroup.PINNACLE_CACHE,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{
+				quest = 89268, -- Lost Legends
+				questPool = {
+					88993, -- Wey'nan's Ward
+					88994, -- The Cauldron of Echoes
+					88996, -- The Echoless Flame
+					88997, -- Russula's Outreach
+					88995, -- Aln'hara's Bloom
+				},
+			},
+		},
+	},
+	{
+		id = "mn-war",
+		key = "WarSparks",
+		group = RewardsGroup.PVP,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 93423 }, -- Sparks of War: Eversong Woods
+			{ quest = 93424 }, -- Sparks of War: Zul'Aman
+			{ quest = 93425 }, -- Sparks of War: Harandar
+			{ quest = 93426 }, -- Sparks of War: Voidstorm
 		},
 	},
 	{
