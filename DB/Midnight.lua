@@ -31,6 +31,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 					93913, -- Midnight: World Boss
 					94457, -- Midnight: Battlegrounds
 				},
+				maxCompletion = 1,
 			},
 		},
 	},
@@ -77,6 +78,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 					90575, -- Fortify the Runestones: Farstriders
 					90576, -- Fortify the Runestones: Shades of the Row
 				},
+				maxCompletion = 1,
 			},
 		},
 	},
@@ -96,6 +98,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 					88997, -- Russula's Outreach
 					88995, -- Aln'hara's Bloom
 				},
+				maxCompletion = 1,
 			},
 		},
 	},
