@@ -9,9 +9,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-spark",
 		key = "Spark",
-		description = "Meta Quest from Lady Liadrin|nRewards a weekly Spark of Radiance",
 		group = RewardsGroup.PINNACLE_CACHE,
-		minimumLevel = 80,
+		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{

@@ -69,6 +69,7 @@ function WeeklyRewards:MigrateDB()
 			reward.objectives[1].maxCompletion = 1
 		elseif reward.id == "mn-spark" then
 			reward.objectives[1].maxCompletion = 1
+			reward.minimumLevel = 90
 		end
 	end
 end
