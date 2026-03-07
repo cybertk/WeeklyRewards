@@ -673,24 +673,38 @@ function Main:AddRewardColumns()
 			align = "CENTER",
 			cell = function(character)
 				local progress = character.progress[reward.id]
-				if progress == nil then
+
+				if progress == nil and character.level >= reward.minimumLevel then
 					return ""
 				end
 
-				local text = progress.total < 100 and format("%d / %d", progress.position, progress.total)
-					or format("%.0f%%", progress.position / progress.total * 100)
-				if progress.hasClaimed and progress:hasClaimed() then
-					text = CreateAtlasMarkup("common-icon-checkmark", 15, 15)
-				elseif progress.hasStarted and progress:hasStarted() then
-					text = YELLOW_FONT_COLOR:WrapTextInColorCode(text)
+				local text
+				if progress == nil then
+					text = character.level >= reward.minimumLevel and " " or "-"
+				else
+					text = progress.total < 100 and format("%d / %d", progress.position, progress.total)
+						or format("%.0f%%", progress.position / progress.total * 100)
+
+					if progress.hasClaimed and progress:hasClaimed() then
+						text = CreateAtlasMarkup("common-icon-checkmark", 15, 15)
+					elseif progress.hasStarted and progress:hasStarted() then
+						text = YELLOW_FONT_COLOR:WrapTextInColorCode(text)
+					end
 				end
 
 				return {
 					text = text,
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						self:AddProgressToGameTooltip(progress)
-						cellFrame.hasInstructions = nil
+						if progress == nil then
+							GameTooltip:AddLine(YELLOW_FONT_COLOR:WrapTextInColorCode(reward:GetDescription(true)))
+							GameTooltip:AddLine(" ")
+							GameTooltip:AddLine(ITEM_MIN_LEVEL:format(reward.minimumLevel))
+						else
+							self:AddProgressToGameTooltip(progress)
+							cellFrame.hasInstructions = nil
+						end
+
 						GameTooltip:Show()
 					end,
 					onLeave = function()

@@ -181,6 +181,14 @@ function Reward:UpdateDescription()
 	end
 end
 
+function Reward:GetDescription(short)
+	if short and self.description:match("|n") then
+		return self.name
+	else
+		return Util:ResolveTags(self.description)
+	end
+end
+
 function Reward:HasConfirmed()
 	return self.state == STATE.CONFIRMED
 end
