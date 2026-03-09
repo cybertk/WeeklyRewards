@@ -76,6 +76,7 @@ function RewardProgress:Init(reward)
 	self.numObjectives = #reward.objectives
 
 	local factionNameToEnum = { ["Alliance"] = 1, ["Horde"] = 2 }
+	local isSelectionPending = false
 
 	for _, objective in ipairs(reward.objectives) do
 		if objective.questPool then
@@ -112,6 +113,10 @@ function RewardProgress:Init(reward)
 				end
 			end
 
+			if numObjectives == 0 and objective.quest then
+				isSelectionPending = true
+			end
+
 			self.numObjectives = self.numObjectives - 1 + (objective.maxCompletion or numObjectives)
 		else
 			if
@@ -137,7 +142,7 @@ function RewardProgress:Init(reward)
 
 	self.total = self.numObjectives
 
-	return #self.pendingObjectives > 0 or #self.fulfilledObjectives > 0
+	return isSelectionPending or #self.pendingObjectives > 0 or #self.fulfilledObjectives > 0
 end
 
 function RewardProgress:NeedTrackPosition()
