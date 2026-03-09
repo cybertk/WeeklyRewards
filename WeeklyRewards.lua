@@ -65,6 +65,8 @@ function WeeklyRewards:MigrateDB()
 			reward.id = "vault"
 		elseif reward.id == "mn-soiree" then
 			reward.objectives[1].maxCompletion = 1
+			reward.objectives[1].quest = 91966
+			reward.name = "Runestones"
 		elseif reward.id == "mn-legends" then
 			reward.objectives[1].maxCompletion = 1
 		elseif reward.id == "mn-spark" then
