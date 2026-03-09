@@ -791,9 +791,9 @@ end
 function Main:AddRewardToGameTooltip(reward)
 	GameTooltip:AddDoubleLine(reward.name, "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. (IsControlKeyDown() and HIDE or STABLE_FILTER_BUTTON_LABEL) .. ")|r")
 	if reward.group then
-		GameTooltip:AddLine(reward.group .. ": " .. WHITE_FONT_COLOR:WrapTextInColorCode(reward.description))
+		GameTooltip:AddLine(reward.group .. ": " .. WHITE_FONT_COLOR:WrapTextInColorCode(reward:GetDescription()))
 	else
-		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode(reward.description))
+		GameTooltip:AddLine(WHITE_FONT_COLOR:WrapTextInColorCode(reward:GetDescription()))
 	end
 
 	GameTooltip:AddLine(" ")

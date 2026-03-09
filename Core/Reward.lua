@@ -172,7 +172,7 @@ function Reward:DetermineResetTime(timeLeft)
 end
 
 function Reward:UpdateDescription()
-	if self.description then
+	if self.description and #self.description > 0 then
 		return
 	end
 
@@ -182,7 +182,11 @@ function Reward:UpdateDescription()
 end
 
 function Reward:GetDescription(short)
-	if short and self.description:match("|n") then
+	self:UpdateDescription()
+
+	if not self.description then
+		return LFG_LIST_LOADING
+	elseif short and self.description:match("|n") then
 		return self.name
 	else
 		return Util:ResolveTags(self.description)
