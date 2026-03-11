@@ -685,7 +685,9 @@ function Main:AddRewardColumns()
 					text = progress.total < 100 and format("%d / %d", progress.position, progress.total)
 						or format("%.0f%%", progress.position / progress.total * 100)
 
-					if progress.hasClaimed and progress:hasClaimed() then
+					if progress:IsExpired() then
+						text = GRAY_FONT_COLOR:WrapTextInColorCode(text)
+					elseif progress.hasClaimed and progress:hasClaimed() then
 						text = CreateAtlasMarkup("common-icon-checkmark", 15, 15)
 					elseif progress.hasStarted and progress:hasStarted() then
 						text = YELLOW_FONT_COLOR:WrapTextInColorCode(text)
@@ -737,9 +739,14 @@ end
 function Main:AddProgressToGameTooltip(progress)
 	local questColor = progress:ObjectivesCount() == 1 and YELLOW_FONT_COLOR or WHITE_FONT_COLOR
 
+	local status = ""
+	if progress:IsExpired() then
+		status = "|cnGRAY_FONT_COLOR:(" .. RAID_INSTANCE_EXPIRES_EXPIRED .. ")|r"
+	end
+
 	if progress:ObjectivesCount() > 1 then
 		-- Show quests as high-level objectives
-		GameTooltip:AddLine(YELLOW_FONT_COLOR:WrapTextInColorCode(progress.name))
+		GameTooltip:AddDoubleLine(YELLOW_FONT_COLOR:WrapTextInColorCode(progress.name), status)
 		progress:ForEachObjective(function(objective, completed)
 			GameTooltip:AddDoubleLine(
 				WHITE_FONT_COLOR:WrapTextInColorCode("- " .. progress:GetCachedObjectiveName(objective)),
@@ -748,7 +755,7 @@ function Main:AddProgressToGameTooltip(progress)
 		end)
 	else
 		local questName = QuestUtils_GetQuestName(progress:Quest()) or ""
-		GameTooltip:AddLine(YELLOW_FONT_COLOR:WrapTextInColorCode(#questName > 0 and questName or progress.name))
+		GameTooltip:AddDoubleLine(YELLOW_FONT_COLOR:WrapTextInColorCode(#questName > 0 and questName or progress.name), status)
 		-- Show objectives of single quest
 		progress:ForEachRecord(function(record, completed)
 			GameTooltip:AddDoubleLine(

@@ -128,7 +128,11 @@ function Character:ResetProgress(reward, force)
 	end
 
 	-- Reset
-	self.progress[reward.id] = nil
+	if force then
+		self.progress[reward.id] = nil
+	else
+		self.progress[reward.id]:SetExpired()
+	end
 
 	return progress
 end
@@ -231,7 +235,7 @@ function Character:Scan(activeRewards)
 		end
 
 		local progress = self.progress[reward.id]
-		if progress == nil or next(progress) == nil or progress:ObjectivesCount() == 0 then
+		if progress == nil or next(progress) == nil or progress:ObjectivesCount() == 0 or progress:IsExpired() then
 			return true
 		end
 

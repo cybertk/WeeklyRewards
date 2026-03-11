@@ -76,6 +76,45 @@ function WeeklyRewards:MigrateDB()
 	end
 end
 
+function WeeklyRewards:PopulateExpiredProgress()
+	if self.db.global.populatedExpiredProgress then
+		return
+	end
+
+	local rewards = {}
+	for _, reward in ipairs(self.db.global.activeRewards) do
+		rewards[reward.name] = reward
+	end
+
+	local resetStartTime = C_DateAndTime.GetWeeklyResetStartTime()
+
+	CharacterStore.Get():ForEach(function(x)
+		local store = self.archive:Load("RawData", x.GUID)
+		local populated = {}
+
+		x.progress = x.progress or {}
+
+		for i = #store, 1, -1 do
+			local progress = store[i]
+			if populated[progress.name] then
+				break
+			end
+
+			local reward = rewards[progress.name]
+			if reward and x.progress[reward.id] == nil then
+				x.progress[reward.id] = namespace.RewardProgress:New(CopyTable(progress))
+				x.progress[reward.id].state = 3
+
+				populated[progress.name] = true
+			end
+		end
+	end, function(x)
+		return x.lastUpdate < resetStartTime
+	end)
+
+	self.db.global.populatedExpiredProgress = true
+end
+
 function WeeklyRewards:OnInitialize()
 	_G["BINDING_NAME_WeeklyRewards"] = L["BINDING_NAME_WeeklyRewards"]
 	self:RegisterChatCommand("wr", "ExecuteChatCommands")
@@ -187,6 +226,7 @@ function WeeklyRewards:OnEnable()
 		end
 
 		self:UpdateActiveRewards()
+		self:PopulateExpiredProgress()
 	end)
 
 	self:RegisterEvent("PLAYER_LEVEL_CHANGED", function()

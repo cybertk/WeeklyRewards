@@ -29,9 +29,10 @@ local WAPI_GetServerTime = GetServerTime
 local WAPI_GetQuestName = QuestUtils_GetQuestName
 
 local PROGRESS_STATE = {
-	["CLAIMED"] = 0,
-	["NOT_STARTED"] = 1,
-	["IN_PROGRESS"] = 2,
+	CLAIMED = 0,
+	NOT_STARTED = 1,
+	IN_PROGRESS = 2,
+	EXPIRED = 3,
 }
 
 function RewardProgress.__eq(a, b)
@@ -70,7 +71,7 @@ function RewardProgress:Init(reward)
 	end
 
 	self.name = reward.name
-	self.state = self.state or PROGRESS_STATE.NOT_STARTED
+	self.state = (self.state and self.state ~= PROGRESS_STATE.EXPIRED) and self.state or PROGRESS_STATE.NOT_STARTED
 	self.pendingObjectives = {}
 	self.fulfilledObjectives = {}
 	self.numObjectives = #reward.objectives
@@ -381,6 +382,15 @@ end
 
 function RewardProgress:Quest()
 	return #self.pendingObjectives > 0 and self.pendingObjectives[1].quest or self.fulfilledObjectives[1].quest
+end
+
+function RewardProgress:IsExpired()
+	return self.state == PROGRESS_STATE.EXPIRED
+end
+
+function RewardProgress:SetExpired()
+	self.state = PROGRESS_STATE.EXPIRED
+	Util:Debug(self.name .. " is expired")
 end
 
 function RewardProgress:ForEachRewardQuest(callback)
