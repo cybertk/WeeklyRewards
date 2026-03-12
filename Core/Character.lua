@@ -256,7 +256,11 @@ function Character:Scan(activeRewards)
 	Util:Debug("Rewards to scan: " .. #rewardsToScan)
 
 	for _, reward in ipairs(rewardsToScan) do
-		local progress = self.progress[reward.id] or ProgressFactory:Create(reward.objectives[1].progressType)
+		local progress = self.progress[reward.id]
+
+		if not progress or progress:IsExpired() then
+			progress = ProgressFactory:Create(reward.objectives[1].progressType)
+		end
 
 		if progress:Init(reward) then
 			self:_AddProgress(progress, reward.id)

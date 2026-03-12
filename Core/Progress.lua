@@ -71,7 +71,7 @@ function RewardProgress:Init(reward)
 	end
 
 	self.name = reward.name
-	self.state = (self.state and self.state ~= PROGRESS_STATE.EXPIRED) and self.state or PROGRESS_STATE.NOT_STARTED
+	self.state = self.state or PROGRESS_STATE.NOT_STARTED
 	self.pendingObjectives = {}
 	self.fulfilledObjectives = {}
 	self.numObjectives = #reward.objectives
