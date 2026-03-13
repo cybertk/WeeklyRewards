@@ -35,7 +35,7 @@ local defaultDB = {
 			windowScale = 100,
 			windowMaxRelativeWidth = 80,
 			windowMaxRows = 20,
-			windowBackgroundColor = { r = 0.11372549019, g = 0.14117647058, b = 0.16470588235, a = 1 },
+			windowBackgroundColor = { r = 0, g = 0, b = 0, a = 1 },
 			windowBorder = true,
 		},
 		utils = {
@@ -73,6 +73,11 @@ function WeeklyRewards:MigrateDB()
 			reward.objectives[1].maxCompletion = 1
 			reward.minimumLevel = 90
 		end
+	end
+
+	local color = self.db.global.main.windowBackgroundColor
+	if color.r == 0.11372549019 and color.g == 0.14117647058 and color.b == 0.16470588235 then
+		color = { r = 0, g = 0, b = 0, a = 1 }
 	end
 end
 
