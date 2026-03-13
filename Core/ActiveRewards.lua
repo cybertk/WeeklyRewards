@@ -146,11 +146,6 @@ function ActiveRewards:_FindCandidatesToScan(candidates)
 	local activeEvents = Util:GetCalendarActiveEvents()
 
 	return Util:Filter(candidates, function(candidate)
-		if playerLevel < candidate.minimumLevel then
-			Util:Debug("playerLevel is not qualified: ", candidate.id)
-			return false
-		end
-
 		if candidate.unlockEvent and activeEvents[candidate.unlockEvent] == nil then
 			Util:Debug("Event is not active: ", candidate.id)
 			return false
