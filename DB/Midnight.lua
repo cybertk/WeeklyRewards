@@ -3,9 +3,29 @@ local _, namespace = ...
 local RewardsGroup = {
 	PINNACLE_CACHE = "Pinnacle Cache",
 	PVP = "PvP",
+	LEVELING = "Leveling",
+	PREY = "Prey",
 }
 
+local function range(start, stop, step)
+	step = step or 1
+	local t = {}
+	for i = start, stop, step do
+		table.insert(t, i)
+	end
+	return t
+end
+
 namespace.DB.rewardCandidiates["MN"] = {
+	{
+		id = "mn-hope",
+		key = "Hope",
+		group = RewardsGroup.LEVELING,
+		minimumLevel = 80,
+		maximumLevel = 89,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 95468 } }, -- Hope in the Darkest Corners
+	},
 	{
 		id = "mn-spark",
 		key = "Spark",
@@ -132,6 +152,36 @@ namespace.DB.rewardCandidiates["MN"] = {
 			{ quest = 91390, unlockQuest = 94865 }, -- Special Assignment: What Remains of a Temple Broken
 			{ quest = 91796, unlockQuest = 94866 }, -- Special Assignment: Ours Once More!
 			{ quest = 92139, unlockQuest = 95435 }, -- Special Assignment: Shade and Claw
+		},
+	},
+	{
+		id = "mn-prey-n",
+		key = "|A:worldquest-Prey-Crystal:16:16|aNormal",
+		description = "Weekly Prey Quests (Normal)",
+		group = RewardsGroup.PREY,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 0, questPool = range(91095, 91124), maxCompletion = 4 } },
+	},
+	{
+		id = "mn-prey-h",
+		key = "|A:worldquest-Prey-Crystal:16:16|aHard",
+		description = "Weekly Prey Quests (Hard)",
+		group = RewardsGroup.PREY,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 0, questPool = tAppendAll(range(91210, 91242, 2), range(91243, 91255)), maxCompletion = 4 } },
+	},
+
+	{
+		id = "mn-prey-m",
+		key = "|A:worldquest-Prey-Crystal:16:16|aNightmare",
+		description = "Weekly Prey Quests (Nightmare)",
+		group = RewardsGroup.PREY,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 0, questPool = tAppendAll(range(91211, 91241, 2), range(91256, 91269)), maxCompletion = 4 },
 		},
 	},
 }
