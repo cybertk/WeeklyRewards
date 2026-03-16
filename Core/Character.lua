@@ -235,7 +235,7 @@ function Character:Scan(activeRewards)
 		end
 
 		local progress = self.progress[reward.id]
-		if progress == nil or next(progress) == nil or progress:ObjectivesCount() == 0 or progress:IsExpired() then
+		if progress == nil or next(progress) == nil or progress:ObjectivesCount() ~= progress.numObjectives or progress:IsExpired() then
 			return true
 		end
 
