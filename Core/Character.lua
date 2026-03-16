@@ -230,7 +230,7 @@ function Character:Scan(activeRewards)
 	self:UpdateCovenant()
 
 	local rewardsToScan = Util:Filter(activeRewards, function(reward)
-		if self.level < reward.minimumLevel then
+		if not reward:PlayerMeetsRequiredLevel(self.level) then
 			return false
 		end
 

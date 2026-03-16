@@ -13,7 +13,8 @@ local Reward = {
 	description = nil,
 	objectives = {},
 	rolloverObjectives = nil,
-	minimumLevel = "",
+	minimumLevel = nil,
+	maximunLevel = nil,
 	resetTime = nil,
 	startTime = nil,
 	items = nil,
@@ -51,6 +52,18 @@ function Reward:New(o)
 	end
 
 	return o
+end
+
+function Reward:PlayerMeetsRequiredLevel(level)
+	if level < self.minimumLevel then
+		return false
+	end
+
+	if self.maximumLevel and level > self.maximumLevel then
+		return false
+	end
+
+	return true
 end
 
 function Reward:AddObjective(objective)

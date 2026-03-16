@@ -674,13 +674,13 @@ function Main:AddRewardColumns()
 			cell = function(character)
 				local progress = character.progress[reward.id]
 
-				if progress == nil and character.level >= reward.minimumLevel then
+				if progress == nil and reward:PlayerMeetsRequiredLevel(character.level) then
 					return ""
 				end
 
 				local text
 				if progress == nil then
-					text = character.level >= reward.minimumLevel and " " or "-"
+					text = reward:PlayerMeetsRequiredLevel(character.level) and " " or "-"
 				else
 					text = progress.total < 100 and format("%d / %d", progress.position, progress.total)
 						or format("%.0f%%", progress.position / progress.total * 100)
@@ -701,7 +701,10 @@ function Main:AddRewardColumns()
 						if progress == nil or progress:ObjectivesCount() == 0 then
 							GameTooltip:AddLine(YELLOW_FONT_COLOR:WrapTextInColorCode(reward:GetDescription(true)))
 							GameTooltip:AddLine(" ")
-							GameTooltip:AddLine(progress and L["progress_not_started"] or ITEM_MIN_LEVEL:format(reward.minimumLevel))
+							GameTooltip:AddLine(
+								progress and L["progress_not_started"]
+									or ITEM_MIN_LEVEL:format(reward.maximumLevel or reward.minimumLevel)
+							)
 						else
 							self:AddProgressToGameTooltip(progress)
 							cellFrame.hasInstructions = nil

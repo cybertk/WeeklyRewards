@@ -226,6 +226,7 @@ function ActiveRewards:Update(candidates)
 			group = candidate.group,
 			expansion = candidate.expansion,
 			minimumLevel = candidate.minimumLevel,
+			maximumLevel = candidate.maximumLevel,
 			rollover = candidate.rollover,
 			items = candidate.items,
 		})
