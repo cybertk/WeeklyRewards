@@ -16,6 +16,13 @@ local function range(start, stop, step)
 	return t
 end
 
+local function concat(t1, t2)
+	local t = {}
+	tAppendAll(t, t1)
+	tAppendAll(t, t2)
+	return t
+end
+
 namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-hope",
@@ -170,7 +177,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 0, questPool = tAppendAll(range(91210, 91242, 2), range(91243, 91255)), maxCompletion = 4 } },
+		entries = { { quest = 0, questPool = concat(range(91210, 91242, 2), range(91243, 91255)), maxCompletion = 4 } },
 	},
 
 	{
@@ -181,7 +188,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 0, questPool = tAppendAll(range(91211, 91241, 2), range(91256, 91269)), maxCompletion = 4 },
+			{ quest = 0, questPool = concat(range(91211, 91241, 2), range(91256, 91269)), maxCompletion = 4 },
 		},
 	},
 }
