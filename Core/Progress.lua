@@ -86,13 +86,14 @@ function RewardProgress:Init(reward)
 
 			for i, quest in ipairs(objective.questPool) do
 				local unlockProfession = objective.unlockProfession and objective.unlockProfession[i]
+				local items = objective.items and { objective.items[i] } or nil
 
 				if
 					objective.maxCompletion
 					and WAPI_IsQuestFlaggedCompleted(quest)
 					and (objective.unlockItem == nil or WAPI_GetItemCount(objective.unlockItem) > 0)
 				then
-					table.insert(self.fulfilledObjectives, { quest = quest, prior = true })
+					table.insert(self.fulfilledObjectives, { quest = quest, items = items, profession = unlockProfession, prior = true })
 					numCompleted = numCompleted + 1
 					if numCompleted >= objective.maxCompletion then
 						break
@@ -106,15 +107,12 @@ function RewardProgress:Init(reward)
 					or (objective.factionMask and factionNameToEnum[UnitFactionGroup("player")] == objective.factionMask[i])
 					or factionNameToEnum[UnitFactionGroup("player")] == WAPI_GetQuestFactionGroup(quest)
 				then
-					table.insert(
-						self.pendingObjectives,
-						{ quest = quest, items = objective.items and { objective.items[i] } or nil, profession = unlockProfession }
-					)
+					table.insert(self.pendingObjectives, { quest = quest, items = items, profession = unlockProfession })
 					numObjectives = numObjectives + 1
 				end
 			end
 
-			if numObjectives == 0 and objective.quest then
+			if numObjectives == 0 then
 				isSelectionPending = true
 			end
 
@@ -480,20 +478,36 @@ end
 function RewardProgress:GetCachedObjectiveName(objective)
 	if objective.name then
 		return Util:ResolveTags(objective.name)
-	elseif objective.items and #objective.items > 0 then
-		return self:GetCachedItemName(objective.items[1], objective.items.amount and objective.items.amount > 1 and objective.items.amount)
 	end
 
-	local name = WAPI_GetQuestName(objective.quest)
-	if name ~= nil and #name > 0 then
-		if objective.profession then
-			name = CreateSimpleTextureMarkup(Util:GetProfessionIcon(objective.profession), 13, 13) .. " " .. name
+	local name
+
+	if objective.items and #objective.items > 0 then
+		local item = objective.items[1]
+		local quality = C_Item.GetItemQualityByID(item)
+
+		name = C_Item.GetItemNameByID(item)
+		if quality and name then
+			name = ITEM_QUALITY_COLORS[quality].color:WrapTextInColorCode(name)
 		end
-
-		return format("%s %s", CreateAtlasMarkup("quest-recurring-available", 13, 13), name)
+	else
+		name = WAPI_GetQuestName(objective.quest)
 	end
 
-	return "Loading"
+	if not name then
+		return LFG_LIST_LOADING
+	end
+
+	local icon
+	if objective.profession then
+		icon = CreateSimpleTextureMarkup(Util:GetProfessionIcon(objective.profession), 13, 13)
+	elseif objective.items then
+		icon = C_Item.GetItemIconByID(objective.items[1])
+	else
+		icon = CreateAtlasMarkup("quest-recurring-available", 13, 13)
+	end
+
+	return format("%s %s", icon or "", name)
 end
 
 function RewardProgress:GetCachedItemName(item, amount)

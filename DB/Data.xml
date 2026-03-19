@@ -5,6 +5,7 @@
     <Script file="Shadowlands.lua" />
     <Script file="GreatVault.lua" />
     <Script file="Delve.lua" />
+    <Script file="Profession.lua" />
     <Script file="Timewalking.lua" />
     <Script file="DarkmoonFaire.lua" />
     <Script file="LunarFestival.lua" />
