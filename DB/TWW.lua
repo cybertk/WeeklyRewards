@@ -5,7 +5,6 @@ local RewardsGroup = {
 	WEEKLY_CACHE = "Weekly Cache",
 	SIREN_ISLE = "Siren Isle",
 	UNDERMINE = "Undermine",
-	DELVE = "Delve",
 	NIGHTFALL = "Nightfall",
 	KARESH = "K'aresh",
 }
@@ -21,29 +20,6 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 			{ quest = 81630 }, -- Kordac, the Dormant Protector
 			{ quest = 81653 }, -- Shurrai, Atrocity of the Undersea
 			{ quest = 82653 }, -- Aggregation of Horrors
-		},
-	},
-	{
-		id = "tww-dkeys",
-		key = "DelveKeys",
-		description = "Weekly Delve Keys",
-		group = RewardsGroup.DELVE,
-		pick = 8,
-		minimumLevel = 80,
-		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = {
-			{ quest = 91175, items = { 238527 }, loot = { 413590, name = { 228942 } } }, -- Bountiful Coffer
-			{ quest = 91176, items = { 238527 } }, -- Restored Coffer Key
-			{ quest = 91177, items = { 238527 } }, -- Restored Coffer Key
-			{ quest = 91178, items = { 238527 } }, -- Restored Coffer Key
-			{ quest = 84736, items = { 245653, amount = 50 } }, -- Coffer Key Shard
-			{ quest = 84737, items = { 245653, amount = 50 } }, -- Coffer Key Shard
-			{ quest = 84738, items = { 245653, amount = 50 } }, -- Coffer Key Shard
-			{ quest = 84739, items = { 245653, amount = 50 } }, -- Coffer Key Shard
-		},
-		items = {
-			{ currency = 3028, amount = 4 }, -- Restored Coffer Key
-			{ item = 245653, amount = 200 }, -- Coffer Key Shard
 		},
 	},
 	{
@@ -431,35 +407,6 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		},
 	},
 	{
-		id = "tww-dmap",
-		key = "DelveMap",
-		description = "Weekly Delver's Bounty Map",
-		group = RewardsGroup.DELVE,
-		minimumLevel = 80,
-		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = {
-			{ quest = 86371, items = { 248142 }, loot = { 461482, name = { 235559 } } }, -- Hidden Trove
-		},
-		items = { { item = 248142, amount = 1 } },
-	},
-	{
-		id = "tww-dstash",
-		key = "GildedStash",
-		description = "Weekly Gilded Stash in Delves",
-		group = RewardsGroup.DELVE,
-		minimumLevel = 80,
-		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = {
-			{ quest = 0, progressType = 4 },
-		},
-		items = {
-			{
-				name = "3 |cffffffff[Gilded Stash]|r",
-				texture = 5872049, -- Gilded Stash
-			},
-		},
-	},
-	{
 		id = "tww-incursion",
 		key = "Incursion",
 		description = "Daily incursions in Hollowfall or Azj-Kahet",
@@ -492,28 +439,6 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 				},
 			},
 		},
-	},
-	{
-		id = "tww-belt",
-		key = "D.I.S.C.",
-		description = "|T6883015:12|t |cffa335ee[Durable Information Securing Container]|r(D.I.S.C. Belt)|n|n"
-			.. "The belt starts at Item Level 691 by completing the quest offered by Dagran II in Dornogal.|n|n"
-			.. "|T134394:12|t |cffa335ee[Titan Memory Card]|r upgrades the belt to maximum Item Level 701 by 3 times.",
-		group = RewardsGroup.DELVE,
-		minimumLevel = 80,
-		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		rollover = true,
-		entries = {
-			{
-				quest = 0,
-				unlockQuest = 91009, -- Durable Information Securing Container
-				progressType = 3,
-				items = { 242664, 245964, 245965, 245966 },
-				upgradeItem = 244311, -- Titan Memory Card
-				itemLevelRange = { 691, 694, 697, 701 },
-			},
-		},
-		items = { { item = 244311, amount = 1 }, { item = 244696, amount = 1 } },
 	},
 	{
 		id = "tww-sa-ka",

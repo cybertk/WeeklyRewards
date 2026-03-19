@@ -191,4 +191,12 @@ namespace.DB.rewardCandidiates["MN"] = {
 			{ quest = 0, questPool = concat(range(91211, 91241, 2), range(91256, 91269)), maxCompletion = 4 },
 		},
 	},
+	{
+		id = "mn-prey-beacon",
+		key = "|A:worldquest-Prey-Crystal:16:16|aBeacon",
+		group = RewardsGroup.PREY,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 94446 } }, -- A Nightmarish Task
+	},
 }

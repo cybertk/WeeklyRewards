@@ -18,7 +18,7 @@ function GildedStashProgress:_UpdateRecords()
 		if self.records == nil then
 			self.records = {}
 			table.insert(self.records, {
-				text = RED_FONT_COLOR:WrapTextInColorCode("Go to Khaz Algar to update the progress"),
+				text = RED_FONT_COLOR:WrapTextInColorCode("Go to Silvermoon City to update the progress"),
 				fulfilled = 0,
 				required = 1,
 			})
