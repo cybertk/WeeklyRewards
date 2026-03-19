@@ -747,7 +747,7 @@ function Main:AddProgressToGameTooltip(progress)
 		status = "|cnGRAY_FONT_COLOR:(" .. RAID_INSTANCE_EXPIRES_EXPIRED .. ")|r"
 	end
 
-	if progress:ObjectivesCount() > 1 then
+	if progress.numObjectives > 1 then
 		-- Show quests as high-level objectives
 		GameTooltip:AddDoubleLine(YELLOW_FONT_COLOR:WrapTextInColorCode(progress.name), status)
 		progress:ForEachObjective(function(objective, completed)

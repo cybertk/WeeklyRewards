@@ -308,7 +308,7 @@ function RewardProgress:Update(completedQuest)
 		self:_FinalizeRecords()
 		-- Drop remaining optional objectives
 		self.pendingObjectives = {}
-	elseif #self.fulfilledObjectives > 0 then
+	elseif #self.fulfilledObjectives > 0 or self.numObjectives > 1 then
 		-- Multi rewards scenerio
 		newState = PROGRESS_STATE.IN_PROGRESS
 		self.position = #self.fulfilledObjectives
