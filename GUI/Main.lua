@@ -668,7 +668,6 @@ function Main:AddRewardColumns()
 				cellFrame:SetScript("OnEvent", nil)
 				GameTooltip:Hide()
 			end,
-			width = 70,
 			toggleHidden = true,
 			align = "CENTER",
 			cell = function(character)
@@ -941,7 +940,7 @@ function Main:Redraw()
 
 			---@type WK_TableDataColumn
 			local column = {
-				width = math.max(text:GetStringWidth() + 16, dataColumn.width),
+				width = math.max(text:GetStringWidth() + 16, dataColumn.width or 46),
 				align = dataColumn.align or "LEFT",
 			}
 			table.insert(tableData.columns, column)
