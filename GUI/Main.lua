@@ -680,6 +680,8 @@ function Main:AddRewardColumns()
 				local text
 				if progress == nil then
 					text = reward:PlayerMeetsRequiredLevel(character.level) and " " or "-"
+				elseif progress.total == 0 then
+					text = "-"
 				else
 					text = progress.total < 100 and format("%d / %d", progress.position, progress.total)
 						or format("%.0f%%", progress.position / progress.total * 100)
