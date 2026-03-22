@@ -378,6 +378,21 @@ function Util:AddCovenantSanctumUpgradeToTooltip(tooltip, covenant, upgrade)
 	end
 end
 
+function Util:GetCurrentSeasonWeek()
+	local seasonStartWeek = time({ year = 2026, month = 3, day = 22 })
+
+	return math.ceil((GetServerTime() + C_DateAndTime.GetSecondsUntilWeeklyReset() - seasonStartWeek) / 7 / SECONDS_PER_DAY)
+end
+
+function Util:GetCurrentSeasonName()
+	local expansion = C_SeasonInfo.GetCurrentDisplaySeasonExpansion()
+	local season = C_PvP.GetUIDisplaySeason()
+
+	local WEEK_NAME = "Week %d"
+
+	return EXPANSION_SEASON_NAME:format(GetExpansionName(expansion), season) .. " - " .. WEEK_NAME:format(self:GetCurrentSeasonWeek())
+end
+
 Util.TagCache = {}
 function Util:ResolveTags(s)
 	local resolvedString = s:gsub("{(%l+):(%d+)(%l*)}", function(type, id, suffix)
