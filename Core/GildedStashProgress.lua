@@ -5,10 +5,10 @@ local Util = namespace.Util
 local GildedStashProgress = namespace.RewardProgress:New()
 namespace.GildedStashProgress = GildedStashProgress
 
-local GILDED_STASH_SPELL_ID = 6659
+local GILDED_STASH_SPELL_ID = 7591
 
 function GildedStashProgress:hasStarted()
-	return self.total == 3
+	return self.total == 4
 end
 
 function GildedStashProgress:_UpdateRecords()
@@ -26,19 +26,19 @@ function GildedStashProgress:_UpdateRecords()
 		return
 	end
 
-	local record, fulfilled = widget.spellInfo.tooltip:match("COLOR:([^%d]*(%d)/3)")
+	local record, fulfilled = widget.spellInfo.tooltip:match("COLOR:([^%d]*(%d)/4)")
 
 	fulfilled = tonumber(fulfilled) or 0
 
 	self.records = { {
 		text = record or "",
 		fulfilled = fulfilled,
-		required = 3,
+		required = 4,
 	} }
 	self.position = fulfilled
-	self.total = 3
+	self.total = 4
 
-	if self.position == 3 then
+	if self.position == 4 then
 		self.fulfilledObjectives = self.pendingObjectives
 		self.pendingObjectives = {}
 	end
