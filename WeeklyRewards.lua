@@ -81,6 +81,18 @@ function WeeklyRewards:MigrateDB()
 	if color.r == 0.11372549019 and color.g == 0.14117647058 and color.b == 0.16470588235 then
 		color = { r = 0, g = 0, b = 0, a = 1 }
 	end
+
+	local playerGUID = UnitGUID("player")
+	if self.db.global.characters[playerGUID] == nil then
+		return
+	end
+
+	for n, p in pairs(self.db.global.characters[playerGUID].progress) do
+		if n == "delve-map" then
+			local objective = p.pendingObjectives[#p.pendingObjectives] or p.fulfilledObjectives[#p.fulfilledObjectives]
+			objective.loot = { 581922, name = { 252415 } }
+		end
+	end
 end
 
 function WeeklyRewards:PopulateExpiredProgress()

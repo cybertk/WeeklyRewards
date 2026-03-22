@@ -13,7 +13,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 86371, items = { 252415 }, loot = { 461482, name = { 252415 } } }, -- Hidden Trove
+			{ quest = 86371, items = { 252415 }, loot = { 581922, name = { 252415 } } }, -- Hidden Trove
 		},
 		items = { { item = 252415, amount = 1 } },
 	},
