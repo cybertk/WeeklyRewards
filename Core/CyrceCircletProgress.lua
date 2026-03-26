@@ -36,8 +36,6 @@ function CyrceCircletProgress:_UpdateRecords()
 	})
 
 	if self.position == self.total then
-		self.fulfilledObjectives = self.pendingObjectives
-		self.pendingObjectives = {}
 		return
 	end
 

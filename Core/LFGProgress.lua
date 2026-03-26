@@ -24,9 +24,4 @@ function LFGProgress:_UpdateRecords()
 		fulfilled = fulfilled,
 		required = 1,
 	})
-
-	if fulfilled == 1 then
-		self.fulfilledObjectives = self.pendingObjectives
-		self.pendingObjectives = {}
-	end
 end

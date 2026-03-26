@@ -259,7 +259,7 @@ function Character:Scan(activeRewards)
 		local progress = self.progress[reward.id]
 
 		if not progress or progress:IsExpired() then
-			progress = ProgressFactory:Create(reward.objectives[1].progressType)
+			progress = ProgressFactory:Create(reward.objectives[1].currency and 6 or reward.objectives[1].progressType)
 		end
 
 		if progress:Init(reward) then

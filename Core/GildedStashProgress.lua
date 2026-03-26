@@ -37,9 +37,4 @@ function GildedStashProgress:_UpdateRecords()
 	} }
 	self.position = fulfilled
 	self.total = 4
-
-	if self.position == 4 then
-		self.fulfilledObjectives = self.pendingObjectives
-		self.pendingObjectives = {}
-	end
 end

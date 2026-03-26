@@ -7,6 +7,7 @@
     <Script file="CyrceCircletProgress.lua" />
     <Script file="GildedStashProgress.lua" />
     <Script file="EncounterProgress.lua" />
+    <Script file="CurrencyProgress.lua" />
     <Script file="ProgressFactory.lua" />
     <Script file="Character.lua" />
     <Script file="CharacterStore.lua" />

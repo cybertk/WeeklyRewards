@@ -313,14 +313,19 @@ function RewardProgress:Update(completedQuest)
 	elseif #self.pendingObjectives == 1 then
 		-- Single reward scenerio: Track records for this case
 		self:_UpdateRecords()
-		if self.position > 0 or WAPI_IsOnQuest(self.pendingObjectives[1].quest) then
-			newState = PROGRESS_STATE.IN_PROGRESS
-		end
 
 		if self.total == 0 then
 			-- No records were found in this case, fallback to track rewards count
 			Util:Debug("No objectives found:", self.name)
 			self.total = 1
+		end
+
+		if self.position == self.total then
+			table.insert(self.fulfilledObjectives, self.pendingObjectives[1])
+			self.pendingObjectives = {}
+			newState = PROGRESS_STATE.CLAIMED
+		elseif self.position > 0 or (self.pendingObjectives[1].quest and WAPI_IsOnQuest(self.pendingObjectives[1].quest)) then
+			newState = PROGRESS_STATE.IN_PROGRESS
 		end
 	end
 

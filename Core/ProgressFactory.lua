@@ -9,6 +9,7 @@ local PROGRESS_TYPE = {
 	CyrceCirclet = 3,
 	GildedStash = 4,
 	Encounter = 5,
+	Currency = 6,
 }
 
 function ProgressFactory:Create(type, o)

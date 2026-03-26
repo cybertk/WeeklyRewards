@@ -66,9 +66,4 @@ function EncounterProgress:_UpdateRecords()
 			self:_AddRecord({ text = format("%s (%s)", name, difficultyName), fulfilled = fulfilled and 1 or 0, required = 1 })
 		end
 	end
-
-	if self.position == self.total then
-		self.fulfilledObjectives = self.pendingObjectives
-		self.pendingObjectives = {}
-	end
 end
