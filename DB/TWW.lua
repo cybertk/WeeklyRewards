@@ -1,7 +1,7 @@
 local _, namespace = ...
 
 local RewardsGroup = {
-	PINNACLE_CACHE = "Pinnacle Cache",
+	PINNACLE_CACHE = "Pinnacle Cache - TWW",
 	WEEKLY_CACHE = "Weekly Cache",
 	SIREN_ISLE = "Siren Isle",
 	UNDERMINE = "Undermine",
