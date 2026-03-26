@@ -34,4 +34,15 @@ namespace.DB.rewardCandidiates["Delve"] = {
 			},
 		},
 	},
+	{
+		id = "delve-shards",
+		key = "|A:delves-bountiful:16:16|aShards",
+		description = "Weekly {currency:3310}",
+		group = RewardsGroup.DELVE,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 0, currency = 3310, loot = { 584514, name = { 252415 } } },
+		},
+	},
 }
