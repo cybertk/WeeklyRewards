@@ -625,7 +625,15 @@ function Main:AddCharacterColumns()
 			width = 90,
 			align = "CENTER",
 			cell = function(character)
-				return { text = character.location }
+				return {
+					text = character.location,
+					onEnter = function(cellFrame)
+						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+						GameTooltip:AddLine(character.location)
+						GameTooltip:Show()
+					end,
+					onLeave = GameTooltip_Hide,
+				}
 			end,
 		},
 		{
