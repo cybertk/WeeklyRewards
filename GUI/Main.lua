@@ -579,10 +579,10 @@ function Main:AddCharacterColumns()
 		{
 			name = FACTION,
 			key = "factionName",
-			width = 60,
+			width = 50,
 			align = "CENTER",
 			cell = function(character)
-				return { text = character.factionName }
+				return { text = CreateAtlasMarkup(format("questlog-questtypeicon-%s", character.faction:lower()), 20, 20) }
 			end,
 		},
 		{

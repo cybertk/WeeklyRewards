@@ -48,15 +48,12 @@ function Character:New(o)
 end
 
 function Character:_Init()
-	local _localizedClassName, classFile, _classID = UnitClass("player")
-	local _englishFactionName, localizedFactionName = UnitFactionGroup("player")
-
 	self.name = UnitName("player")
 	self.GUID = UnitGUID("player")
 	self.realmName = GetRealmName()
 	self.level = UnitLevel("player")
-	self.factionName = localizedFactionName
-	self.class = classFile
+	self.faction = UnitFactionGroup("player")
+	self.class = select(2, UnitClass("player"))
 	self.progress = {}
 	self.lastUpdate = WAPI.GetServerTime()
 	self.location = GetZoneText()

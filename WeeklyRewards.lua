@@ -77,6 +77,17 @@ function WeeklyRewards:MigrateDB()
 		end
 	end
 
+	local factionMap = {}
+	for i = 1, 2 do
+		local faction = C_CreatureInfo.GetFactionInfo(i)
+		factionMap[faction.name] = faction.groupTag
+	end
+	for _, p in pairs(self.db.global.characters) do
+		if p.factionName then
+			p.faction = factionMap[p.factionName]
+		end
+	end
+
 	local color = self.db.global.main.windowBackgroundColor
 	if color.r == 0.11372549019 and color.g == 0.14117647058 and color.b == 0.16470588235 then
 		color = { r = 0, g = 0, b = 0, a = 1 }
