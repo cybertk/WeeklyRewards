@@ -22,6 +22,7 @@ namespace.DB.rewardCandidiates["PROFESSION"] = {
 					93694,
 					93695,
 					93696,
+					93697,
 					93698,
 					93699,
 					93700,

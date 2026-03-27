@@ -72,7 +72,7 @@ function WeeklyRewards:MigrateDB()
 		elseif reward.id == "mn-spark" then
 			reward.objectives[1].maxCompletion = 1
 			reward.minimumLevel = 90
-		elseif reward.id == "mn-prey-h" or reward.id == "mn-prey-m" then
+		elseif reward.id == "mn-prey-h" or reward.id == "mn-prey-m" or reward.id == "mn-pquests" then
 			reward.objectives[1].questPool = candidate.entries[1].questPool
 		end
 	end
