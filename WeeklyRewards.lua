@@ -74,6 +74,8 @@ function WeeklyRewards:MigrateDB()
 			reward.minimumLevel = 90
 		elseif reward.id == "mn-prey-h" or reward.id == "mn-prey-m" or reward.id == "mn-pquests" then
 			reward.objectives[1].questPool = candidate.entries[1].questPool
+		elseif reward.id == "mn-hope" or reward.id == "mn-prey-beacon" then
+			reward.rollover = true
 		end
 	end
 

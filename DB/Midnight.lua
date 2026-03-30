@@ -30,6 +30,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		group = RewardsGroup.LEVELING,
 		minimumLevel = 80,
 		maximumLevel = 89,
+		rollover = true,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 95468 } }, -- Hope in the Darkest Corners
 	},
@@ -196,6 +197,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		key = "|A:worldquest-Prey-Crystal:16:16|aBeacon",
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
+		rollover = true,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 94446 } }, -- A Nightmarish Task
 	},
