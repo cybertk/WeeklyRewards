@@ -509,7 +509,7 @@ function RewardProgress:GetCachedObjectiveName(objective)
 	if objective.profession then
 		icon = CreateSimpleTextureMarkup(Util:GetProfessionIcon(objective.profession), 13, 13)
 	elseif objective.items then
-		icon = C_Item.GetItemIconByID(objective.items[1])
+		icon = CreateSimpleTextureMarkup(C_Item.GetItemIconByID(objective.items[1]), 13, 13)
 	else
 		icon = CreateAtlasMarkup("quest-recurring-available", 13, 13)
 	end
