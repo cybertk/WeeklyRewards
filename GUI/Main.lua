@@ -697,6 +697,8 @@ function Main:AddRewardColumns()
 					text = reward:PlayerMeetsRequiredLevel(character.level) and " " or "-"
 				elseif progress.total == 0 then
 					text = "-"
+				elseif progress.claimedAt and progress:IsExpired() then
+					text = CreateAtlasMarkup("checkmark-minimal-disabled", 15, 15)
 				else
 					text = progress.total < 100 and format("%d / %d", progress.position, progress.total)
 						or format("%.0f%%", progress.position / progress.total * 100)
