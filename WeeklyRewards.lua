@@ -63,17 +63,6 @@ function WeeklyRewards:MigrateDB()
 
 		if reward.id == "tww-vault" then
 			reward.id = "vault"
-		elseif reward.id == "mn-soiree" then
-			reward.objectives[1].maxCompletion = 1
-			reward.objectives[1].quest = 91966
-			reward.name = "Runestones"
-		elseif reward.id == "mn-legends" then
-			reward.objectives[1].maxCompletion = 1
-		elseif reward.id == "mn-spark" then
-			reward.objectives[1].maxCompletion = 1
-			reward.minimumLevel = 90
-		elseif reward.id == "mn-prey-h" or reward.id == "mn-prey-m" or reward.id == "mn-pquests" then
-			reward.objectives[1].questPool = candidate.entries[1].questPool
 		elseif reward.id == "mn-hope" or reward.id == "mn-prey-beacon" then
 			reward.rollover = true
 		end
@@ -99,52 +88,6 @@ function WeeklyRewards:MigrateDB()
 	if self.db.global.characters[playerGUID] == nil then
 		return
 	end
-
-	for n, p in pairs(self.db.global.characters[playerGUID].progress) do
-		if n == "delve-map" then
-			local objective = p.pendingObjectives[#p.pendingObjectives] or p.fulfilledObjectives[#p.fulfilledObjectives]
-			objective.loot = { 581922, name = { 252415 } }
-		end
-	end
-end
-
-function WeeklyRewards:PopulateExpiredProgress()
-	if self.db.global.populatedExpiredProgress then
-		return
-	end
-
-	local rewards = {}
-	for _, reward in ipairs(self.db.global.activeRewards) do
-		rewards[reward.name] = reward
-	end
-
-	local resetStartTime = C_DateAndTime.GetWeeklyResetStartTime()
-
-	CharacterStore.Get():ForEach(function(x)
-		local store = self.archive:Load("RawData", x.GUID)
-		local populated = {}
-
-		x.progress = x.progress or {}
-
-		for i = #store, 1, -1 do
-			local progress = store[i]
-			if populated[progress.name] then
-				break
-			end
-
-			local reward = rewards[progress.name]
-			if reward and x.progress[reward.id] == nil then
-				x.progress[reward.id] = namespace.RewardProgress:New(CopyTable(progress))
-				x.progress[reward.id].state = 3
-
-				populated[progress.name] = true
-			end
-		end
-	end, function(x)
-		return x.lastUpdate < resetStartTime
-	end)
-
-	self.db.global.populatedExpiredProgress = true
 end
 
 function WeeklyRewards:OnInitialize()
@@ -258,7 +201,6 @@ function WeeklyRewards:OnEnable()
 		end
 
 		self:UpdateActiveRewards()
-		self:PopulateExpiredProgress()
 	end)
 
 	self:RegisterEvent("PLAYER_LEVEL_CHANGED", function()
