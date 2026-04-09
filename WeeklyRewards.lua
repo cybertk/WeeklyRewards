@@ -231,6 +231,10 @@ function WeeklyRewards:OnEnable()
 	self:RegisterEvent("QUEST_ACCEPTED", function()
 		self:UpdateActiveRewards()
 	end)
+
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", function()
+		character:UpdateParty()
+	end)
 end
 
 function WeeklyRewards:OnDisable()

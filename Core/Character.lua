@@ -324,3 +324,69 @@ function Character:GetCovenantName()
 
 	return Cache.covenantNames[self.covenant]
 end
+
+function Character:UpdateParty()
+	if IsInRaid() or GetNumGroupMembers(LE_PARTY_CATEGORY_HOME) < 2 then
+		return
+	end
+
+	local members = {}
+
+	if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+		for _, member in ipairs(GetHomePartyInfo()) do
+			table.insert(members, { "", "", ("-"):split(member) })
+		end
+	else
+		for i = 1, GetNumGroupMembers(LE_PARTY_CATEGORY_HOME) - 1 do
+			local unit = "party" .. i
+			local account = C_BattleNet.GetAccountInfoByGUID(UnitGUID(unit))
+
+			table.insert(members, { account and account.battleTag or "", select(2, UnitClass(unit)), UnitName(unit) })
+		end
+	end
+
+	self.party = members
+end
+
+function Character:InviteLastParty()
+	if not C_PartyInfo.CanInvite() then
+		Util:Debug("Cannot invite party members.")
+		return
+	end
+
+	for _, memeber in ipairs(self.party or {}) do
+		local unit = format("%s-%s", select(3, unpack(memeber)))
+
+		if not UnitInParty(unit) and not UnitInRaid(unit) then
+			C_PartyInfo.InviteUnit(unit)
+			Util:Debug("Inviting " .. unit .. " to party.")
+		else
+			Util:Debug(unit .. " is already in the party.")
+		end
+	end
+end
+
+function Character:AddPartyToTooltip(tooltip, instruction)
+	if self.party == nil or #self.party == 0 then
+		return
+	end
+
+	if Cache.battleTag == nil then
+		local account = C_BattleNet.GetAccountInfoByGUID(UnitGUID("player"))
+
+		Cache.battleTag = account.battleTag
+		Cache.accountID = account.gameAccountInfo.gameAccountID
+	end
+
+	tooltip:AddLine(" ")
+	tooltip:AddDoubleLine("Last Party:", instruction)
+
+	for _, member in ipairs(self.party) do
+		local battleTag, class, name, realm = unpack(member)
+
+		local warbandIcon = Cache.battleTag == battleTag and CreateAtlasMarkup("warbands-icon") or ""
+		local color = class == "" and GRAY_FONT_COLOR or C_ClassColor.GetClassColor(class)
+
+		tooltip:AddLine(format("%s%s - %s%s|r", color:GenerateHexColorMarkup(), name, realm or "", warbandIcon))
+	end
+end

@@ -629,10 +629,19 @@ function Main:AddCharacterColumns()
 					text = character.location,
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						GameTooltip:AddLine(character.location)
+						GameTooltip:SetText(character.location, HIGHLIGHT_FONT_COLOR:GetRGB())
+
+						local instruction = "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. INVITE .. ")|r"
+						character:AddPartyToTooltip(GameTooltip, CharacterStore.IsCurrentPlayer(character) and instruction or "")
+
 						GameTooltip:Show()
 					end,
 					onLeave = GameTooltip_Hide,
+					onClick = function()
+						if CharacterStore.IsCurrentPlayer(character) then
+							character:InviteLastParty()
+						end
+					end,
 				}
 			end,
 		},
