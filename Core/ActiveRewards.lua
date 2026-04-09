@@ -207,7 +207,7 @@ function ActiveRewards:Reset(teardown_func, force)
 	end
 end
 
-function ActiveRewards:Update(candidates)
+function ActiveRewards:Update(candidates, OnRewardAddedCallback)
 	local candidatesToScan = self:_FindCandidatesToScan(candidates)
 
 	Util:Debug("Scanning candidates: ", #candidatesToScan)
@@ -251,6 +251,9 @@ function ActiveRewards:Update(candidates)
 		end
 
 		self:_Add(reward)
+		if OnRewardAddedCallback then
+			OnRewardAddedCallback(reward)
+		end
 	end
 
 	self:Sort()

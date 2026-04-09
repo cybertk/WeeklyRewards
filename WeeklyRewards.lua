@@ -52,6 +52,8 @@ function WeeklyRewards:MigrateDB()
 		candidatesMap[candidate.id] = candidate
 	end
 
+	local rewardsMap = {}
+
 	for _, reward in ipairs(self.db.global.activeRewards) do
 		local candidateID = string.gsub(reward.id, "([-%w+]):%d+", "%1")
 		local candidate = candidatesMap[candidateID]
@@ -66,6 +68,8 @@ function WeeklyRewards:MigrateDB()
 		elseif reward.id == "mn-hope" or reward.id == "mn-prey-beacon" then
 			reward.rollover = true
 		end
+
+		rewardsMap[reward.id] = reward
 	end
 
 	local factionMap = {}
@@ -82,6 +86,15 @@ function WeeklyRewards:MigrateDB()
 	local color = self.db.global.main.windowBackgroundColor
 	if color.r == 0.11372549019 and color.g == 0.14117647058 and color.b == 0.16470588235 then
 		color = { r = 0, g = 0, b = 0, a = 1 }
+	end
+
+	for _, c in pairs(self.db.global.characters) do
+		for n, p in pairs(c.progress) do
+			local reward = rewardsMap[n]
+			if reward and p.claimedAt and p.state ~= 3 and (reward.resetTime - p.claimedAt) > 7 * 24 * 3600 then
+				p.state = 3
+			end
+		end
 	end
 
 	local playerGUID = UnitGUID("player")
@@ -238,17 +251,16 @@ function WeeklyRewards:ExecuteChatCommands(command)
 end
 
 function WeeklyRewards:UpdateActiveRewards()
-	self.activeRewards:Reset(function(outdatedReward)
+	self.activeRewards:Reset(nop)
+	self.activeRewards:Update(DB:GetAllCandidates(), function(reward)
 		CharacterStore.Get():ForEach(function(x)
-			local outdatedProgress = x:ResetProgress(outdatedReward)
+			local outdatedProgress = x:ResetProgress(reward)
 			if outdatedProgress then
 				local store = self.archive:Load("RawData", x.GUID)
 				table.insert(store, outdatedProgress)
 			end
 		end, next)
 	end)
-
-	self.activeRewards:Update(DB:GetAllCandidates())
 	self.character:Scan(self.activeRewards)
 	self.character:UpdateRewardsGUID()
 end
