@@ -236,6 +236,10 @@ function Character:Scan(activeRewards)
 			return false
 		end
 
+		if reward:IsLegacy() and activeRewards:IsExcluded(reward.id) then
+			return false
+		end
+
 		local progress = self.progress[reward.id]
 		if progress == nil or next(progress) == nil or progress:ObjectivesCount() ~= progress.numObjectives or progress:IsExpired() then
 			return true

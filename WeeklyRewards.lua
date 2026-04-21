@@ -93,6 +93,9 @@ function WeeklyRewards:MigrateDB()
 			local reward = rewardsMap[n]
 			if reward and p.claimedAt and p.state ~= 3 and (reward.resetTime - p.claimedAt) > 7 * 24 * 3600 then
 				p.state = 3
+			elseif reward and reward.expansion and self.db.global.activeRewards.excluded[n] then
+				c.progress[n] = nil
+				print("Purge progress:", c.name, n)
 			end
 		end
 	end

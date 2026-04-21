@@ -357,6 +357,12 @@ function Main:AddRewardsFilterToMenu(rootMenu, expansions, isLegacy)
 					return not activeRewards:IsExcluded(reward.id)
 				end, function()
 					activeRewards:ToggleExclusion(reward.id)
+					if not activeRewards:IsExcluded(reward.id) then
+						local character = CharacterStore.Get():CurrentPlayer()
+
+						character:Scan(activeRewards)
+						character:UpdateProgress()
+					end
 					self:Redraw()
 				end)
 			end

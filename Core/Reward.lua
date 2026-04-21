@@ -66,6 +66,10 @@ function Reward:PlayerMeetsRequiredLevel(level)
 	return true
 end
 
+function Reward:IsLegacy()
+	return self.expansion ~= nil
+end
+
 function Reward:AddObjective(objective)
 	setmetatable(objective, RewardObjective)
 	table.insert(self.objectives, objective)
