@@ -217,6 +217,50 @@ function Util:FindEquippedItem(itemIDs)
 	Util:Debug("GetItemLevelByItemID: Cannot find the item")
 end
 
+Util.LookupTableCache = {}
+function Util:GetCachedLookupTable(array, id)
+	if array == nil then
+		return {}
+	end
+
+	id = id or array
+
+	if self.LookupTableCache[id] == nil then
+		self.LookupTableCache[id] = {}
+		for _, v in ipairs(array) do
+			self.LookupTableCache[id][v] = true
+		end
+	end
+
+	return self.LookupTableCache[id]
+end
+
+function Util:GetClassID(classKey)
+	local classIDs = {
+		WARRIOR = 1,
+		HUNTER = 3,
+		MAGE = 8,
+		ROGUE = 4,
+		PRIEST = 5,
+		WARLOCK = 9,
+		PALADIN = 2,
+		DRUID = 11,
+		SHAMAN = 7,
+		MONK = 10,
+		DEMONHUNTER = 12,
+		DEATHKNIGHT = 6,
+		EVOKER = 13,
+	}
+
+	return classIDs[classKey]
+end
+
+function Util:IsPandaren(raceID)
+	local knownPandarenRace = { 24, 25, 26 } -- neutral, alliance, horde
+
+	return self:GetCachedLookupTable(knownPandarenRace, self.IsPandaren)[raceID] or false
+end
+
 Util.SavedInstances = {}
 function Util.SavedInstances:Init()
 	self.frame = CreateFrame("Frame")

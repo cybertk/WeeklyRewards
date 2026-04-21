@@ -53,6 +53,7 @@ function Character:_Init()
 	self.realmName = GetRealmName()
 	self.level = UnitLevel("player")
 	self.faction = UnitFactionGroup("player")
+	self.race = select(3, UnitRace("player"))
 	self.class = select(2, UnitClass("player"))
 	self.progress = {}
 	self.lastUpdate = WAPI.GetServerTime()
@@ -82,6 +83,10 @@ function Character:_AddProgress(progress, name)
 
 		Cache.progressNameToRewardID[progress.name] = name
 	end
+end
+
+function Character:IsCurrentPlayer()
+	return self.GUID == UnitGUID("player")
 end
 
 function Character:UpdateProgress(quest)
@@ -297,6 +302,69 @@ end
 
 function Character:UpdateLocation()
 	self.location = GetZoneText()
+
+	self:UpdateXP()
+end
+
+function Character:UpdateXP()
+	self.resting = IsResting() or nil
+
+	if GetMaxLevelForLatestExpansion() == self.level then
+		self.xp = nil
+		self.xpExhaustion = nil
+
+		return
+	end
+
+	local maxXP = UnitXPMax("player")
+	if maxXP == 0 then
+		return
+	end
+
+	self.xp = UnitXP("player") / maxXP
+	self.xpExhaustion = GetXPExhaustion() / maxXP
+
+	self.race = select(3, UnitRace("player"))
+	self.lastUpdate = WAPI.GetServerTime()
+end
+
+local XP_EXHAUSTION_RATE_IN_SECONDS = 0.15 / 24 / 3600
+function Character:GetRestedXP()
+	if self.xpExhaustion == nil then
+		return 0
+	end
+
+	local rate = self.resting and XP_EXHAUSTION_RATE_IN_SECONDS or XP_EXHAUSTION_RATE_IN_SECONDS / 4
+	local maxV = Util:IsPandaren(self.race) and 3 or 1.5
+	local v = math.min(self.xpExhaustion + rate * (GetServerTime() - self.lastUpdate), maxV)
+
+	return v, (maxV - v) / rate
+end
+
+function Character:AddXPToTooltip(tooltip)
+	local title =
+		UNIT_TYPE_LEVEL_TEMPLATE:format(self.level, self.race and C_CreatureInfo.GetRaceInfo(self.race).raceName or GetClassInfo(Util:GetClassID(self.class)))
+
+	if not self.xp then
+		tooltip:SetText(title, HIGHLIGHT_FONT_COLOR:GetRGB())
+		return
+	end
+
+	if self:IsCurrentPlayer() then
+		self:UpdateXP()
+	end
+
+	tooltip:SetText(title .. format(" (|cnGOLD_FONT_COLOR:%s:|r |cffffffff%.1f%%|r)", XP, self.xp * 100), HIGHLIGHT_FONT_COLOR:GetRGB())
+
+	local xp, timeToCharge = self:GetRestedXP()
+	local color = (timeToCharge == 0 and "GREEN" or self.resting and "LIGHTBLUE" or "RED") .. "_FONT_COLOR"
+
+	tooltip:AddLine(format("|cn%s:%s|r", color, timeToCharge == 0 and "Fully Rested" or self.resting and TUTORIAL_TITLE30 or EXHAUST_TOOLTIP2))
+	tooltip:AddLine(" ")
+	tooltip:AddLine(CreateAtlasMarkup("GarrMission_CurrencyIcon-Xp", 18, 18) .. TUTORIAL_TITLE26 .. format(": |cn%s:%.1f%%|r", color, xp * 100))
+	if timeToCharge and timeToCharge > 0 then
+		tooltip:AddLine(format("Time To Fully Rested: |cffffffff%s|r", Util.FormatTimeDuration(timeToCharge)), 1, NORMAL_FONT_COLOR.g, 0, false, 18)
+	end
 end
 
 function Character:UpdateCovenant(force)
