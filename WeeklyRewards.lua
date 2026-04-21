@@ -151,6 +151,10 @@ function WeeklyRewards:OnEnable()
 	self.activeRewards = activeRewards
 	self.archive = archive
 
+	if not self.db.global.archive then
+		archive:DeleteAll()
+	end
+
 	EventRegistry:RegisterCallback("CK_LOOT_SCANNER_ITEM_LOOTED", function(self, source, quantity, itemID, currencyID)
 		character:ReceiveDrop(source, quantity, itemID, currencyID)
 	end)
@@ -259,7 +263,7 @@ function WeeklyRewards:UpdateActiveRewards()
 	self.activeRewards:Update(DB:GetAllCandidates(), function(reward)
 		CharacterStore.Get():ForEach(function(x)
 			local outdatedProgress = x:ResetProgress(reward)
-			if outdatedProgress then
+			if self.db.global.archive and outdatedProgress then
 				local store = self.archive:Load("RawData", x.GUID)
 				table.insert(store, outdatedProgress)
 			end
