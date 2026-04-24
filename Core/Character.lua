@@ -326,7 +326,7 @@ function Character:UpdateXP()
 	end
 
 	self.xp = UnitXP("player") / maxXP
-	self.xpExhaustion = GetXPExhaustion() / maxXP
+	self.xpExhaustion = (GetXPExhaustion() or 0) / maxXP
 
 	self.race = select(3, UnitRace("player"))
 	self.lastUpdate = WAPI.GetServerTime()
