@@ -5,6 +5,7 @@ local RewardsGroup = {
 	PVP = "PvP",
 	LEVELING = "Leveling",
 	PREY = "Prey",
+	FIELD_ACCOLADES = "Field Accolades",
 }
 
 local function range(start, stop, step)
@@ -200,5 +201,17 @@ namespace.DB.rewardCandidiates["MN"] = {
 		rollover = true,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 94446 } }, -- A Nightmarish Task
+	},
+	{
+		id = "mn-assaults-void",
+		key = "|A:ui-eventpoi-majorattacks:20:20|aVoid",
+		group = RewardsGroup.FIELD_ACCOLADES,
+		minimumLevel = 80,
+		rollover = true,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 94386 }, -- Void Assaults: Zul'Aman
+			{ quest = 94385 }, -- Void Assaults: Eversong Woods
+		},
 	},
 }
