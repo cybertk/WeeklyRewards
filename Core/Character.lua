@@ -338,8 +338,9 @@ function Character:GetRestedXP()
 		return 0
 	end
 
-	local rate = self.resting and XP_EXHAUSTION_RATE_IN_SECONDS or XP_EXHAUSTION_RATE_IN_SECONDS / 4
-	local maxV = Util:IsPandaren(self.race) and 3 or 1.5
+	local multiplier = Util:IsPandaren(self.race) and 2 or 1
+	local rate = multiplier * (self.resting and XP_EXHAUSTION_RATE_IN_SECONDS or XP_EXHAUSTION_RATE_IN_SECONDS / 4)
+	local maxV = multiplier * 1.5
 	local v = math.min(self.xpExhaustion + rate * (GetServerTime() - self.lastUpdate), maxV)
 
 	return v, (maxV - v) / rate
