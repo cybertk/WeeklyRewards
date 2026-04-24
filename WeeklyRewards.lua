@@ -146,16 +146,16 @@ function WeeklyRewards:OnEnable()
 	local characterStore = CharacterStore.Load(self.db.global.characters)
 	local character = characterStore:CurrentPlayer()
 	local activeRewards = ActiveRewards:New(self.db.global.activeRewards)
-	local archive = Archivist:Initialize(WeeklyRewardsArchive)
 
 	RewardSummary:Init(characterStore)
 
 	self.character = character
 	self.activeRewards = activeRewards
-	self.archive = archive
 
-	if not self.db.global.archive then
-		archive:DeleteAll()
+	if self.db.global.archive then
+		self.archive = Archivist:Initialize(WeeklyRewardsArchive)
+	else
+		wipe(WeeklyRewardsArchive)
 	end
 
 	EventRegistry:RegisterCallback("CK_LOOT_SCANNER_ITEM_LOOTED", function(self, source, quantity, itemID, currencyID)
