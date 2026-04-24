@@ -458,7 +458,7 @@ function Character:AddPartyToTooltip(tooltip, instruction)
 		local battleTag, class, name, realm = unpack(member)
 
 		local warbandIcon = Cache.battleTag == battleTag and CreateAtlasMarkup("warbands-icon") or ""
-		local color = class == "" and GRAY_FONT_COLOR or C_ClassColor.GetClassColor(class)
+		local color = (class == "" or not class) and GRAY_FONT_COLOR or C_ClassColor.GetClassColor(class)
 
 		tooltip:AddLine(format("%s%s - %s%s|r", color:GenerateHexColorMarkup(), name, realm or "", warbandIcon))
 	end
