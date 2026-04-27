@@ -310,6 +310,17 @@ function Character:UpdateLocation()
 	self:UpdateXP()
 end
 
+function Character:LogOut()
+	self.lastSession = WAPI.GetServerTime()
+end
+
+function Character:AddLastUpdateToTooltip(tooltip)
+	tooltip:SetText("Last Update", HIGHLIGHT_FONT_COLOR:GetRGB())
+	tooltip:AddLine(" ")
+	tooltip:AddLine(format("|cnNORMAL_FONT_COLOR:Updated At:|r |cnWHITE_FONT_COLOR:%s|r", date("%Y-%m-%d %H:%M", self.lastUpdate)))
+	tooltip:AddLine(format("|cnNORMAL_FONT_COLOR:Previous Session:|r |cnWHITE_FONT_COLOR:%s|r", date("%Y-%m-%d %H:%M", self.lastSession or 0)))
+end
+
 function Character:UpdateXP()
 	self.resting = IsResting() or nil
 

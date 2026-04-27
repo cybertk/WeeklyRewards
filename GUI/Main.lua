@@ -666,7 +666,16 @@ function Main:AddCharacterColumns()
 			width = 60,
 			align = "CENTER",
 			cell = function(character)
-				return { text = Util.FormatLastUpdateTime(character.lastUpdate) }
+				return {
+					text = Util.FormatLastUpdateTime(character.lastUpdate),
+					onEnter = function(cellFrame)
+						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+						character:AddLastUpdateToTooltip(GameTooltip)
+
+						GameTooltip:Show()
+					end,
+					onLeave = GameTooltip_Hide,
+				}
 			end,
 		},
 	}

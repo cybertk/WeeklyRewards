@@ -223,6 +223,10 @@ function WeeklyRewards:OnEnable()
 		self:UpdateActiveRewards()
 	end)
 
+	self:RegisterEvent("PLAYER_LEAVING_WORLD", function()
+		character:LogOut()
+	end)
+
 	self:RegisterEvent("PLAYER_LEVEL_CHANGED", function()
 		character:Scan(activeRewards)
 	end)
