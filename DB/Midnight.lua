@@ -144,6 +144,16 @@ namespace.DB.rewardCandidiates["MN"] = {
 			{ quest = 93426 }, -- Sparks of War: Voidstorm
 		},
 	},
+		{
+		id = "mn-war",
+		key = "SlayerRise",
+		group = RewardsGroup.PVP,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 89354 }, -- Preparing For Battle
+		},
+	},
 	{
 		id = "mn-sa",
 		key = "SA",
@@ -201,6 +211,15 @@ namespace.DB.rewardCandidiates["MN"] = {
 		rollover = true,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 94446 } }, -- A Nightmarish Task
+	},
+		{
+		id = "mn-prey-select",
+		key = "|A:worldquest-Prey-Crystal:16:16|aSelect",
+		group = RewardsGroup.PREY,
+		minimumLevel = 90,
+		rollover = true,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 91277 } }, -- Prey: Preferential Killing
 	},
 	{
 		id = "mn-assaults-void",
