@@ -366,7 +366,7 @@ function Character:AddXPToTooltip(tooltip)
 
 	tooltip:AddLine(format("|cn%s:%s|r", color, timeToCharge == 0 and "Fully Rested" or self.resting and TUTORIAL_TITLE30 or EXHAUST_TOOLTIP2))
 	tooltip:AddLine(" ")
-	tooltip:AddLine(CreateAtlasMarkup("GarrMission_CurrencyIcon-Xp", 18, 18) .. TUTORIAL_TITLE26 .. format(": |cn%s:%.1f%%|r", color, xp * 100))
+	tooltip:AddLine(CreateAtlasMarkup("GarrMission_CurrencyIcon-Xp", 18, 18) .. format("|cffffd200%s:|r |cn%s:%.1f%%|r", TUTORIAL_TITLE26, color, xp * 100))
 	if timeToCharge and timeToCharge > 0 then
 		tooltip:AddLine(format("Time To Fully Rested: |cffffffff%s|r", Util.FormatTimeDuration(timeToCharge)), 1, NORMAL_FONT_COLOR.g, 0, false, 18)
 	end
