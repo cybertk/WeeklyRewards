@@ -579,8 +579,9 @@ function Main:AddCharacterColumns()
 			width = 50,
 			align = "CENTER",
 			cell = function(character)
+				local _, timeToCharge = character:GetRestedXP()
 				return {
-					text = character.level,
+					text = timeToCharge == 0 and GREEN_FONT_COLOR:WrapTextInColorCode(character.level) or character.level,
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
 						character:AddXPToTooltip(GameTooltip)
