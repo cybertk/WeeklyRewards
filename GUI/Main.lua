@@ -480,7 +480,7 @@ function Main:CreateWindow()
 	self.window.titlebar.title:SetPoint("LEFT", self.window.titlebar, 28, 0)
 	self.window.titlebar.title:SetJustifyH("LEFT")
 	self.window.titlebar.title:SetJustifyV("MIDDLE")
-	self.window.titlebar.title:SetText(addonName)
+	self.window.titlebar.title:SetText("WeeklyRewards")
 
 	self.window.titlebar.season = self.window.titlebar:CreateFontString("$parentText", "OVERLAY")
 	self.window.titlebar.season:SetFontObject("SystemFont_Med2")

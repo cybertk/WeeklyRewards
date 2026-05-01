@@ -144,7 +144,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 			{ quest = 93426 }, -- Sparks of War: Voidstorm
 		},
 	},
-		{
+	{
 		id = "mn-war",
 		key = "SlayerRise",
 		group = RewardsGroup.PVP,
@@ -212,7 +212,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 94446 } }, -- A Nightmarish Task
 	},
-		{
+	{
 		id = "mn-prey-select",
 		key = "|A:worldquest-Prey-Crystal:16:16|aSelect",
 		group = RewardsGroup.PREY,

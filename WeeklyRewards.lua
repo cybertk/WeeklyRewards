@@ -96,6 +96,10 @@ function WeeklyRewards:MigrateDB()
 			elseif reward and reward.expansion and self.db.global.activeRewards.excluded[n] then
 				c.progress[n] = nil
 				print("Purge progress:", c.name, n)
+			elseif reward and reward.id == "mn-assaults-void" and #p.pendingObjectives > 0 and reward.objectives[1].quest ~= p.pendingObjectives[1] then
+				if reward.objectives[1].quest ~= p.pendingObjectives[1].quest then
+					c.progress[n] = nil
+				end
 			end
 		end
 	end
