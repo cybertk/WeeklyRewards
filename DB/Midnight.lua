@@ -58,6 +58,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 					93912, -- Midnight: Raid
 					93913, -- Midnight: World Boss
 					94457, -- Midnight: Battlegrounds
+					95843, -- Midnight: Ritual Sites
 				},
 				maxCompletion = 1,
 			},
@@ -145,6 +146,14 @@ namespace.DB.rewardCandidiates["MN"] = {
 		},
 	},
 	{
+		id = "mn-war",
+		key = "SR:Battle",
+		group = RewardsGroup.PVP,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 89354 } }, -- Preparing For Battle
+	},
+	{
 		id = "mn-sa",
 		key = "SA",
 		group = RewardsGroup.PINNACLE_CACHE,
@@ -201,6 +210,15 @@ namespace.DB.rewardCandidiates["MN"] = {
 		rollover = true,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 94446 } }, -- A Nightmarish Task
+	},
+	{
+		id = "mn-prey-select",
+		key = "|A:worldquest-Prey-Crystal:16:16|aSelect",
+		group = RewardsGroup.PREY,
+		minimumLevel = 90,
+		rollover = true,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 91277 } }, -- Prey: Preferential Killing
 	},
 	{
 		id = "mn-assaults-void",
