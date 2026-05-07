@@ -95,7 +95,7 @@ function Util:GetCalendarActiveEvents(calendarType)
 	for i = 1, C_Calendar.GetNumDayEvents(0, now.monthDay) do
 		local event = C_Calendar.GetDayEvent(0, now.monthDay, i)
 		if
-			not issecretvalue(event)
+			not issecretvalue(event.calendarType)
 			and event.calendarType == calendarType
 			and C_DateAndTime.CompareCalendarTime(event.startTime, now) >= 0
 			and C_DateAndTime.CompareCalendarTime(event.endTime, now) < 0
