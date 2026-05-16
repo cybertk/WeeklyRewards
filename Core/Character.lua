@@ -11,6 +11,7 @@ local Character = {
 	factionName = "",
 	class = "",
 	location = "",
+	currencies = nil,
 }
 namespace.Character = Character
 
@@ -36,6 +37,8 @@ function Character:New(o)
 
 	if next(o) == nil then
 		Character._Init(o)
+	else
+		o.currencies = o.currencies or {}
 	end
 
 	for k, v in pairs(o.progress or {}) do
@@ -56,10 +59,59 @@ function Character:_Init()
 	self.race = select(3, UnitRace("player"))
 	self.class = select(2, UnitClass("player"))
 	self.progress = {}
+	self.currencies = {}
 	self.lastUpdate = WAPI.GetServerTime()
 	self.location = GetZoneText()
 
 	Util:Debug("Initialized new character:", self.name)
+end
+
+function Character:SetCurrencies(currencyIDs)
+	Character.Currencies = {}
+
+	for _, currencyID in ipairs(currencyIDs or {}) do
+		table.insert(Character.Currencies, currencyID)
+	end
+
+	Util:Debug("Currencies to track:", #Character.Currencies)
+end
+
+function Character:HasTrackedCurrency(currencyID)
+	for _, id in ipairs(Character.Currencies or {}) do
+		if id == currencyID then
+			return true
+		end
+	end
+	return false
+end
+
+function Character:RefreshTrackedCurrencies(currencyID)
+	self.currencies = self.currencies or {}
+
+	if currencyID ~= nil then
+		if not self:HasTrackedCurrency(currencyID) then
+			return
+		end
+		local info = C_CurrencyInfo.GetCurrencyInfo(currencyID)
+		self.currencies[currencyID] = info and info.quantity or 0
+		self.lastUpdate = WAPI.GetServerTime()
+		return
+	end
+
+	local seen = {}
+	for _, id in ipairs(Character.Currencies or {}) do
+		local info = C_CurrencyInfo.GetCurrencyInfo(id)
+		self.currencies[id] = info and info.quantity or 0
+		seen[id] = true
+	end
+
+	for k in pairs(self.currencies) do
+		if not seen[k] then
+			self.currencies[k] = nil
+		end
+	end
+
+	self.lastUpdate = WAPI.GetServerTime()
 end
 
 function Character:_AddProgress(progress, name)

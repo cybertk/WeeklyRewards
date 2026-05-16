@@ -24,6 +24,7 @@ function Main:ToggleWindow()
 	if self.window:IsVisible() then
 		self.window:Hide()
 	else
+		WeeklyRewards:UpdateTrackedCurrencies()
 		CharacterStore.Get():CurrentPlayer():UpdateProgress()
 		self.window:Show()
 		self:Redraw()
@@ -726,6 +727,15 @@ function Main:AddRewardColumns()
 				else
 					text = progress.total < 100 and format("%d / %d", progress.position, progress.total)
 						or format("%.0f%%", progress.position / progress.total * 100)
+
+					if reward.currency and not progress:hasClaimed() then
+						local c = character.currencies
+						local qty = 0
+						if c then
+							qty = c[reward.currency] or 0
+						end
+						text = format("%s | %d", text, qty)
+					end
 
 					if progress:IsExpired() then
 						text = GRAY_FONT_COLOR:WrapTextInColorCode(text)

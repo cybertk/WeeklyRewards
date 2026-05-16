@@ -18,6 +18,7 @@ local Reward = {
 	resetTime = nil,
 	startTime = nil,
 	items = nil,
+	currency = nil,
 }
 namespace.Reward = Reward
 

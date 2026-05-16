@@ -41,6 +41,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		currency = 3028,
 		entries = {
 			{ quest = 0, currency = 3310, loot = { 584514, name = { 252415 } } },
 		},

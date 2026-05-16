@@ -3,6 +3,8 @@ local addonName, namespace = ...
 local DB = {
 	rewardCandidiates = {},
 	all = {},
+	currencyCandidiates = {},
+	allCurrencies = {},
 }
 namespace.DB = DB
 
@@ -17,4 +19,14 @@ function DB:GetAllCandidates()
 	end
 
 	return self.all
+end
+
+function DB:GetAllCurrencies()
+	if #self.allCurrencies == 0 then
+		for _, currencyID in ipairs(self.currencyCandidiates) do
+			table.insert(self.allCurrencies, currencyID)
+		end
+	end
+
+	return self.allCurrencies
 end

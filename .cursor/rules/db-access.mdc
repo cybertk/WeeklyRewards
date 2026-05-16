@@ -1,0 +1,10 @@
+---
+description: WeeklyRewards — only WeeklyRewards.lua reads DB at runtime
+alwaysApply: true
+---
+
+# Database access
+
+- **`WeeklyRewards.lua`** is the only module that should **read** `namespace.DB` at runtime (e.g. `DB:GetAllCandidates()`, `DB:GetAllCurrencies()`, migrations, saved-variable glue).
+- Scripts under **`DB/`** may **register** data on `namespace.DB` when they load (same pattern as reward candidates).
+- **`Core/*.lua`**, **`GUI/*.lua`**, and other runtime code must **not** import or call `namespace.DB`. Use helpers in **`WeeklyRewards.lua`** (or pass data from there) instead.

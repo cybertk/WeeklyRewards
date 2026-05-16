@@ -15,10 +15,28 @@ local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
 local RewardSummary = namespace.RewardSummary
 local Main = namespace.GUIMain
+local Character = namespace.Character
 
 _G.WeeklyRewards = WeeklyRewards
 
 WeeklyRewardsArchive = WeeklyRewardsArchive or {}
+
+local function MergeRewardCurrencyFromCandidates(activeRewards)
+	local candidateCurrencyById = {}
+	for _, candidate in ipairs(DB:GetAllCandidates()) do
+		if candidate.currency then
+			candidateCurrencyById[candidate.id] = candidate.currency
+		end
+	end
+
+	for _, reward in ipairs(activeRewards) do
+		local baseId = string.gsub(reward.id, "([-%w+]):%d+", "%1")
+		local cCur = candidateCurrencyById[baseId]
+		if cCur then
+			reward.currency = reward.currency or cCur
+		end
+	end
+end
 
 local defaultDB = {
 	---@type WR_DefaultGlobal
@@ -152,11 +170,14 @@ function WeeklyRewards:OnEnable()
 	local characterStore = CharacterStore.Load(self.db.global.characters)
 	local character = characterStore:CurrentPlayer()
 	local activeRewards = ActiveRewards:New(self.db.global.activeRewards)
+	MergeRewardCurrencyFromCandidates(activeRewards)
 
 	RewardSummary:Init(characterStore)
 
 	self.character = character
 	self.activeRewards = activeRewards
+
+	self:UpdateTrackedCurrencies()
 
 	if self.db.global.archive then
 		self.archive = Archivist:Initialize(WeeklyRewardsArchive)
@@ -227,6 +248,15 @@ function WeeklyRewards:OnEnable()
 		end
 
 		self:UpdateActiveRewards()
+		self:UpdateTrackedCurrencies()
+	end)
+
+	self:RegisterEvent("CURRENCY_DISPLAY_UPDATE", function(currencyType)
+		if type(currencyType) == "number" and currencyType >= 0 then
+			self:UpdateTrackedCurrencies(currencyType)
+		else
+			self:UpdateTrackedCurrencies()
+		end
 	end)
 
 	self:RegisterEvent("PLAYER_LEVEL_CHANGED", function()
@@ -253,6 +283,30 @@ end
 function WeeklyRewards:OnDisable()
 	self:UnregisterAllEvents()
 	self:UnregisterAllBuckets()
+end
+
+function WeeklyRewards:UpdateTrackedCurrencies(currencyID)
+	if not self.character then
+		return
+	end
+
+	local function syncIdListFromDB()
+		self.character:SetCurrencies(DB:GetAllCurrencies())
+	end
+
+	if currencyID == nil then
+		syncIdListFromDB()
+		self.character:RefreshTrackedCurrencies()
+	elseif #(Character.Currencies or {}) == 0 then
+		syncIdListFromDB()
+		self.character:RefreshTrackedCurrencies()
+	else
+		self.character:RefreshTrackedCurrencies(currencyID)
+	end
+
+	if Main.window and Main.window:IsVisible() then
+		Main:Redraw()
+	end
 end
 
 function WeeklyRewards:ExecuteChatCommands(command)

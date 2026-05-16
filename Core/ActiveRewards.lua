@@ -19,7 +19,7 @@ local WAPI_GetServerTime = GetServerTime
 local WAPI_UnitLevel = UnitLevel
 
 local Cache = {
-	rewardsCount = {}, -- Per candidiate ID defined in DB.candidates
+	rewardsCount = {}, -- Per candidate id (base reward id from data files)
 	nameToReward = {},
 	questToReward = {},
 	groups = {},
@@ -229,6 +229,7 @@ function ActiveRewards:Update(candidates, OnRewardAddedCallback)
 			maximumLevel = candidate.maximumLevel,
 			rollover = candidate.rollover,
 			items = candidate.items,
+			currency = candidate.currency,
 		})
 		local entries = candidate.entries
 		local pick = candidate.pick or 1
