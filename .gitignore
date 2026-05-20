@@ -4,3 +4,6 @@ Embeds/
 
 # pkgmeta local
 .release/
+
+# Cursor / IDE
+.cursor/

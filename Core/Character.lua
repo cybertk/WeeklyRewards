@@ -11,6 +11,8 @@ local Character = {
 	factionName = "",
 	class = "",
 	location = "",
+	---@type number[]|nil  -- { GetAverageItemLevel() } — overall, equipped, PvP
+	itemLevels = nil,
 }
 namespace.Character = Character
 
@@ -19,6 +21,7 @@ local ProgressFactory = namespace.ProgressFactory
 
 local WAPI = {
 	GetServerTime = GetServerTime,
+	GetAverageItemLevel = GetAverageItemLevel,
 }
 
 local Cache = {
@@ -226,10 +229,24 @@ function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
 end
 
 -- Reset progress, replace old with new one
+function Character:UpdateItemLevels()
+	if not self:IsCurrentPlayer() then
+		return
+	end
+
+	local overall, equipped, pvp = WAPI.GetAverageItemLevel()
+	if type(equipped) ~= "number" and type(overall) ~= "number" then
+		return
+	end
+
+	self.itemLevels = { overall, equipped, pvp }
+end
+
 function Character:Scan(activeRewards)
 	-- Reset level and etc
 	self.level = UnitLevel("player")
 	self:UpdateCovenant()
+	self:UpdateItemLevels()
 
 	local rewardsToScan = Util:Filter(activeRewards, function(reward)
 		if not reward:PlayerMeetsRequiredLevel(self.level) then

@@ -48,6 +48,9 @@ L["column_realm"] = "Игровой мир"
 L["column_covenant"] = "Ковенант"
 L["column_location"] = "Местоположение"
 L["column_last_update"] = "Обновлено"
+L["column_item_level"] = "Уровень предметов"
+L["column_item_level_unknown"] = "Зайдите этим персонажем, чтобы записать уровень предметов."
+L["column_item_level_pvp"] = "Ур. предметов (PvP)"
 
 -- Covenant tooltips
 L["covenant_sanctum_unknown"] = "Статус обновления Обители неизвестен"

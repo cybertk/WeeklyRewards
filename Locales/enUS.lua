@@ -46,6 +46,9 @@ L["column_realm"] = "Realm"
 L["column_covenant"] = "Covenant"
 L["column_location"] = "Location"
 L["column_last_update"] = "LastUpdate"
+L["column_item_level"] = "Item Level"
+L["column_item_level_unknown"] = "Log in on this character to record item level."
+L["column_item_level_pvp"] = "PvP item level"
 
 -- Covenant tooltips
 L["covenant_sanctum_unknown"] = "Sanctum Upgrade status is unknown"

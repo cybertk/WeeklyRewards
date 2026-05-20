@@ -17,6 +17,7 @@ local Cache = {
 	ascending = true,
 	secondaryAscending = true,
 	flatField = "",
+	fieldIndex = nil,
 }
 
 local function CharacterComparator(lhs, rhs, field)
@@ -28,7 +29,9 @@ local function CharacterComparator(lhs, rhs, field)
 		return -1
 	end
 
-	if Cache.instance:CurrentPlayer()[field] then
+	local data = Cache.instance:CurrentPlayer()[field]
+
+	if data and type(data) ~= "table" then
 		if lhs[field] == rhs[field] then
 			return 0
 		elseif lhs[field] == nil then
@@ -41,6 +44,10 @@ local function CharacterComparator(lhs, rhs, field)
 	end
 
 	local flatField = Cache.flatField
+	if type(data) == "table" and #data > 0 then
+		flatField = field
+		field = Cache.fieldIndex or 1
+	end
 
 	if lhs[flatField][field] == rhs[flatField][field] then
 		return 0
@@ -131,15 +138,16 @@ function CharacterStore:GetSortOrder()
 	return Cache.sortOrder, Cache.ascending
 end
 
-function CharacterStore:SetSortOrder(field)
-	if Cache.sortOrder == field then
-		Cache.ascending = not Cache.ascending
-	else
+function CharacterStore:SetSortOrder(field, index)
+	if Cache.sortOrder ~= field then
 		Cache.secondarySortOrder = Cache.sortOrder
 		Cache.secondaryAscending = Cache.ascending
+	elseif not index then
+		Cache.ascending = not Cache.ascending
 	end
 
 	Cache.sortOrder = field
+	Cache.fieldIndex = index
 
 	Util:Debug("Sorting:", Cache.sortOrder, Cache.secondarySortOrder, Cache.ascending, Cache.secondaryAscending)
 end
