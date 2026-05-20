@@ -46,9 +46,6 @@ L["column_realm"] = "Realm"
 L["column_covenant"] = "Covenant"
 L["column_location"] = "Location"
 L["column_last_update"] = "LastUpdate"
-L["column_item_level"] = "Item Level"
-L["column_item_level_unknown"] = "Log in on this character to record item level."
-L["column_item_level_pvp"] = "PvP item level"
 
 -- Covenant tooltips
 L["covenant_sanctum_unknown"] = "Sanctum Upgrade status is unknown"
@@ -57,7 +54,7 @@ L["covenant_not_joined"] = "This character has not join any Covenant"
 -- Table tooltips
 L["table_sort_hint"] = "<Left Click to Sort>"
 L["table_reset_progress_hint"] = "<Ctrl click to reset the progress>"
-L["table_alts_collect_hint"] = "Log in with this character to collect it"
+L["table_alts_collect_hint"] = "Log in on this character to collect it"
 
 -- Progress tooltips
 L["progress_rewards_received_at"] = "Rewards Received At:"

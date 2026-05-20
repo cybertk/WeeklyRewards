@@ -228,20 +228,15 @@ function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
 	progress:AddReward(currencyId, itemId, quantity, true)
 end
 
--- Reset progress, replace old with new one
 function Character:UpdateItemLevels()
-	if not self:IsCurrentPlayer() then
-		return
-	end
-
-	local overall, equipped, pvp = WAPI.GetAverageItemLevel()
-	if type(equipped) ~= "number" and type(overall) ~= "number" then
-		return
-	end
-
-	self.itemLevels = { overall, equipped, pvp }
+	self.itemLevels = { WAPI.GetAverageItemLevel() }
 end
 
+function Character:GetAverageItemLevel()
+	return unpack(self.itemLevels or {})
+end
+
+-- Reset progress, replace old with new one
 function Character:Scan(activeRewards)
 	-- Reset level and etc
 	self.level = UnitLevel("player")

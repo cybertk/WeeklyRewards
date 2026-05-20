@@ -20,6 +20,21 @@ local Cache = {
 	fieldIndex = nil,
 }
 
+local function SafeDictComparator(lhs, rhs, field)
+	lhs = lhs and lhs[field] or nil
+	rhs = rhs and rhs[field] or nil
+
+	if lhs == rhs then
+		return 0
+	elseif lhs == nil then
+		return -1
+	elseif rhs == nil then
+		return 1
+	end
+
+	return lhs < rhs and -1 or 1
+end
+
 local function CharacterComparator(lhs, rhs, field)
 	if lhs == rhs then
 		return 0
@@ -32,15 +47,7 @@ local function CharacterComparator(lhs, rhs, field)
 	local data = Cache.instance:CurrentPlayer()[field]
 
 	if data and type(data) ~= "table" then
-		if lhs[field] == rhs[field] then
-			return 0
-		elseif lhs[field] == nil then
-			return -1
-		elseif rhs[field] == nil then
-			return 1
-		end
-
-		return lhs[field] < rhs[field] and -1 or 1
+		return SafeDictComparator(lhs, rhs, field)
 	end
 
 	local flatField = Cache.flatField
@@ -49,15 +56,7 @@ local function CharacterComparator(lhs, rhs, field)
 		field = Cache.fieldIndex or 1
 	end
 
-	if lhs[flatField][field] == rhs[flatField][field] then
-		return 0
-	elseif lhs[flatField][field] == nil then
-		return -1
-	elseif rhs[flatField][field] == nil then
-		return 1
-	end
-
-	return lhs[flatField][field] < rhs[flatField][field] and -1 or 1
+	return SafeDictComparator(lhs[flatField], rhs[flatField], field)
 end
 
 local function CreateCharacterSorter(primary, secondary, ascending, secondaryAscending)

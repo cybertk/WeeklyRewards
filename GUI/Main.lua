@@ -592,54 +592,29 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = L["column_item_level"],
+			name = ITEM_LEVEL_ABBR,
 			key = "itemLevels",
-			width = 56,
+			width = 40,
 			align = "CENTER",
 			cell = function(character)
-				local il = character.itemLevels
-				local overall = type(il) == "table" and il[1]
-				local equipped = type(il) == "table" and il[2]
-				local pvpIl = type(il) == "table" and il[3]
-				local text = "-"
-				if type(equipped) == "number" then
-					if type(overall) == "number" and overall > equipped then
-						text = format("%d (%d)", equipped, overall)
-					else
-						text = tostring(equipped)
-					end
-				elseif type(overall) == "number" then
-					text = tostring(overall)
-				end
-
+				local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvP = character:GetAverageItemLevel()
 				return {
-					text = text,
+					text = avgItemLevel and floor(avgItemLevel) or "-",
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						GameTooltip:SetText(L["column_item_level"], HIGHLIGHT_FONT_COLOR:GetRGB())
-						if type(overall) == "number" or type(equipped) == "number" then
-							GameTooltip:AddLine(" ")
-							if type(equipped) == "number" then
-								GameTooltip:AddDoubleLine(
-									STAT_AVERAGE_ITEM_LEVEL_EQUIPPED,
-									WHITE_FONT_COLOR:WrapTextInColorCode(tostring(equipped))
-								)
-							end
-							if type(overall) == "number" and overall ~= equipped then
-								GameTooltip:AddDoubleLine(
-									STAT_AVERAGE_ITEM_LEVEL,
-									WHITE_FONT_COLOR:WrapTextInColorCode(tostring(overall))
-								)
-							end
-							if type(pvpIl) == "number" then
-								GameTooltip:AddDoubleLine(
-									L["column_item_level_pvp"],
-									WHITE_FONT_COLOR:WrapTextInColorCode(tostring(pvpIl))
-								)
-							end
+
+						if not avgItemLevel then
+							GameTooltip:SetText(L["table_alts_collect_hint"], GREEN_FONT_COLOR:GetRGB())
 						else
+							local title = format("%s %d", STAT_AVERAGE_ITEM_LEVEL, avgItemLevel)
+							if avgItemLevelEquipped ~= avgItemLevel then
+								title = title .. "  " .. STAT_AVERAGE_ITEM_LEVEL_EQUIPPED:format(avgItemLevelEquipped)
+							end
+							GameTooltip:SetText(title, HIGHLIGHT_FONT_COLOR:GetRGB())
+
+							GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL_TOOLTIP)
 							GameTooltip:AddLine(" ")
-							GameTooltip:AddLine(L["column_item_level_unknown"], GRAY_FONT_COLOR:GetRGB())
+							GameTooltip:AddLine(PVP_RATING_LINK_ITEM_LEVEL:format(avgItemLevelPvP))
 						end
 						GameTooltip:Show()
 					end,
