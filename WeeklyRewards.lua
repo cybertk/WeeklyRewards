@@ -233,6 +233,14 @@ function WeeklyRewards:OnEnable()
 		character:Scan(activeRewards)
 	end)
 
+	self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", function()
+		character:UpdateItemLevels()
+	end)
+
+	self:RegisterEvent("PLAYER_AVG_ITEM_LEVEL_UPDATE", function()
+		character:UpdateItemLevels()
+	end)
+
 	self:RegisterEvent("QUEST_LOG_UPDATE", function()
 		Util:InvokeAfter(5, character.UpdateProgress, character)
 	end)

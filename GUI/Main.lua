@@ -592,6 +592,37 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
+			name = ITEM_LEVEL_ABBR,
+			key = "itemLevels",
+			width = 40,
+			align = "CENTER",
+			cell = function(character)
+				local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvP = character:GetAverageItemLevel()
+				return {
+					text = avgItemLevel and floor(avgItemLevel) or "-",
+					onEnter = function(cellFrame)
+						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+
+						if not avgItemLevel then
+							GameTooltip:SetText(L["table_alts_collect_hint"], GREEN_FONT_COLOR:GetRGB())
+						else
+							local title = format("%s %d", STAT_AVERAGE_ITEM_LEVEL, avgItemLevel)
+							if avgItemLevelEquipped ~= avgItemLevel then
+								title = title .. "  " .. STAT_AVERAGE_ITEM_LEVEL_EQUIPPED:format(avgItemLevelEquipped)
+							end
+							GameTooltip:SetText(title, HIGHLIGHT_FONT_COLOR:GetRGB())
+
+							GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL_TOOLTIP)
+							GameTooltip:AddLine(" ")
+							GameTooltip:AddLine(PVP_RATING_LINK_ITEM_LEVEL:format(avgItemLevelPvP))
+						end
+						GameTooltip:Show()
+					end,
+					onLeave = GameTooltip_Hide,
+				}
+			end,
+		},
+		{
 			name = FACTION,
 			key = "factionName",
 			width = 50,

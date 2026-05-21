@@ -17,7 +17,23 @@ local Cache = {
 	ascending = true,
 	secondaryAscending = true,
 	flatField = "",
+	fieldIndex = nil,
 }
+
+local function SafeDictComparator(lhs, rhs, field)
+	lhs = lhs and lhs[field] or nil
+	rhs = rhs and rhs[field] or nil
+
+	if lhs == rhs then
+		return 0
+	elseif lhs == nil then
+		return -1
+	elseif rhs == nil then
+		return 1
+	end
+
+	return lhs < rhs and -1 or 1
+end
 
 local function CharacterComparator(lhs, rhs, field)
 	if lhs == rhs then
@@ -28,29 +44,19 @@ local function CharacterComparator(lhs, rhs, field)
 		return -1
 	end
 
-	if Cache.instance:CurrentPlayer()[field] then
-		if lhs[field] == rhs[field] then
-			return 0
-		elseif lhs[field] == nil then
-			return -1
-		elseif rhs[field] == nil then
-			return 1
-		end
+	local data = Cache.instance:CurrentPlayer()[field]
 
-		return lhs[field] < rhs[field] and -1 or 1
+	if data and type(data) ~= "table" then
+		return SafeDictComparator(lhs, rhs, field)
 	end
 
 	local flatField = Cache.flatField
-
-	if lhs[flatField][field] == rhs[flatField][field] then
-		return 0
-	elseif lhs[flatField][field] == nil then
-		return -1
-	elseif rhs[flatField][field] == nil then
-		return 1
+	if type(data) == "table" and #data > 0 then
+		flatField = field
+		field = Cache.fieldIndex or 1
 	end
 
-	return lhs[flatField][field] < rhs[flatField][field] and -1 or 1
+	return SafeDictComparator(lhs[flatField], rhs[flatField], field)
 end
 
 local function CreateCharacterSorter(primary, secondary, ascending, secondaryAscending)
@@ -131,15 +137,16 @@ function CharacterStore:GetSortOrder()
 	return Cache.sortOrder, Cache.ascending
 end
 
-function CharacterStore:SetSortOrder(field)
-	if Cache.sortOrder == field then
-		Cache.ascending = not Cache.ascending
-	else
+function CharacterStore:SetSortOrder(field, index)
+	if Cache.sortOrder ~= field then
 		Cache.secondarySortOrder = Cache.sortOrder
 		Cache.secondaryAscending = Cache.ascending
+	elseif not index then
+		Cache.ascending = not Cache.ascending
 	end
 
 	Cache.sortOrder = field
+	Cache.fieldIndex = index
 
 	Util:Debug("Sorting:", Cache.sortOrder, Cache.secondarySortOrder, Cache.ascending, Cache.secondaryAscending)
 end
