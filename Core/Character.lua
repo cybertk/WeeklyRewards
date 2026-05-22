@@ -475,3 +475,13 @@ function Character:AddPartyToTooltip(tooltip, instruction)
 		tooltip:AddLine(format("%s%s - %s%s|r", color:GenerateHexColorMarkup(), name, realm or "", warbandIcon))
 	end
 end
+
+function Character:SetNote(text)
+	self.note = strtrim(text)
+	Util:Debug("Comment updated:", self.note)
+end
+
+function Character:GetNote()
+	local prefix = string.split(" ", self.note or "")
+	return self.note or "", prefix
+end

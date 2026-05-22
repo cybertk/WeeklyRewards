@@ -16,6 +16,8 @@ local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
 local RewardSummary = namespace.RewardSummary
 
+local Dialogs = namespace.Dialogs
+
 function Main:ToggleWindow()
 	if not self.window then
 		self:CreateWindow()
@@ -562,7 +564,29 @@ function Main:AddCharacterColumns()
 			key = "name",
 			width = 90,
 			cell = function(character)
-				return { text = Util.WrapTextInClassColor(character.class, character.name) }
+				local note, tag = character:GetNote()
+
+				tag = #tag > 0 and format(" |cnGOLD_FONT_COLOR:(%s)|r", #tag > 4 and "*" or tag) or tag
+
+				local text = Util.WrapTextInClassColor(character.class, character.name)
+				return {
+					text = text .. tag,
+					onEnter = function(cellFrame)
+						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+						GameTooltip:SetText(text)
+						GameTooltip:AddLine(" ")
+						if #note > 0 then
+							GameTooltip:AddLine("|T131129:12|t" .. note, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
+							GameTooltip:AddLine(" ")
+						end
+						GameTooltip:AddLine(CLICK_TO_ENTER_COMMENT, GREEN_FONT_COLOR:GetRGB())
+						GameTooltip:Show()
+					end,
+					onLeave = GameTooltip_Hide,
+					onClick = function()
+						Dialogs.ShowCharacterNote(character)
+					end,
+				}
 			end,
 		},
 		{
