@@ -1,0 +1,4 @@
+<Ui>
+    <Script file="Dialogs.lua" />
+    <Script file="Main.lua" />
+</Ui>
