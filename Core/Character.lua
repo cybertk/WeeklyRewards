@@ -228,6 +228,14 @@ function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
 	progress:AddReward(currencyId, itemId, quantity, true)
 end
 
+function Character:GetFaction()
+	return self.faction or ""
+end
+
+function Character:UpdateFaction()
+	self.faction = UnitFactionGroup("player")
+end
+
 function Character:UpdateItemLevels()
 	self.itemLevels = { WAPI.GetAverageItemLevel() }
 end

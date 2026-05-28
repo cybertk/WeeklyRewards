@@ -222,6 +222,8 @@ function WeeklyRewards:OnEnable()
 			return
 		end
 
+		character:UpdateFaction()
+
 		if self.db.global.utils.untrackQuests then
 			character:RemoveQuestsWatch()
 		end
