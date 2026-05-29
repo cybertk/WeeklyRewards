@@ -932,6 +932,8 @@ function Main:UpdateSortArrow()
 				end
 			else
 				CharacterStore.Get():SetSortOrder(characterField)
+				local field, ascending = CharacterStore.Get():GetSortOrder()
+				WeeklyRewards.db.global.main.characterSort = { field = field, ascending = ascending }
 			end
 
 			self:Redraw()
