@@ -652,7 +652,7 @@ function Main:AddCharacterColumns()
 			width = 50,
 			align = "CENTER",
 			cell = function(character)
-				return { text = CreateAtlasMarkup(format("questlog-questtypeicon-%s", character.faction:lower()), 20, 20) }
+				return { text = CreateAtlasMarkup(format("questlog-questtypeicon-%s", character:GetFaction():lower()), 20, 20) }
 			end,
 		},
 		{
