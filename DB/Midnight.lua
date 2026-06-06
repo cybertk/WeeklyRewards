@@ -120,15 +120,16 @@ namespace.DB.rewardCandidiates["MN"] = {
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{
-				quest = 89268, -- Lost Legends
+				quest = 92713, -- Echoes Rekindled
 				questPool = {
-					88993, -- Wey'nan's Ward
-					88994, -- The Cauldron of Echoes
-					88996, -- The Echoless Flame
-					88997, -- Russula's Outreach
-					88995, -- Aln'hara's Bloom
+					92716, -- The Story of Wey'nan's Ward
+					92719, -- The Story of the Cauldron of Echoes
+					92721, -- The Story of the Echoless Flame
+					92720, -- The Story of Aln'hara's Bloom
+					92722, -- The Story of Russula's Outreach
+					92724, -- The Story of the Root of the World
+					92725, -- The Story of Sky's Hope
 				},
-				maxCompletion = 1,
 			},
 		},
 	},

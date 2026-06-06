@@ -54,7 +54,7 @@ function WeeklyRewards:MigrateDB()
 
 	local rewardsMap = {}
 
-	for _, reward in ipairs(self.db.global.activeRewards) do
+	for i, reward in ipairs(self.db.global.activeRewards) do
 		local candidateID = string.gsub(reward.id, "([-%w+]):%d+", "%1")
 		local candidate = candidatesMap[candidateID]
 
@@ -69,6 +69,8 @@ function WeeklyRewards:MigrateDB()
 			reward.rollover = true
 		elseif reward.id == "mn-spark" or reward.id == "mn-pquests" then
 			reward.objectives[1].questPool = candidate.entries[1].questPool
+		elseif reward.id == "mn-legends" and reward.objectives[1].quest == 89268 then
+			table.remove(self.db.global.activeRewards, i)
 		end
 
 		rewardsMap[reward.id] = reward
