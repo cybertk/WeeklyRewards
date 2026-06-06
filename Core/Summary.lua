@@ -99,7 +99,7 @@ function RewardSummary:GetPrinter(channel)
 	end
 
 	return function(text)
-		SendChatMessage(text, channel)
+		C_ChatInfo.SendChatMessage(text:gsub("|A:.*|a", ""), channel)
 	end
 end
 
