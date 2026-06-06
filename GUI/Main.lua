@@ -573,7 +573,7 @@ function Main:AddCharacterColumns()
 					text = text .. tag,
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						GameTooltip:SetText(text)
+						GameTooltip:SetText(Util.WrapTextInClassColor(character.class, format("%s-%s", character.name, character.realmName)))
 						GameTooltip:AddLine(" ")
 						if #note > 0 then
 							GameTooltip:AddLine("|T131129:12|t" .. note, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
