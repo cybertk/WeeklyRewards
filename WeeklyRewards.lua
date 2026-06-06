@@ -67,7 +67,7 @@ function WeeklyRewards:MigrateDB()
 			reward.id = "vault"
 		elseif reward.id == "mn-hope" or reward.id == "mn-prey-beacon" then
 			reward.rollover = true
-		elseif reward.id == "mn-spark" then
+		elseif reward.id == "mn-spark" or reward.id == "mn-pquests" then
 			reward.objectives[1].questPool = candidate.entries[1].questPool
 		end
 

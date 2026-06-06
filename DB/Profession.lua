@@ -4,6 +4,14 @@ local RewardsGroup = {
 	PROFESSION = TRADE_SKILLS,
 }
 
+local function range(start, stop)
+	local t = {}
+	for i = start, stop, 1 do
+		table.insert(t, i)
+	end
+	return t
+end
+
 namespace.DB.rewardCandidiates["PROFESSION"] = {
 	{
 		id = "mn-pquests",
@@ -12,35 +20,7 @@ namespace.DB.rewardCandidiates["PROFESSION"] = {
 		description = "Weekly Profession Quests",
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = {
-			{
-				questPool = {
-					93690,
-					93691,
-					93692,
-					93693,
-					93694,
-					93695,
-					93696,
-					93697,
-					93698,
-					93699,
-					93700,
-					93702,
-					93703,
-					93704,
-					93705,
-					93706,
-					93708,
-					93709,
-					93710,
-					93711,
-					93712,
-					93714,
-				},
-				maxCompletion = 2,
-			},
-		},
+		entries = { { questPool = range(93690, 93714), maxCompletion = 2 } },
 	},
 	{
 		id = "mn-pdrops",
