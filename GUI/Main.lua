@@ -690,6 +690,40 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
+			name = GARRISON_LOCATION_TOOLTIP,
+			key = "garrison",
+			width = 50,
+			align = "CENTER",
+			cell = function(character)
+				return {
+					text = character:GetGarrisonLevel(),
+					onEnter = function(cellFrame)
+						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+						GameTooltip:SetText(L["column_covenant"], YELLOW_FONT_COLOR:GetRGB())
+						GameTooltip:AddLine(" ")
+
+						if CharacterStore.IsCurrentPlayer(character) then
+							character:UpdateGarrison(true)
+						end
+						if character.garrisonPlots then
+							Util:AddGarrisonUpgradeToTooltip(GameTooltip, character.garrison, character.garrisonPlots)
+						elseif character.garrison ~= 0 then
+							GameTooltip:AddLine(L["covenant_sanctum_unknown"], RED_FONT_COLOR:GetRGB())
+							GameTooltip:AddLine(" ")
+							GameTooltip:AddLine(L["table_alts_collect_hint"], GREEN_FONT_COLOR:GetRGB())
+						else
+							GameTooltip:AddLine(L["covenant_not_joined"])
+						end
+
+						GameTooltip:Show()
+					end,
+					onLeave = function()
+						GameTooltip:Hide()
+					end,
+				}
+			end,
+		},
+		{
 			name = L["column_location"],
 			key = "location",
 			width = 90,

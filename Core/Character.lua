@@ -393,6 +393,33 @@ function Character:AddXPToTooltip(tooltip)
 	end
 end
 
+function Character:UpdateGarrison(force)
+	if not force and self.garrison ~= nil and self.garrisonPlots ~= nil then
+		return
+	end
+
+	self.garrison = C_Garrison.GetGarrisonInfo(Enum.GarrisonType.Type_6_0_Garrison) or 0
+
+	if self.garrison == 0 then
+		return
+	end
+
+	self.garrisonPlots = Util:GetGarrisonUpgrade()
+	Util:Debug("Garrison updated:", self.garrison)
+end
+
+function Character:GetGarrisonLevel()
+	if self.garrison == nil then
+		return ""
+	end
+
+	if self.garrison == 0 then
+		return "-"
+	end
+
+	return self.garrison
+end
+
 function Character:UpdateCovenant(force)
 	if not force and self.covenant ~= nil and self.covenantSanctum ~= nil then
 		return

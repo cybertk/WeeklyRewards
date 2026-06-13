@@ -422,6 +422,124 @@ function Util:AddCovenantSanctumUpgradeToTooltip(tooltip, covenant, upgrade)
 	end
 end
 
+Util.GarrisonPlots = {
+	{ 18, 19, 20, 21 }, -- GARRISON_EMPTY_PLOT_SMALL
+	{ 22, 25, 26 }, --GARRISON_EMPTY_PLOT_MEDIUM
+	{ 23, 24, 28 }, --GARRISON_EMPTY_PLOT_LARGE
+	{ 59, 63, 67, 81, 98 }, -- Mine, Farm, Fishing Hut, Pet Menagerie, Shipyard
+}
+function Util:GetGarrisonUpgradeOld()
+	-- local level = C_Garrison.GetGarrisonInfo(Enum.GarrisonType.Type_6_0_Garrison)
+
+	-- C_Garrison.GetBuildingsForSize(Enum.GarrisonType.Type_6_0_Garrison
+
+	local upgrade = {}
+	for _, building in ipairs(C_Garrison.GetBuildings(Enum.GarrisonType.Type_6_0_Garrison)) do
+		local id, name, textureKit, icon, rank = C_Garrison.GetOwnedBuildingInfoAbbrev(building.plotID)
+
+		table.insert(upgrade, { id, rank })
+	end
+
+	return #upgrade > 0 and upgrade or nil
+end
+
+function Util:GetGarrisonUpgrade()
+	local plots = {}
+
+	for _, group in ipairs(self.GarrisonPlots) do
+		for _, plotID in ipairs(group) do
+			local id, name, textureKit, icon, rank = C_Garrison.GetOwnedBuildingInfoAbbrev(plotID)
+
+			if id then
+				plots[plotID] = { id, rank }
+			end
+			-- table.insert(upgrade, { id, rank })
+		end
+	end
+
+	return next(plots) and plots or nil
+end
+
+function Util:AddGarrisonUpgradeToTooltip(tooltip, level, upgrade)
+	-- tooltip:AddLine(COVENANT_PREVIEW_SANCTUM_FEATURE, NORMAL_FONT_COLOR:GetRGB())
+
+	tooltip:AddLine("Level: ", level)
+	tooltip:AddLine(" ")
+
+	local sizes = C_Garrison.GetBuildingSizes()
+
+	for size, group in ipairs(self.GarrisonPlots) do
+		-- local sizeName = sizes[size] or "Unknown Size"
+		tooltip:AddLine(sizes[size] and sizes[size].name or OTHER)
+
+		for _, plotID in ipairs(group) do
+			if upgrade[plotID] then
+				local buildingID, rank = unpack(upgrade[plotID])
+
+				local id, name, _, icon = C_Garrison.GetBuildingInfo(buildingID)
+				tooltip:AddDoubleLine(format("|T%s:14:14|t |cffffffff%s|r", icon, name, rank), format("|cnYELLOW_FONT_COLOR:%d|r", rank))
+			end
+		end
+
+		tooltip:AddLine(" ")
+	end
+
+	-- for _, plot in ipairs(upgrade) do
+	-- 	local buildingID, rank = unpack(plot)
+
+	-- 	local id, name, _, icon = C_Garrison.GetBuildingInfo(buildingID)
+	-- 	tooltip:AddLine(format("|T%s:14:14|t %s: (Rank %d)", icon, name, rank) .. id)
+	-- 	-- end
+	-- end
+
+	-- for _, plot in ipairs(upgrade) do
+	-- 	local buildingID, rank = unpack(plot)
+
+	-- 	table.insert(sizeGroup(1, plot))
+	-- end
+
+	-- local sizeGroups = {
+	-- 	[Enum.GarrisonBuildingSize.Small] = "Small",
+	-- 	[Enum.GarrisonBuildingSize.Medium] = "Medium",
+	-- 	[Enum.GarrisonBuildingSize.Large] = "Large",
+	-- }
+
+	-- local buidings = C_Garrison.GetBuildingsForSize(Enum.GarrisonType.Type_6_0_Garrison)
+	-- for _, building in ipairs(buidings) do
+	-- 	local id, name, textureKit, icon, rank = C_Garrison.GetOwnedBuildingInfoAbbrev(building.buildingID)
+
+	-- 	table.insert(sizeGroup(C_Garrison.GetBuildingSize(building.buildingID), {building.buildingID, rank}))
+	-- end
+
+	-- for name, group in pairs(sizeGroups) do
+	-- 	tooltip:AddLine(name)
+
+	-- 	for _, plot in ipairs(group) do
+	-- 		local buildingID, rank = unpack(plot)
+
+	-- 		local id, name, _, icon = C_Garrison.GetBuildingInfo(buildingID)
+	-- 		tooltip:AddLine(format("|T%s:14:14|t %s: (Rank %d)", icon, name, rank))
+	-- 		-- end
+	-- 	end
+	-- end
+
+	-- tooltip:AddLine(GARRISON_EMPTY_PLOT_SMALL)
+	-- tooltip:AddLine(GARRISON_EMPTY_PLOT_MEDIUM)
+	-- tooltip:AddLine(GARRISON_EMPTY_PLOT_LARGE)
+
+	-- for i, treeID in ipairs(self.CovenantSanctumTalentTree[covenant]) do
+	-- 	local tree = C_Garrison.GetTalentTreeInfo(treeID)
+
+	-- 	C_Garrison.GetBuildingInfo(buildingID)
+
+	-- 	tooltip:AddDoubleLine(
+	-- 		format("|T%d:12|t %s", tree.talents[1].icon, tree.title),
+	-- 		format("|cn%s_FONT_COLOR:%d/%d|r", upgrade[i] == 0 and "RED" or upgrade[i] == #tree.talents and "GREEN" or "WHITE", upgrade[i], #tree.talents),
+	-- 		WHITE_FONT_COLOR:GetRGB()
+	-- 	)
+	-- end
+end
+
 function Util:GetCurrentSeasonWeek()
 	local seasonStartWeek = time({ year = 2026, month = 3, day = 22 })
 
