@@ -254,7 +254,8 @@ function WeeklyRewards:OnEnable()
 	end)
 
 	self:RegisterEvent("QUEST_ACCEPTED", function()
-		self:UpdateActiveRewards()
+		Util:InvokeAfter(1, self.UpdateActiveRewards, self)
+		-- self:UpdateActiveRewards()
 	end)
 
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", function()

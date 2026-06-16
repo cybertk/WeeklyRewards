@@ -355,7 +355,10 @@ function RewardProgress:AddReward(currency, item, quantity, asDrops)
 	end
 
 	for _, rewardItem in ipairs(items) do
-		if (currency and rewardItem.currency == currency) or (item and rewardItem.item == item) then
+		if
+			(currency and rewardItem.currency == currency)
+			or (item and select(6, C_Item.GetItemInfoInstant(item)) == Enum.ItemClass.Consumable and rewardItem.item == item)
+		then
 			rewardItem.quantity = rewardItem.quantity + quantity
 			return
 		end
@@ -439,7 +442,19 @@ end
 function RewardProgress:ForEachRewardItem(callback, showDrops)
 	local items = showDrops == true and (self.drops or {}) or (self.rewards or {}) -- self.drops or self.rewards might be nil
 
+	local uniqueItems = {}
+
 	for _, rewardItem in ipairs(items) do
+		local obj = rewardItem.currency or rewardItem.item
+
+		if uniqueItems[obj] then
+			uniqueItems[obj].quantity = uniqueItems[obj].quantity + rewardItem.quantity
+		else
+			uniqueItems[obj] = CopyTable(rewardItem)
+		end
+	end
+
+	for _, rewardItem in pairs(uniqueItems) do
 		local item
 		if rewardItem.currency == Util.MONEY_CURRENCY_ID then
 			item = {
