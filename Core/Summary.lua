@@ -71,8 +71,10 @@ function RewardSummary:Create(rewardID)
 				o.count = o.count + 1
 			end
 
-			o:_AggregateObjects(o.rewards, progress.rewards or {})
-			o:_AggregateObjects(o.drops, progress.drops or {})
+			if not progress:IsExpired() then
+				o:_AggregateObjects(o.rewards, progress.rewards or {})
+				o:_AggregateObjects(o.drops, progress.drops or {})
+			end
 		end
 	end)
 
