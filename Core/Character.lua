@@ -252,10 +252,6 @@ function Character:Scan(activeRewards)
 	self:UpdateItemLevels()
 
 	local rewardsToScan = Util:Filter(activeRewards, function(reward)
-		if not reward:PlayerMeetsRequiredLevel(self.level) then
-			return false
-		end
-
 		if reward:IsLegacy() and activeRewards:IsExcluded(reward.id) then
 			return false
 		end
@@ -284,11 +280,16 @@ function Character:Scan(activeRewards)
 	for _, reward in ipairs(rewardsToScan) do
 		local progress = self.progress[reward.id]
 
-		if not progress or progress:IsExpired() then
+		if not reward:PlayerMeetsRequiredLevel(self.level) then
+			if progress and progress:IsExpired() then
+				self.progress[reward.id] = nil
+				progress = nil
+			end
+		elseif not progress or progress:IsExpired() then
 			progress = ProgressFactory:Create(reward.objectives[1].currency and 6 or reward.objectives[1].progressType)
 		end
 
-		if progress:Init(reward) then
+		if progress and progress:Init(reward) then
 			self:_AddProgress(progress, reward.id)
 			Util:Debug("progress initalized: " .. reward.id)
 		end
