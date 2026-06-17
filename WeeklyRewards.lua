@@ -32,6 +32,8 @@ local defaultDB = {
 		},
 		main = {
 			hiddenColumns = {},
+			sortColumn = "lastUpdate",
+			sortAscending = true,
 			windowScale = 100,
 			windowMaxRelativeWidth = 80,
 			windowMaxRows = 20,
@@ -152,6 +154,15 @@ function WeeklyRewards:OnEnable()
 	CharacterStore:SetFlatField("progress")
 
 	local characterStore = CharacterStore.Load(self.db.global.characters)
+
+	do
+		local main = self.db.global.main
+		characterStore:SetSortOrder(main.sortColumn)
+		if main.sortAscending ~= select(2, characterStore:GetSortOrder()) then
+			characterStore:SetSortOrder(main.sortColumn)
+		end
+	end
+
 	local character = characterStore:CurrentPlayer()
 	local activeRewards = ActiveRewards:New(self.db.global.activeRewards)
 
