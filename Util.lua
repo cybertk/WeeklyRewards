@@ -422,8 +422,20 @@ function Util:AddCovenantSanctumUpgradeToTooltip(tooltip, covenant, upgrade)
 	end
 end
 
-function Util:GetCurrentSeasonWeek()
-	local seasonStartWeek = time({ year = 2026, month = 3, day = 22 })
+---@param season number The season number, i.e. C_PvP.GetUIDisplaySeason()
+function Util:GetCurrentSeasonWeek(season)
+	-- The Sunday within week 1 of each season, keyed by season number. It has to sit after the
+	-- weekly reset of every region, i.e. a season starts on Tuesday in US but on Wednesday in EU
+	local seasonStartWeeks = {
+		{ year = 2026, month = 3, day = 22 }, -- Midnight Season 1, live on Mar 17
+		{ year = 2026, month = 8, day = 9 }, -- Midnight Season 2, live on Aug 4
+	}
+
+	if seasonStartWeeks[season] == nil then
+		return 1
+	end
+
+	local seasonStartWeek = time(seasonStartWeeks[season])
 
 	return math.ceil((GetServerTime() + C_DateAndTime.GetSecondsUntilWeeklyReset() - seasonStartWeek) / 7 / SECONDS_PER_DAY)
 end
@@ -434,7 +446,7 @@ function Util:GetCurrentSeasonName()
 
 	local WEEK_NAME = "Week %d"
 
-	return EXPANSION_SEASON_NAME:format(GetExpansionName(expansion), season) .. " - " .. WEEK_NAME:format(self:GetCurrentSeasonWeek())
+	return EXPANSION_SEASON_NAME:format(GetExpansionName(expansion), season) .. " - " .. WEEK_NAME:format(self:GetCurrentSeasonWeek(season))
 end
 
 Util.TagCache = {}
