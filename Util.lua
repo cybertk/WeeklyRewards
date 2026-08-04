@@ -423,7 +423,18 @@ function Util:AddCovenantSanctumUpgradeToTooltip(tooltip, covenant, upgrade)
 end
 
 function Util:GetCurrentSeasonWeek()
-	local seasonStartWeek = time({ year = 2026, month = 3, day = 22 })
+	local seasonStartWeeks = {
+		{ year = 2026, month = 3, day = 22 },
+		{ year = 2026, month = 8, day = 9 },
+	}
+
+	local season = C_PvP.GetUIDisplaySeason()
+
+	if seasonStartWeeks[season] == nil then
+		return 1
+	end
+
+	local seasonStartWeek = time(seasonStartWeeks[season])
 
 	return math.ceil((GetServerTime() + C_DateAndTime.GetSecondsUntilWeeklyReset() - seasonStartWeek) / 7 / SECONDS_PER_DAY)
 end
