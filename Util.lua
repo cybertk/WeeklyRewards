@@ -425,7 +425,7 @@ end
 function Util:GetCurrentSeasonWeek()
 	local seasonStartWeeks = {
 		{ year = 2026, month = 3, day = 22 },
-		{ year = 2026, month = 8, day = 9 },
+		{ year = 2026, month = 8, day = 16 },
 	}
 
 	local season = C_PvP.GetUIDisplaySeason()
