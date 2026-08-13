@@ -43,7 +43,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{
-				quest = 93744, -- Unity Against the Void
+				quest = 98172, -- Trailing Xal'atath
 				questPool = {
 					93766, -- Midnight: World Quests
 					93767, -- Midnight: Arcantina
@@ -59,6 +59,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 					93913, -- Midnight: World Boss
 					94457, -- Midnight: Battlegrounds
 					95843, -- Midnight: Ritual Sites
+					98172, -- Trailing Xal'atath
 				},
 				maxCompletion = 1,
 			},
