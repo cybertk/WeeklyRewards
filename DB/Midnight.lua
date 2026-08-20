@@ -17,10 +17,11 @@ local function range(start, stop, step)
 	return t
 end
 
-local function concat(t1, t2)
+local function concat(...)
 	local t = {}
-	tAppendAll(t, t1)
-	tAppendAll(t, t2)
+	for i = 1, select("#", ...) do
+		tAppendAll(t, select(i, ...))
+	end
 	return t
 end
 
@@ -36,14 +37,14 @@ namespace.DB.rewardCandidiates["MN"] = {
 		entries = { { quest = 95468 } }, -- Hope in the Darkest Corners
 	},
 	{
-		id = "mn-spark",
-		key = "Spark",
+		id = "mn-unity",
+		key = "Unity",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{
-				quest = 98172, -- Trailing Xal'atath
+				quest = 93744, -- Unity Against the Void
 				questPool = {
 					93766, -- Midnight: World Quests
 					93767, -- Midnight: Arcantina
@@ -58,8 +59,10 @@ namespace.DB.rewardCandidiates["MN"] = {
 					93912, -- Midnight: Raid
 					93913, -- Midnight: World Boss
 					94457, -- Midnight: Battlegrounds
+					95842, -- Midnight: Void Assaults
 					95843, -- Midnight: Ritual Sites
-					98172, -- Trailing Xal'atath
+					96727, -- Midnight: Offworld Showdowns
+					98232, -- Midnight: Vaults of Atal'Utek
 				},
 				maxCompletion = 1,
 			},
@@ -181,7 +184,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		group = RewardsGroup.PREY,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 0, questPool = range(91095, 91124), maxCompletion = 4 } },
+		entries = { { quest = 0, questPool = range(91095, 91124), maxCompletion = 5 } },
 	},
 	{
 		id = "mn-prey-h",
@@ -190,7 +193,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 0, questPool = concat(range(91210, 91242, 2), range(91243, 91255)), maxCompletion = 4 } },
+		entries = { { quest = 0, questPool = concat(range(91210, 91242, 2), range(91243, 91255)), maxCompletion = 5 } },
 	},
 
 	{
@@ -201,7 +204,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 0, questPool = concat(range(91211, 91241, 2), range(91256, 91269)), maxCompletion = 4 },
+			{ quest = 0, questPool = concat(range(91211, 91241, 2), range(91256, 91269), range(95021, 95024)), maxCompletion = 5 },
 		},
 	},
 	{
@@ -223,6 +226,15 @@ namespace.DB.rewardCandidiates["MN"] = {
 		entries = { { quest = 91277 } }, -- Prey: Preferential Killing
 	},
 	{
+		id = "mn-prey-anguish",
+		key = "|A:worldquest-Prey-Crystal:16:16|aAnguish",
+		group = RewardsGroup.PREY,
+		minimumLevel = 90,
+		rollover = true,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 96528 } }, -- Prey: Anguish from Beyond
+	},
+	{
 		id = "mn-assaults-void",
 		key = "|A:ui-eventpoi-majorattacks:20:20|aVoid",
 		group = RewardsGroup.FIELD_ACCOLADES,
@@ -233,5 +245,21 @@ namespace.DB.rewardCandidiates["MN"] = {
 			{ quest = 94386 }, -- Void Assaults: Zul'Aman
 			{ quest = 94385 }, -- Void Assaults: Eversong Woods
 		},
+	},
+	{
+		id = "mn-trailing",
+		key = "Trailing",
+		group = RewardsGroup.PINNACLE_CACHE,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 98172 } }, -- Trailing Xal'atath
+	},
+	{
+		id = "mn-surge",
+		key = "Surges",
+		group = RewardsGroup.PINNACLE_CACHE,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 96995 } }, -- Turn Back the Surge
 	},
 }

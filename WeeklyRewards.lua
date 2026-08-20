@@ -54,7 +54,7 @@ function WeeklyRewards:MigrateDB()
 
 	local rewardsMap = {}
 
-	for i, reward in ipairs(self.db.global.activeRewards) do
+	for i, reward in ipairs_reverse(self.db.global.activeRewards) do
 		local candidateID = string.gsub(reward.id, "([-%w+]):%d+", "%1")
 		local candidate = candidatesMap[candidateID]
 
@@ -63,54 +63,13 @@ function WeeklyRewards:MigrateDB()
 			reward.expansion = candidate.expansion
 		end
 
-		if reward.id == "tww-vault" then
-			reward.id = "vault"
-		elseif reward.id == "mn-hope" or reward.id == "mn-prey-beacon" then
-			reward.rollover = true
-		elseif reward.id == "mn-spark" or reward.id == "mn-pquests" then
-			reward.objectives[1].questPool = candidate.entries[1].questPool
-		elseif reward.id == "mn-legends" and reward.objectives[1].quest == 89268 then
+		if (reward.id == "mn-prey-n" or reward.id == "mn-prey-h" or reward.id == "mn-prey-m") and reward.objectives[1].maxCompletion == 4 then
+			table.remove(self.db.global.activeRewards, i)
+		elseif reward.id == "mn-spark" then
 			table.remove(self.db.global.activeRewards, i)
 		end
 
 		rewardsMap[reward.id] = reward
-	end
-
-	local factionMap = {}
-	for i = 1, 2 do
-		local faction = C_CreatureInfo.GetFactionInfo(i)
-		factionMap[faction.name] = faction.groupTag
-	end
-	for _, p in pairs(self.db.global.characters) do
-		if p.factionName then
-			p.faction = factionMap[p.factionName]
-		end
-	end
-
-	local color = self.db.global.main.windowBackgroundColor
-	if color.r == 0.11372549019 and color.g == 0.14117647058 and color.b == 0.16470588235 then
-		color = { r = 0, g = 0, b = 0, a = 1 }
-	end
-
-	for _, c in pairs(self.db.global.characters) do
-		for n, p in pairs(c.progress) do
-			local reward = rewardsMap[n]
-			if reward and p.claimedAt and p.state ~= 3 and (reward.resetTime - p.claimedAt) > 7 * 24 * 3600 then
-				p.state = 3
-			elseif reward and reward.expansion and self.db.global.activeRewards.excluded[n] then
-				c.progress[n] = nil
-				print("Purge progress:", c.name, n)
-			elseif reward and reward.id == "mn-assaults-void" and #p.pendingObjectives > 0 and reward.objectives[1].quest ~= p.pendingObjectives[1] then
-				if reward.objectives[1].quest ~= p.pendingObjectives[1].quest then
-					c.progress[n] = nil
-				end
-			end
-		end
-	end
-
-	local playerGUID = UnitGUID("player")
-	if self.db.global.characters[playerGUID] == nil then
-		return
 	end
 end
 
