@@ -63,6 +63,7 @@ function WeeklyRewards:MigrateDB()
 		if candidate then
 			reward.group = candidate.group
 			reward.expansion = candidate.expansion
+			reward.description = candidate.description
 		end
 
 		if (reward.id == "mn-prey-n" or reward.id == "mn-prey-h" or reward.id == "mn-prey-m") and reward.objectives[1].maxCompletion == 4 then

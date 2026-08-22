@@ -219,6 +219,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-prey-select",
 		key = "|A:worldquest-Prey-Crystal:16:16|aSelect",
+		description = "Preferential Killing|n|cnLIGHTBLUE_FONT_COLOR:Unlocked after reaching Renown 10 in the Preyhunter's Journey.|r",
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		rollover = true,
