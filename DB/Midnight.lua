@@ -251,6 +251,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		key = "Trailing",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 90,
+		rollover = true,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 98172 } }, -- Trailing Xal'atath
 	},
