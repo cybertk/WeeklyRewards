@@ -6,6 +6,7 @@ local RewardsGroup = {
 	LEVELING = "Leveling",
 	PREY = "Prey",
 	FIELD_ACCOLADES = "Field Accolades",
+	CORROSIVE_COIN = "Corrosive Coin",
 }
 
 local function range(start, stop, step)
@@ -263,5 +264,24 @@ namespace.DB.rewardCandidiates["MN"] = {
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 96995 } }, -- Turn Back the Surge
+	},
+	{
+		id = "mn-cc-purge",
+		key = "|A:ulatek-minor:20:20|aPurge",
+		group = RewardsGroup.CORROSIVE_COIN,
+		minimumLevel = 90,
+		rollover = true,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 95520 } }, -- Purging the Vaults
+	},
+	{
+		id = "mn-lair",
+		key = "Lair",
+		description = "Weekly Lair World Boss",
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 97128 }, -- Lair: Nymrissa Wavecaller
+		},
 	},
 }
