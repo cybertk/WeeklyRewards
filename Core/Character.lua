@@ -88,7 +88,7 @@ function Character:_AddProgress(progress, name)
 	end
 end
 
-function Character:IsCurrentPlayer()
+function Character:IsCurrent()
 	return self.GUID == UnitGUID("player")
 end
 
@@ -376,7 +376,7 @@ function Character:AddXPToTooltip(tooltip)
 		return
 	end
 
-	if self:IsCurrentPlayer() then
+	if self:IsCurrent() then
 		self:UpdateXP()
 	end
 

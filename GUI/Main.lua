@@ -570,7 +570,7 @@ function Main:AddCharacterColumns()
 
 				local text = Util.WrapTextInClassColor(character.class, character.name)
 				return {
-					text = text .. tag,
+					text = character:IsCurrent() and format("|T%s.tga:13:13|t%s%s", FRIENDS_TEXTURE_ONLINE, text, tag) or text .. tag,
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
 						GameTooltip:SetText(Util.WrapTextInClassColor(character.class, format("%s-%s", character.name, character.realmName)))
@@ -696,7 +696,7 @@ function Main:AddCharacterColumns()
 			align = "CENTER",
 			cell = function(character)
 				return {
-					text = character.location,
+					text = character:IsCurrent() and GREEN_FONT_COLOR:WrapTextInColorCode(character.location) or character.location,
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
 						GameTooltip:SetText(character.location, HIGHLIGHT_FONT_COLOR:GetRGB())
@@ -721,7 +721,8 @@ function Main:AddCharacterColumns()
 			width = 60,
 			align = "CENTER",
 			cell = function(character)
-				return { text = Util.FormatLastUpdateTime(character.lastUpdate) }
+				local text = Util.FormatLastUpdateTime(character.lastUpdate)
+				return { text = character:IsCurrent() and GREEN_FONT_COLOR:WrapTextInColorCode(text) or text }
 			end,
 		},
 	}
@@ -990,6 +991,14 @@ function Main:LayoutHeader(force)
 	header:SetClipsChildren(true)
 end
 
+function Main:UpdateLayout()
+	for _, row in ipairs(self.window.table.rows) do
+		for _, cell in ipairs(row.columns) do
+			cell.text:SetWordWrap(false)
+		end
+	end
+end
+
 function Main:ForEachColumn(callback, visibleOnly)
 	local activeRewards = ActiveRewards.Get()
 
@@ -1104,4 +1113,5 @@ function Main:Redraw()
 
 	self:UpdateSortArrow()
 	self:LayoutHeader(true)
+	self:UpdateLayout()
 end
