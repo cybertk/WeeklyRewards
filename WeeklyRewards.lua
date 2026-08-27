@@ -1,22 +1,18 @@
 local addonName, namespace = ...
 
-local WeeklyRewards = LibStub("AceAddon-3.0"):NewAddon(namespace, addonName, "AceConsole-3.0", "AceEvent-3.0")
-
 local LibDataBroker = LibStub("LibDataBroker-1.1")
 local LibDBIcon = LibStub("LibDBIcon-1.0")
-local AceDB = LibStub("AceDB-3.0")
 
 local Archivist = namespace.Archivist
 
 local L = namespace.L
 local DB = namespace.DB
 local Util = namespace.Util
+local Settings = namespace.Settings
 local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
 local RewardSummary = namespace.RewardSummary
 local Main = namespace.GUIMain
-
-_G.WeeklyRewards = WeeklyRewards
 
 WeeklyRewardsArchive = WeeklyRewardsArchive or {}
 
@@ -47,6 +43,8 @@ local defaultDB = {
 		dbVersion = 8,
 	},
 }
+
+local WeeklyRewards = {}
 
 function WeeklyRewards:MigrateDB()
 	local candidatesMap = {}
@@ -80,12 +78,11 @@ function WeeklyRewards:MigrateDB()
 	end
 end
 
-function WeeklyRewards:OnInitialize()
+function WeeklyRewards:OnLoaded()
 	_G["BINDING_NAME_WeeklyRewards"] = L["BINDING_NAME_WeeklyRewards"]
-	self:RegisterChatCommand("wr", "ExecuteChatCommands")
-	self:RegisterChatCommand("WeeklyRewards", "ExecuteChatCommands")
 
-	self.db = AceDB:New("WeeklyRewardsDB", defaultDB, true)
+	Settings:RegisterSettings("WeeklyRewardsDB", defaultDB)
+	self.db = WeeklyRewardsDB
 
 	Util.debug = self.db.global.debug
 	Util:Debug("Debug Mode:", Util.debug)
@@ -113,7 +110,7 @@ function WeeklyRewards:OnInitialize()
 	self:MigrateDB()
 end
 
-function WeeklyRewards:OnEnable()
+function WeeklyRewards:Init()
 	CharacterStore:SetCharacterTemplate(namespace.Character)
 	CharacterStore:SetFlatField("progress")
 
@@ -140,6 +137,14 @@ function WeeklyRewards:OnEnable()
 	else
 		wipe(WeeklyRewardsArchive)
 	end
+
+	character:UpdateFaction()
+
+	if self.db.global.utils.untrackQuests then
+		character:RemoveQuestsWatch()
+	end
+
+	self:UpdateActiveRewards()
 
 	EventRegistry:RegisterCallback("CK_LOOT_SCANNER_ITEM_LOOTED", function(self, source, quantity, itemID, currencyID)
 		character:ReceiveDrop(source, quantity, itemID, currencyID)
@@ -194,20 +199,6 @@ function WeeklyRewards:OnEnable()
 		character:UpdateCovenant(true)
 	end)
 
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", function(event, isInitialLogin, isReloadingUi)
-		if isInitialLogin == false and isReloadingUi == false then
-			return
-		end
-
-		character:UpdateFaction()
-
-		if self.db.global.utils.untrackQuests then
-			character:RemoveQuestsWatch()
-		end
-
-		self:UpdateActiveRewards()
-	end)
-
 	self:RegisterEvent("PLAYER_LEVEL_CHANGED", function()
 		character:Scan(activeRewards)
 	end)
@@ -235,11 +226,6 @@ function WeeklyRewards:OnEnable()
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", function()
 		character:UpdateParty()
 	end)
-end
-
-function WeeklyRewards:OnDisable()
-	self:UnregisterAllEvents()
-	self:UnregisterAllBuckets()
 end
 
 function WeeklyRewards:ExecuteChatCommands(command)
@@ -306,4 +292,44 @@ function WeeklyRewards:Broadcast(rewardID, channel)
 		return
 	end
 	RewardSummary:Create(rewardID):Broadcast(channel)
+end
+
+function WeeklyRewards:RegisterEvent(name, handler)
+	if self.eventsHandler == nil then
+		self.eventsHandler = {}
+	end
+	self.eventsHandler[name] = handler
+	self.frame:RegisterEvent(name)
+end
+
+do
+	_G["WeeklyRewards"] = WeeklyRewards
+
+	SLASH_WEEKLYREWARDS1 = "/wr"
+	SLASH_WEEKLYREWARDS2 = "/weeklyrewards"
+	function SlashCmdList.WEEKLYREWARDS(msg, editBox)
+		WeeklyRewards:ExecuteChatCommands(msg)
+	end
+
+	WeeklyRewards.frame = CreateFrame("Frame")
+
+	WeeklyRewards.frame:SetScript("OnEvent", function(self, event, ...)
+		WeeklyRewards.eventsHandler[event](event, ...)
+	end)
+
+	WeeklyRewards:RegisterEvent("ADDON_LOADED", function(event, name)
+		if name ~= addonName then
+			return
+		end
+
+		WeeklyRewards:OnLoaded()
+	end)
+
+	WeeklyRewards:RegisterEvent("PLAYER_ENTERING_WORLD", function(event, isInitialLogin, isReloadingUi)
+		if isInitialLogin == false and isReloadingUi == false then
+			return
+		end
+
+		WeeklyRewards:Init()
+	end)
 end
