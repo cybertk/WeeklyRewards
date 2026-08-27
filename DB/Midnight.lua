@@ -26,6 +26,14 @@ local function concat(...)
 	return t
 end
 
+local function GetSecondsUntilReset(lastReset, numWeeks)
+	local seconds = numWeeks * 7 * SECONDS_PER_DAY
+	local now = GetServerTime()
+	local timeStarted = lastReset + ((now + C_DateAndTime.GetSecondsUntilWeeklyReset() - lastReset) % (7 * SECONDS_PER_DAY))
+
+	return seconds - ((now - timeStarted) % seconds)
+end
+
 namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-hope",
@@ -42,7 +50,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		key = "Unity",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 90,
-		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		timeLeft = GenerateClosure(GetSecondsUntilReset, time({ year = 2026, month = 8, day = 17 }), 2),
 		entries = {
 			{
 				quest = 93744, -- Unity Against the Void
@@ -253,8 +261,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		key = "Trailing",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 90,
-		rollover = true,
-		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		timeLeft = GenerateClosure(GetSecondsUntilReset, time({ year = 2026, month = 8, day = 24 }), 2),
 		entries = { { quest = 98172 } }, -- Trailing Xal'atath
 	},
 	{

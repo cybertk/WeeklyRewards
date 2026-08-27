@@ -70,8 +70,10 @@ function WeeklyRewards:MigrateDB()
 			table.remove(self.db.global.activeRewards, i)
 		elseif reward.id == "mn-spark" then
 			table.remove(self.db.global.activeRewards, i)
-		elseif reward.id == "mn-trailing" then
-			reward.rollover = true
+		elseif reward.id == "mn-trailing" and reward.rollover then
+			table.remove(self.db.global.activeRewards, i)
+		elseif reward.id == "mn-unity" then
+			reward.resetTime = candidate.timeLeft() + GetServerTime()
 		end
 
 		rewardsMap[reward.id] = reward
