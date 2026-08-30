@@ -5,6 +5,26 @@ local Util = namespace.Util
 local GreatVaultProgress = namespace.RewardProgress:New()
 namespace.GreatVaultProgress = GreatVaultProgress
 
+local function GetActivityItemLevel(activity)
+	local itemLink = C_WeeklyRewards.GetExampleRewardItemHyperlinks(activity.id)
+	if not itemLink or itemLink == "" then
+		return
+	end
+
+	local itemLevel = C_Item.GetDetailedItemLevelInfo(itemLink)
+	if itemLevel then
+		return itemLevel
+	end
+end
+
+local function GetRecordStatus(activity)
+	local itemLevel = GetActivityItemLevel(activity)
+
+	if itemLevel then
+		return format("|cnLIGHTBLUE_FONT_COLOR:%s: |r|cnYELLOW_FONT_COLOR:%d|r", ITEM_LEVEL_ABBR, itemLevel)
+	end
+end
+
 -- See https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_WeeklyRewards/Blizzard_WeeklyRewards.lua
 function GreatVaultProgress:_UpdateRecords()
 	local rewardsDescriptionTemplate = {
@@ -41,6 +61,7 @@ function GreatVaultProgress:_UpdateRecords()
 				text = format("%d / %d ", progress, activity.threshold) .. format(#template > 0 and template or activity.raidString, activity.threshold),
 				fulfilled = progress,
 				required = activity.threshold,
+				s = GetRecordStatus(activity),
 			})
 		end
 	end

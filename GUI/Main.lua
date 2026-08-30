@@ -861,7 +861,7 @@ function Main:AddProgressToGameTooltip(progress)
 		progress:ForEachRecord(function(record, completed)
 			GameTooltip:AddDoubleLine(
 				WHITE_FONT_COLOR:WrapTextInColorCode("- " .. record.text or "Loading"),
-				CreateAtlasMarkup(completed and "common-icon-checkmark" or "common-icon-redx", 12, 12)
+				record.s or CreateAtlasMarkup(completed and "common-icon-checkmark" or "common-icon-redx", 12, 12)
 			)
 		end)
 	end
