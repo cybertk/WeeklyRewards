@@ -257,6 +257,28 @@ namespace.DB.rewardCandidiates["MN"] = {
 		},
 	},
 	{
+		id = "mn-showdown-n",
+		key = "Showdown:N",
+		group = RewardsGroup.FIELD_ACCOLADES,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 96713 }, -- Showdown on Val
+			{ quest = 96717 }, -- Showdown on Naigtal
+		},
+	},
+	{
+		id = "mn-showdown-h",
+		key = "Showdown:H",
+		group = RewardsGroup.FIELD_ACCOLADES,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 96714 }, -- Showdown on Val: Heroic
+			{ quest = 96718 }, -- Showdown on Naigtal: Heroic
+		},
+	},
+	{
 		id = "mn-trailing",
 		key = "Trailing",
 		group = RewardsGroup.PINNACLE_CACHE,
