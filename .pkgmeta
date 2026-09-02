@@ -37,9 +37,7 @@ ignore:
     - README.md
     # Ignore unused WeeklyKnowledge files to optimize pkg size
     - Embeds/WeeklyKnowledge/Libs
-    - Embeds/WeeklyKnowledge/Media/*.png
-    - Embeds/WeeklyKnowledge/Media/*.jpg
-    - Embeds/WeeklyKnowledge/Media/*.psd
+    - Embeds/WeeklyKnowledge/Media
     - Embeds/WeeklyKnowledge/Checklist.lua
     - Embeds/WeeklyKnowledge/Data.lua
     - Embeds/WeeklyKnowledge/Main.lua
