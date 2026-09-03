@@ -83,6 +83,15 @@ function WeeklyRewards:MigrateDB()
 
 		rewardsMap[reward.id] = reward
 	end
+
+	for _, c in pairs(self.db.global.characters) do
+		for n, p in pairs(c.progress) do
+			local reward = rewardsMap[n]
+			if reward and reward.id == "mn-surge" and not p.claimedAt and p.state == 3 then
+				p.state = 2
+			end
+		end
+	end
 end
 
 function WeeklyRewards:OnInitialize()
