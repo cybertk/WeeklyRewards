@@ -62,8 +62,8 @@ function Main:AddCloseButton()
 
 	self.window.titlebar.closeButton.Icon = self.window.titlebar:CreateTexture("$parentIcon", "ARTWORK")
 	self.window.titlebar.closeButton.Icon:SetPoint("CENTER", self.window.titlebar.closeButton, "CENTER")
-	self.window.titlebar.closeButton.Icon:SetSize(10, 10)
-	self.window.titlebar.closeButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Close.blp")
+	self.window.titlebar.closeButton.Icon:SetSize(16, 16)
+	self.window.titlebar.closeButton.Icon:SetAtlas("uitools-icon-close")
 	self.window.titlebar.closeButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
 end
 
@@ -221,8 +221,9 @@ function Main:AddSettingsButton()
 
 	self.window.titlebar.SettingsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.SettingsButton:GetName() .. "Icon", "ARTWORK")
 	self.window.titlebar.SettingsButton.Icon:SetPoint("CENTER", self.window.titlebar.SettingsButton, "CENTER")
-	self.window.titlebar.SettingsButton.Icon:SetSize(12, 12)
-	self.window.titlebar.SettingsButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Settings.blp")
+	self.window.titlebar.SettingsButton.Icon:SetSize(30, 30)
+	self.window.titlebar.SettingsButton.Icon:SetAtlas("GM-icon-settings")
+
 	self.window.titlebar.SettingsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
 end
 
@@ -245,8 +246,9 @@ function Main:AddCharactersButton()
 	end)
 	self.window.titlebar.CharactersButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.CharactersButton:GetName() .. "Icon", "ARTWORK")
 	self.window.titlebar.CharactersButton.Icon:SetPoint("CENTER", self.window.titlebar.CharactersButton, "CENTER")
-	self.window.titlebar.CharactersButton.Icon:SetSize(14, 14)
-	self.window.titlebar.CharactersButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Characters.blp")
+	self.window.titlebar.CharactersButton.Icon:SetSize(18, 18)
+	self.window.titlebar.CharactersButton.Icon:SetAtlas("squad_size_trios")
+
 	self.window.titlebar.CharactersButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
 	self.window.titlebar.CharactersButton:SetupMenu(function(_, rootMenu)
 		rootMenu:CreateTitle():AddInitializer(function(frame, description, menu)
@@ -327,8 +329,8 @@ function Main:AddRewardsFilterButton()
 
 	self.window.titlebar.ColumnsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.ColumnsButton:GetName() .. "Icon", "ARTWORK")
 	self.window.titlebar.ColumnsButton.Icon:SetPoint("CENTER", self.window.titlebar.ColumnsButton, "CENTER")
-	self.window.titlebar.ColumnsButton.Icon:SetSize(12, 12)
-	self.window.titlebar.ColumnsButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Columns.blp")
+	self.window.titlebar.ColumnsButton.Icon:SetSize(15, 14)
+	self.window.titlebar.ColumnsButton.Icon:SetAtlas("UI-HUD-Minimap-Tracking-Up")
 	self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
 end
 
@@ -414,8 +416,8 @@ function Main:AddSortButton()
 
 	self.window.titlebar.SortButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.SortButton:GetName() .. "Icon", "ARTWORK")
 	self.window.titlebar.SortButton.Icon:SetPoint("CENTER", self.window.titlebar.SortButton, "CENTER")
-	self.window.titlebar.SortButton.Icon:SetSize(14, 14)
-	self.window.titlebar.SortButton.Icon:SetTexture("Interface/AddOns/WeeklyRewards/Embeds/WeeklyKnowledge/Media/Icon_Toggle.blp")
+	self.window.titlebar.SortButton.Icon:SetSize(20, 20)
+	self.window.titlebar.SortButton.Icon:SetAtlas("shop-header-arrow-disabled")
 	self.window.titlebar.SortButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
 end
 
