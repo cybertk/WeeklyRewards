@@ -339,4 +339,16 @@ namespace.DB.rewardCandidiates["MN"] = {
 			{ quest = 97128 }, -- Lair: Nymrissa Wavecaller
 		},
 	},
+	{
+		id = "mn-sa-coiled",
+		key = "SA:Coiled",
+		group = RewardsGroup.PINNACLE_CACHE,
+		minimumLevel = 90,
+		rollover = true,
+		entries = {
+			{ quest = 95918, unlockQuest = 96307 }, -- Special Assignment: Wraith Wrath
+			{ quest = 95921, unlockQuest = 96492 }, -- Special Assignment: Demand and Supply
+			{ quest = 95922, unlockQuest = 96029 }, -- Special Assignment: Face the Swarm
+		},
+	},
 }
