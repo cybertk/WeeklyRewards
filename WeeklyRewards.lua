@@ -79,16 +79,38 @@ function WeeklyRewards:MigrateDB()
 		then
 			reward.resetTime = 0
 			self.db.global.activeRewards.nextResetTime = 0
+		elseif candidateID == "mn-sa" then
+			table.remove(self.db.global.activeRewards, i)
+			self.db.global.activeRewards.nextResetTime = 0
 		end
 
 		rewardsMap[reward.id] = reward
 	end
 
+	local saZones = {
+		[92145] = "eversong",
+		[92139] = "eversong",
+		[91390] = "zulaman",
+		[91796] = "zulaman",
+		[92063] = "harandar",
+		[93013] = "harandar",
+		[93438] = "voidstorm",
+		[93244] = "voidstorm",
+	}
+
 	for _, c in pairs(self.db.global.characters) do
+		for q, map in pairs(saZones) do
+			if c.progress["mn-sa:" .. q] then
+				c.progress["mn-sa-" .. map .. ":" .. q] = c.progress["mn-sa:" .. q]
+			end
+		end
+
 		for n, p in pairs(c.progress) do
 			local reward = rewardsMap[n]
 			if reward and reward.id == "mn-surge" and not p.claimedAt and p.state == 3 then
 				p.state = 2
+			elseif n:find("%-sa:(%d+)") then
+				c.progress[n] = nil
 			end
 		end
 	end

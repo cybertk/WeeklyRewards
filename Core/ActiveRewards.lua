@@ -20,19 +20,21 @@ local WAPI_UnitLevel = UnitLevel
 
 local Cache = {
 	rewardsCount = {}, -- Per candidiate ID defined in DB.candidates
-	nameToReward = {},
 	questToReward = {},
 	groups = {},
 	instance = nil,
 }
 
+local function GetCandidateID(rewardID)
+	return string.gsub(rewardID, "([-%w+]):%d+", "%1")
+end
+
 local function AddRewardToCache(reward)
 	do -- Update rewardsCount
-		local candidateID = string.gsub(reward.id, "([-%w+]):%d+", "%1")
+		local candidateID = GetCandidateID(reward.id)
 		Cache.rewardsCount[candidateID] = Cache.rewardsCount[candidateID] == nil and 1 or Cache.rewardsCount[candidateID] + 1
 	end
 
-	Cache.nameToReward[reward.name] = reward
 	for _, objective in ipairs(reward.objectives) do
 		Cache.questToReward[objective:GetQuest()] = reward
 	end
@@ -45,11 +47,10 @@ end
 
 local function RemoveRewardFromCache(reward)
 	do -- Update rewardsCount
-		local candidateID = string.gsub(reward.id, "([-%w+]):%d+", "%1")
+		local candidateID = GetCandidateID(reward.id)
 		Cache.rewardsCount[candidateID] = (Cache.rewardsCount[candidateID] or 0) > 1 and Cache.rewardsCount[candidateID] - 1 or nil
 	end
 
-	Cache.nameToReward[reward.name] = nil
 	Cache.questToReward[reward.id] = nil
 
 	if reward.group then
@@ -59,7 +60,6 @@ end
 
 local function ResetCache(activeRewards)
 	Cache.rewardsCount = {}
-	Cache.nameToReward = {}
 	Cache.questToReward = {}
 	Cache.groups = {}
 
@@ -105,8 +105,6 @@ function ActiveRewards:Sort()
 	end)
 end
 
-function ActiveRewards:_UpdateRewardId(reward) end
-
 function ActiveRewards:_Add(reward)
 	if reward:HasConfirmed() ~= true then
 		-- Only add confirmed reward
@@ -117,18 +115,6 @@ function ActiveRewards:_Add(reward)
 		Util:Debug("Reward already added", reward.id)
 		return
 	end
-
-	local name = reward.name
-	local attempts = 0
-	while Cache.nameToReward[name] ~= nil and attempts < 5 do
-		name = string.gsub(name, "(%w+:#)(%d+)", function(basename, index)
-			return basename .. (index + 1)
-		end)
-		attempts = attempts + 1
-		Util:Debug(format("Updated reward name: %s => %s", reward.name, name))
-	end
-
-	reward.name = name
 
 	table.insert(self, reward)
 	AddRewardToCache(reward)
@@ -161,7 +147,7 @@ function ActiveRewards:_FindCandidatesToScan(candidates)
 			end
 		end
 
-		return Cache.rewardsCount[candidate.id] == nil or (candidate.trackRecords and Cache.rewardsCount[candidate.id] < candidate.pick)
+		return Cache.rewardsCount[candidate.id] == nil
 	end)
 end
 
@@ -230,23 +216,14 @@ function ActiveRewards:Update(candidates, OnRewardAddedCallback)
 			rollover = candidate.rollover,
 			items = candidate.items,
 		})
-		local entries = candidate.entries
 		local pick = candidate.pick or 1
 
-		if candidate.trackRecords then
-			entries = Util:Filter(entries, function(e)
-				return Cache.questToReward[e.quest] == nil
-			end)
-			pick = 1
-			reward.name = reward.name .. ":#1"
-		end
-
-		reward:DetermineObjectives(entries, pick, candidate.rollover == true)
+		reward:DetermineObjectives(candidate.entries, pick, candidate.rollover == true)
 		reward:DetermineResetTime(candidate.timeLeft and candidate.timeLeft() or nil)
 		reward:DetermineState(pick)
 		reward:UpdateDescription()
 
-		if candidate.trackRecords and #reward.objectives > 0 then
+		if candidate.rollover and #candidate.entries > 1 and #reward.objectives > 0 then
 			reward.id = reward.id .. ":" .. reward.objectives[1].quest
 		end
 

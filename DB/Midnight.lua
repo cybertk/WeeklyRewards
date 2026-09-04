@@ -168,22 +168,47 @@ namespace.DB.rewardCandidiates["MN"] = {
 		entries = { { quest = 89354 } }, -- Preparing For Battle
 	},
 	{
-		id = "mn-sa",
-		key = "SA",
+		id = "mn-sa-eversong",
+		key = "SA:Eversong",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 80,
-		pick = 2,
-		trackRecords = true,
 		rollover = true,
 		entries = {
 			{ quest = 92145, unlockQuest = 92848 }, -- Special Assignment: The Grand Magister's Drink
-			{ quest = 92063, unlockQuest = 94390 }, -- Special Assignment: A Hunter's Regret
-			{ quest = 93013, unlockQuest = 94391 }, -- Special Assignment: Push Back the Light
-			{ quest = 93438, unlockQuest = 94743 }, -- Special Assignment: Precision Excision
-			{ quest = 93244, unlockQuest = 94795 }, -- Special Assignment: Agents of the Shield
+			{ quest = 92139, unlockQuest = 95435 }, -- Special Assignment: Shade and Claw
+		},
+	},
+	{
+		id = "mn-sa-zulaman",
+		key = "SA:Zul'Aman",
+		group = RewardsGroup.PINNACLE_CACHE,
+		minimumLevel = 80,
+		rollover = true,
+		entries = {
 			{ quest = 91390, unlockQuest = 94865 }, -- Special Assignment: What Remains of a Temple Broken
 			{ quest = 91796, unlockQuest = 94866 }, -- Special Assignment: Ours Once More!
-			{ quest = 92139, unlockQuest = 95435 }, -- Special Assignment: Shade and Claw
+		},
+	},
+	{
+		id = "mn-sa-harandar",
+		key = "SA:Harandar",
+		group = RewardsGroup.PINNACLE_CACHE,
+		minimumLevel = 80,
+		rollover = true,
+		entries = {
+			{ quest = 92063, unlockQuest = 94390 }, -- Special Assignment: A Hunter's Regret
+			{ quest = 93013, unlockQuest = 94391 }, -- Special Assignment: Push Back the Light
+		},
+	},
+	{
+		id = "mn-sa-voidstorm",
+		key = "SA:Voidstorm",
+		group = RewardsGroup.PINNACLE_CACHE,
+		minimumLevel = 80,
+		rollover = true,
+		entries = {
+			{ quest = 93438, unlockQuest = 94743 }, -- Special Assignment: Precision Excision
+			{ quest = 93244, unlockQuest = 94795 }, -- Special Assignment: Agents of the Shield
 		},
 	},
 	{
