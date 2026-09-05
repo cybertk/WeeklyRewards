@@ -5,21 +5,52 @@ local STATE = {
 	ANALYZING = 1,
 }
 
-local Reward = {
-	name = "",
-	id = "", -- id is unique, while name is not
-	group = nil,
-	state = STATE.ANALYZING,
-	description = nil,
-	objectives = {},
-	rolloverObjectives = nil,
-	minimumLevel = nil,
-	maximunLevel = nil,
-	resetTime = nil,
-	startTime = nil,
-	items = nil,
-}
+local Reward = {}
 namespace.Reward = Reward
+
+local candidatesById = {}
+
+function Reward.SetCandidates(candidates)
+	wipe(candidatesById)
+	for _, candidate in ipairs(candidates) do
+		candidatesById[candidate.id] = candidate
+
+		if candidate.rollover and candidate.entries and #candidate.entries > 1 then
+			for _, entry in ipairs(candidate.entries) do
+				if entry.quest then
+					candidatesById[candidate.id .. ":" .. entry.quest] = candidate
+				end
+			end
+		end
+	end
+end
+
+function Reward.GetCandidate(id)
+	return id and candidatesById[id]
+end
+
+function Reward:GetCandidateID()
+	local candidate = Reward.GetCandidate(self.id)
+	return candidate and candidate.id or self.id
+end
+
+function Reward.__index(instance, key)
+	local classValue = rawget(Reward, key)
+	if classValue ~= nil then
+		return classValue
+	end
+
+	local candidate = Reward.GetCandidate(instance.id)
+	if not candidate then
+		return nil
+	end
+
+	if key == "name" then
+		return candidate.key
+	end
+
+	return candidate[key]
+end
 
 local Util = namespace.Util
 
@@ -44,14 +75,29 @@ end
 
 function Reward:New(o)
 	o = o or {}
-	self.__index = self
 	setmetatable(o, self)
 
-	for _, objective in ipairs(o.objectives) do
+	for _, objective in ipairs(o.objectives or {}) do
 		setmetatable(objective, RewardObjective)
 	end
 
 	return o
+end
+
+function Reward:FromCandidate(candidate)
+	local reward = self:New({ id = candidate.id })
+	local pick = candidate.pick or 1
+
+	reward:DetermineObjectives(candidate.entries, pick, candidate.rollover == true)
+	reward:DetermineResetTime(candidate.timeLeft and candidate.timeLeft() or nil)
+	reward:DetermineState(pick)
+	reward:UpdateDescription()
+
+	if candidate.rollover and #candidate.entries > 1 and #reward.objectives > 0 then
+		reward.id = candidate.id .. ":" .. reward.objectives[1].quest
+	end
+
+	return reward
 end
 
 function Reward:PlayerMeetsRequiredLevel(level)
@@ -72,6 +118,7 @@ end
 
 function Reward:AddObjective(objective)
 	setmetatable(objective, RewardObjective)
+	self.objectives = self.objectives or {}
 	table.insert(self.objectives, objective)
 end
 
