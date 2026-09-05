@@ -1,26 +1,5 @@
 local _, namespace = ...
 
-local STATE = {
-	CONFIRMED = 0,
-	ANALYZING = 1,
-}
-
-local Reward = {
-	name = "",
-	id = "", -- id is unique, while name is not
-	group = nil,
-	state = STATE.ANALYZING,
-	description = nil,
-	objectives = {},
-	rolloverObjectives = nil,
-	minimumLevel = nil,
-	maximunLevel = nil,
-	resetTime = nil,
-	startTime = nil,
-	items = nil,
-}
-namespace.Reward = Reward
-
 local Util = namespace.Util
 
 local WAPI_GetQuestTimeLeftSeconds = C_TaskQuest.GetQuestTimeLeftSeconds
@@ -35,6 +14,11 @@ local WAPI_GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 local WAPI_GetServerTime = GetServerTime
 local WAPI_UnitLevel = UnitLevel
 
+local STATE = {
+	CONFIRMED = 0,
+	ANALYZING = 1,
+}
+
 local RewardObjective = {}
 RewardObjective.__index = RewardObjective
 
@@ -42,16 +26,100 @@ function RewardObjective:GetQuest()
 	return self.quest or self.questPool[1]
 end
 
-function Reward:New(o)
-	o = o or {}
-	self.__index = self
-	setmetatable(o, self)
+local Reward = {
+	CandidatesById = {},
+	Objectives = {},
+}
 
-	for _, objective in ipairs(o.objectives) do
-		setmetatable(objective, RewardObjective)
+local function GetRewardID(candidate, index)
+	if index then
+		return candidate.id .. ":" .. candidate.entries[index].quest
+	elseif candidate.rollover and #candidate.entries ~= (candidate.pick or 1) then
+		return candidate.id .. ":" .. candidate.entries[1].quest
+	else
+		return candidate.id
+	end
+end
+
+function Reward.SetCandidates(candidates)
+	for _, candidate in ipairs(candidates) do
+		if GetRewardID(candidate) ~= candidate.id then
+			for i, entry in ipairs(candidate.entries) do
+				Reward.CandidatesById[GetRewardID(candidate, i)] = candidate
+			end
+		else
+			Reward.CandidatesById[candidate.id] = candidate
+		end
+
+		for i, entry in ipairs(candidate.entries) do
+			setmetatable(entry, RewardObjective)
+		end
+	end
+end
+
+function Reward.__index(instance, key)
+	local classValue = rawget(Reward, key)
+	if classValue ~= nil then
+		return classValue
 	end
 
+	local candidate = Reward.CandidatesById[instance.id]
+	if key == "name" then
+		return candidate.key
+	end
+
+	if candidate == nil then
+		print("__index", instance.id, key)
+	end
+
+	if key == "objectives" then
+		if instance.o then
+			if not Reward.Objectives[instance] then
+				Reward.Objectives[instance] = {}
+
+				for _, r in ipairs(instance.o) do
+					table.insert(Reward.Objectives[instance], candidate.entries[r])
+				end
+			end
+
+			return Reward.Objectives[instance]
+		else
+			return candidate.entries
+		end
+	end
+
+	return candidate[key]
+end
+
+function Reward:New(o)
+	o = o or {}
+	setmetatable(o, self)
+
 	return o
+end
+
+function Reward:FromCandidate(candidate)
+	local reward = self:New({ id = GetRewardID(candidate) })
+	local pick = candidate.pick or 1
+
+	reward:DetermineObjectives(candidate.entries, pick, candidate.rollover == true)
+	reward:DetermineResetTime(candidate.timeLeft and candidate.timeLeft() or nil)
+	reward:DetermineState(pick)
+	-- reward:UpdateDescription()
+
+	return reward
+end
+
+function Reward:GetCandidate()
+	return Reward.CandidatesById[self.id]
+end
+
+function Reward:GetCandidateID()
+	return Reward.CandidatesById[self.id].id
+end
+
+function Reward:IsValid()
+	return Reward.CandidatesById[self.id] ~= nil
 end
 
 function Reward:PlayerMeetsRequiredLevel(level)
@@ -70,9 +138,11 @@ function Reward:IsLegacy()
 	return self.expansion ~= nil
 end
 
-function Reward:AddObjective(objective)
-	setmetatable(objective, RewardObjective)
-	table.insert(self.objectives, objective)
+function Reward:AddObjective(index)
+	-- setmetatable(objective, RewardObjective)
+	-- table.insert(self.objectives, objective)
+	self.o = self.o or {}
+	table.insert(self.o, index)
 end
 
 function Reward:DetermineObjectives(entries, pick, isRollover)
@@ -82,14 +152,8 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 
 	Util:Debug(string.format("Determine: [%s] %d out of %d candidiates", self.name, pick, #entries))
 
-	self.objectives = {}
-
 	-- Scenario: Fixed target
 	if pick == #entries then
-		for _, entry in ipairs(entries) do
-			self:AddObjective(entry)
-		end
-
 		return
 	end
 
@@ -125,7 +189,7 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 
 			if confirmed then
 				Util:Debug("Reward [" .. self.name .. "] confirmed: " .. QuestUtils_GetQuestName(entry.quest or 0))
-				self:AddObjective(entry)
+				self:AddObjective(i)
 				if #self.objectives == pick then
 					Util:Debug("Reward [" .. self.name .. "] all confirmed: " .. pick)
 					break
@@ -188,15 +252,15 @@ function Reward:DetermineResetTime(timeLeft)
 	self.resetTime = self.startTime + timeLeft
 end
 
-function Reward:UpdateDescription()
-	if self.description and #self.description > 0 then
-		return
-	end
+-- function Reward:UpdateDescription()
+-- 	if self.description and #self.description > 0 then
+-- 		return
+-- 	end
 
-	if self.objectives and #self.objectives > 0 then
-		self.description = "{quest:" .. self.objectives[1]:GetQuest() .. "}"
-	end
-end
+-- 	if self.objectives and #self.objectives > 0 then
+-- 		self.description = "{quest:" .. self.objectives[1]:GetQuest() .. "}"
+-- 	end
+-- end
 
 function Reward:GetDescription(short)
 	if short and self.description and self.description:match("|n") then
@@ -333,3 +397,5 @@ function Reward:ForEachItem(callback)
 
 	return items
 end
+
+namespace.Reward = Reward

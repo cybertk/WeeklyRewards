@@ -54,19 +54,40 @@ function WeeklyRewards:MigrateDB()
 
 	local rewardsMap = {}
 
+	-- self.db.global.activeRewards = {}
+	-- self.db.global.activeRewards.nextResetTime = 0
+
 	for i, reward in ipairs_reverse(self.db.global.activeRewards) do
 		local candidateID = string.gsub(reward.id, "([-%w+]):%d+", "%1")
 		local candidate = candidatesMap[candidateID]
 
-		if candidate then
-			reward.group = candidate.group
-			reward.expansion = candidate.expansion
-			reward.description = candidate.description
+		if reward.objectives then
+			local objectives = reward.objectives
+			reward.objectives = nil
+
+			if #candidate.entries ~= #objectives then
+				reward.o = {}
+				for r, e in ipairs(candidate.entries) do
+					for _, o in ipairs(objectives) do
+						if o.quest == e.quest then
+							table.insert(reward.o, r)
+						end
+					end
+				end
+			end
+			print("oh")
 		end
 
-		if (reward.id == "mn-prey-n" or reward.id == "mn-prey-h" or reward.id == "mn-prey-m") and reward.objectives[1].maxCompletion == 4 then
-			table.remove(self.db.global.activeRewards, i)
-		elseif reward.id == "mn-spark" then
+		reward.name = nil
+		reward.description = nil
+		reward.group = nil
+		reward.expansion = nil
+		reward.minimumLevel = nil
+		reward.maximumLevel = nil
+		reward.rollover = nil
+		reward.items = nil
+
+		if reward.id == "mn-spark" then
 			table.remove(self.db.global.activeRewards, i)
 		elseif reward.id == "mn-trailing" and reward.rollover then
 			table.remove(self.db.global.activeRewards, i)
@@ -161,6 +182,8 @@ function WeeklyRewards:Init()
 			characterStore:SetSortOrder(main.sortColumn)
 		end
 	end
+
+	ActiveRewards.SetCandidates(DB:GetAllCandidates())
 
 	local character = characterStore:CurrentPlayer()
 	local activeRewards = ActiveRewards:New(self.db.global.activeRewards)

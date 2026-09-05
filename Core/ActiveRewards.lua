@@ -25,13 +25,9 @@ local Cache = {
 	instance = nil,
 }
 
-local function GetCandidateID(rewardID)
-	return string.gsub(rewardID, "([-%w+]):%d+", "%1")
-end
-
 local function AddRewardToCache(reward)
 	do -- Update rewardsCount
-		local candidateID = GetCandidateID(reward.id)
+		local candidateID = reward:GetCandidateID()
 		Cache.rewardsCount[candidateID] = Cache.rewardsCount[candidateID] == nil and 1 or Cache.rewardsCount[candidateID] + 1
 	end
 
@@ -47,7 +43,7 @@ end
 
 local function RemoveRewardFromCache(reward)
 	do -- Update rewardsCount
-		local candidateID = GetCandidateID(reward.id)
+		local candidateID = reward:GetCandidateID()
 		Cache.rewardsCount[candidateID] = (Cache.rewardsCount[candidateID] or 0) > 1 and Cache.rewardsCount[candidateID] - 1 or nil
 	end
 
@@ -79,8 +75,16 @@ function ActiveRewards:New(o)
 	self.__index = self
 	setmetatable(o, self)
 
-	for i, reward in ipairs(o) do
-		o[i] = Reward:New(reward)
+	for i = #o, 1, -1 do
+		local reward = o[i]
+
+		if Reward.IsValid(reward) then
+			o[i] = Reward:New(reward)
+		else
+			Util:Debug("Invalid reward, cannot add to cache", reward.id)
+			print("Invalid reward, cannot add to cache", reward.id, Reward.CandidatesById[reward.id])
+			table.remove(o, i)
+		end
 	end
 
 	-- Init
@@ -171,6 +175,10 @@ function ActiveRewards:GetAllGroups()
 	return current, legacy
 end
 
+function ActiveRewards.SetCandidates(candidates)
+	Reward.SetCandidates(candidates)
+end
+
 function ActiveRewards:Reset(teardown_func, force)
 	local now = WAPI_GetServerTime()
 
@@ -205,27 +213,7 @@ function ActiveRewards:Update(candidates, OnRewardAddedCallback)
 	end
 
 	for _, candidate in ipairs(candidatesToScan) do
-		local reward = Reward:New({
-			id = candidate.id,
-			name = candidate.key,
-			description = candidate.description,
-			group = candidate.group,
-			expansion = candidate.expansion,
-			minimumLevel = candidate.minimumLevel,
-			maximumLevel = candidate.maximumLevel,
-			rollover = candidate.rollover,
-			items = candidate.items,
-		})
-		local pick = candidate.pick or 1
-
-		reward:DetermineObjectives(candidate.entries, pick, candidate.rollover == true)
-		reward:DetermineResetTime(candidate.timeLeft and candidate.timeLeft() or nil)
-		reward:DetermineState(pick)
-		reward:UpdateDescription()
-
-		if candidate.rollover and #candidate.entries > 1 and #reward.objectives > 0 then
-			reward.id = reward.id .. ":" .. reward.objectives[1].quest
-		end
+		local reward = Reward:FromCandidate(candidate)
 
 		self:_Add(reward)
 		if OnRewardAddedCallback then
