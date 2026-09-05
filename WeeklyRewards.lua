@@ -58,11 +58,20 @@ function WeeklyRewards:MigrateDB()
 		local candidateID = string.gsub(reward.id, "([-%w+]):%d+", "%1")
 		local candidate = candidatesMap[candidateID]
 
-		if candidate then
-			reward.group = candidate.group
-			reward.expansion = candidate.expansion
-			reward.description = candidate.description
-		end
+		-- if candidate then
+		-- 	reward.group = candidate.group
+		-- 	reward.expansion = candidate.expansion
+		-- 	reward.description = candidate.description
+		-- end
+
+		reward.name = nil
+		reward.description = nil
+		reward.group = nil
+		reward.expansion = nil
+		reward.minimumLevel = nil
+		reward.maximumLevel = nil
+		reward.rollover = nil
+		reward.items = nil
 
 		if (reward.id == "mn-prey-n" or reward.id == "mn-prey-h" or reward.id == "mn-prey-m") and reward.objectives[1].maxCompletion == 4 then
 			table.remove(self.db.global.activeRewards, i)
@@ -161,6 +170,8 @@ function WeeklyRewards:Init()
 			characterStore:SetSortOrder(main.sortColumn)
 		end
 	end
+
+	ActiveRewards.SetCandidates(DB:GetAllCandidates())
 
 	local character = characterStore:CurrentPlayer()
 	local activeRewards = ActiveRewards:New(self.db.global.activeRewards)

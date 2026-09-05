@@ -6,20 +6,61 @@ local STATE = {
 }
 
 local Reward = {
-	name = "",
-	id = "", -- id is unique, while name is not
-	group = nil,
-	state = STATE.ANALYZING,
-	description = nil,
-	objectives = {},
-	rolloverObjectives = nil,
-	minimumLevel = nil,
-	maximunLevel = nil,
-	resetTime = nil,
-	startTime = nil,
-	items = nil,
+	CandidatesById = {},
 }
 namespace.Reward = Reward
+
+local function GetRewardID(candidate, index)
+	if index then
+		return candidate.id .. ":" .. candidate.entries[index].quest
+	elseif candidate.rollover and #candidate.entries ~= (candidate.pick or 1) then
+		return candidate.id .. ":" .. candidate.entries[1].quest
+	else
+		return candidate.id
+	end
+end
+
+function Reward.SetCandidates(candidates)
+	for _, candidate in ipairs(candidates) do
+		if GetRewardID(candidate) ~= candidate.id then
+			for i, entry in ipairs(candidate.entries) do
+				Reward.CandidatesById[GetRewardID(candidate, i)] = candidate
+			end
+		else
+			Reward.CandidatesById[candidate.id] = candidate
+		end
+	end
+end
+
+function Reward:GetCandidate()
+	return Reward.CandidatesById[self.id]
+end
+
+function Reward:GetCandidateID()
+	return Reward.CandidatesById[self.id].id
+end
+
+function Reward:IsValid()
+	return Reward.CandidatesById[self.id] ~= nil
+end
+
+function Reward.__index(instance, key)
+	local classValue = rawget(Reward, key)
+	if classValue ~= nil then
+		return classValue
+	end
+
+	local candidate = Reward.CandidatesById[instance.id]
+	if key == "name" then
+		return candidate.key
+	end
+
+	if candidate == nil then
+		print("__index", instance.id)
+	end
+
+	return candidate[key]
+end
 
 local Util = namespace.Util
 
@@ -44,14 +85,25 @@ end
 
 function Reward:New(o)
 	o = o or {}
-	self.__index = self
 	setmetatable(o, self)
 
-	for _, objective in ipairs(o.objectives) do
+	for _, objective in ipairs(o.objectives or {}) do
 		setmetatable(objective, RewardObjective)
 	end
 
 	return o
+end
+
+function Reward:FromCandidate(candidate)
+	local reward = self:New({ id = GetRewardID(candidate) })
+	local pick = candidate.pick or 1
+
+	reward:DetermineObjectives(candidate.entries, pick, candidate.rollover == true)
+	reward:DetermineResetTime(candidate.timeLeft and candidate.timeLeft() or nil)
+	reward:DetermineState(pick)
+	reward:UpdateDescription()
+
+	return reward
 end
 
 function Reward:PlayerMeetsRequiredLevel(level)
@@ -72,6 +124,7 @@ end
 
 function Reward:AddObjective(objective)
 	setmetatable(objective, RewardObjective)
+	self.objectives = self.objectives or {}
 	table.insert(self.objectives, objective)
 end
 
