@@ -1029,6 +1029,9 @@ function Main:Redraw()
 		return
 	end
 
+	local windowScale = WeeklyRewards.db.global.main.windowScale / 100
+	self.window:SetScale(windowScale)
+
 	local tableWidth = 0
 	local tableHeight = 0
 	local minWindowWidth = 300
@@ -1099,7 +1102,6 @@ function Main:Redraw()
 		end)
 	end
 
-	local windowScale = WeeklyRewards.db.global.main.windowScale / 100
 	local desiredTableHeight = WeeklyRewards.db.global.main.windowMaxRows * Constants.TABLE_ROW_HEIGHT + Constants.TABLE_HEADER_HEIGHT
 
 	self.window.border:SetShown(WeeklyRewards.db.global.main.windowBorder)
@@ -1109,7 +1111,6 @@ function Main:Redraw()
 	self.window:SetHeight(math.min(GetScreenHeight() / windowScale, math.min(tableHeight, desiredTableHeight) + Constants.TITLEBAR_HEIGHT + 2))
 
 	self.window:SetClampRectInsets(self.window:GetWidth() / 2, self.window:GetWidth() / -2, 0, self.window:GetHeight() / 2)
-	self.window:SetScale(windowScale)
 	self.window.titlebar.title:SetShown(self.window:GetWidth() > (240 / windowScale))
 	self.window.titlebar.season:SetShown(self.window:GetWidth() > (600 / windowScale))
 
