@@ -564,7 +564,6 @@ function Main:AddCharacterColumns()
 		{
 			name = NAME,
 			key = "name",
-			width = 90,
 			cell = function(character)
 				local note, tag = character:GetNote()
 
@@ -594,7 +593,6 @@ function Main:AddCharacterColumns()
 		{
 			name = L["column_realm"],
 			key = "realmName",
-			width = 90,
 			cell = function(character)
 				return { text = character.realmName }
 			end,
@@ -602,7 +600,6 @@ function Main:AddCharacterColumns()
 		{
 			name = LEVEL,
 			key = "level",
-			width = 50,
 			align = "CENTER",
 			cell = function(character)
 				local _, timeToCharge = character:GetRestedXP()
@@ -620,7 +617,6 @@ function Main:AddCharacterColumns()
 		{
 			name = ITEM_LEVEL_ABBR,
 			key = "itemLevels",
-			width = 40,
 			align = "CENTER",
 			cell = function(character)
 				local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvP = character:GetAverageItemLevel()
@@ -651,7 +647,6 @@ function Main:AddCharacterColumns()
 		{
 			name = FACTION,
 			key = "factionName",
-			width = 50,
 			align = "CENTER",
 			cell = function(character)
 				return { text = CreateAtlasMarkup(format("questlog-questtypeicon-%s", character:GetFaction():lower()), 20, 20) }
@@ -660,7 +655,6 @@ function Main:AddCharacterColumns()
 		{
 			name = L["column_covenant"],
 			key = "covenant",
-			width = 70,
 			align = "CENTER",
 			cell = function(character)
 				return {
@@ -694,7 +688,6 @@ function Main:AddCharacterColumns()
 		{
 			name = L["column_location"],
 			key = "location",
-			width = 90,
 			align = "CENTER",
 			cell = function(character)
 				return {
@@ -720,7 +713,6 @@ function Main:AddCharacterColumns()
 		{
 			name = L["column_last_update"],
 			key = "lastUpdate",
-			width = 60,
 			align = "CENTER",
 			cell = function(character)
 				local text = Util.FormatLastUpdateTime(character.lastUpdate)
@@ -1001,6 +993,16 @@ function Main:UpdateLayout()
 	end
 end
 
+function Main:MeasureTextWidth(text)
+	if not self.measureText then
+		self.measureText = self.window:CreateFontString("$parentMeasureText", "OVERLAY")
+		self.measureText:SetFontObject("GameFontHighlightSmall")
+		self.measureText:Hide()
+	end
+	self.measureText:SetText(text or "")
+	return self.measureText:GetStringWidth()
+end
+
 function Main:ForEachColumn(callback, visibleOnly)
 	local activeRewards = ActiveRewards.Get()
 
@@ -1047,22 +1049,6 @@ function Main:Redraw()
 		self:AddRewardColumns()
 	end
 
-	do -- Table Column config
-		Main:ForEachColumn(function(dataColumn)
-			local text = self.window:CreateFontString("$parentText", "OVERLAY")
-			text:SetFontObject("GameFontHighlightSmall")
-			text:SetText(dataColumn.name)
-
-			---@type WK_TableDataColumn
-			local column = {
-				width = math.max(text:GetStringWidth() + 16, dataColumn.width or 46),
-				align = dataColumn.align or "LEFT",
-			}
-			table.insert(tableData.columns, column)
-			tableWidth = tableWidth + column.width
-		end)
-	end
-
 	do -- Table Header row
 		---@type WK_TableDataRow
 		local row = { columns = {} }
@@ -1099,6 +1085,28 @@ function Main:Redraw()
 			tableHeight = tableHeight + self.window.table.config.rows.height
 		end, function(character) -- filter
 			return CharacterStore.IsCurrentPlayer(character) or character.enabled
+		end)
+	end
+
+	do -- Auto column widths from header and cell text
+		local padding = Constants.TABLE_CELL_PADDING * 2
+		local col = 0
+		Main:ForEachColumn(function(dataColumn)
+			col = col + 1
+			local headerWidth = self:MeasureTextWidth(dataColumn.name)
+			local cellWidth = 0
+			for rowIndex = 2, #tableData.rows do
+				local cell = tableData.rows[rowIndex].columns[col]
+				cellWidth = math.max(cellWidth, self:MeasureTextWidth(cell and cell.text))
+			end
+
+			---@type WK_TableDataColumn
+			local column = {
+				width = math.max(headerWidth, cellWidth) + padding,
+				align = dataColumn.align or "LEFT",
+			}
+			table.insert(tableData.columns, column)
+			tableWidth = tableWidth + column.width
 		end)
 	end
 
