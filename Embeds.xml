@@ -4,7 +4,7 @@
 
   <!-- CallbackHandler:
           URL: https://www.wowace.com/projects/callbackhandler
-          Required By: AceEvent
+          Required By: LibDataBroker, LibDBIcon
   -->
   <Include file='Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml' />
 
@@ -16,14 +16,6 @@
           Dependencies：LibDataBroker
   -->
   <Include file='Libs\LibDBIcon-1.0\lib.xml' />
-
-  <!-- Ace3 Libs: https://www.wowace.com/projects/ace3 -->
-  <Include file='Libs\Ace3\AceAddon-3.0\AceAddon-3.0.xml' />
-  <Include file='Libs\Ace3\AceConsole-3.0\AceConsole-3.0.xml' />
-  <Include file='Libs\Ace3\AceDB-3.0\AceDB-3.0.xml' />
-  <Include file='Libs\Ace3\AceDBOptions-3.0\AceDBOptions-3.0.xml' />
-  <Include file='Libs\Ace3\AceEvent-3.0\AceEvent-3.0.xml' />
-
 
   <!-- Archivist: https://github.com/emptyrivers/Archivist -->
   <Include file="Embeds\Archivist\Archivist.xml" />

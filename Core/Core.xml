@@ -1,4 +1,5 @@
 <Ui>
+    <Script file="Settings.lua" />
     <Script file="Reward.lua" />
     <Script file="ActiveRewards.lua" />
     <Script file="Progress.lua" />
