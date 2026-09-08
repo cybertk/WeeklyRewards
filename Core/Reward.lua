@@ -194,19 +194,19 @@ function Reward:UpdateDescription()
 	end
 
 	if self.objectives and #self.objectives > 0 then
-		self.description = WAPI_GetQuestName(self.objectives[1]:GetQuest())
+		self.description = "{quest:" .. self.objectives[1]:GetQuest() .. "}"
 	end
 end
 
 function Reward:GetDescription(short)
-	self:UpdateDescription()
-
-	if not self.description then
-		return LFG_LIST_LOADING
-	elseif short and self.description:match("|n") then
+	if short and self.description and self.description:match("|n") then
 		return self.name
-	else
+	elseif self.description then
 		return Util:ResolveTags(self.description)
+	elseif self.objectives and #self.objectives > 0 then
+		return Util:ResolveTags("{quest:" .. self.objectives[1]:GetQuest() .. "}")
+	else
+		return UNKNOWN
 	end
 end
 

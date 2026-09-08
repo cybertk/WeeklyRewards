@@ -449,21 +449,24 @@ function Util:GetCurrentSeasonName()
 end
 
 Util.TagCache = {}
-function Util:ResolveTags(s)
-	local resolvedString = s:gsub("{(%l+):(%d+)(%l*)}", function(type, id, suffix)
+Util.PointsTracked = {}
+Util.TrackableTags = {}
+function Util:ResolveTags(s, autoColor)
+	local resolvedString = s:gsub("{(%l+):(%d+):?(-?%d*):?(%d*)}", function(type, id, arg1, arg2)
 		id = tonumber(id)
-		if self.TagCache[id] then
+		arg1 = arg1 ~= "" and tonumber(arg1) or nil
+
+		if self.TagCache[id] and not arg1 then
 			return self.TagCache[id]
 		end
 
+		local color = YELLOW_FONT_COLOR:GenerateHexColorMarkup()
 		local name
 
 		if type == "npc" then
 			local tooltipData = C_TooltipInfo.GetHyperlink("unit:Creature-0-0-0-0-" .. id .. "-0")
 			if tooltipData and tooltipData.lines and tooltipData.lines[1] then
 				name = tooltipData.lines[1].leftText
-			else
-				name = UNKNOWN
 			end
 		elseif type == "currency" then
 			local info = C_CurrencyInfo.GetCurrencyInfo(id)
@@ -472,15 +475,80 @@ function Util:ResolveTags(s)
 			end
 		elseif type == "map" then
 			name = C_Map.GetMapInfo(id).name
+
+			if arg1 then
+				local position
+
+				if C_Map.CanSetUserWaypointOnMap(id) then
+					local tracked = self.PointsTracked[s] and self.PointsTracked[s] == id .. arg1
+					position = CreateAtlasMarkup(tracked and "Waypoint-MapPin-Tracked" or "Waypoint-MapPin-Untracked", 15, 15)
+					self.TrackableTags[s] = self.TrackableTags[s] or {}
+					self.TrackableTags[s][id .. arg1] = true
+				else
+					position = format("%.0f,%.0f", floor(arg1 / 10000) / 100, (arg1 % 10000) / 100)
+				end
+
+				name = name .. format("|cffffffff(%s)|r", position)
+			end
 		elseif type == "area" then
 			name = C_Map.GetAreaInfo(id)
 		elseif type == "quest" then
-			name = C_QuestLog.GetTitleForQuestID(id)
+			if not arg1 then
+				name = C_QuestLog.GetTitleForQuestID(id)
+			elseif arg2 ~= "" and tonumber(arg2) ~= select(3, UnitClass("player")) then
+				name = ""
+			elseif arg1 == 0 then
+				local atlas = CreateAtlasMarkup(format("common-icon-%s", C_QuestLog.IsQuestFlaggedCompleted(id) and "checkmark" or "redx"), 12, 12)
+				name = "|cffffffff(" .. atlas .. ")|r"
+			elseif math.abs(arg1) > 10000 then
+				local status
+				if id == 0 then
+					status = C_QuestLog.IsQuestFlaggedCompleted(tonumber(arg1)) and "|cnGRAY_FONT_COLOR:" .. CRITERIA_COMPLETED .. "|r" or DAILY
+				elseif C_QuestLog.IsQuestFlaggedCompleted(id) then
+					status = CreateAtlasMarkup(format("common-icon-checkmark", 12, 12))
+				elseif C_QuestLog.IsQuestFlaggedCompleted(math.abs(tonumber(arg1))) then
+					status = tonumber(arg1) > 0 and "|cnRED_FONT_COLOR:" .. FAILED .. "|r" or "|cnGREEN_FONT_COLOR:" .. READY .. "|r"
+				else
+					status = CreateAtlasMarkup(format("common-icon-redx", 12, 12))
+				end
+				name = "|cffffffff(" .. status .. ")|r"
+			else
+				name = ""
+			end
+		elseif type == "item" then
+			local item = Item:CreateFromItemID(id)
+			item:ContinueOnItemLoad(function()
+				self.TagCache[id] = autoColor and format("|T%d:12|t %s%s|r", item:GetItemIcon(), item:GetItemQualityColor().hex, item:GetItemName())
+					or item:GetItemName()
+			end)
+		elseif type == "faction" then
+			if arg1 and arg2 then
+				local i = tonumber(arg2)
+				local rewards = C_MajorFactions.GetRenownRewardsForLevel(id, arg1)
+				if rewards and rewards[i] then
+					name = rewards[i].description
+				end
+			else
+				name = C_Reputation.GetFactionDataByID(id).name
+			end
+		elseif type == "encounter" then
+			name = EJ_GetEncounterInfo(id)
+		elseif type == "spell" then
+			local info = C_Spell.GetSpellInfo(id)
+			if info then
+				name = autoColor and format("|T%d:12|t |cff71d5ff%s|r", info.iconID, info.name) or info.name
+			end
 		end
 
-		self.TagCache[id] = name
+		if autoColor and name then
+			name = autoColor and format("%s%s|r", color, name)
+		end
 
-		return self.TagCache[id]
+		if name and not arg1 then
+			self.TagCache[id] = name
+		end
+
+		return name or "[" .. LFG_LIST_LOADING .. "]"
 	end)
 
 	return resolvedString
