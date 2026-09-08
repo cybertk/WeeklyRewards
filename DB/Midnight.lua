@@ -274,7 +274,6 @@ namespace.DB.rewardCandidiates["MN"] = {
 		key = "|A:ui-eventpoi-majorattacks:20:20|aVoid",
 		group = RewardsGroup.FIELD_ACCOLADES,
 		minimumLevel = 80,
-		rollover = true,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 94386 }, -- Void Assaults: Zul'Aman

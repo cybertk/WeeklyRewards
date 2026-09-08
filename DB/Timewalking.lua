@@ -11,7 +11,6 @@ namespace.DB.rewardCandidiates["timewalking"] = {
 		description = "Timewalking Raid",
 		group = RewardsGroup.TIMEWALKING_EVENTS,
 		minimumLevel = 30,
-		rollover = true,
 		entries = {
 			{ quest = 82817, unlockAura = 452307 }, -- Disturbance Detected: Blackrock Depths
 			{ quest = 47523, unlockAura = 335148 }, -- Disturbance Detected: Black Temple
