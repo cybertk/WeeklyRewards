@@ -270,6 +270,16 @@ namespace.DB.rewardCandidiates["MN"] = {
 		entries = { { quest = 96528 } }, -- Prey: Anguish from Beyond
 	},
 	{
+		id = "mn-prey-soul",
+		key = "|A:worldquest-Prey-Crystal:16:16|aSoul",
+		description = "{item:276547}|n|n{faction:2808:4:1}",
+		group = RewardsGroup.PREY,
+		minimumLevel = 90,
+		rollover = true,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 97763, items = { 276547 } } },
+	},
+	{
 		id = "mn-assaults-void",
 		key = "|A:ui-eventpoi-majorattacks:20:20|aVoid",
 		group = RewardsGroup.FIELD_ACCOLADES,
