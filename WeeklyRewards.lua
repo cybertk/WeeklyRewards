@@ -80,6 +80,8 @@ function WeeklyRewards:MigrateDB()
 		elseif candidateID == "mn-sa" then
 			table.remove(self.db.global.activeRewards, i)
 			self.db.global.activeRewards.nextResetTime = 0
+		elseif reward.id == "mn-prey-anguish" then
+			reward.resetTime = GetServerTime() + C_DateAndTime.GetSecondsUntilDailyReset()
 		end
 
 		rewardsMap[reward.id] = reward

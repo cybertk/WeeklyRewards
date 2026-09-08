@@ -266,7 +266,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		rollover = true,
-		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = { { quest = 96528 } }, -- Prey: Anguish from Beyond
 	},
 	{
