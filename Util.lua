@@ -448,7 +448,32 @@ function Util:GetCurrentSeasonName()
 	return EXPANSION_SEASON_NAME:format(GetExpansionName(expansion), season) .. " - " .. WEEK_NAME:format(self:GetCurrentSeasonWeek())
 end
 
-Util.TagCache = {}
+local function GetFirstSentence(text)
+	if not text or text == "" then
+		return text
+	end
+
+	local n = #text
+	for i = 1, n do
+		local b = string.byte(text, i)
+		if b == 46 then -- .
+			local nxt = string.byte(text, i + 1)
+			-- skip decimals: 1.5
+			if not (nxt and nxt >= 48 and nxt <= 57) then
+				return string.sub(text, 1, i)
+			end
+		elseif
+			b == 227 -- 。 = E3 80 82
+			and string.byte(text, i + 1) == 128
+			and string.byte(text, i + 2) == 130
+		then
+			return string.sub(text, 1, i)
+		end
+	end
+	return text
+end
+
+Util.TagCache = { {}, {} }
 Util.PointsTracked = {}
 Util.TrackableTags = {}
 function Util:ResolveTags(s, autoColor)
@@ -456,8 +481,10 @@ function Util:ResolveTags(s, autoColor)
 		id = tonumber(id)
 		arg1 = arg1 ~= "" and tonumber(arg1) or nil
 
-		if self.TagCache[id] and not arg1 then
-			return self.TagCache[id]
+		local cache = self.TagCache[autoColor and 1 or 2]
+
+		if cache[id] and not arg1 then
+			return cache[id]
 		end
 
 		local color = YELLOW_FONT_COLOR:GenerateHexColorMarkup()
@@ -471,7 +498,16 @@ function Util:ResolveTags(s, autoColor)
 		elseif type == "currency" then
 			local info = C_CurrencyInfo.GetCurrencyInfo(id)
 			if info then
-				name = info.name
+				if arg1 == 0 then
+					local hex = select(4, C_Item.GetItemQualityColor(info.quality)) or "ffffffff"
+					name = format("|T%d:12|t |c%s%s|r|n|n%s", info.iconFileID, hex, info.name, info.description)
+					color = nil
+					if info.maxWeeklyQuantity and info.maxWeeklyQuantity ~= 0 then
+						name = name .. "|n|n" .. CURRENCY_WEEKLY_CAP:format("", info.quantityEarnedThisWeek, info.maxWeeklyQuantity)
+					end
+				else
+					name = info.name
+				end
 			end
 		elseif type == "map" then
 			name = C_Map.GetMapInfo(id).name
@@ -518,16 +554,26 @@ function Util:ResolveTags(s, autoColor)
 		elseif type == "item" then
 			local item = Item:CreateFromItemID(id)
 			item:ContinueOnItemLoad(function()
-				self.TagCache[id] = autoColor and format("|T%d:12|t %s%s|r", item:GetItemIcon(), item:GetItemQualityColor().hex, item:GetItemName())
+				cache[id] = autoColor and format("|T%d:12|t %s%s|r", item:GetItemIcon(), item:GetItemQualityColor().hex, item:GetItemName())
 					or item:GetItemName()
 			end)
+
+			if arg1 == 0 then
+				name = select(18, C_Item.GetItemInfo(id))
+				color = nil
+			end
 		elseif type == "faction" then
 			if arg1 and arg2 then
 				local i = tonumber(arg2)
-				local rewards = C_MajorFactions.GetRenownRewardsForLevel(id, arg1)
+				local rewards = C_MajorFactions.GetRenownRewardsForLevel(id, math.abs(arg1))
 				if rewards and rewards[i] then
 					name = rewards[i].description
+					if arg1 < 0 then
+						name = GetFirstSentence(name)
+					end
 				end
+
+				color = nil
 			else
 				name = C_Reputation.GetFactionDataByID(id).name
 			end
@@ -540,12 +586,12 @@ function Util:ResolveTags(s, autoColor)
 			end
 		end
 
-		if autoColor and name then
+		if autoColor and color and name then
 			name = autoColor and format("%s%s|r", color, name)
 		end
 
 		if name and not arg1 then
-			self.TagCache[id] = name
+			cache[id] = name
 		end
 
 		return name or "[" .. LFG_LIST_LOADING .. "]"

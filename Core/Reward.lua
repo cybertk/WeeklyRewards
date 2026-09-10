@@ -202,7 +202,7 @@ function Reward:GetDescription(short)
 	if short and self.description and self.description:match("|n") then
 		return self.name
 	elseif self.description then
-		return Util:ResolveTags(self.description)
+		return Util:ResolveTags(self.description, true)
 	elseif self.objectives and #self.objectives > 0 then
 		return Util:ResolveTags("{quest:" .. self.objectives[1]:GetQuest() .. "}")
 	else

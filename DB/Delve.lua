@@ -8,7 +8,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	{
 		id = "delve-map",
 		key = "|A:delves-bountiful:16:16|aMap",
-		description = "Weekly Trovehunter's Bounty Map",
+		description = "{item:265714:0}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -20,7 +20,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	{
 		id = "delve-stash",
 		key = "|A:delves-bountiful:16:16|aStash",
-		description = "Weekly Gilded Stash in Tier 11 Delves",
+		description = "{faction:2796:-4:1}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -37,7 +37,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	{
 		id = "delve-shards",
 		key = "|A:delves-bountiful:16:16|aShards",
-		description = "Weekly {currency:3310}",
+		description = "{currency:3310:0}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,

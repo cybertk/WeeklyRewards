@@ -194,6 +194,8 @@ function RewardProgress:_UpdateRecords()
 					required = count,
 				})
 			end
+		elseif reward.text and reward.progressType == nil then
+			self:_AddRecord({ text = Util:ResolveTags(reward.text), fulfilled = 0, required = 1 })
 		end
 
 		local quest = reward.unlockQuest or reward.quest
