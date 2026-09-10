@@ -151,11 +151,13 @@ function Character:ReceiveReward(quest, quantity, item, currencyId)
 	end
 
 	local itemId = item
+	local itemLevel
 	if type(item) == "string" then
 		itemId = C_Item.GetItemInfoInstant(item)
+		itemLevel = C_Item.GetDetailedItemLevelInfo(item)
 	end
 
-	progress:AddReward(currencyId, itemId, quantity)
+	progress:AddReward(currencyId, itemId, quantity, nil, itemLevel)
 end
 
 function Character:UpdateRewardsGUID(quest)

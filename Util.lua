@@ -343,8 +343,26 @@ function Util.FormatLastUpdateTime(time)
 	return LASTONLINE_DAYS:format(days)
 end
 
--- item: name, texture, quality, quantity/amount
+-- item: name, texture, quality, quantity/amount, itemLevel
 Util.MONEY_CURRENCY_ID = 0
+function Util.FormatGearSlot(itemID, itemLevel)
+	if not itemID then
+		return
+	end
+
+	local itemEquipLoc = select(4, C_Item.GetItemInfoInstant(itemID))
+	if not itemEquipLoc or itemEquipLoc == "" or itemEquipLoc == "INVTYPE_NON_EQUIP_IGNORE" then
+		return
+	end
+
+	local slotName = _G[itemEquipLoc]
+	if itemLevel and slotName and slotName ~= "" then
+		return format("%d %s", itemLevel, slotName)
+	elseif slotName and slotName ~= "" then
+		return slotName
+	end
+end
+
 function Util.FormatItem(item)
 	if item.id == Util.MONEY_CURRENCY_ID then
 		return GetMoneyString(item.quantity or item.amount)
@@ -356,6 +374,11 @@ function Util.FormatItem(item)
 		s = s .. ITEM_QUALITY_COLORS[item.quality].color:WrapTextInColorCode(format(" [%s]", item.name))
 	else
 		s = s .. " " .. item.name
+	end
+
+	local gearSlot = Util.FormatGearSlot(item.id, item.itemLevel)
+	if gearSlot then
+		s = s .. " " .. gearSlot
 	end
 
 	local quantity = item.quantity or item.amount or 0

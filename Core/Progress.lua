@@ -342,8 +342,8 @@ function RewardProgress:Update(completedQuest)
 end
 
 -- Handle uniqueness
-function RewardProgress:AddReward(currency, item, quantity, asDrops)
-	Util:Debug("RewardProgress:AddReward", currency, item, quantity, asDrops)
+function RewardProgress:AddReward(currency, item, quantity, asDrops, itemLevel)
+	Util:Debug("RewardProgress:AddReward", currency, item, quantity, asDrops, itemLevel)
 
 	local items
 	if asDrops == true then
@@ -357,6 +357,9 @@ function RewardProgress:AddReward(currency, item, quantity, asDrops)
 	for _, rewardItem in ipairs(items) do
 		if (currency and rewardItem.currency == currency) or (item and rewardItem.item == item) then
 			rewardItem.quantity = rewardItem.quantity + quantity
+			if itemLevel and rewardItem.itemLevel == nil then
+				rewardItem.itemLevel = itemLevel
+			end
 			return
 		end
 	end
@@ -365,7 +368,11 @@ function RewardProgress:AddReward(currency, item, quantity, asDrops)
 	if currency then
 		table.insert(items, { currency = currency, quantity = quantity })
 	elseif item then
-		table.insert(items, { item = item, quantity = quantity })
+		local rewardItem = { item = item, quantity = quantity }
+		if itemLevel then
+			rewardItem.itemLevel = itemLevel
+		end
+		table.insert(items, rewardItem)
 	end
 
 	table.sort(items, function(a, b)
@@ -463,6 +470,7 @@ function RewardProgress:ForEachRewardItem(callback, showDrops)
 				texture = icon,
 				quantity = rewardItem.quantity,
 				quality = C_Item.GetItemQualityByID(rewardItem.item) or Enum.ItemQuality.Common, -- It requires server query and might not get instance result
+				itemLevel = rewardItem.itemLevel,
 			}
 		end
 		callback(item)
