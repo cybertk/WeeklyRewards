@@ -45,4 +45,17 @@ namespace.DB.rewardCandidiates["Delve"] = {
 			{ quest = 0, currency = 3310, loot = { 584514, name = { 252415 } } },
 		},
 	},
+	{
+		id = "delve-abundance",
+		key = "|A:delves-bountiful:16:16|aAbundance",
+		description = "{faction:2796:-3:1}|n|n"
+			.. "The first time you find Dundun within delve each week, "
+			.. "it will be made {spell:1297887}, and you will receive below extra chests at the end:|n"
+			.. "- 1 |cnEPIC_PURPLE_COLOR:Bountiful Coffer|r|n"
+			.. "- 3 |cnRARE_BLUE_COLOR:Abundantly Bountiful Heavy Trunk",
+		group = RewardsGroup.DELVE,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 97064, text = "{spell:1297887}" } },
+	},
 }
