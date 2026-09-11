@@ -3,6 +3,7 @@ local _, namespace = ...
 local L = namespace.L
 local Util = namespace.Util
 local CharacterStore = namespace.CharacterStore
+local Settings = namespace.Settings
 local Constants = namespace.Constants
 local Utils = namespace.Utils
 
@@ -11,25 +12,35 @@ WeeklyRewardsCharactersButtonMixin = {}
 function WeeklyRewardsCharactersButtonMixin:OnLoad()
 	self:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
 
-	self:SetupMenu(function(_, rootMenu)
+	Settings:SetupPagedMenu(self, function(_, rootMenu)
 		rootMenu:CreateTitle():AddInitializer(function(frame)
 			frame.fontString:SetText(format("|cnWHITE_FONT_COLOR:%s (%d)|r", L["characters_button_title"], CharacterStore.Get():GetNumEnabledCharacters()))
 		end)
-		CharacterStore.Get():ForEach(function(character)
-			rootMenu:CreateCheckbox(character:GetNameInClassColor(), function()
+
+		local function CharactersFilter(character)
+			return not CharacterStore.IsCurrentPlayer(character)
+		end
+
+		local characterStore = CharacterStore.Get()
+		local characters = characterStore:ForEach(function() end, CharactersFilter)
+
+		local pageSize = 20
+		Settings:CreatePagedMenu(rootMenu, characters, function(character)
+			local checkbox = rootMenu:CreateCheckbox(character:GetNameInClassColor(), function()
 				return character.enabled or false
-			end, function()
+			end)
+
+			checkbox:SetResponder(function()
 				if IsControlKeyDown() then
 					self:RemoveCharacter(character)
-					return
+					return MenuResponse.CloseAll
+				else
+					character.enabled = not character.enabled
+					namespace.GUIMain:Redraw()
+					return MenuResponse.Refresh
 				end
-
-				character.enabled = not character.enabled
-				namespace.GUIMain:Redraw()
 			end)
-		end, function(character)
-			return not CharacterStore.IsCurrentPlayer(character)
-		end)
+		end, self, pageSize)
 
 		rootMenu:CreateSpacer()
 		rootMenu:CreateTitle(GREEN_FONT_COLOR:WrapTextInColorCode(L["characters_button_remove_hint"]))
