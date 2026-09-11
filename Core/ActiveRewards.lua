@@ -29,7 +29,7 @@ local Cache = {
 }
 
 local function AddRewardToCache(reward)
-	Cache.rewards[reward:GetCandidateID()] = true
+	Cache.rewards[reward:GetCandidateID()] = reward
 
 	for _, objective in ipairs(reward.objectives) do
 		Cache.questToReward[objective:GetQuest()] = reward
@@ -76,6 +76,46 @@ function ActiveRewards:SetSelectedCandidates(list)
 	end
 end
 
+function ActiveRewards:EnumerateSelected()
+	local function iterator(_, i)
+		while true do
+			i = i + 1
+			local candidateID = Cache.selected[i]
+			if not candidateID then
+				return
+			end
+			local reward = Cache.rewards[candidateID]
+			if reward then
+				return i, reward
+			end
+		end
+	end
+
+	return iterator, nil, 0
+end
+
+function ActiveRewards:MoveSelected(index, newIndex)
+	local n = #Cache.selected
+	if not index or not newIndex or index < 1 or index > n then
+		return false
+	end
+	if newIndex < 1 then
+		newIndex = 1
+	elseif newIndex > n + 1 then
+		newIndex = n + 1
+	end
+	if index == newIndex or index + 1 == newIndex then
+		return false
+	end
+
+	local candidateID = table.remove(Cache.selected, index)
+	if index < newIndex then
+		newIndex = newIndex - 1
+	end
+	table.insert(Cache.selected, newIndex, candidateID)
+	return true
+end
+
 function ActiveRewards:New(o)
 	if Cache.instance ~= nil then
 		Util:Debug("ActiveRewards RESET")
@@ -112,6 +152,22 @@ function ActiveRewards:Sort()
 		local yV = y[field] or "0"
 
 		return xV .. x.name < yV .. y.name
+	end)
+
+	local rank = {}
+	for i, reward in ipairs(self) do
+		rank[reward:GetCandidateID()] = i
+	end
+	table.sort(Cache.selected, function(a, b)
+		local ra, rb = rank[a], rank[b]
+		if ra and rb then
+			return ra < rb
+		elseif ra then
+			return true
+		elseif rb then
+			return false
+		end
+		return a < b
 	end)
 end
 
@@ -280,7 +336,7 @@ function ActiveRewards:IsGroupExcluded(group)
 end
 
 function ActiveRewards:IsCandidateActive(candidateID)
-	return Cache.rewards[candidateID] == true
+	return Cache.rewards[candidateID] ~= nil
 end
 
 function ActiveRewards:ScanJournal()

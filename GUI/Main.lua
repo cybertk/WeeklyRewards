@@ -1,6 +1,6 @@
 local addonName, namespace = ...
 
-local Main = {}
+local Main = CreateFromMixins(WeeklyRewardsColumnReorderMixin)
 namespace.GUIMain = Main
 
 local LibDBIcon = LibStub("LibDBIcon-1.0")
@@ -583,13 +583,14 @@ function Main:AddCharacterColumns()
 end
 
 function Main:AddRewardColumns()
-	for _, reward in ipairs(ActiveRewards.Get()) do
+	for index, reward in ActiveRewards.Get():EnumerateSelected() do
 		-- cache
 		reward:ForEachItem(type)
 
 		local column = {
 			name = reward.name,
 			reward = reward,
+			selectedIndex = index,
 			onEnter = function(cellFrame)
 				local function updateTooltip()
 					GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
@@ -740,6 +741,7 @@ end
 
 function Main:AddRewardToGameTooltip(reward)
 	GameTooltip:AddDoubleLine(reward.name, "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. (IsControlKeyDown() and HIDE or STABLE_FILTER_BUTTON_LABEL) .. ")|r")
+	self:AddColumnReorderHint(GameTooltip)
 	GameTooltip:AddLine(format("|cnNORMAL_FONT_COLOR:%s|r%s", reward.group and reward.group .. ": " or "", reward:GetDescription()), 1, 1, 1, true)
 
 	GameTooltip:AddLine(" ")
@@ -762,7 +764,13 @@ function Main:UpdateSortArrow()
 		local cellFrame = self.window.table.rows[1].columns[i]
 		local characterField = column.key or column.reward.id
 
+		self:BindHeaderCell(cellFrame, column)
+
 		cellFrame.data.onClick = function()
+			if self:ConsumeColumnDragClick() then
+				return
+			end
+
 			if IsControlKeyDown() then
 				if column.reward then
 					ActiveRewards.Get():ToggleExclusion(column.reward:GetCandidateID())
@@ -848,8 +856,6 @@ function Main:MeasureTextWidth(text)
 end
 
 function Main:ForEachColumn(callback, visibleOnly)
-	local activeRewards = ActiveRewards.Get()
-
 	visibleOnly = visibleOnly or true
 
 	for _, column in ipairs(self.columns) do
@@ -859,9 +865,9 @@ function Main:ForEachColumn(callback, visibleOnly)
 		end
 
 		local reward = column.reward
-		if reward and not activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
+		if reward then
 			callback(column)
-		elseif reward == nil and not WeeklyRewards.db.global.main.hiddenColumns[column.name] then
+		elseif not WeeklyRewards.db.global.main.hiddenColumns[column.name] then
 			callback(column)
 		end
 	end
@@ -900,7 +906,7 @@ function Main:Redraw()
 			---@type WK_TableDataCell
 			local cell = {
 				text = NORMAL_FONT_COLOR:WrapTextInColorCode(dataColumn.name),
-				onEnter = dataColumn.onEnter,
+				onEnter = self:WrapHeaderOnEnter(dataColumn.onEnter),
 				onLeave = dataColumn.onLeave,
 				onClick = dataColumn.onClick,
 			}
