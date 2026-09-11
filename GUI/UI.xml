@@ -1,4 +1,24 @@
-<Ui>
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <Script file="Dialogs.lua" />
+    <Script file="CharactersButton.lua" />
     <Script file="Main.lua" />
+
+    <DropdownButton name="WeeklyRewardsCharactersButtonTemplate" mixin="WeeklyRewardsCharactersButtonMixin" virtual="true">
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="Icon" atlas="squad_size_trios">
+                    <Size x="18" y="18" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <Color r="0.7" g="0.7" b="0.7" a="1" />
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+        </Scripts>
+    </DropdownButton>
 </Ui>
