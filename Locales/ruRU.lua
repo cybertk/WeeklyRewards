@@ -55,6 +55,7 @@ L["covenant_not_joined"] = "Этот персонаж не вступал ни �
 
 -- Table tooltips
 L["table_sort_hint"] = "<ЛКМ - сортировка>"
+L["table_reorder_hint"] = "<Перетащите, чтобы изменить порядок>"
 L["table_reset_progress_hint"] = "<Ctrl+ЛКМ - сброс прогресса>"
 L["table_alts_collect_hint"] = "Войдите в игру этим персонажем, чтобы получить его данные"
 

@@ -76,6 +76,46 @@ function ActiveRewards:SetSelectedCandidates(list)
 	end
 end
 
+function ActiveRewards:EnumerateSelected()
+	local function iterator(_, i)
+		while true do
+			i = i + 1
+			local candidateID = Cache.selected[i]
+			if not candidateID then
+				return
+			end
+			local reward = Cache.rewards[candidateID]
+			if reward then
+				return i, reward
+			end
+		end
+	end
+
+	return iterator, nil, 0
+end
+
+function ActiveRewards:MoveSelected(index, newIndex)
+	local n = #Cache.selected
+	if not index or not newIndex or index < 1 or index > n then
+		return false
+	end
+	if newIndex < 1 then
+		newIndex = 1
+	elseif newIndex > n + 1 then
+		newIndex = n + 1
+	end
+	if index == newIndex or index + 1 == newIndex then
+		return false
+	end
+
+	local candidateID = table.remove(Cache.selected, index)
+	if index < newIndex then
+		newIndex = newIndex - 1
+	end
+	table.insert(Cache.selected, newIndex, candidateID)
+	return true
+end
+
 function ActiveRewards:New(o)
 	if Cache.instance ~= nil then
 		Util:Debug("ActiveRewards RESET")
@@ -102,17 +142,6 @@ end
 
 function ActiveRewards.Get()
 	return Cache.instance
-end
-
-function ActiveRewards:Sort()
-	local field = self.sortBy or "resetTime"
-
-	table.sort(self, function(x, y)
-		local xV = x[field] or "0"
-		local yV = y[field] or "0"
-
-		return xV .. x.name < yV .. y.name
-	end)
 end
 
 function ActiveRewards:_Add(reward)
@@ -232,8 +261,6 @@ function ActiveRewards:Update(candidates, OnRewardAddedCallback)
 			OnRewardAddedCallback(reward)
 		end
 	end
-
-	self:Sort()
 end
 
 function ActiveRewards:ToggleExclusion(candidateID)

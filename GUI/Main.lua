@@ -1,6 +1,6 @@
 local addonName, namespace = ...
 
-local Main = {}
+local Main = CreateFromMixins(WeeklyRewardsColumnReorderMixin)
 namespace.GUIMain = Main
 
 local LibDBIcon = LibStub("LibDBIcon-1.0")
@@ -237,49 +237,6 @@ function Main:AddRewardsFilterButton()
 	self.window.titlebar.ColumnsButton:SetPoint("RIGHT", self.window.titlebar.CharactersButton, "LEFT", 0, 0)
 end
 
-function Main:AddSortButton()
-	self.window.titlebar.SortButton = CreateFrame("DropdownButton", "$parentSettingsButton", self.window.titlebar)
-	self.window.titlebar.SortButton:SetPoint("RIGHT", self.window.titlebar.ColumnsButton, "LEFT", 0, 0)
-	self.window.titlebar.SortButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
-	self.window.titlebar.SortButton:SetScript("OnEnter", function()
-		self.window.titlebar.SortButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.SortButton, 1, 1, 1, 0.05)
-		self:SetTooltipOwner(GameTooltip, self.window.titlebar.SortButton)
-		GameTooltip:SetText(L["sort_button_tooltip"], 1, 1, 1, 1, true)
-		GameTooltip:AddLine(L["sort_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-		GameTooltip:Show()
-	end)
-	self.window.titlebar.SortButton:SetScript("OnLeave", function()
-		self.window.titlebar.SortButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.SortButton, 1, 1, 1, 0)
-		GameTooltip:Hide()
-	end)
-	self.window.titlebar.SortButton:SetupMenu(function(_, rootMenu)
-		local activeRewards = ActiveRewards.Get()
-		local sortingFields = {
-			group = L["sort_reward_group"],
-			name = L["sort_reward_name"],
-			resetTime = L["sort_time_left"],
-		}
-		for field, name in pairs(sortingFields) do
-			rootMenu:CreateCheckbox(name, function()
-				return activeRewards.sortBy == field
-			end, function()
-				activeRewards.sortBy = field
-				activeRewards:Sort()
-				self:Redraw()
-			end)
-		end
-		-- end
-	end)
-
-	self.window.titlebar.SortButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.SortButton:GetName() .. "Icon", "ARTWORK")
-	self.window.titlebar.SortButton.Icon:SetPoint("CENTER", self.window.titlebar.SortButton, "CENTER")
-	self.window.titlebar.SortButton.Icon:SetSize(20, 20)
-	self.window.titlebar.SortButton.Icon:SetAtlas("shop-header-arrow-disabled")
-	self.window.titlebar.SortButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-end
-
 function Main:CreateWindow()
 	local frameName = addonName .. "MainWindow"
 	self.window = CreateFrame("Frame", frameName, UIParent)
@@ -356,7 +313,6 @@ function Main:CreateWindow()
 	self:AddSettingsButton()
 	self:AddCharactersButton()
 	self:AddRewardsFilterButton()
-	self:AddSortButton()
 
 	self.window.table = UI:CreateTableFrame({
 		header = {
@@ -583,13 +539,14 @@ function Main:AddCharacterColumns()
 end
 
 function Main:AddRewardColumns()
-	for _, reward in ipairs(ActiveRewards.Get()) do
+	for index, reward in ActiveRewards.Get():EnumerateSelected() do
 		-- cache
 		reward:ForEachItem(type)
 
 		local column = {
 			name = reward.name,
 			reward = reward,
+			selectedIndex = index,
 			onEnter = function(cellFrame)
 				local function updateTooltip()
 					GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
@@ -755,6 +712,7 @@ end
 
 function Main:AddRewardToGameTooltip(reward)
 	GameTooltip:AddDoubleLine(reward.name, "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. (IsControlKeyDown() and HIDE or STABLE_FILTER_BUTTON_LABEL) .. ")|r")
+	self:AddColumnReorderHint(GameTooltip)
 	GameTooltip:AddLine(format("|cnNORMAL_FONT_COLOR:%s|r%s", reward.group and reward.group .. ": " or "", reward:GetDescription()), 1, 1, 1, true)
 
 	GameTooltip:AddLine(" ")
@@ -777,7 +735,13 @@ function Main:UpdateSortArrow()
 		local cellFrame = self.window.table.rows[1].columns[i]
 		local characterField = column.key or column.reward.id
 
+		self:BindHeaderCell(cellFrame, column)
+
 		cellFrame.data.onClick = function()
+			if self:ConsumeColumnDragClick() then
+				return
+			end
+
 			if IsControlKeyDown() then
 				if column.reward then
 					ActiveRewards.Get():ToggleExclusion(column.reward:GetCandidateID())
@@ -863,8 +827,6 @@ function Main:MeasureTextWidth(text)
 end
 
 function Main:ForEachColumn(callback, visibleOnly)
-	local activeRewards = ActiveRewards.Get()
-
 	visibleOnly = visibleOnly or true
 
 	for _, column in ipairs(self.columns) do
@@ -874,9 +836,9 @@ function Main:ForEachColumn(callback, visibleOnly)
 		end
 
 		local reward = column.reward
-		if reward and not activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
+		if reward then
 			callback(column)
-		elseif reward == nil and not WeeklyRewards.db.global.main.hiddenColumns[column.name] then
+		elseif not WeeklyRewards.db.global.main.hiddenColumns[column.name] then
 			callback(column)
 		end
 	end
@@ -915,7 +877,7 @@ function Main:Redraw()
 			---@type WK_TableDataCell
 			local cell = {
 				text = NORMAL_FONT_COLOR:WrapTextInColorCode(dataColumn.name),
-				onEnter = dataColumn.onEnter,
+				onEnter = self:WrapHeaderOnEnter(dataColumn.onEnter),
 				onLeave = dataColumn.onLeave,
 				onClick = dataColumn.onClick,
 			}
