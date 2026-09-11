@@ -408,6 +408,7 @@ function Main:AddSortButton()
 			end, function()
 				activeRewards.sortBy = field
 				activeRewards:Sort()
+				self:SyncRewardColumnOrder()
 				self:Redraw()
 			end)
 		end
@@ -892,6 +893,7 @@ end
 
 function Main:AddRewardToGameTooltip(reward)
 	GameTooltip:AddDoubleLine(reward.name, "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. (IsControlKeyDown() and HIDE or STABLE_FILTER_BUTTON_LABEL) .. ")|r")
+	GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(L["table_reorder_hint"]))
 	GameTooltip:AddLine(format("|cnNORMAL_FONT_COLOR:%s|r%s", reward.group and reward.group .. ": " or "", reward:GetDescription()), 1, 1, 1, true)
 
 	GameTooltip:AddLine(" ")
@@ -914,7 +916,17 @@ function Main:UpdateSortArrow()
 		local cellFrame = self.window.table.rows[1].columns[i]
 		local characterField = column.key or column.reward.id
 
+		cellFrame.columnKey = self:GetColumnKey(column)
+		if column.reward then
+			self:SetupColumnHeaderDrag(cellFrame)
+		end
+
 		cellFrame.data.onClick = function()
+			if self.didColumnDrag then
+				self.didColumnDrag = nil
+				return
+			end
+
 			if IsControlKeyDown() then
 				if column.reward then
 					ActiveRewards.Get():ToggleExclusion(column.reward.id)
@@ -999,6 +1011,383 @@ function Main:MeasureTextWidth(text)
 	return self.measureText:GetStringWidth()
 end
 
+function Main:GetColumnKey(column)
+	return column.reward and column.reward.id or column.key
+end
+
+function Main:GetVisibleColumnAt(index)
+	local i = 0
+	local found
+	self:ForEachColumn(function(column)
+		i = i + 1
+		if i == index then
+			found = column
+		end
+	end)
+	return found
+end
+
+function Main:ApplyColumnOrder()
+	local order = WeeklyRewards.db.global.main.columnOrder
+	if not order or #order == 0 then
+		return
+	end
+
+	local byKey = {}
+	for _, column in ipairs(self.columns) do
+		byKey[self:GetColumnKey(column)] = column
+	end
+
+	local newColumns = {}
+	local used = {}
+	for _, key in ipairs(order) do
+		local column = byKey[key]
+		if column then
+			table.insert(newColumns, column)
+			used[key] = true
+		end
+	end
+	for _, column in ipairs(self.columns) do
+		local key = self:GetColumnKey(column)
+		if not used[key] then
+			table.insert(newColumns, column)
+		end
+	end
+	self.columns = newColumns
+end
+
+function Main:EnsureColumnOrder()
+	local main = WeeklyRewards.db.global.main
+	main.columnOrder = main.columnOrder or {}
+	local order = main.columnOrder
+	local known = {}
+	for _, column in ipairs(self.columns) do
+		known[self:GetColumnKey(column)] = true
+	end
+
+	if #order == 0 then
+		for _, column in ipairs(self.columns) do
+			table.insert(order, self:GetColumnKey(column))
+		end
+		return order
+	end
+
+	for i = #order, 1, -1 do
+		if not known[order[i]] then
+			table.remove(order, i)
+		end
+	end
+
+	local have = {}
+	for _, key in ipairs(order) do
+		have[key] = true
+	end
+	for _, column in ipairs(self.columns) do
+		local key = self:GetColumnKey(column)
+		if not have[key] then
+			table.insert(order, key)
+		end
+	end
+	return order
+end
+
+function Main:SyncRewardColumnOrder()
+	local order = WeeklyRewards.db.global.main.columnOrder
+	if not order or #order == 0 then
+		return
+	end
+
+	self:EnsureColumnOrder()
+
+	local rewardIds = {}
+	local rewardSet = {}
+	for _, reward in ipairs(ActiveRewards.Get()) do
+		table.insert(rewardIds, reward.id)
+		rewardSet[reward.id] = true
+	end
+
+	local ri = 1
+	for i, key in ipairs(order) do
+		if rewardSet[key] and ri <= #rewardIds then
+			order[i] = rewardIds[ri]
+			ri = ri + 1
+		end
+	end
+	while ri <= #rewardIds do
+		table.insert(order, rewardIds[ri])
+		ri = ri + 1
+	end
+end
+
+function Main:MoveColumn(fromKey, toKey, after)
+	if fromKey == toKey then
+		return false
+	end
+
+	local order = self:EnsureColumnOrder()
+	local visible = {}
+	self:ForEachColumn(function(column)
+		table.insert(visible, self:GetColumnKey(column))
+	end)
+
+	local fromVis, toVis
+	for i, key in ipairs(visible) do
+		if key == fromKey then
+			fromVis = i
+		end
+		if key == toKey then
+			toVis = i
+		end
+	end
+	if not fromVis or not toVis then
+		return false
+	end
+
+	local destVis = after and (toVis + 1) or toVis
+	table.remove(visible, fromVis)
+	if fromVis < destVis then
+		destVis = destVis - 1
+	end
+	if destVis < 1 then
+		destVis = 1
+	elseif destVis > #visible + 1 then
+		destVis = #visible + 1
+	end
+	if destVis == fromVis then
+		return false
+	end
+
+	table.insert(visible, destVis, fromKey)
+
+	local visibleSet = {}
+	for _, key in ipairs(visible) do
+		visibleSet[key] = true
+	end
+
+	local vi = 1
+	for i, key in ipairs(order) do
+		if visibleSet[key] then
+			order[i] = visible[vi]
+			vi = vi + 1
+		end
+	end
+	while vi <= #visible do
+		table.insert(order, visible[vi])
+		vi = vi + 1
+	end
+
+	return true
+end
+
+function Main:GetColumnDragGhost()
+	if self.columnDragGhost then
+		return self.columnDragGhost
+	end
+
+	local ghost = CreateFrame("Frame", addonName .. "ColumnDragGhost", UIParent)
+	ghost:SetFrameStrata("TOOLTIP")
+	ghost:SetFrameLevel(10000)
+	ghost:SetSize(80, Constants.TABLE_HEADER_HEIGHT)
+	Utils:SetBackgroundColor(ghost, 0, 0, 0, 0.85)
+	ghost.text = ghost:CreateFontString("$parentText", "OVERLAY")
+	ghost.text:SetFontObject("GameFontHighlightSmall")
+	ghost.text:SetPoint("TOPLEFT", ghost, "TOPLEFT", Constants.TABLE_CELL_PADDING, 0)
+	ghost.text:SetPoint("BOTTOMRIGHT", ghost, "BOTTOMRIGHT", -Constants.TABLE_CELL_PADDING, 0)
+	ghost.text:SetJustifyH("CENTER")
+	ghost.text:SetJustifyV("MIDDLE")
+	ghost.text:SetWordWrap(false)
+	ghost:Hide()
+	self.columnDragGhost = ghost
+	return ghost
+end
+
+function Main:GetColumnDropIndicator()
+	if self.columnDropIndicator then
+		return self.columnDropIndicator
+	end
+
+	local header = self.window.table.rows[1]
+	local line = header:CreateTexture(nil, "OVERLAY")
+	line:SetDrawLayer("OVERLAY", 7)
+	line:SetColorTexture(1, 0.82, 0, 0.95)
+	line:SetWidth(3)
+	line:Hide()
+	self.columnDropIndicator = line
+	return line
+end
+
+function Main:GetHeaderDropTarget()
+	local header = self.window.table.rows[1]
+	if not header then
+		return
+	end
+
+	local scale = header:GetEffectiveScale()
+	local cursorX = GetCursorPosition() / scale
+	local cells = header.columns
+	local n = #cells
+
+	for i, cell in ipairs(cells) do
+		if cell:IsShown() then
+			local left, right = cell:GetLeft(), cell:GetRight()
+			if left and right and cursorX >= left and cursorX <= right then
+				return i, cell, cursorX > (left + right) / 2
+			end
+		end
+	end
+
+	local first, last = cells[1], cells[n]
+	if first and first:GetLeft() and cursorX < first:GetLeft() then
+		return 1, first, false
+	end
+	if last and last:GetRight() and cursorX > last:GetRight() then
+		return n, last, true
+	end
+end
+
+function Main:NormalizeRewardDropTarget(index, cell, after)
+	if not index then
+		return
+	end
+
+	local target = self:GetVisibleColumnAt(index)
+	if target and target.reward then
+		return index, cell, after, target
+	end
+
+	local firstIndex, lastIndex, firstReward, lastReward
+	local i = 0
+	self:ForEachColumn(function(column)
+		i = i + 1
+		if column.reward then
+			if not firstIndex then
+				firstIndex = i
+				firstReward = column
+			end
+			lastIndex = i
+			lastReward = column
+		end
+	end)
+	if not firstIndex then
+		return
+	end
+
+	local header = self.window.table.rows[1]
+	if index >= lastIndex then
+		return lastIndex, header.columns[lastIndex], true, lastReward
+	end
+	return firstIndex, header.columns[firstIndex], false, firstReward
+end
+
+function Main:UpdateColumnDropIndicator()
+	local index, cell, after = self:NormalizeRewardDropTarget(self:GetHeaderDropTarget())
+	local indicator = self:GetColumnDropIndicator()
+	if not index or not cell or not self.columnDrag then
+		indicator:Hide()
+		return
+	end
+
+	local target = self:GetVisibleColumnAt(index)
+	if not target or self:GetColumnKey(target) == self.columnDrag.key then
+		indicator:Hide()
+		return
+	end
+
+	indicator:ClearAllPoints()
+	if after then
+		indicator:SetPoint("TOP", cell, "TOPRIGHT", 0, 0)
+		indicator:SetPoint("BOTTOM", cell, "BOTTOMRIGHT", 0, 0)
+	else
+		indicator:SetPoint("TOP", cell, "TOPLEFT", 0, 0)
+		indicator:SetPoint("BOTTOM", cell, "BOTTOMLEFT", 0, 0)
+	end
+	indicator:Show()
+end
+
+function Main:HideColumnDragVisuals()
+	if self.columnDragGhost then
+		self.columnDragGhost:SetScript("OnUpdate", nil)
+		self.columnDragGhost:Hide()
+	end
+	if self.columnDropIndicator then
+		self.columnDropIndicator:Hide()
+	end
+	if self.columnDrag and self.columnDrag.frame then
+		Utils:SetBackgroundColor(self.columnDrag.frame, 1, 1, 1, 0)
+	end
+	ResetCursor()
+end
+
+function Main:SetupColumnHeaderDrag(cellFrame)
+	if cellFrame.columnDragSetup then
+		return
+	end
+	cellFrame.columnDragSetup = true
+	cellFrame:RegisterForDrag("LeftButton")
+	cellFrame:SetScript("OnDragStart", function(frame)
+		self:OnColumnDragStart(frame)
+	end)
+	cellFrame:SetScript("OnDragStop", function(frame)
+		self:OnColumnDragStop(frame)
+	end)
+end
+
+function Main:OnColumnDragStart(frame)
+	local key = frame.columnKey
+	if not key then
+		return
+	end
+
+	local column
+	for _, candidate in ipairs(self.columns) do
+		if self:GetColumnKey(candidate) == key then
+			column = candidate
+			break
+		end
+	end
+	if not column or not column.reward then
+		return
+	end
+
+	self.didColumnDrag = true
+	self.columnDrag = { key = key, frame = frame }
+	GameTooltip:Hide()
+	Utils:SetBackgroundColor(frame, 1, 1, 1, 0.15)
+	SetCursor("Interface/CURSOR/openhandglow")
+
+	local ghost = self:GetColumnDragGhost()
+	ghost.text:SetText(frame.text and frame.text:GetText() or key)
+	ghost:SetWidth(math.max(frame:GetWidth(), 60))
+	ghost:SetHeight(frame:GetHeight())
+	ghost:SetScale(self.window:GetScale())
+	ghost:Show()
+	ghost:SetScript("OnUpdate", function(g)
+		local x, y = GetCursorPosition()
+		local scale = g:GetEffectiveScale()
+		g:ClearAllPoints()
+		g:SetPoint("CENTER", UIParent, "BOTTOMLEFT", x / scale + 16, y / scale - 8)
+		self:UpdateColumnDropIndicator()
+	end)
+end
+
+function Main:OnColumnDragStop()
+	local fromKey = self.columnDrag and self.columnDrag.key
+	local _, _, after, target = self:NormalizeRewardDropTarget(self:GetHeaderDropTarget())
+	self:HideColumnDragVisuals()
+	self.columnDrag = nil
+
+	if not fromKey or not target then
+		return
+	end
+
+	local toKey = self:GetColumnKey(target)
+	if self:MoveColumn(fromKey, toKey, after) then
+		Util:Debug("Reordered column:", fromKey, toKey, after)
+		ActiveRewards.Get().sortBy = nil
+		self:Redraw()
+	end
+end
+
 function Main:ForEachColumn(callback, visibleOnly)
 	local activeRewards = ActiveRewards.Get()
 
@@ -1043,6 +1432,7 @@ function Main:Redraw()
 		self.columns = {}
 		self:AddCharacterColumns()
 		self:AddRewardColumns()
+		self:ApplyColumnOrder()
 	end
 
 	do -- Table Header row
@@ -1052,7 +1442,14 @@ function Main:Redraw()
 			---@type WK_TableDataCell
 			local cell = {
 				text = NORMAL_FONT_COLOR:WrapTextInColorCode(dataColumn.name),
-				onEnter = dataColumn.onEnter,
+				onEnter = function(cellFrame)
+					if self.columnDrag then
+						return
+					end
+					if dataColumn.onEnter then
+						dataColumn.onEnter(cellFrame)
+					end
+				end,
 				onLeave = dataColumn.onLeave,
 				onClick = dataColumn.onClick,
 			}

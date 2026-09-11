@@ -53,6 +53,7 @@ L["covenant_not_joined"] = "This character has not join any Covenant"
 
 -- Table tooltips
 L["table_sort_hint"] = "<Left Click to Sort>"
+L["table_reorder_hint"] = "<Drag to Reorder>"
 L["table_reset_progress_hint"] = "<Ctrl click to reset the progress>"
 L["table_alts_collect_hint"] = "Log in on this character to collect it"
 

@@ -28,6 +28,7 @@ local defaultDB = {
 		},
 		main = {
 			hiddenColumns = {},
+			columnOrder = {},
 			sortColumn = "lastUpdate",
 			sortAscending = true,
 			windowScale = 100,
