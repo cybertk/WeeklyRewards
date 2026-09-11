@@ -791,8 +791,8 @@ function Main:AddRewardColumns()
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
 						if progress == nil or progress:ObjectivesCount() == 0 then
-							GameTooltip:AddLine(YELLOW_FONT_COLOR:WrapTextInColorCode(reward:GetDescription(true)))
-							GameTooltip:AddLine(" ")
+							-- GameTooltip:AddLine(YELLOW_FONT_COLOR:WrapTextInColorCode(reward:GetDescription(true)))
+							-- GameTooltip:AddLine(" ")
 							GameTooltip:AddLine(
 								progress and L["progress_not_started"]
 									or ITEM_MIN_LEVEL:format(reward.maximumLevel or reward.minimumLevel)
