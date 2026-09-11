@@ -262,6 +262,10 @@ end
 -- 	end
 -- end
 
+function Reward:GetGroupName()
+	return Util:ResolveTags(self.group or self)
+end
+
 function Reward:GetDescription(short)
 	if short and self.description and self.description:match("|n") then
 		return self.name

@@ -1,12 +1,12 @@
 local _, namespace = ...
 
 local RewardsGroup = {
-	PINNACLE_CACHE = "Pinnacle Cache",
-	PVP = "PvP",
+	PINNACLE_CACHE = "{item:239118}",
+	PVP = PVP,
 	LEVELING = "Leveling",
 	PREY = "Prey",
-	FIELD_ACCOLADES = "Field Accolades",
-	CORROSIVE_COIN = "Corrosive Coin",
+	FIELD_ACCOLADES = "{currency:3405}",
+	CORROSIVE_COIN = "{currency:3448}",
 }
 
 local function range(start, stop, step)

@@ -343,7 +343,7 @@ function Main:AddRewardsFilterToMenu(rootMenu, expansions, isLegacy)
 		if isLegacy then
 			button = rootMenu:CreateButton(_G["EXPANSION_NAME" .. name])
 		elseif name ~= "" then
-			button = rootMenu:CreateCheckbox(name, function()
+			button = rootMenu:CreateCheckbox(activeRewards:GetGroupName(name), function()
 				return not activeRewards:IsGroupExcluded(name)
 			end, function()
 				activeRewards:ToggleExclusionByGroup(name)
@@ -353,7 +353,7 @@ function Main:AddRewardsFilterToMenu(rootMenu, expansions, isLegacy)
 
 		for group, rewards in pairs(expansion) do
 			if isLegacy and group ~= "" then
-				button:CreateTitle(group)
+				button:CreateTitle(activeRewards:GetGroupName(group))
 			end
 
 			for _, reward in ipairs(rewards) do
@@ -892,7 +892,7 @@ end
 
 function Main:AddRewardToGameTooltip(reward)
 	GameTooltip:AddDoubleLine(reward.name, "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. (IsControlKeyDown() and HIDE or STABLE_FILTER_BUTTON_LABEL) .. ")|r")
-	GameTooltip:AddLine(format("|cnNORMAL_FONT_COLOR:%s|r%s", reward.group and reward.group .. ": " or "", reward:GetDescription()), 1, 1, 1, true)
+	GameTooltip:AddLine(format("|cnNORMAL_FONT_COLOR:%s|r%s", reward.group and reward:GetGroupName() .. ": " or "", reward:GetDescription()), 1, 1, 1, true)
 
 	GameTooltip:AddLine(" ")
 

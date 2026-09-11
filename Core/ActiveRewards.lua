@@ -175,6 +175,10 @@ function ActiveRewards:GetAllGroups()
 	return current, legacy
 end
 
+function ActiveRewards:GetGroupName(groupID)
+	return Reward.GetGroupName(groupID)
+end
+
 function ActiveRewards.SetCandidates(candidates)
 	Reward.SetCandidates(candidates)
 end
