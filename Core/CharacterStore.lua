@@ -122,6 +122,10 @@ function CharacterStore.IsCurrentPlayer(character)
 	return character.GUID == UnitGUID("player")
 end
 
+function CharacterStore.IsNotCurrentPlayer(character)
+	return character.GUID ~= UnitGUID("player")
+end
+
 function CharacterStore:RemoveCharacter(id)
 	if not self[id] then
 		return false

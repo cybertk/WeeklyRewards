@@ -287,4 +287,103 @@ function Settings:CreateOptionsTree(key, menu, text, options, tooltipText, respo
 	end
 end
 
+local function AdvanceMenuPage(pageOwner, pageDelta)
+	local numPages = pageOwner.menuPageCount or 1
+	local page = pageOwner.menuPage or 1
+	local newPage = page + pageDelta
+	if newPage < 1 or newPage > numPages then
+		return false
+	end
+
+	pageOwner.menuPage = newPage
+	return true
+end
+
+local function BindPagedMenuMouseWheel(dropdown, rootMenu)
+	if (dropdown.menuPageCount or 1) <= 1 then
+		return
+	end
+
+	local function OnMouseWheel(_, delta)
+		if not AdvanceMenuPage(dropdown, delta > 0 and -1 or 1) then
+			return
+		end
+
+		dropdown:GenerateMenu()
+	end
+
+	rootMenu:AddMenuAcquiredCallback(function(menuFrame)
+		menuFrame:EnableMouseWheel(true)
+		menuFrame:SetScript("OnMouseWheel", OnMouseWheel)
+	end)
+
+	rootMenu:AddMenuReleasedCallback(function(menuFrame)
+		menuFrame:SetScript("OnMouseWheel", nil)
+		menuFrame:EnableMouseWheel(false)
+	end)
+
+	for _, elementDescription in rootMenu:EnumerateElementDescriptions() do
+		elementDescription:AddInitializer(function(frame)
+			frame:EnableMouseWheel(true)
+			frame:SetScript("OnMouseWheel", OnMouseWheel)
+		end)
+		elementDescription:AddResetter(function(frame)
+			frame:SetScript("OnMouseWheel", nil)
+			frame:EnableMouseWheel(false)
+		end)
+	end
+end
+
+function Settings:SetupPagedMenu(dropdown, generator)
+	-- Refresh only reinitializes existing rows; regeneration is required so page changes can rebuild the slice.
+	dropdown:EnableRegenerateOnResponse()
+	dropdown:SetupMenu(function(owner, rootMenu)
+		generator(owner, rootMenu)
+		BindPagedMenuMouseWheel(dropdown, rootMenu)
+	end)
+end
+
+function Settings:CreatePagedMenu(menu, items, addItem, pageOwner, pageSize)
+	local numItems = #items
+	local numPages = math.max(1, math.ceil(numItems / pageSize))
+	local page = pageOwner.menuPage or 1
+	if page < 1 then
+		page = 1
+	elseif page > numPages then
+		page = numPages
+	end
+	pageOwner.menuPage = page
+	pageOwner.menuPageCount = numPages
+
+	local startIndex = 1
+	local endIndex = numItems
+	if numItems > pageSize then
+		startIndex = (page - 1) * pageSize + 1
+		endIndex = math.min(page * pageSize, numItems)
+	end
+
+	for i = startIndex, endIndex do
+		addItem(items[i])
+	end
+
+	if numItems <= pageSize then
+		return
+	end
+
+	menu:CreateDivider()
+	menu:CreateTitle(PAGE_NUMBER_WITH_MAX:format(page, numPages) .. " " .. CreateAtlasMarkup("housing-hotkey-icon-mousewheel-down", 24, 24))
+
+	local prevButton = menu:CreateButton(PREV, function()
+		AdvanceMenuPage(pageOwner, -1)
+		return MenuResponse.Refresh
+	end)
+	prevButton:SetEnabled(page > 1)
+
+	local nextButton = menu:CreateButton(NEXT, function()
+		AdvanceMenuPage(pageOwner, 1)
+		return MenuResponse.Refresh
+	end)
+	nextButton:SetEnabled(page < numPages)
+end
+
 namespace.Settings = Settings

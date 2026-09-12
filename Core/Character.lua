@@ -92,6 +92,14 @@ function Character:IsCurrent()
 	return self.GUID == UnitGUID("player")
 end
 
+function Character:GetNameInClassColor(excludeRealm)
+	if excludeRealm or not self.realmName then
+		return Util.WrapTextInClassColor(self.class, self.name)
+	end
+
+	return Util.WrapTextInClassColor(self.class, format("%s - %s", self.name, self.realmName))
+end
+
 function Character:UpdateProgress(quest)
 	local completionSet = {}
 

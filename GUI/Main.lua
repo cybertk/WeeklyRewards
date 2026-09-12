@@ -228,57 +228,8 @@ function Main:AddSettingsButton()
 end
 
 function Main:AddCharactersButton()
-	self.window.titlebar.CharactersButton = CreateFrame("DropdownButton", "$parentCharactersButton", self.window.titlebar)
+	self.window.titlebar.CharactersButton = CreateFrame("DropdownButton", "$parentCharactersButton", self.window.titlebar, "WeeklyRewardsCharactersButtonTemplate")
 	self.window.titlebar.CharactersButton:SetPoint("RIGHT", self.window.titlebar.SettingsButton, "LEFT", 0, 0)
-	self.window.titlebar.CharactersButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
-	self.window.titlebar.CharactersButton:SetScript("OnEnter", function()
-		self.window.titlebar.CharactersButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.CharactersButton, 1, 1, 1, 0.05)
-		self:SetTooltipOwner(GameTooltip, self.window.titlebar.CharactersButton)
-		GameTooltip:SetText(L["characters_button_title"], 1, 1, 1, 1, true)
-		GameTooltip:AddLine(L["characters_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-		GameTooltip:Show()
-	end)
-	self.window.titlebar.CharactersButton:SetScript("OnLeave", function()
-		self.window.titlebar.CharactersButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.CharactersButton, 1, 1, 1, 0)
-		GameTooltip:Hide()
-	end)
-	self.window.titlebar.CharactersButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.CharactersButton:GetName() .. "Icon", "ARTWORK")
-	self.window.titlebar.CharactersButton.Icon:SetPoint("CENTER", self.window.titlebar.CharactersButton, "CENTER")
-	self.window.titlebar.CharactersButton.Icon:SetSize(18, 18)
-	self.window.titlebar.CharactersButton.Icon:SetAtlas("squad_size_trios")
-
-	self.window.titlebar.CharactersButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-	self.window.titlebar.CharactersButton:SetupMenu(function(_, rootMenu)
-		rootMenu:CreateTitle():AddInitializer(function(frame, description, menu)
-			frame.fontString:SetText(format("|cnWHITE_FONT_COLOR:%s (%d)|r", L["characters_button_title"], CharacterStore.Get():GetNumEnabledCharacters()))
-		end)
-		CharacterStore.Get():ForEach(function(character)
-			local name = character.name
-
-			if character.realmName then
-				name = format("%s - %s", character.name, character.realmName)
-			end
-
-			local characterButton = rootMenu:CreateCheckbox(Util.WrapTextInClassColor(character.class, name), function()
-				return character.enabled or false
-			end, function()
-				if IsControlKeyDown() then
-					self:RemoveRow(character)
-					return
-				end
-
-				character.enabled = not character.enabled
-				self:Redraw()
-			end)
-		end, function(character)
-			return not CharacterStore.IsCurrentPlayer(character)
-		end)
-
-		rootMenu:CreateSpacer()
-		rootMenu:CreateTitle(GREEN_FONT_COLOR:WrapTextInColorCode(L["characters_button_remove_hint"]))
-	end)
 end
 
 function Main:AddRewardsFilterButton()
@@ -533,17 +484,6 @@ function Main:CreateWindow()
 	end)
 
 	table.insert(UISpecialFrames, frameName)
-end
-
-function Main:RemoveRow(character)
-	Util:Debug("Removing row:", character.name)
-
-	local text = CONFIRM_DESTROY_CHARACTER_COMMUNITY:gsub(CLUB_FINDER_COMMUNITY_TYPE:lower(), PVP_PROGRESS_REWARDS_HEADER:lower())
-
-	StaticPopup_ShowGenericConfirmation(text:gsub("|n.*$", ""):format(character.name), function()
-		CharacterStore:Get():RemoveCharacter(character.GUID)
-		self:Redraw()
-	end)
 end
 
 function Main:ResetCell(character, reward)
