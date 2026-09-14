@@ -58,4 +58,22 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 97064, text = "{spell:1297887}" } },
 	},
+	{
+		id = "delve-crystals",
+		key = "|A:delves-bountiful:16:16|aCrystals",
+		description = "{currency:3356:0}",
+		group = RewardsGroup.DELVE,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 0, currency = 3356 } },
+	},
+	{
+		id = "delve-souls",
+		key = "|A:delves-bountiful:16:16|aSouls",
+		description = "{item:276547} {item:276548}|n|n{faction:2808:-4:1}|n|n{faction:2808:9:1}",
+		group = RewardsGroup.DELVE,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 97628, text = "{item:276547}|n- {item:276548}" } },
+	},
 }
