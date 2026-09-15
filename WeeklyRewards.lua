@@ -27,6 +27,7 @@ local defaultDB = {
 			lock = false,
 		},
 		main = {
+			candidates = { "vault", "mn-unity", "mn-trailing", "mn-cc-purge", "delve-shards", "delve-abundance", "mn-pquests", "mn-prey-beacon", "mn-prey-m" },
 			hiddenColumns = {},
 			sortColumn = "lastUpdate",
 			sortAscending = true,
@@ -49,14 +50,19 @@ local WeeklyRewards = {}
 function WeeklyRewards:MigrateDB()
 	local candidatesMap = {}
 	for _, candidate in ipairs(DB:GetAllCandidates()) do
-		candidatesMap[candidate.id] = candidate
+		if candidate.rollover and #candidate.entries ~= (candidate.pick or 1) then
+			for i, entry in ipairs(candidate.entries) do
+				candidatesMap[candidate.id .. ":" .. candidate.entries[1].quest] = candidate
+			end
+		else
+			candidatesMap[candidate.id] = candidate
+		end
 	end
 
 	local rewardsMap = {}
 
 	for i, reward in ipairs_reverse(self.db.global.activeRewards) do
-		local candidateID = string.gsub(reward.id, "([-%w+]):%d+", "%1")
-		local candidate = candidatesMap[candidateID]
+		local candidate = candidatesMap[reward.id]
 
 		if candidate then
 			reward.group = candidate.group
@@ -64,11 +70,7 @@ function WeeklyRewards:MigrateDB()
 			reward.description = candidate.description
 		end
 
-		if (reward.id == "mn-prey-n" or reward.id == "mn-prey-h" or reward.id == "mn-prey-m") and reward.objectives[1].maxCompletion == 4 then
-			table.remove(self.db.global.activeRewards, i)
-		elseif reward.id == "mn-spark" then
-			table.remove(self.db.global.activeRewards, i)
-		elseif reward.id == "mn-trailing" and reward.rollover then
+		if reward.id == "mn-trailing" and reward.rollover then
 			table.remove(self.db.global.activeRewards, i)
 		elseif
 			reward.id == "mn-unity"
@@ -76,9 +78,6 @@ function WeeklyRewards:MigrateDB()
 			and reward.startTime < time({ year = 2026, month = 9, day = 3 })
 		then
 			reward.resetTime = 0
-			self.db.global.activeRewards.nextResetTime = 0
-		elseif candidateID == "mn-sa" then
-			table.remove(self.db.global.activeRewards, i)
 			self.db.global.activeRewards.nextResetTime = 0
 		elseif reward.id == "mn-prey-anguish" then
 			reward.resetTime = GetServerTime() + C_DateAndTime.GetSecondsUntilDailyReset()
@@ -113,6 +112,19 @@ function WeeklyRewards:MigrateDB()
 				c.progress[n] = nil
 			end
 		end
+	end
+
+	if self.db.global.activeRewards.excluded then
+		self.db.global.main.candidates = {}
+
+		for _, c in pairs(candidatesMap) do
+			if not self.db.global.activeRewards.excluded[c.id] and not c.expansion then
+				table.insert(self.db.global.main.candidates, c.id)
+			end
+		end
+
+		print("migraged rewards", #self.db.global.main.candidates)
+		self.db.global.activeRewards.excluded = nil
 	end
 end
 
@@ -162,8 +174,11 @@ function WeeklyRewards:Init()
 		end
 	end
 
+	ActiveRewards.SetCandidates(DB:GetAllCandidates())
+
 	local character = characterStore:CurrentPlayer()
 	local activeRewards = ActiveRewards:New(self.db.global.activeRewards)
+	activeRewards:SetSelectedCandidates(self.db.global.main.candidates)
 
 	RewardSummary:Init(characterStore)
 
@@ -280,7 +295,7 @@ end
 
 function WeeklyRewards:UpdateActiveRewards()
 	self.activeRewards:Reset(nop)
-	self.activeRewards:Update(DB:GetAllCandidates(), function(reward)
+	self.activeRewards:Update(nil, function(reward)
 		CharacterStore.Get():ForEach(function(x)
 			local outdatedProgress = x:ResetProgress(reward)
 			if self.db.global.archive and outdatedProgress then
