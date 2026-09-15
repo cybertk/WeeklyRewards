@@ -268,14 +268,22 @@ function Main:AddRewardsFilterButton()
 			end
 		end
 
-		local groups, legacyExpansions = activeRewards:GetAllGroups()
-
+		local groups, inactiveGroups = activeRewards:GetAllCandidates()
 		rootMenu:CreateDivider()
 		rootMenu:CreateTitle(REWARDS)
-		self:AddRewardsFilterToMenu(rootMenu, groups)
 
+		self:AddRewardsFilterToMenu(rootMenu, groups)
 		rootMenu:CreateTitle(LFG_LIST_LEGACY)
-		self:AddRewardsFilterToMenu(rootMenu, legacyExpansions, true)
+		for i = 1, LE_EXPANSION_LEVEL_CURRENT - 1 do
+			local groups = activeRewards:GetAllCandidatesByExpansion(i)
+			if groups then
+				local button = rootMenu:CreateButton(_G["EXPANSION_NAME" .. i])
+				self:AddRewardsFilterToMenu(button, groups, true)
+			end
+		end
+		rootMenu:CreateDivider()
+		rootMenu:CreateTitle(GARRISON_FOLLOWER_INACTIVE)
+		self:AddRewardsFilterToMenu(rootMenu, inactiveGroups, false, true)
 	end)
 
 	self.window.titlebar.ColumnsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.ColumnsButton:GetName() .. "Icon", "ARTWORK")
@@ -285,16 +293,18 @@ function Main:AddRewardsFilterButton()
 	self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
 end
 
-function Main:AddRewardsFilterToMenu(rootMenu, expansions, isLegacy)
+function Main:AddRewardsFilterToMenu(rootMenu, groups, isLegacy, isInactive)
 	local activeRewards = ActiveRewards.Get()
 
-	for name, expansion in pairs(expansions) do
+	for name, candidates in pairs(groups) do
 		local button = rootMenu
 
-		if isLegacy then
-			button = rootMenu:CreateButton(_G["EXPANSION_NAME" .. name])
-		elseif name ~= "" then
-			button = rootMenu:CreateCheckbox(name, function()
+		if name == "" then
+		elseif isLegacy then
+			button:CreateTitle(name)
+		else
+			local color = isInactive and GRAY_FONT_COLOR or WHITE_FONT_COLOR
+			button = rootMenu:CreateCheckbox(color:WrapTextInColorCode(name), function()
 				return not activeRewards:IsGroupExcluded(name)
 			end, function()
 				activeRewards:ToggleExclusionByGroup(name)
@@ -302,29 +312,24 @@ function Main:AddRewardsFilterToMenu(rootMenu, expansions, isLegacy)
 			end)
 		end
 
-		for group, rewards in pairs(expansion) do
-			if isLegacy and group ~= "" then
-				button:CreateTitle(group)
-			end
+		for _, candidate in ipairs(candidates) do
+			local color = activeRewards:IsActive(candidate.id) and WHITE_FONT_COLOR or GRAY_FONT_COLOR
+			button:CreateCheckbox(color:WrapTextInColorCode(candidate.key), function()
+				return not activeRewards:IsCandidateExcluded(candidate.id)
+			end, function()
+				activeRewards:ToggleExclusion(candidate.id)
+				if not activeRewards:IsCandidateExcluded(candidate.id) then
+					local character = CharacterStore.Get():CurrentPlayer()
 
-			for _, reward in ipairs(rewards) do
-				button:CreateCheckbox(reward.name, function()
-					return not activeRewards:IsExcluded(reward.id)
-				end, function()
-					activeRewards:ToggleExclusion(reward.id)
-					if not activeRewards:IsExcluded(reward.id) then
-						local character = CharacterStore.Get():CurrentPlayer()
+					character:Scan(activeRewards)
+					character:UpdateProgress()
+				end
+				self:Redraw()
+			end)
+		end
 
-						character:Scan(activeRewards)
-						character:UpdateProgress()
-					end
-					self:Redraw()
-				end)
-			end
-
-			if isLegacy and group ~= "" then
-				button:QueueDivider()
-			end
+		if isLegacy and name ~= "" then
+			button:QueueDivider()
 		end
 	end
 end
@@ -857,7 +862,7 @@ function Main:UpdateSortArrow()
 		cellFrame.data.onClick = function()
 			if IsControlKeyDown() then
 				if column.reward then
-					ActiveRewards.Get():ToggleExclusion(column.reward.id)
+					ActiveRewards.Get():ToggleExclusion(column.reward:GetCandidateID())
 				else
 					WeeklyRewards.db.global.main.hiddenColumns[column.name] = true
 				end
@@ -951,7 +956,7 @@ function Main:ForEachColumn(callback, visibleOnly)
 		end
 
 		local reward = column.reward
-		if reward and activeRewards.excluded[reward.id] ~= true then
+		if reward and not activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
 			callback(column)
 		elseif reward == nil and not WeeklyRewards.db.global.main.hiddenColumns[column.name] then
 			callback(column)

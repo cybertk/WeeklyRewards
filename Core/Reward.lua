@@ -1,26 +1,5 @@
 local _, namespace = ...
 
-local STATE = {
-	CONFIRMED = 0,
-	ANALYZING = 1,
-}
-
-local Reward = {
-	name = "",
-	id = "", -- id is unique, while name is not
-	group = nil,
-	state = STATE.ANALYZING,
-	description = nil,
-	objectives = {},
-	rolloverObjectives = nil,
-	minimumLevel = nil,
-	maximunLevel = nil,
-	resetTime = nil,
-	startTime = nil,
-	items = nil,
-}
-namespace.Reward = Reward
-
 local Util = namespace.Util
 
 local WAPI_GetQuestTimeLeftSeconds = C_TaskQuest.GetQuestTimeLeftSeconds
@@ -35,6 +14,11 @@ local WAPI_GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 local WAPI_GetServerTime = GetServerTime
 local WAPI_UnitLevel = UnitLevel
 
+local STATE = {
+	CONFIRMED = 0,
+	ANALYZING = 1,
+}
+
 local RewardObjective = {}
 RewardObjective.__index = RewardObjective
 
@@ -42,16 +26,59 @@ function RewardObjective:GetQuest()
 	return self.quest or self.questPool[1]
 end
 
+local Reward = {
+	CandidatesById = {},
+	Objectives = {},
+}
+
+local function GetRewardID(candidate, index)
+	if index then
+		return candidate.id .. ":" .. candidate.entries[index].quest
+	elseif candidate.rollover and #candidate.entries ~= (candidate.pick or 1) then
+		return candidate.id .. ":" .. candidate.entries[1].quest
+	else
+		return candidate.id
+	end
+end
+
+function Reward.SetCandidates(candidates)
+	for _, candidate in ipairs(candidates) do
+		if GetRewardID(candidate) ~= candidate.id then
+			for i, entry in ipairs(candidate.entries) do
+				Reward.CandidatesById[GetRewardID(candidate, i)] = candidate
+			end
+		else
+			Reward.CandidatesById[candidate.id] = candidate
+		end
+
+		for i, entry in ipairs(candidate.entries) do
+			setmetatable(entry, RewardObjective)
+		end
+	end
+end
+
 function Reward:New(o)
 	o = o or {}
 	self.__index = self
 	setmetatable(o, self)
 
-	for _, objective in ipairs(o.objectives) do
+	for _, objective in ipairs(o.objectives or {}) do
 		setmetatable(objective, RewardObjective)
 	end
 
 	return o
+end
+
+function Reward:GetCandidate()
+	return Reward.CandidatesById[self.id]
+end
+
+function Reward:GetCandidateID()
+	return Reward.CandidatesById[self.id].id
+end
+
+function Reward:IsValid()
+	return Reward.CandidatesById[self.id] ~= nil
 end
 
 function Reward:PlayerMeetsRequiredLevel(level)
@@ -333,3 +360,5 @@ function Reward:ForEachItem(callback)
 
 	return items
 end
+
+namespace.Reward = Reward
