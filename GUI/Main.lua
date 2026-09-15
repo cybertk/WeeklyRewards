@@ -232,111 +232,14 @@ function Main:AddCharactersButton()
 	self.window.titlebar.CharactersButton:SetPoint("RIGHT", self.window.titlebar.SettingsButton, "LEFT", 0, 0)
 end
 
-function Main:AddRewardsFilterButton()
-	self.window.titlebar.ColumnsButton = CreateFrame("DropdownButton", "$parentColumnsButton", self.window.titlebar)
-	self.window.titlebar.ColumnsButton:SetPoint("RIGHT", self.window.titlebar.CharactersButton, "LEFT", 0, 0)
-	self.window.titlebar.ColumnsButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
-	self.window.titlebar.ColumnsButton:SetScript("OnEnter", function()
-		self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.ColumnsButton, 1, 1, 1, 0.05)
-		self:SetTooltipOwner(GameTooltip, self.window.titlebar.ColumnsButton)
-		GameTooltip:SetText(L["columns_button_tooltip"], 1, 1, 1, 1, true)
-		GameTooltip:AddLine(L["columns_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-		GameTooltip:Show()
-	end)
-	self.window.titlebar.ColumnsButton:SetScript("OnLeave", function()
-		self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.ColumnsButton, 1, 1, 1, 0)
-		GameTooltip:Hide()
-	end)
-	self.window.titlebar.ColumnsButton:SetupMenu(function(_, rootMenu)
-		if not self.columns then
-			return
-		end
-
-		local hidden = WeeklyRewards.db.global.main.hiddenColumns
-		local activeRewards = ActiveRewards.Get()
-
-		for _, column in ipairs(self.columns) do
-			if column.reward == nil then
-				rootMenu:CreateCheckbox(column.name, function()
-					return not hidden[column.name]
-				end, function(columnName)
-					hidden[columnName] = not hidden[columnName]
-					self:Redraw()
-				end, column.name)
-			end
-		end
-
-		local groups, inactiveGroups = activeRewards:GetAllCandidates()
-		rootMenu:CreateDivider()
-		rootMenu:CreateTitle(REWARDS)
-
-		self:AddRewardsFilterToMenu(rootMenu, groups)
-		rootMenu:CreateTitle(LFG_LIST_LEGACY)
-		for i = 1, LE_EXPANSION_LEVEL_CURRENT - 1 do
-			local groups = activeRewards:GetAllCandidatesByExpansion(i)
-			if groups then
-				local button = rootMenu:CreateButton(_G["EXPANSION_NAME" .. i])
-				self:AddRewardsFilterToMenu(button, groups, true)
-			end
-		end
-		rootMenu:CreateDivider()
-		rootMenu:CreateTitle(GARRISON_FOLLOWER_INACTIVE)
-		self:AddRewardsFilterToMenu(rootMenu, inactiveGroups, false, true)
-	end)
-
-	self.window.titlebar.ColumnsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.ColumnsButton:GetName() .. "Icon", "ARTWORK")
-	self.window.titlebar.ColumnsButton.Icon:SetPoint("CENTER", self.window.titlebar.ColumnsButton, "CENTER")
-	self.window.titlebar.ColumnsButton.Icon:SetSize(15, 14)
-	self.window.titlebar.ColumnsButton.Icon:SetAtlas("UI-HUD-Minimap-Tracking-Up")
-	self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-end
-
-function Main:AddRewardsFilterToMenu(rootMenu, groups, isLegacy, isInactive)
-	local activeRewards = ActiveRewards.Get()
-
-	for name, candidates in pairs(groups) do
-		local button = rootMenu
-
-		if name == "" then
-		elseif isLegacy then
-			button:CreateTitle(name)
-		else
-			local color = isInactive and GRAY_FONT_COLOR or WHITE_FONT_COLOR
-			button = rootMenu:CreateCheckbox(color:WrapTextInColorCode(name), function()
-				return not activeRewards:IsGroupExcluded(name)
-			end, function()
-				activeRewards:ToggleExclusionByGroup(name)
-				self:Redraw()
-			end)
-		end
-
-		for _, candidate in ipairs(candidates) do
-			local color = activeRewards:IsActive(candidate.id) and WHITE_FONT_COLOR or GRAY_FONT_COLOR
-			button:CreateCheckbox(color:WrapTextInColorCode(candidate.key), function()
-				return not activeRewards:IsCandidateExcluded(candidate.id)
-			end, function()
-				activeRewards:ToggleExclusion(candidate.id)
-				if not activeRewards:IsCandidateExcluded(candidate.id) then
-					local character = CharacterStore.Get():CurrentPlayer()
-
-					character:Scan(activeRewards)
-					character:UpdateProgress()
-				end
-				self:Redraw()
-			end)
-		end
-
-		if isLegacy and name ~= "" then
-			button:QueueDivider()
-		end
-	end
+function Main:AddTrackingButton()
+	self.window.titlebar.TrackingButton = CreateFrame("DropdownButton", "$parentTrackingButton", self.window.titlebar, "WeeklyRewardsTrackingButtonTemplate")
+	self.window.titlebar.TrackingButton:SetPoint("RIGHT", self.window.titlebar.CharactersButton, "LEFT", 0, 0)
 end
 
 function Main:AddSortButton()
 	self.window.titlebar.SortButton = CreateFrame("DropdownButton", "$parentSettingsButton", self.window.titlebar)
-	self.window.titlebar.SortButton:SetPoint("RIGHT", self.window.titlebar.ColumnsButton, "LEFT", 0, 0)
+	self.window.titlebar.SortButton:SetPoint("RIGHT", self.window.titlebar.TrackingButton, "LEFT", 0, 0)
 	self.window.titlebar.SortButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
 	self.window.titlebar.SortButton:SetScript("OnEnter", function()
 		self.window.titlebar.SortButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
@@ -452,7 +355,7 @@ function Main:CreateWindow()
 	self:AddCloseButton()
 	self:AddSettingsButton()
 	self:AddCharactersButton()
-	self:AddRewardsFilterButton()
+	self:AddTrackingButton()
 	self:AddSortButton()
 
 	self.window.table = UI:CreateTableFrame({
