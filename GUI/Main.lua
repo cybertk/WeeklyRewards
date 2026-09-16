@@ -197,6 +197,13 @@ function Main:AddSettingsButton()
 			self:Redraw()
 		end)
 
+		rootMenu:CreateCheckbox(L["settings_show_tracking_column"], function()
+			return WeeklyRewards.db.global.main.showTrackingColumn
+		end, function()
+			WeeklyRewards.db.global.main.showTrackingColumn = not WeeklyRewards.db.global.main.showTrackingColumn
+			self:Redraw()
+		end)
+
 		rootMenu:CreateTitle(L["settings_utility_title"])
 		local untrackQuests = rootMenu:CreateCheckbox(L["settings_auto_untrack_quests"], function()
 			return WeeklyRewards.db.global.utils.untrackQuests
@@ -679,6 +686,36 @@ function Main:AddRewardColumns()
 	end
 end
 
+function Main:AddTrackingColumn()
+	if not WeeklyRewards.db.global.main.showTrackingColumn then
+		return
+	end
+
+	table.insert(self.columns, {
+		name = "",
+		tracking = true,
+		align = "CENTER",
+		cell = function()
+			return { text = "" }
+		end,
+	})
+end
+
+function Main:AttachTrackingButton(headerCell)
+	if not self.headerTrackingButton then
+		self.headerTrackingButton = CreateFrame("DropdownButton", "$parentHeaderTrackingButton", headerCell, "WeeklyRewardsTrackingButtonTemplate")
+	else
+		self.headerTrackingButton:SetParent(headerCell)
+	end
+
+	local size = self.window.table.config.header.height
+	self.headerTrackingButton:SetSize(size, size)
+	self.headerTrackingButton:ClearAllPoints()
+	self.headerTrackingButton:SetPoint("CENTER", headerCell, "CENTER")
+	self.headerTrackingButton:SetFrameLevel(headerCell:GetFrameLevel() + 1)
+	self.headerTrackingButton:Show()
+end
+
 function Main:AddProgressToGameTooltip(progress)
 	local questColor = progress:ObjectivesCount() == 1 and YELLOW_FONT_COLOR or WHITE_FONT_COLOR
 
@@ -754,12 +791,22 @@ end
 
 function Main:UpdateSortArrow()
 	local sortOrder, ascending = CharacterStore.Get():GetSortOrder()
+	local trackingAttached = false
 
 	local i = 0
 	Main:ForEachColumn(function(column)
 		i = i + 1
 
 		local cellFrame = self.window.table.rows[1].columns[i]
+		if column.tracking then
+			self:AttachTrackingButton(cellFrame)
+			trackingAttached = true
+			if cellFrame.Arrow then
+				cellFrame.Arrow:Hide()
+			end
+			return
+		end
+
 		local characterField = column.key or column.reward.id
 
 		cellFrame.data.onClick = function()
@@ -808,6 +855,10 @@ function Main:UpdateSortArrow()
 			end
 		end
 	end)
+
+	if not trackingAttached and self.headerTrackingButton then
+		self.headerTrackingButton:Hide()
+	end
 end
 
 function Main:LayoutHeader(force)
@@ -859,7 +910,9 @@ function Main:ForEachColumn(callback, visibleOnly)
 		end
 
 		local reward = column.reward
-		if reward and not activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
+		if column.tracking then
+			callback(column)
+		elseif reward and not activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
 			callback(column)
 		elseif reward == nil and not WeeklyRewards.db.global.main.hiddenColumns[column.name] then
 			callback(column)
@@ -891,6 +944,7 @@ function Main:Redraw()
 		self.columns = {}
 		self:AddCharacterColumns()
 		self:AddRewardColumns()
+		self:AddTrackingColumn()
 	end
 
 	do -- Table Header row
@@ -946,7 +1000,7 @@ function Main:Redraw()
 
 			---@type WK_TableDataColumn
 			local column = {
-				width = math.max(headerWidth, cellWidth) + padding,
+				width = dataColumn.tracking and self.window.table.config.header.height or math.max(headerWidth, cellWidth) + padding,
 				align = dataColumn.align or "LEFT",
 			}
 			table.insert(tableData.columns, column)

@@ -36,6 +36,7 @@ local defaultDB = {
 			windowMaxRows = 20,
 			windowBackgroundColor = { r = 0, g = 0, b = 0, a = 1 },
 			windowBorder = true,
+			showTrackingColumn = true,
 		},
 		utils = {
 			untrackQuests = false,

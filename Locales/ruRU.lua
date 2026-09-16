@@ -37,11 +37,14 @@ L["settings_max_width_percent"] = "% от полного экрана"
 L["settings_max_rows"] = "Макс. кол-во строк"
 L["settings_background_color"] = "Цвет фона"
 L["settings_show_border"] = "Показывать границу"
+L["settings_show_tracking_column"] = "Показывать колонку отслеживания"
 L["settings_utility_title"] = "Утилиты"
 L["settings_auto_untrack_quests"] = "Отключение заданий"
-L["settings_auto_untrack_quests_tooltip"] = "Отключить отслеживание всех заданий, управляемых WeeklyRewards, при входе в игру, что позволит сделать панель журнала заданий более удобной."
+L["settings_auto_untrack_quests_tooltip"] =
+	"Отключить отслеживание всех заданий, управляемых WeeklyRewards, при входе в игру, что позволит сделать панель журнала заданий более удобной."
 L["settings_broadcast_rewards"] = "Оповещать о наградах"
-L["settings_broadcast_rewards_tooltip"] = "После получения наград Отряда Вы сможете опубликовать сводку по ней. Для этого автоматически выбирается канал чата с наибольшей аудиторией."
+L["settings_broadcast_rewards_tooltip"] =
+	"После получения наград Отряда Вы сможете опубликовать сводку по ней. Для этого автоматически выбирается канал чата с наибольшей аудиторией."
 
 -- Table columns
 L["column_realm"] = "Игровой мир"

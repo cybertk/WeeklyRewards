@@ -10,33 +10,29 @@ local Utils = namespace.Utils
 
 WeeklyRewardsTrackingButtonMixin = {}
 
+function WeeklyRewardsTrackingButtonMixin:QueueRedraw()
+	self.pendingRedraw = true
+end
+
+function WeeklyRewardsTrackingButtonMixin:FlushPendingRedraw()
+	if not self.pendingRedraw then
+		return
+	end
+	self.pendingRedraw = nil
+	namespace.GUIMain:Redraw()
+end
+
+function WeeklyRewardsTrackingButtonMixin:OnMenuClosed(menu, closeReason)
+	DropdownButtonMixin.OnMenuClosed(self, menu, closeReason)
+	self:FlushPendingRedraw()
+end
+
 function WeeklyRewardsTrackingButtonMixin:OnLoad()
 	self:SetupMenu(function(_, rootMenu)
 		-- local main = namespace.GUIMain
 		local activeRewards = ActiveRewards.Get()
 
-		do
-			self:AddCharacterInfoFilterToMenu(rootMenu)
-			-- if not main.columns then
-			-- 	return
-			-- end
-
-			-- local hidden = WeeklyRewards.db.global.main.hiddenColumns
-
-			-- local button = rootMenu:CreateButton(CHARACTER_BUTTON)
-			-- for _, column in ipairs(main.columns) do
-			-- 	if column.reward == nil then
-			-- 		button:CreateCheckbox(column.name, function()
-			-- 			return not hidden[column.name]
-			-- 		end, function(columnName)
-			-- 			hidden[columnName] = not hidden[columnName]
-			-- 			main:Redraw()
-			-- 		end, column.name)
-			-- 	end
-			-- end
-
-			-- rootMenu:CreateDivider()
-		end
+		self:AddCharacterInfoFilterToMenu(rootMenu)
 
 		local groups, inactiveGroups = activeRewards:GetAllCandidates()
 
@@ -115,12 +111,12 @@ function WeeklyRewardsTrackingButtonMixin:AddCharacterInfoFilterToMenu(rootMenu)
 
 	local button = rootMenu:CreateButton(CHARACTER_BUTTON)
 	for _, column in ipairs(main.columns) do
-		if column.reward == nil then
+		if column.reward == nil and not column.tracking then
 			button:CreateCheckbox(column.name, function()
 				return not hidden[column.name]
 			end, function(columnName)
 				hidden[columnName] = not hidden[columnName]
-				main:Redraw()
+				self:QueueRedraw()
 			end, column.name)
 		end
 	end
@@ -143,7 +139,7 @@ function WeeklyRewardsTrackingButtonMixin:AddRewardsFilterToMenu(rootMenu, group
 				return not activeRewards:IsGroupExcluded(name)
 			end, function()
 				activeRewards:ToggleExclusionByGroup(name)
-				namespace.GUIMain:Redraw()
+				self:QueueRedraw()
 			end)
 		end
 
@@ -160,7 +156,7 @@ function WeeklyRewardsTrackingButtonMixin:AddRewardsFilterToMenu(rootMenu, group
 					character:Scan(activeRewards)
 					character:UpdateProgress()
 				end
-				namespace.GUIMain:Redraw()
+				self:QueueRedraw()
 			end)
 
 			checkbox:SetTooltip(self:GenerateRewardTooltip(candidate))
