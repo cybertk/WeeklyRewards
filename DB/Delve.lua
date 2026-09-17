@@ -25,7 +25,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 0, progressType = 4 },
+			{ quest = 0, progressType = 4, loot = { 584507 } }, -- spell:1216211
 		},
 		items = {
 			{
@@ -56,7 +56,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 97064, text = "{spell:1297887}" } },
+		entries = { { quest = 97064, text = "{spell:1297887}" }, loot = { 584515, 658087, 658088 } }, -- 584514 584515 Bountiful Heavy Trunk , 658087 addi
 	},
 	{
 		id = "delve-crystals",
@@ -75,5 +75,14 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 97628, text = "{item:276547}|n- {item:276548}" } },
+	},
+	{
+		id = "delve-hero",
+		key = "|A:delves-bountiful:16:16|aHero",
+		description = "{item:276547} {item:276548}|n|n{faction:2808:-4:1}|n|n{faction:2808:9:1}",
+		group = RewardsGroup.DELVE,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 93935, text = "{item:276547}|n- {item:276548}" } },
 	},
 }
