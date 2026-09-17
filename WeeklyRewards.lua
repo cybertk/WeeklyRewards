@@ -64,24 +64,30 @@ function WeeklyRewards:MigrateDB()
 	for i, reward in ipairs_reverse(self.db.global.activeRewards) do
 		local candidate = candidatesMap[reward.id]
 
-		if candidate then
-			reward.group = candidate.group
-			reward.expansion = candidate.expansion
-			reward.description = candidate.description
+		if candidate and reward.objectives then
+			if #candidate.entries ~= #reward.objectives then
+				reward.o = {}
+				for r, e in ipairs(candidate.entries) do
+					for _, o in ipairs(reward.objectives) do
+						if o.quest == e.quest then
+							table.insert(reward.o, r)
+						end
+					end
+				end
+
+				print("oh", candidate.id)
+			end
 		end
 
-		if reward.id == "mn-trailing" and reward.rollover then
-			table.remove(self.db.global.activeRewards, i)
-		elseif
-			reward.id == "mn-unity"
-			and reward.resetTime > time({ year = 2026, month = 9, day = 7 })
-			and reward.startTime < time({ year = 2026, month = 9, day = 3 })
-		then
-			reward.resetTime = 0
-			self.db.global.activeRewards.nextResetTime = 0
-		elseif reward.id == "mn-prey-anguish" then
-			reward.resetTime = GetServerTime() + C_DateAndTime.GetSecondsUntilDailyReset()
-		end
+		reward.name = nil
+		reward.description = nil
+		reward.group = nil
+		reward.expansion = nil
+		reward.minimumLevel = nil
+		reward.maximumLevel = nil
+		reward.rollover = nil
+		reward.items = nil
+		reward.objectives = nil
 
 		rewardsMap[reward.id] = reward
 	end

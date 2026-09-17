@@ -45,6 +45,19 @@ function Util:DebugQuest(questID)
 	print(RED_FONT_COLOR:WrapTextInColorCode("DebugQuest:"), s)
 end
 
+function Util:DebugConcatTableField(tbl, field)
+	if self.debug ~= true then
+		return
+	end
+
+	local values = {}
+	for _, v in pairs(tbl) do
+		table.insert(values, tostring(v[field]))
+	end
+
+	return table.concat(values, ", ")
+end
+
 function Util:Filter(t, pattern, inplace, asList)
 	asList = asList or true
 

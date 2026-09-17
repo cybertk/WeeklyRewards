@@ -219,34 +219,14 @@ end
 function ActiveRewards:Update(candidates, OnRewardAddedCallback)
 	local candidatesToScan = self:_FindCandidatesToScan(candidates or Cache.candidates)
 
-	Util:Debug("Scanning candidates: ", #candidatesToScan)
+	Util:Debug("Scanning candidates: ", #candidatesToScan, Util:DebugConcatTableField(candidatesToScan, "id"))
 
 	if #candidatesToScan == 0 then
 		return
 	end
 
 	for _, candidate in ipairs(candidatesToScan) do
-		local reward = Reward:New({
-			id = candidate.id,
-			name = candidate.key,
-			description = candidate.description,
-			group = candidate.group,
-			expansion = candidate.expansion,
-			minimumLevel = candidate.minimumLevel,
-			maximumLevel = candidate.maximumLevel,
-			rollover = candidate.rollover,
-			items = candidate.items,
-		})
-		local pick = candidate.pick or 1
-
-		reward:DetermineObjectives(candidate.entries, pick, candidate.rollover == true)
-		reward:DetermineResetTime(candidate.timeLeft and candidate.timeLeft() or nil)
-		reward:DetermineState(pick)
-		reward:UpdateDescription()
-
-		if candidate.rollover and #candidate.entries ~= pick and #reward.objectives > 0 then
-			reward.id = reward.id .. ":" .. reward.objectives[1].quest
-		end
+		local reward = Reward:FromCandidate(candidate)
 
 		if self:_Add(reward) and OnRewardAddedCallback then
 			OnRewardAddedCallback(reward)
