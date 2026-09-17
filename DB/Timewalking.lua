@@ -77,17 +77,18 @@ namespace.DB.rewardCandidiates["timewalking"] = {
 		id = "tw-path",
 		key = "TW:Path",
 		group = RewardsGroup.TIMEWALKING_EVENTS,
-		minimumLevel = 80,
+		minimumLevel = 10,
 		entries = {
-			{ quest = 86731, unlockAura = 452307 }, -- An Original Path Through Time - Clapths
-			{ quest = 83363, unlockAura = 335148 }, -- A Burning Path Through Time - TBC
-			{ quest = 83365, unlockAura = 335149 }, -- A Frozen Path Through Time - WLK
-			{ quest = 83359, unlockAura = 335150 }, -- A Shattered Path Through Time - Cat
-			{ quest = 83362, unlockAura = 335151 }, -- A Shrouded Path Through Time - MoP
-			{ quest = 83364, unlockAura = 335152 }, -- A Savage Path Through Time - WoD
-			{ quest = 83360, unlockAura = 359082 }, -- A Fel Path Through Time - Legion
-			{ quest = 88805, unlockAura = 1223878 }, -- A Scarred Path Through Time - BFA
-			{ quest = 92649, unlockAura = 1256081 }, -- A Shadowed Path Through Time - SL
+			{ quest = 85947, questPool = { 83274, 85947 }, unlockAura = 452307 }, -- An Original Path Through Time - Classic
+			{ quest = 93608, questPool = { 83363, 93608 }, unlockAura = 335148 }, -- A Burning Path Through Time - TBC
+			{ quest = 85949, questPool = { 83365, 85949 }, unlockAura = 335149 }, -- A Frozen Path Through Time - WLK
+			{ quest = 93611, questPool = { 83359, 93611 }, unlockAura = 335150 }, -- A Shattered Path Through Time - Cat
+			{ quest = 93612, questPool = { 83362, 93612 }, unlockAura = 335151 }, -- A Shrouded Path Through Time - MoP
+			{ quest = 93613, questPool = { 83364, 93613 }, unlockAura = 335152 }, -- A Savage Path Through Time - WoD
+			{ quest = 93614, questPool = { 86564, 93614 }, unlockAura = 359082 }, -- A Fel Path Through Time - Legion
+			{ quest = 93627, questPool = { 88808, 93627 }, unlockAura = 1223878 }, -- A Scarred Path Through Time - BFA
+			{ quest = 93628, questPool = { 92647, 93628 }, unlockAura = 1256081 }, -- A Shadowed Path Through Time - SL
+			{ quest = 93497, questPool = { 93495, 93497 }, unlockAura = 1305981 }, -- A Soaring Path Through Time - DF
 		},
 	},
 }
