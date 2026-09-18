@@ -541,15 +541,36 @@ function Util:ResolveTags(s, autoColor)
 				if id == 0 then
 					status = C_QuestLog.IsQuestFlaggedCompleted(tonumber(arg1)) and "|cnGRAY_FONT_COLOR:" .. CRITERIA_COMPLETED .. "|r" or DAILY
 				elseif C_QuestLog.IsQuestFlaggedCompleted(id) then
-					status = CreateAtlasMarkup(format("common-icon-checkmark", 12, 12))
+					status = CreateAtlasMarkup("common-icon-checkmark", 12, 12)
 				elseif C_QuestLog.IsQuestFlaggedCompleted(math.abs(tonumber(arg1))) then
 					status = tonumber(arg1) > 0 and "|cnRED_FONT_COLOR:" .. FAILED .. "|r" or "|cnGREEN_FONT_COLOR:" .. READY .. "|r"
 				else
-					status = CreateAtlasMarkup(format("common-icon-redx", 12, 12))
+					status = CreateAtlasMarkup("common-icon-redx", 12, 12)
 				end
 				name = "|cffffffff(" .. status .. ")|r"
 			else
 				name = ""
+			end
+
+			if name and name ~= "" then
+				local atlas
+				local class = C_QuestInfoSystem.GetQuestClassification(id)
+
+				if class == Enum.QuestClassification.WorldQuest then
+					atlas = "Worldquest-icon"
+				elseif class == Enum.QuestClassification.BonusObjective then
+					atlas = "minimap-genericevent-hornicon-small"
+				elseif class == Enum.QuestClassification.Normal then
+					atlas = "QuestNormal"
+				else
+					atlas = (QuestUtil.GetQuestClassificationInfo(class) or {}).atlas
+				end
+
+				if atlas then
+					name = format("%s %s", CreateAtlasMarkup(atlas, 14, 14), name)
+				else
+					name = nil
+				end
 			end
 		elseif type == "item" then
 			local item = Item:CreateFromItemID(id)
@@ -598,6 +619,14 @@ function Util:ResolveTags(s, autoColor)
 	end)
 
 	return resolvedString
+end
+
+function Util:Text(...)
+	return self:ResolveTags(format(...))
+end
+
+function Util:ColoredText(...)
+	return self:ResolveTags(format(...), true)
 end
 
 Util.pendingExecution = {}
