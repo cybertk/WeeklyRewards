@@ -72,6 +72,13 @@ L["progress_drops"] = "Дроп"
 L["reward_rewards"] = "Награды"
 L["reward_time_left"] = "Осталось времени: "
 
+-- Candidate tooltips
+L["candidate_from_following_quests"] = "Награды за одно из следующих заданий:"
+L["candidate_from_quest_format"] = "Награды за {quest:%s}"
+L["candidate_one_of_following_quests"] = "Которое может быть одним из следующих заданий"
+L["candidate_from_quest"] = "Награды за задание"
+L["candidate_not_active"] = "Награда не активна на этой неделе"
+
 -- Summary
 L["summary_completed_count"] = "%s выполнено %d раз на этой неделе"
 L["summary_progress"] = "Прогресс Отряда:"

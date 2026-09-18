@@ -68,6 +68,13 @@ L["progress_drops"] = "Drops"
 L["reward_rewards"] = "Rewards"
 L["reward_time_left"] = "Time Left: "
 
+-- Candidate tooltips
+L["candidate_from_following_quests"] = "Rewards from one of the following quests:"
+L["candidate_from_quest_format"] = "Rewards from {quest:%s}"
+L["candidate_one_of_following_quests"] = "Which can be one of the following quests"
+L["candidate_from_quest"] = "Rewards from quest"
+L["candidate_not_active"] = "Reward is not active this week"
+
 -- Summary
 L["summary_completed_count"] = "%s completed %d times this week"
 L["summary_progress"] = "Warband Progress:"

@@ -76,27 +76,27 @@ function WeeklyRewardsTrackingButtonMixin:GenerateRewardTooltip(candidate)
 		if candidate.description then
 			GameTooltip_AddNormalLine(tooltip, Util:ColoredText(candidate.description))
 		elseif #candidate.entries > 1 then
-			GameTooltip_AddNormalLine(tooltip, "Rewards from one of the following quests:")
+			GameTooltip_AddNormalLine(tooltip, L["candidate_from_following_quests"])
 			for _, entry in ipairs(candidate.entries) do
 				GameTooltip_AddHighlightLine(tooltip, Util:Text("{quest:%d}", entry.quest), false)
 			end
 		elseif candidate.entries[1].questPool then
 			local entry = candidate.entries[1]
 
-			GameTooltip_AddNormalLine(tooltip, Util:Text("Rewards from {quest:%s}", (entry.quest == 0 or not entry.quest) and "0:0" or entry.quest))
+			GameTooltip_AddNormalLine(tooltip, Util:Text(L["candidate_from_quest_format"], (entry.quest == 0 or not entry.quest) and "0:0" or entry.quest))
 			GameTooltip_AddBlankLineToTooltip(tooltip)
-			GameTooltip_AddHighlightLine(tooltip, "Which can be one of the following quest")
+			GameTooltip_AddHighlightLine(tooltip, L["candidate_one_of_following_quests"])
 			for _, quest in ipairs(entry.questPool) do
 				GameTooltip_AddHighlightLine(tooltip, Util:Text("{quest:%d}", quest), false)
 			end
 		else
-			GameTooltip_AddNormalLine(tooltip, "Rewards from quest")
+			GameTooltip_AddNormalLine(tooltip, L["candidate_from_quest"])
 			GameTooltip_AddHighlightLine(tooltip, Util:Text("{quest:%d}", candidate.entries[1].quest), false)
 		end
 
 		if not activeRewards:IsCandidateActive(candidate.id) then
 			GameTooltip_AddBlankLineToTooltip(tooltip)
-			GameTooltip_AddDisabledLine(tooltip, "Reward is not active this week")
+			GameTooltip_AddDisabledLine(tooltip, L["candidate_not_active"])
 		end
 	end
 end
