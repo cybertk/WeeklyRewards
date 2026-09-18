@@ -260,7 +260,7 @@ function Character:Scan(activeRewards)
 	self:UpdateItemLevels()
 
 	local rewardsToScan = Util:Filter(activeRewards, function(reward)
-		if reward:IsLegacy() and activeRewards:IsExcluded(reward.id) then
+		if reward:IsLegacy() and activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
 			return false
 		end
 

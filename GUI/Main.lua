@@ -233,100 +233,8 @@ function Main:AddCharactersButton()
 end
 
 function Main:AddRewardsFilterButton()
-	self.window.titlebar.ColumnsButton = CreateFrame("DropdownButton", "$parentColumnsButton", self.window.titlebar)
+	self.window.titlebar.ColumnsButton = CreateFrame("DropdownButton", "$parentColumnsButton", self.window.titlebar, "WeeklyRewardsTrackingButtonTemplate")
 	self.window.titlebar.ColumnsButton:SetPoint("RIGHT", self.window.titlebar.CharactersButton, "LEFT", 0, 0)
-	self.window.titlebar.ColumnsButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
-	self.window.titlebar.ColumnsButton:SetScript("OnEnter", function()
-		self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.ColumnsButton, 1, 1, 1, 0.05)
-		self:SetTooltipOwner(GameTooltip, self.window.titlebar.ColumnsButton)
-		GameTooltip:SetText(L["columns_button_tooltip"], 1, 1, 1, 1, true)
-		GameTooltip:AddLine(L["columns_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-		GameTooltip:Show()
-	end)
-	self.window.titlebar.ColumnsButton:SetScript("OnLeave", function()
-		self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.ColumnsButton, 1, 1, 1, 0)
-		GameTooltip:Hide()
-	end)
-	self.window.titlebar.ColumnsButton:SetupMenu(function(_, rootMenu)
-		if not self.columns then
-			return
-		end
-
-		local hidden = WeeklyRewards.db.global.main.hiddenColumns
-		local activeRewards = ActiveRewards.Get()
-
-		for _, column in ipairs(self.columns) do
-			if column.reward == nil then
-				rootMenu:CreateCheckbox(column.name, function()
-					return not hidden[column.name]
-				end, function(columnName)
-					hidden[columnName] = not hidden[columnName]
-					self:Redraw()
-				end, column.name)
-			end
-		end
-
-		local groups, legacyExpansions = activeRewards:GetAllGroups()
-
-		rootMenu:CreateDivider()
-		rootMenu:CreateTitle(REWARDS)
-		self:AddRewardsFilterToMenu(rootMenu, groups)
-
-		rootMenu:CreateTitle(LFG_LIST_LEGACY)
-		self:AddRewardsFilterToMenu(rootMenu, legacyExpansions, true)
-	end)
-
-	self.window.titlebar.ColumnsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.ColumnsButton:GetName() .. "Icon", "ARTWORK")
-	self.window.titlebar.ColumnsButton.Icon:SetPoint("CENTER", self.window.titlebar.ColumnsButton, "CENTER")
-	self.window.titlebar.ColumnsButton.Icon:SetSize(15, 14)
-	self.window.titlebar.ColumnsButton.Icon:SetAtlas("UI-HUD-Minimap-Tracking-Up")
-	self.window.titlebar.ColumnsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-end
-
-function Main:AddRewardsFilterToMenu(rootMenu, expansions, isLegacy)
-	local activeRewards = ActiveRewards.Get()
-
-	for name, expansion in pairs(expansions) do
-		local button = rootMenu
-
-		if isLegacy then
-			button = rootMenu:CreateButton(_G["EXPANSION_NAME" .. name])
-		elseif name ~= "" then
-			button = rootMenu:CreateCheckbox(name, function()
-				return not activeRewards:IsGroupExcluded(name)
-			end, function()
-				activeRewards:ToggleExclusionByGroup(name)
-				self:Redraw()
-			end)
-		end
-
-		for group, rewards in pairs(expansion) do
-			if isLegacy and group ~= "" then
-				button:CreateTitle(group)
-			end
-
-			for _, reward in ipairs(rewards) do
-				button:CreateCheckbox(reward.name, function()
-					return not activeRewards:IsExcluded(reward.id)
-				end, function()
-					activeRewards:ToggleExclusion(reward.id)
-					if not activeRewards:IsExcluded(reward.id) then
-						local character = CharacterStore.Get():CurrentPlayer()
-
-						character:Scan(activeRewards)
-						character:UpdateProgress()
-					end
-					self:Redraw()
-				end)
-			end
-
-			if isLegacy and group ~= "" then
-				button:QueueDivider()
-			end
-		end
-	end
 end
 
 function Main:AddSortButton()
@@ -857,7 +765,7 @@ function Main:UpdateSortArrow()
 		cellFrame.data.onClick = function()
 			if IsControlKeyDown() then
 				if column.reward then
-					ActiveRewards.Get():ToggleExclusion(column.reward.id)
+					ActiveRewards.Get():ToggleExclusion(column.reward:GetCandidateID())
 				else
 					WeeklyRewards.db.global.main.hiddenColumns[column.name] = true
 				end
@@ -951,7 +859,7 @@ function Main:ForEachColumn(callback, visibleOnly)
 		end
 
 		local reward = column.reward
-		if reward and activeRewards.excluded[reward.id] ~= true then
+		if reward and not activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
 			callback(column)
 		elseif reward == nil and not WeeklyRewards.db.global.main.hiddenColumns[column.name] then
 			callback(column)
