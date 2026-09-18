@@ -50,7 +50,7 @@ function SelectableLootScanner:Debug(...)
 		return ns.debug(...)
 	end
 
-	if ns.debug == true then
+	if ns.debug == true or _G["WR_DEBUG"] then
 		print(...)
 	end
 end
