@@ -84,8 +84,15 @@ L["reward_objective_multi_quests_title"] = "Complete %d of the following quests:
 
 -- Candidate tooltips
 L["candidate_from_following_quests"] = "%s earned from one of the following quests:"
+L["candidate_from_following_1"] = "One of the following:"
+L["candidate_from_following_n"] = "%d of the following:"
+L["candidate_from_following_all"] = "All of the following:"
 L["candidate_from_quest_format"] = "Rewards from {quest:%d}"
-L["candidate_one_of_following_quests"] = "Each character may select one of the following quests independently:"
+-- L["candidate_1_of_following_quests"] = "Each character may select one of the following quests independently:"
+-- L["candidate_n_of_following_quests"] = "Each character may select at most %d of the following quests independently:"
+L["candidate_1_of_following_quests"] = "Each character can choose one of these quests independently:"
+L["candidate_n_of_following_quests"]   = "Each character can choose up to %d of these quests independently:"
+L["candidate_x_of_following_quests"]   = "Each character can choose from these quests independently:"
 L["candidate_from_quest"] = "Rewards from quest"
 L["candidate_not_active"] = "Reward is not active this week"
 

@@ -143,10 +143,10 @@ function Util:GetHolidayEventName(eventID)
 	Util.CollectCalendarEvents()
 end
 
-Util.ReturnEvents = {}
+Util.ActiveEvents = {}
 function Util:GetCalendarActiveEvents(calendarType)
 	local now = C_DateAndTime.GetCurrentCalendarTime()
-	local events = self.ReturnEvents
+	local events = self.ActiveEvents
 
 	wipe(events)
 	calendarType = calendarType or "HOLIDAY"
@@ -166,6 +166,14 @@ function Util:GetCalendarActiveEvents(calendarType)
 	end
 
 	return events
+end
+
+function Util:IsEventActive(eventID)
+	if table.isempty(self.ActiveEvents) then
+		self:GetCalendarActiveEvents()
+	end
+
+	return self.ActiveEvents[eventID] ~= nil
 end
 
 function Util:GetTimestampFromCalendarTime(calendarTime)
@@ -484,6 +492,12 @@ function Util:AddCovenantSanctumUpgradeToTooltip(tooltip, covenant, upgrade)
 			format("|cn%s_FONT_COLOR:%d/%d|r", upgrade[i] == 0 and "RED" or upgrade[i] == #tree.talents and "GREEN" or "WHITE", upgrade[i], #tree.talents),
 			WHITE_FONT_COLOR:GetRGB()
 		)
+	end
+end
+
+function Util:AddBlankLineAfterHeaderToTooltip(tooltip)
+	if tooltip:NumLines() == 1 then
+		tooltip:AddLine(" ")
 	end
 end
 
