@@ -83,10 +83,13 @@ L["reward_time_left"] = "Time Left: "
 L["reward_objective_multi_quests_title"] = "Complete %d of the following quests:"
 
 -- Candidate tooltips
-L["candidate_from_following_quests"] = "%s earned from one of the following quests:"
-L["candidate_from_quest_format"] = "Rewards from {quest:%d}"
-L["candidate_one_of_following_quests"] = "Each character may select one of the following quests independently:"
-L["candidate_from_quest"] = "Rewards from quest"
+L["candidate_from"] = "Rewards earned from |cffffffff%s|r"
+L["candidate_from_following_1"] = "One of the following shared across your Warband:"
+L["candidate_from_following_n"] = "%d of the following shared across your Warband:"
+L["candidate_from_following_all"] = "All of the following:"
+L["candidate_1_of_following_per_character"] = "One of the following per character:"
+L["candidate_n_of_following_per_character"] = "Up to %d of the following per character:"
+L["candidate_x_of_following_per_character"] = "Any of the following per character:"
 L["candidate_not_active"] = "Reward is not active this week"
 
 -- Summary

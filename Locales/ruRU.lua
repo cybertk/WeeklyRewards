@@ -84,10 +84,13 @@ L["reward_time_left"] = "Осталось времени: "
 L["reward_objective_multi_quests_title"] = "Завершите %d из следующих заданий:"
 
 -- Candidate tooltips
-L["candidate_from_following_quests"] = "%s получено за одно из следующих заданий:"
-L["candidate_from_quest_format"] = "Награды за {quest:%d}"
-L["candidate_one_of_following_quests"] = "Каждый персонаж может независимо выбрать одно из следующих заданий:"
-L["candidate_from_quest"] = "Награды за задание"
+L["candidate_from"] = "Награды получены из %s"
+L["candidate_from_following_1"] = "Один из следующих общий для вашего отряда:"
+L["candidate_from_following_n"] = "%d из следующих общие для вашего отряда:"
+L["candidate_from_following_all"] = "Все следующие общие для вашего отряда:"
+L["candidate_1_of_following_per_character"] = "Один из следующих для каждого персонажа:"
+L["candidate_n_of_following_per_character"] = "Не более %d из следующих для каждого персонажа:"
+L["candidate_x_of_following_per_character"] = "Любой из следующих для каждого персонажа:"
 L["candidate_not_active"] = "Награда неактивна на этой неделе"
 
 -- Summary
