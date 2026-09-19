@@ -378,6 +378,34 @@ function Util.FormatItem(item)
 	return WHITE_FONT_COLOR:WrapTextInColorCode(s)
 end
 
+function Util.FormatGearDetails(itemID, ilvl)
+	if not itemID then
+		return
+	end
+
+	local _, _, itemSubType, itemEquipLoc, _, classID, subClassID = C_Item.GetItemInfoInstant(itemID)
+	local slotName = itemEquipLoc and _G[itemEquipLoc]
+	if not slotName or slotName == "" then
+		return
+	end
+
+	if not ilvl or ilvl == 0 then
+		ilvl = C_Item.GetDetailedItemLevelInfo(itemID)
+	end
+
+	local parts = {}
+	if ilvl and ilvl > 0 then
+		table.insert(parts, format("|cnLIGHTBLUE_FONT_COLOR:%s:|r |cnYELLOW_FONT_COLOR:%d|r", ITEM_LEVEL_ABBR, ilvl))
+	end
+	table.insert(parts, slotName)
+
+	if classID == Enum.ItemClass.Armor and subClassID >= Enum.ItemArmorSubclass.Cloth and subClassID <= Enum.ItemArmorSubclass.Plate then
+		table.insert(parts, itemSubType)
+	end
+
+	return table.concat(parts, "  ")
+end
+
 function Util.WrapTextInClassColor(classFile, ...)
 	local color = C_ClassColor.GetClassColor(classFile)
 	if color then
