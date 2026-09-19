@@ -196,6 +196,7 @@ function WeeklyRewards:Init()
 		character:RemoveQuestsWatch()
 	end
 
+	self:PurgeProgress()
 	self:UpdateActiveRewards()
 
 	EventRegistry:RegisterCallback("CK_LOOT_SCANNER_ITEM_LOOTED", function(self, source, quantity, itemID, currencyID)
@@ -335,6 +336,27 @@ function WeeklyRewards:UpdateProgress(quest)
 	end
 
 	self.lastClaimed = lastClaimed or self.lastClaimed
+end
+
+function WeeklyRewards:PurgeProgress()
+	CharacterStore.Get():ForEach(function(character)
+		for rewardID, _ in pairs(character.progress) do
+			local candidate = ActiveRewards:GetCandidate(rewardID)
+
+			if not candidate or (ActiveRewards:IsCandidateExcluded(candidate.id) and candidate.expansion) then
+				Util:Debug("Delete progress", character.name, rewardID)
+				print(
+					"Delete progress",
+					character.name,
+					rewardID,
+					candidate and ActiveRewards:IsCandidateExcluded(candidate.id),
+					candidate and candidate.expansion
+				)
+
+				character.progress[rewardID] = nil
+			end
+		end
+	end, next)
 end
 
 function WeeklyRewards:Broadcast(rewardID, channel)

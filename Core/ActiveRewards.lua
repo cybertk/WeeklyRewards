@@ -161,6 +161,10 @@ function ActiveRewards:_FindCandidatesToScan(candidates)
 	end)
 end
 
+function ActiveRewards:GetCandidate(rewardID)
+	return Reward.CandidatesById[rewardID]
+end
+
 function ActiveRewards:GetAllCandidates()
 	local current, inactive = {}, {}
 
