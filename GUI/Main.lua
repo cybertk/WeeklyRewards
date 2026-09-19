@@ -684,9 +684,19 @@ function Main:AddProgressToGameTooltip(progress)
 
 	if progress.claimedAt then
 		local duration = progress.startedAt and format(" (%s used)", Util.FormatTimeDuration(progress.claimedAt - progress.startedAt, true)) or ""
-		GameTooltip:AddDoubleLine(L["progress_rewards_received_at"], WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.claimedAt) .. duration))
+		if progress.rewards then
+			GameTooltip:AddDoubleLine(
+				REWARDS,
+				format("|cnLIGHTBLUE_FONT_COLOR:%s:|r |cffffffff%s|r", "Received At", date("%m-%d %H:%M", progress.claimedAt) .. duration)
+			)
+		else
+			GameTooltip:AddDoubleLine(
+				L["progress_rewards_received_at"],
+				WHITE_FONT_COLOR:WrapTextInColorCode(date("%m-%d %H:%M", progress.claimedAt) .. duration)
+			)
+		end
 	elseif progress.startedAt then
-		GameTooltip:AddDoubleLine(L["progress_started_at"], WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.startedAt)))
+		GameTooltip:AddDoubleLine(L["progress_started_at"], WHITE_FONT_COLOR:WrapTextInColorCode(date("%m-%d %H:%M", progress.startedAt)))
 
 		if progress.rewards then
 			GameTooltip:AddLine(" ")
