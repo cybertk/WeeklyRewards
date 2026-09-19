@@ -24,7 +24,6 @@ namespace.DB.rewardCandidiates["timewalking"] = {
 		description = "Timewalking Dungeon",
 		group = RewardsGroup.TIMEWALKING_EVENTS,
 		minimumLevel = 1,
-		rollover = true,
 		entries = {
 			{ quest = 83285, items = { 225348 }, unlockAura = 452307 }, -- [Classic] - [Quest] The Ancient Scroll - [Aura] Sign of the Past
 			{ quest = 40168, items = { 129747 }, unlockAura = 335148 }, -- [TBC] - [Quest] The Swirling Vial - [Aura] Sign of the Twisting Nether
