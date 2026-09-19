@@ -344,8 +344,8 @@ function RewardProgress:Update(completedQuest)
 end
 
 -- Handle uniqueness
-function RewardProgress:AddReward(currency, item, quantity, asDrops)
-	Util:Debug("RewardProgress:AddReward", currency, item, quantity, asDrops)
+function RewardProgress:AddReward(currency, item, quantity, asDrops, ilvl)
+	Util:Debug("RewardProgress:AddReward", currency, item, quantity, asDrops, ilvl)
 
 	local items
 	if asDrops == true then
@@ -359,6 +359,7 @@ function RewardProgress:AddReward(currency, item, quantity, asDrops)
 	for _, rewardItem in ipairs(items) do
 		if (currency and rewardItem.currency == currency) or (item and rewardItem.item == item) then
 			rewardItem.quantity = rewardItem.quantity + quantity
+			rewardItem.ilvl = rewardItem.ilvl or ilvl
 			return
 		end
 	end
@@ -367,7 +368,7 @@ function RewardProgress:AddReward(currency, item, quantity, asDrops)
 	if currency then
 		table.insert(items, { currency = currency, quantity = quantity })
 	elseif item then
-		table.insert(items, { item = item, quantity = quantity })
+		table.insert(items, { item = item, quantity = quantity, ilvl = ilvl })
 	end
 
 	table.sort(items, function(a, b)
@@ -458,13 +459,15 @@ function RewardProgress:ForEachRewardItem(callback, showDrops)
 				quality = currency.quality,
 			}
 		elseif rewardItem.item then
-			local itemID, itemType, itemSubType, itemEquipLoc, icon, classID, subClassID = C_Item.GetItemInfoInstant(rewardItem.item)
+			local icon = select(5, C_Item.GetItemInfoInstant(rewardItem.item))
 			item = {
 				id = rewardItem.item,
 				name = C_Item.GetItemNameByID(rewardItem.item) or "Loading",
 				texture = icon,
 				quantity = rewardItem.quantity,
 				quality = C_Item.GetItemQualityByID(rewardItem.item) or Enum.ItemQuality.Common, -- It requires server query and might not get instance result
+				ilvl = rewardItem.ilvl,
+				isItem = true,
 			}
 		end
 		callback(item)

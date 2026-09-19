@@ -158,12 +158,13 @@ function Character:ReceiveReward(quest, quantity, item, currencyId)
 		return
 	end
 
-	local itemId = item
+	local itemId, ilvl = item, nil
 	if type(item) == "string" then
 		itemId = C_Item.GetItemInfoInstant(item)
+		ilvl = C_Item.GetDetailedItemLevelInfo(item)
 	end
 
-	progress:AddReward(currencyId, itemId, quantity)
+	progress:AddReward(currencyId, itemId, quantity, nil, ilvl)
 end
 
 function Character:UpdateRewardsGUID(quest)
@@ -195,6 +196,10 @@ function Character:UpdateRewardsGUID(quest)
 
 			if info and remainingItems[info.itemID] then
 				local item, progress = unpack(remainingItems[info.itemID])
+
+				if not item.ilvl and info.hyperlink then
+					item.ilvl = C_Item.GetDetailedItemLevelInfo(info.hyperlink)
+				end
 
 				if info.stackCount > 1 then
 					item.guid = false

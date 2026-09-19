@@ -30,7 +30,7 @@ function RewardSummary:_AggregateObjects(aggregated, objects)
 		elseif o.item then
 			local slot = select(4, C_Item.GetItemInfoInstant(o.item))
 			if slot and slot ~= "INVTYPE_NON_EQUIP_IGNORE" then
-				table.insert(self.gears, o.item)
+				table.insert(self.gears, o)
 			else
 				if self.items[o.item] == nil then
 					self.items[o.item] = { item = o.item, quantity = 0 }
@@ -171,6 +171,17 @@ function RewardSummary:AddToTooltip(tooltip)
 		NORMAL_FONT_COLOR,
 		WHITE_FONT_COLOR
 	)
+
+	for _, o in ipairs(self.gears) do
+		local item = Item:CreateFromItemID(o.item)
+		GameTooltip_AddColoredDoubleLine(
+			tooltip,
+			item:IsItemDataCached() and format("|T%d:12|t %s", item:GetItemIcon(), item:GetItemName()) or LFG_LIST_LOADING,
+			Util.FormatGearDetails(o.item, o.ilvl),
+			C_ColorOverrides.GetColorForQuality(item:GetItemQuality() or Enum.ItemQuality.Common),
+			WHITE_FONT_COLOR
+		)
+	end
 
 	for _, o in pairs(self.items) do
 		local item = Item:CreateFromItemID(o.item)
