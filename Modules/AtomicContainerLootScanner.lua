@@ -50,7 +50,7 @@ function AtomicContainerLootScanner:Debug(...)
 		return ns.debug(...)
 	end
 
-	if ns.debug == true then
+	if ns.debug == true or _G["WR_DEBUG"] then
 		print(...)
 	end
 end
@@ -84,7 +84,7 @@ function AtomicContainerLootScanner:UpdateLoot(typeIdentifier, itemLink, quantit
 
 	local item = { source = self.session, quantity = quantity }
 	if typeIdentifier == "item" then
-		item.item = select(1, C_Item.GetItemInfoInstant(itemLink))
+		item.item = itemLink
 	elseif typeIdentifier == "currency" then
 		item.currency = C_CurrencyInfo.GetCurrencyInfoFromLink(itemLink).currencyID
 	elseif typeIdentifier == "money" then

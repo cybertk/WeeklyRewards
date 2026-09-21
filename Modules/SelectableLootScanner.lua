@@ -50,7 +50,7 @@ function SelectableLootScanner:Debug(...)
 		return ns.debug(...)
 	end
 
-	if ns.debug == true then
+	if ns.debug == true or _G["WR_DEBUG"] then
 		print(...)
 	end
 end
@@ -173,7 +173,7 @@ function SelectableLootScanner:UpdateSlot(slot)
 			item.item,
 			item.currency
 		)
-		EventRegistry:TriggerEvent("CK_LOOT_SCANNER_ITEM_LOOTED", item.source, item.quantity, item.item, item.currency)
+		EventRegistry:TriggerEvent("CK_LOOT_SCANNER_ITEM_LOOTED", item.source, item.quantity, item.link, item.currency)
 	end
 end
 

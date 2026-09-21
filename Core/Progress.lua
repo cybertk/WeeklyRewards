@@ -344,9 +344,9 @@ function RewardProgress:Update(completedQuest)
 end
 
 -- Handle uniqueness
-function RewardProgress:AddReward(currency, item, quantity, asDrops, ilvl)
-	Util:Debug("RewardProgress:AddReward", currency, item, quantity, asDrops, ilvl)
-
+function RewardProgress:AddReward(currency, itemLink, quantity, asDrops)
+	Util:Debug("RewardProgress:AddReward", currency, itemLink, quantity, asDrops)
+	print("RewardProgress:AddReward", currency, itemLink, quantity, asDrops)
 	local items
 	if asDrops == true then
 		self.drops = self.drops or {}
@@ -355,11 +355,18 @@ function RewardProgress:AddReward(currency, item, quantity, asDrops, ilvl)
 		self.rewards = self.rewards or {}
 		items = self.rewards
 	end
+	-- C_Item.IsEquippableItem
+
+	local itemID, itemEquipLoc
+
+	if itemLink then
+		itemID, _, _, itemEquipLoc = C_Item.GetItemInfoInstant(itemLink)
+		print("itenm level", C_Item.GetDetailedItemLevelInfo(itemLink))
+	end
 
 	for _, rewardItem in ipairs(items) do
-		if (currency and rewardItem.currency == currency) or (item and rewardItem.item == item) then
+		if (currency and rewardItem.currency == currency) or (itemEquipLoc == "INVTYPE_NON_EQUIP_IGNORE") then
 			rewardItem.quantity = rewardItem.quantity + quantity
-			rewardItem.ilvl = rewardItem.ilvl or ilvl
 			return
 		end
 	end
@@ -367,8 +374,8 @@ function RewardProgress:AddReward(currency, item, quantity, asDrops, ilvl)
 	-- No exsiting reward found
 	if currency then
 		table.insert(items, { currency = currency, quantity = quantity })
-	elseif item then
-		table.insert(items, { item = item, quantity = quantity, ilvl = ilvl })
+	elseif itemLink then
+		table.insert(items, { item = itemID, quantity = quantity, ilvl = C_Item.GetDetailedItemLevelInfo(itemLink) })
 	end
 
 	table.sort(items, function(a, b)

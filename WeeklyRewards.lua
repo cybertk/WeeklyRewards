@@ -189,8 +189,8 @@ function WeeklyRewards:Init()
 	self:PurgeProgress()
 	self:UpdateActiveRewards()
 
-	EventRegistry:RegisterCallback("CK_LOOT_SCANNER_ITEM_LOOTED", function(self, source, quantity, itemID, currencyID)
-		character:ReceiveDrop(source, quantity, itemID, currencyID)
+	EventRegistry:RegisterCallback("CK_LOOT_SCANNER_ITEM_LOOTED", function(self, source, quantity, itemLink, currencyID)
+		character:ReceiveDrop(source, quantity, itemLink, currencyID)
 	end)
 
 	self:RegisterEvent("QUEST_CURRENCY_LOOT_RECEIVED", function(event, questId, currencyId, quantity)

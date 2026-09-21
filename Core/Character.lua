@@ -162,17 +162,18 @@ function Character:ReceiveReward(quest, quantity, item, currencyId)
 	local progress = Cache.questToProgress[quest]
 
 	Util:Debug("Character:ReceiveReward", quest, quantity, item, currencyId, progress)
+	print("Character:ReceiveReward", quest, quantity, item, currencyId, progress)
 	if progress == nil then
 		return
 	end
 
-	local itemId, ilvl = item, nil
-	if type(item) == "string" then
-		itemId = C_Item.GetItemInfoInstant(item)
-		ilvl = C_Item.GetDetailedItemLevelInfo(item)
-	end
+	-- local itemId, ilvl = item, nil
+	-- if type(item) == "string" then
+	-- 	itemId = C_Item.GetItemInfoInstant(item)
+	-- 	ilvl = C_Item.GetDetailedItemLevelInfo(item)
+	-- end
 
-	progress:AddReward(currencyId, itemId, quantity, nil, ilvl)
+	progress:AddReward(currencyId, item, quantity, nil)
 end
 
 function Character:UpdateRewardsGUID(quest)
@@ -227,7 +228,7 @@ function Character:UpdateRewardsGUID(quest)
 	return found == count
 end
 
-function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
+function Character:ReceiveDrop(guid, quantity, itemLink, currencyID)
 	local sourceItemID = C_Item.GetItemIDByGUID(guid)
 	local objectId = sourceItemID or tonumber(select(6, string.split("-", guid)) or nil)
 
@@ -235,7 +236,7 @@ function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
 		local progress, itemId = unpack(Cache.objectToProgress[objectId])
 
 		if sourceItemID then
-			progress:AddReward(nil, itemId, 1)
+			progress:AddReward(nil, itemLink, 1)
 			progress.rewards[#progress.rewards].guid = guid
 		end
 
@@ -247,9 +248,10 @@ function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
 		return
 	end
 
-	Util:Debug("Received drop: ", guid, quantity, itemId, currencyId, progress)
+	Util:Debug("Received drop: ", guid, quantity, itemLink, currencyID, progress)
+	print("Received drop: ", guid, quantity, itemLink, currencyID, progress)
 
-	progress:AddReward(currencyId, itemId, quantity, true)
+	progress:AddReward(currencyID, itemLink, quantity, true)
 end
 
 function Character:GetFaction()
