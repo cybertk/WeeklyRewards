@@ -158,7 +158,6 @@ function ActiveRewards:_Add(reward)
 
 	table.insert(self, reward)
 	AddRewardToCache(reward)
-
 	return not outdatedReward
 end
 
