@@ -109,20 +109,16 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-soiree",
 		key = "Runestones",
+		description = "{quest:91966}",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		pick = 4,
 		entries = {
-			{
-				quest = 91966, -- Saltheril's Soiree
-				questPool = {
-					90573, -- Fortify the Runestones: Magisters
-					90574, -- Fortify the Runestones: Blood Knights
-					90575, -- Fortify the Runestones: Farstriders
-					90576, -- Fortify the Runestones: Shades of the Row
-				},
-				maxCompletion = 1,
-			},
+			{ quest = 90573 }, -- Fortify the Runestones: Magisters
+			{ quest = 90574 }, -- Fortify the Runestones: Blood Knights
+			{ quest = 90575 }, -- Fortify the Runestones: Farstriders
+			{ quest = 90576 }, -- Fortify the Runestones: Shades of the Row
 		},
 	},
 	{

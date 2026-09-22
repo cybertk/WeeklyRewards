@@ -29,7 +29,7 @@ local Cache = {
 }
 
 local function AddRewardToCache(reward)
-	Cache.rewards[reward:GetCandidateID()] = true
+	Cache.rewards[reward:GetCandidateID()] = reward
 
 	for _, objective in ipairs(reward.objectives) do
 		Cache.questToReward[objective:GetQuest()] = reward
@@ -121,13 +121,16 @@ function ActiveRewards:_Add(reward)
 		return
 	end
 
-	if Cache.questToReward[reward.id] then
-		Util:Debug("Reward already added", reward.id)
-		return
+	local outdatedReward = Cache.rewards[reward:GetCandidateID()]
+	if outdatedReward then
+		RemoveRewardFromCache(outdatedReward)
+		tDeleteItem(self, outdatedReward)
 	end
 
 	table.insert(self, reward)
 	AddRewardToCache(reward)
+
+	return not outdatedReward
 end
 
 function ActiveRewards:_Remove(i)
@@ -157,7 +160,12 @@ function ActiveRewards:_FindCandidatesToScan(candidates)
 			end
 		end
 
-		return Cache.rewards[candidate.id] == nil
+		local reward = Cache.rewards[candidate.id]
+		if reward and #reward.objectives ~= (candidate.pick or 1) then
+			return true
+		end
+
+		return reward == nil
 	end)
 end
 
@@ -240,8 +248,7 @@ function ActiveRewards:Update(candidates, OnRewardAddedCallback)
 			reward.id = reward.id .. ":" .. reward.objectives[1].quest
 		end
 
-		self:_Add(reward)
-		if OnRewardAddedCallback then
+		if self:_Add(reward) and OnRewardAddedCallback then
 			OnRewardAddedCallback(reward)
 		end
 	end
@@ -284,7 +291,7 @@ function ActiveRewards:IsGroupExcluded(group)
 end
 
 function ActiveRewards:IsCandidateActive(candidateID)
-	return Cache.rewards[candidateID] == true
+	return Cache.rewards[candidateID] ~= nil
 end
 
 function ActiveRewards:ScanJournal()
