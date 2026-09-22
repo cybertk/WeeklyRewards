@@ -608,15 +608,13 @@ function Main:AddRewardColumns()
 			toggleHidden = true,
 			align = "CENTER",
 			cell = function(character)
-				local progress = character:GetRewardProgress(reward.id)
-
-				if progress == nil and reward:PlayerMeetsRequiredLevel(character.level) then
-					return ""
-				end
-
+				local progress, isScanned = character:GetRewardProgress(reward.id)
 				local text
-				if progress == nil then
-					text = reward:PlayerMeetsRequiredLevel(character.level) and " " or "-"
+
+				if not isScanned and reward:PlayerMeetsRequiredLevel(character.level) then
+					text = " "
+				elseif progress == nil then
+					text = reward:PlayerMeetsRequiredLevel(character.level) and CreateAtlasMarkup("PlayerRaidBlip", 13, 13) or "-"
 				elseif progress.total == 0 then
 					text = "-"
 				elseif progress.claimedAt and progress:IsExpired() then
@@ -639,12 +637,20 @@ function Main:AddRewardColumns()
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
 						if progress == nil or progress:ObjectivesCount() == 0 then
-							-- GameTooltip:AddLine(YELLOW_FONT_COLOR:WrapTextInColorCode(reward:GetDescription(true)))
-							-- GameTooltip:AddLine(" ")
-							GameTooltip:AddLine(
-								progress and L["progress_not_started"]
-									or ITEM_MIN_LEVEL:format(reward.maximumLevel or reward.minimumLevel)
-							)
+							if not reward:PlayerMeetsRequiredLevel(character.level) then
+								GameTooltip:AddLine(ITEM_MIN_LEVEL:format(reward.maximumLevel or reward.minimumLevel))
+							elseif isScanned then
+								GameTooltip_AddNormalLine(GameTooltip, character:GetNameInClassColor(true))
+								GameTooltip:AddLine(" ")
+								self:AddRewardObjectivesToGameTooltip(GameTooltip, reward)
+
+								GameTooltip:AddLine(" ")
+								GameTooltip_AddNormalLine(GameTooltip, L["progress_not_started"])
+							else
+								GameTooltip_AddNormalLine(GameTooltip, L["table_alts_collect_hint"])
+							end
+						elseif progress.total == 0 then
+							GameTooltip_AddNormalLine(GameTooltip, ERR_QUEST_NEED_PREREQS)
 						else
 							self:AddProgressToGameTooltip(progress)
 							cellFrame.hasInstructions = nil
@@ -676,6 +682,15 @@ function Main:AddRewardColumns()
 		}
 
 		table.insert(self.columns, column)
+	end
+end
+
+function Main:AddRewardObjectivesToGameTooltip(tooltip, reward)
+	local redx = CreateAtlasMarkup("common-icon-redx", 12, 12)
+
+	for _, objective in ipairs(reward.objectives) do
+		local text, isMultiline = objective:GetDescription()
+		GameTooltip_AddColoredDoubleLine(tooltip, text, isMultiline and "" or redx, WHITE_FONT_COLOR, WHITE_FONT_COLOR, false)
 	end
 end
 

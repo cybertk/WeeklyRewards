@@ -505,6 +505,11 @@ function Util:ResolveTags(s, autoColor)
 					if info.maxWeeklyQuantity and info.maxWeeklyQuantity ~= 0 then
 						name = name .. "|n|n" .. CURRENCY_WEEKLY_CAP:format("", info.quantityEarnedThisWeek, info.maxWeeklyQuantity)
 					end
+				elseif arg1 == -1 then
+					name = format("|T%d:12|t %d %s|r", info.iconFileID, info.maxWeeklyQuantity or 0, info.name)
+				elseif autoColor then
+					local hex = select(4, C_Item.GetItemQualityColor(info.quality)) or "ffffffff"
+					name = format("|T%d:12|t |c%s%s|r", info.iconFileID, hex, info.name)
 				else
 					name = info.name
 				end
@@ -552,7 +557,7 @@ function Util:ResolveTags(s, autoColor)
 				name = ""
 			end
 
-			if name and name ~= "" then
+			if name and name ~= "" and arg1 ~= 0 then
 				local atlas
 				local class = C_QuestInfoSystem.GetQuestClassification(id)
 
@@ -605,6 +610,10 @@ function Util:ResolveTags(s, autoColor)
 			if info then
 				name = autoColor and format("|T%d:12|t |cff71d5ff%s|r", info.iconID, info.name) or info.name
 			end
+		elseif type == "profession" then
+			name = CreateSimpleTextureMarkup(Util:GetProfessionIcon(id), 13, 13)
+		elseif type == "dungeon" then
+			name = GetLFGDungeonInfo(id)
 		end
 
 		if autoColor and color and name then

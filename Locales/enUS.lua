@@ -66,6 +66,7 @@ L["progress_drops"] = "Drops"
 -- Reward tooltips
 L["reward_rewards"] = "Rewards"
 L["reward_time_left"] = "Time Left: "
+L["reward_objective_multi_quests_title"] = "Complete %d of the following quests:"
 
 -- Candidate tooltips
 L["candidate_from_following_quests"] = "Rewards from one of the following quests:"

@@ -6,6 +6,7 @@ local STATE = {
 }
 
 local Util = namespace.Util
+local L = namespace.L
 
 local WAPI_GetQuestTimeLeftSeconds = C_TaskQuest.GetQuestTimeLeftSeconds
 local WAPI_GetQuestName = QuestUtils_GetQuestName
@@ -24,6 +25,40 @@ RewardObjective.__index = RewardObjective
 
 function RewardObjective:GetQuest()
 	return self.quest or self.questPool[1]
+end
+
+function RewardObjective:GetDescription()
+	if self.name or self.text then
+		return Util:ResolveTags(self.name or self.text)
+	elseif self.profession then
+		return Util:Text("{profession:%d}", self.profession)
+	elseif self.dungeon then
+		return Util:Text("{dungeon:%d}", self.dungeon)
+	elseif self.currency then
+		return Util:Text("{currency:%d:-1}", self.currency)
+	elseif self.quest and self.quest ~= 0 then
+		return Util:Text("{quest:%d}", self.quest)
+	elseif self.items then
+		local tags = {}
+		for _, item in ipairs(self.items) do
+			table.insert(tags, "{item:%d}")
+		end
+
+		return Util:ColoredText(table.concat(tags, "|n"), unpack(self.items)), #self.items > 1
+	elseif self.questPool then
+		local quests = {}
+		for i = 1, math.min(#self.questPool, 10) do
+			table.insert(quests, "{quest:%d}")
+		end
+
+		local s = format(L["reward_objective_multi_quests_title"] .. "|n", self.maxCompletion or 1)
+		s = s .. Util:Text(table.concat(quests, "|n"), unpack(self.questPool))
+		s = s .. (#self.questPool > 10 and format("|n%s.", SOCIAL_QUEUE_AND_MORE) or "")
+
+		return s, #quests > 1
+	else
+		return UNKNOWN
+	end
 end
 
 local Reward = {
@@ -107,8 +142,6 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 		return
 	end
 
-	Util:Debug(string.format("Determine: [%s] %d out of %d candidiates", self.name, pick, #entries))
-
 	self.objectives = {}
 
 	-- Scenario: Fixed target
@@ -146,9 +179,6 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 					end
 				end
 			end
-
-			Util:DebugQuest(entry.quest)
-			Util:DebugQuest(entry.unlockQuest)
 
 			if confirmed then
 				Util:Debug("Reward [" .. self.name .. "] confirmed: " .. QuestUtils_GetQuestName(entry.quest or 0))
