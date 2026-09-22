@@ -64,7 +64,7 @@ function RewardSummary:Create(rewardID)
 	setmetatable(o, RewardSummary)
 
 	self.charactersStore:ForEach(function(character)
-		local progress = character.progress[rewardID]
+		local progress = character:GetRewardProgress(rewardID)
 
 		if progress then
 			if progress:hasClaimed() then
@@ -78,9 +78,8 @@ function RewardSummary:Create(rewardID)
 		end
 	end)
 
-	if self.character.progress[rewardID] then
-		local progress = self.character.progress[rewardID]
-
+	local progress = self.character:GetRewardProgress(rewardID)
+	if progress then
 		o.name = progress:ObjectivesCount() == 1 and GetQuestLink(progress:Quest()) or format("<%s>", progress.name)
 	else
 		o.name = ""

@@ -608,7 +608,7 @@ function Main:AddRewardColumns()
 			toggleHidden = true,
 			align = "CENTER",
 			cell = function(character)
-				local progress = character.progress[reward.id]
+				local progress = character:GetRewardProgress(reward.id)
 
 				if progress == nil and reward:PlayerMeetsRequiredLevel(character.level) then
 					return ""

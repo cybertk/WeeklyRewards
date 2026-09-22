@@ -42,10 +42,10 @@ function Character:New(o)
 	end
 
 	for k, v in pairs(o.progress or {}) do
-		Character._AddProgress(o, ProgressFactory:Create(v.type, v), k)
+		if next(v) then
+			Character._AddProgress(o, ProgressFactory:Create(v.type, v), k)
+		end
 	end
-
-	-- Character:_UpdateLootCache(o)
 
 	return o
 end
@@ -100,6 +100,14 @@ function Character:GetNameInClassColor(excludeRealm)
 	return Util.WrapTextInClassColor(self.class, format("%s - %s", self.name, self.realmName))
 end
 
+function Character:GetRewardProgress(rewardID)
+	if self.progress == nil or self.progress[rewardID] == nil then
+		return
+	end
+
+	return next(self.progress[rewardID]) and self.progress[rewardID] or nil, true
+end
+
 function Character:UpdateProgress(quest)
 	local completionSet = {}
 
@@ -112,7 +120,7 @@ function Character:UpdateProgress(quest)
 	local progressList = quest and { Cache.questToProgress[quest] } or self.progress
 
 	for _, progress in pairs(progressList) do
-		local updated = progress:Update(quest)
+		local updated = progress.Update and progress:Update(quest)
 
 		if updated then
 			Util:Debug("progress updated:", progress.name, progress:hasClaimed())
@@ -128,7 +136,7 @@ function Character:UpdateProgress(quest)
 end
 
 function Character:ResetProgress(reward, force)
-	local progress = self.progress[reward.id]
+	local progress = self:GetRewardProgress(reward.id)
 
 	if progress == nil then
 		return
@@ -264,8 +272,8 @@ function Character:Scan(activeRewards)
 			return false
 		end
 
-		local progress = self.progress[reward.id]
-		if progress == nil or next(progress) == nil or progress:ObjectivesCount() ~= progress.numObjectives or progress:IsExpired() then
+		local progress = self:GetRewardProgress(reward.id)
+		if progress == nil or progress:ObjectivesCount() ~= progress.numObjectives or progress:IsExpired() then
 			return true
 		end
 
@@ -286,7 +294,7 @@ function Character:Scan(activeRewards)
 	Util:Debug("Rewards to scan: " .. #rewardsToScan)
 
 	for _, reward in ipairs(rewardsToScan) do
-		local progress = self.progress[reward.id]
+		local progress = self:GetRewardProgress(reward.id)
 
 		if not reward:PlayerMeetsRequiredLevel(self.level) then
 			if progress and progress:IsExpired() then

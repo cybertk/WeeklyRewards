@@ -86,30 +86,14 @@ function WeeklyRewards:MigrateDB()
 		rewardsMap[reward.id] = reward
 	end
 
-	local saZones = {
-		[92145] = "eversong",
-		[92139] = "eversong",
-		[91390] = "zulaman",
-		[91796] = "zulaman",
-		[92063] = "harandar",
-		[93013] = "harandar",
-		[93438] = "voidstorm",
-		[93244] = "voidstorm",
-	}
-
 	for _, c in pairs(self.db.global.characters) do
-		for q, map in pairs(saZones) do
-			if c.progress["mn-sa:" .. q] then
-				c.progress["mn-sa-" .. map .. ":" .. q] = c.progress["mn-sa:" .. q]
-			end
-		end
-
 		for n, p in pairs(c.progress) do
 			local reward = rewardsMap[n]
-			if reward and reward.id == "mn-surge" and not p.claimedAt and p.state == 3 then
-				p.state = 2
-			elseif n:find("%-sa:(%d+)") then
-				c.progress[n] = nil
+
+			if n == "mn-pquests" or n == "mn-pdrops" or n == "vault" or not p.state then
+				nop()
+			elseif p.state == 1 or (p.state > 1 and p.numObjectives > 1 and p.position == 0) or (p.state == 3 and not p.startedAt) then
+				c.progress[n] = {}
 			end
 		end
 	end
