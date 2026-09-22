@@ -20,7 +20,7 @@ function LFGProgress:_UpdateRecords()
 	local fulfilled = select(1, GetLFGDungeonRewards(dungeon)) and 1 or 0
 
 	self:_AddRecord({
-		text = format("%d / 1 ", fulfilled) .. GetLFGDungeonInfo(dungeon) or "Loading",
+		text = format("%d/1 ", fulfilled) .. GetLFGDungeonInfo(dungeon) or "Loading",
 		fulfilled = fulfilled,
 		required = 1,
 	})

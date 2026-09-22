@@ -58,7 +58,7 @@ function GreatVaultProgress:_UpdateRecords()
 			end
 
 			table.insert(self.records, {
-				text = format("%d / %d ", progress, activity.threshold) .. format(#template > 0 and template or activity.raidString, activity.threshold),
+				text = format("%d/%d ", progress, activity.threshold) .. format(#template > 0 and template or activity.raidString, activity.threshold),
 				fulfilled = progress,
 				required = activity.threshold,
 				s = GetRecordStatus(activity),
