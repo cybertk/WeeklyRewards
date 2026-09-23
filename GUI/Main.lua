@@ -357,7 +357,7 @@ function Main:ResetCell(character, reward)
 
 	StaticPopup_ShowGenericConfirmation(text:gsub("|n.*$", ""):format(reward.name), function()
 		character:ResetProgress(reward, true)
-		character:Scan({ reward })
+		character:Scan({ reward }, true)
 		character:UpdateProgress()
 		self:Redraw()
 	end)

@@ -264,35 +264,36 @@ function Character:GetAverageItemLevel()
 end
 
 -- Reset progress, replace old with new one
-function Character:Scan(activeRewards)
+function Character:Scan(activeRewards, force)
 	-- Reset level and etc
 	self.level = UnitLevel("player")
 	self:UpdateCovenant()
 	self:UpdateItemLevels()
 
-	local rewardsToScan = Util:Filter(activeRewards, function(reward)
-		if reward:IsLegacy() and activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
-			return false
-		end
+	local rewardsToScan = force and activeRewards
+		or Util:Filter(activeRewards, function(reward)
+			if reward:IsLegacy() and activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
+				return false
+			end
 
-		local progress = self:GetRewardProgress(reward.id)
-		if progress == nil or progress:ObjectivesCount() ~= progress.numObjectives or progress:IsExpired() then
+			local progress = self:GetRewardProgress(reward.id)
+			if progress == nil or progress:ObjectivesCount() ~= progress.numObjectives or progress:IsExpired() then
+				return true
+			end
+
+			if progress:hasStarted() then
+				return false
+			end
+
+			local objectivesToRemove = Util:Filter(progress.fulfilledObjectives, function(objective)
+				return objective.removeOnCompletion
+			end)
+			if #objectivesToRemove < #progress.fulfilledObjectives then
+				return false
+			end
+
 			return true
-		end
-
-		if progress:hasStarted() then
-			return false
-		end
-
-		local objectivesToRemove = Util:Filter(progress.fulfilledObjectives, function(objective)
-			return objective.removeOnCompletion
 		end)
-		if #objectivesToRemove < #progress.fulfilledObjectives then
-			return false
-		end
-
-		return true
-	end)
 
 	Util:Debug("Rewards to scan: " .. #rewardsToScan)
 
