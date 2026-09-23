@@ -471,7 +471,9 @@ function Main:AddRewardColumns()
 					text = text,
 					onEnter = function(cellFrame)
 						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						if progress == nil or progress:ObjectivesCount() == 0 then
+						print("onEnter", reward.id, character.name, progress, progress and progress:ObjectivesCount())
+						_G.pp = progress
+						if progress == nil or progress:ObjectivesCount() == 0 or #(progress.records or {}) == 0 then
 							if not reward:PlayerMeetsRequiredLevel(character.level) then
 								GameTooltip:AddLine(ITEM_MIN_LEVEL:format(reward.maximumLevel or reward.minimumLevel))
 							elseif isScanned then
