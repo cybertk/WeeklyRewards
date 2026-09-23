@@ -105,6 +105,12 @@ function Util:GetCalendarActiveEvents(calendarType)
 
 	calendarType = calendarType or "HOLIDAY"
 
+	local numEvents = C_Calendar.GetNumDayEvents(0, now.monthDay)
+	if numEvents == 0 then
+		C_Calendar.SetAbsMonth(now.month, now.year)
+		C_Calendar.OpenCalendar()
+	end
+
 	for i = 1, C_Calendar.GetNumDayEvents(0, now.monthDay) do
 		local event = C_Calendar.GetDayEvent(0, now.monthDay, i)
 		if
