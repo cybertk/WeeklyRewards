@@ -111,6 +111,7 @@ namespace.DB.rewardCandidiates["darkmoon"] = {
 		minimumLevel = 1,
 		unlockEvent = 479,
 		timeLeft = "end-of-event",
+		rollover = true,
 		entries = {
 			{ quest = 29433 }, -- Test Your Strength
 		},
