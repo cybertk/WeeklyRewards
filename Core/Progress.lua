@@ -188,14 +188,10 @@ function RewardProgress:_UpdateRecords()
 			end
 
 			for item, count in pairs(uniqueItems) do
-				self:_AddRecord({
-					text = self:GetCachedItemName(item),
-					fulfilled = WAPI_GetItemCount(item),
-					required = count,
-				})
+				self:_AddRecord({ text = format("{item:%d}", item), fulfilled = WAPI_GetItemCount(item), required = count })
 			end
-		elseif reward.text and reward.progressType == nil then
-			self:_AddRecord({ text = Util:ResolveTags(reward.text), fulfilled = 0, required = 1 })
+		elseif reward.name and reward.progressType == nil then
+			self:_AddRecord({ text = reward.name, fulfilled = 0, required = 1 })
 		end
 
 		local quest = reward.unlockQuest or reward.quest
@@ -527,15 +523,4 @@ function RewardProgress:GetCachedObjectiveName(objective)
 	end
 
 	return format("%s %s", icon or "", name)
-end
-
-function RewardProgress:GetCachedItemName(item, amount)
-	local name, icon, quality = C_Item.GetItemNameByID(item), C_Item.GetItemIconByID(item), C_Item.GetItemQualityByID(item)
-	if name and icon and quality then
-		return CreateSimpleTextureMarkup(icon, 13, 13)
-			.. ITEM_QUALITY_COLORS[quality].color:WrapTextInColorCode(format(" [%s]", name))
-			.. (amount and (" x" .. amount) or "")
-	else
-		return "Loading"
-	end
 end

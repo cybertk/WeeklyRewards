@@ -12,10 +12,8 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = {
-			{ quest = 86371, items = { 252415 }, loot = { 581922, name = { 252415 } } }, -- Hidden Trove
-		},
-		items = { { item = 252415, amount = 1 } },
+		-- entries = { { quest = 86371, name = "{spell:1293799}", loot = { 581922 } } }, -- Hidden Trove
+		entries = { { quest = 86371, items = { 265714 }, loot = { 581922 } } }, -- Hidden Trove
 	},
 	{
 		id = "delve-stash",
@@ -24,15 +22,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = {
-			{ quest = 0, progressType = 4, loot = { 584507 } }, -- spell:1216211
-		},
-		items = {
-			{
-				name = "3 |cffffffff[Gilded Stash]|r",
-				texture = 5872049, -- Gilded Stash
-			},
-		},
+		entries = { { quest = 0, progressType = 4, name = "|T5872049:12|t 4 {spell:1216211}", loot = { 584507 } } }, -- spell:1216211
 	},
 	{
 		id = "delve-shards",
@@ -55,7 +45,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 97064, text = "{spell:1297887}", loot = { 584515, 658087, 658088 } } }, -- Bountiful Heavy Trunk, Abundantly Bountiful Heavy Trunk
+		entries = { { quest = 97064, name = "{spell:1297887}", loot = { 584515, 658087, 658088 } } }, -- Bountiful Heavy Trunk, Abundantly Bountiful Heavy Trunk
 	},
 	{
 		id = "delve-crystals",
@@ -73,7 +63,8 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 97628, text = "{item:276547}|n- {item:276548}" } },
+		-- entries = { { quest = 97628, name = "{item:276547}|n- {item:276548}", items = { 276547, 276548 } } },
+		entries = { { quest = 97628, items = { 276547, 276548 } } },
 	},
 	{
 		id = "delve-hero",
@@ -82,6 +73,6 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 93935, text = "{item:276547}|n- {item:276548}" } },
+		entries = { { quest = 93935, items = { 276547, 276548 } } },
 	},
 }

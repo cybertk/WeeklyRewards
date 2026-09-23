@@ -36,8 +36,6 @@ function RewardObjective:GetDescription()
 		return Util:Text("{dungeon:%d}", self.dungeon)
 	elseif self.currency then
 		return Util:Text("{currency:%d:-1}", self.currency)
-	elseif self.quest and self.quest ~= 0 then
-		return Util:Text("{quest:%d}", self.quest)
 	elseif self.items then
 		local tags = {}
 		for _, item in ipairs(self.items) do
@@ -45,6 +43,8 @@ function RewardObjective:GetDescription()
 		end
 
 		return Util:ColoredText(table.concat(tags, "|n"), unpack(self.items)), #self.items > 1
+	elseif self.quest and self.quest ~= 0 then
+		return Util:Text("{quest:%d}", self.quest)
 	elseif self.questPool then
 		local quests = {}
 		for i = 1, math.min(#self.questPool, 10) do
