@@ -24,6 +24,14 @@ local function SafeDictComparator(lhs, rhs, field)
 	lhs = lhs and lhs[field] or nil
 	rhs = rhs and rhs[field] or nil
 
+	if type(lhs) == "table" and next(lhs) == nil then
+		lhs = nil
+	end
+
+	if type(rhs) == "table" and next(rhs) == nil then
+		rhs = nil
+	end
+
 	if lhs == rhs then
 		return 0
 	elseif lhs == nil then
