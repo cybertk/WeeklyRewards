@@ -359,12 +359,18 @@ function WeeklyRewards:UpdateProgress(quest)
 end
 
 function WeeklyRewards:PurgeProgress()
+	local events = Util:GetCalendarActiveEvents()
+
 	CharacterStore.Get():ForEach(function(character)
 		for rewardID, progress in pairs(character.progress) do
 			local candidate = ActiveRewards:GetCandidate(rewardID)
 			local reward = candidate and ActiveRewards:GetReward(candidate.id) or nil
 
-			if not candidate or (ActiveRewards:IsCandidateExcluded(candidate.id) and candidate.expansion) then
+			if
+				not candidate
+				or (ActiveRewards:IsCandidateExcluded(candidate.id) and candidate.expansion)
+				or (candidate.unlockEvent and not candidate.rollover and next(events) and not events[candidate.unlockEvent])
+			then
 				character.progress[rewardID] = nil
 
 				Util:Debug("Purged progress", character.name, rewardID)
@@ -373,6 +379,7 @@ function WeeklyRewards:PurgeProgress()
 				character:ResetProgress(reward)
 
 				Util:Debug("Reset progress", character.name, rewardID)
+				print("Purged progress", character.name, rewardID)
 			end
 		end
 	end, next)
