@@ -24,9 +24,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = {
-			{ quest = 0, progressType = 4 },
-		},
+		entries = { { quest = 0, progressType = 4, loot = { 584507 } } },
 		items = {
 			{
 				name = "3 |cffffffff[Gilded Stash]|r",
@@ -41,9 +39,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = {
-			{ quest = 0, currency = 3310, loot = { 584514, name = { 252415 } } },
-		},
+		entries = { { quest = 0, currency = 3310, loot = { 584514, name = { 252415 } } } },
 	},
 	{
 		id = "delve-abundance",
@@ -52,11 +48,12 @@ namespace.DB.rewardCandidiates["Delve"] = {
 			.. "The first time you find Dundun within delve each week, "
 			.. "it will be made {spell:1297887}, and you will receive below extra chests at the end:|n"
 			.. "- 1 |cnEPIC_PURPLE_COLOR:Bountiful Coffer|r|n"
-			.. "- 3 |cnRARE_BLUE_COLOR:Abundantly Bountiful Heavy Trunk",
+			.. "- 1 |cnRARE_BLUE_COLOR:Bountiful Heavy Trunk|r|n"
+			.. "- 2 |cnRARE_BLUE_COLOR:Abundantly Bountiful Heavy Trunk|r",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 97064, text = "{spell:1297887}" } },
+		entries = { { quest = 97064, text = "{spell:1297887}", loot = { 584515, 658087, 658088 } } }, -- Bountiful Heavy Trunk, Abundantly Bountiful Heavy Trunk
 	},
 	{
 		id = "delve-crystals",
