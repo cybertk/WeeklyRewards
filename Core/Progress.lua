@@ -373,6 +373,11 @@ function RewardProgress:AddReward(currency, item, quantity, asDrops)
 	table.sort(items, function(a, b)
 		return a.quantity < b.quantity
 	end)
+
+	if self.state == PROGRESS_STATE.NOT_STARTED then
+		self.state = PROGRESS_STATE.IN_PROGRESS
+		self:_UpdateTimestamp()
+	end
 end
 
 function RewardProgress:hasClaimed()
