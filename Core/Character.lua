@@ -223,13 +223,18 @@ function Character:UpdateRewardsGUID(quest)
 end
 
 function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
-	local objectId = C_Item.GetItemIDByGUID(guid) or tonumber(select(6, string.split("-", guid)) or nil)
+	local sourceItemID = C_Item.GetItemIDByGUID(guid)
+	local objectID = sourceItemID or tonumber(select(6, string.split("-", guid)) or nil)
 
-	if Cache.objectToProgress[objectId] and Cache.lootToProgress[guid] == nil then
-		local progress, itemId = unpack(Cache.objectToProgress[objectId])
+	if Cache.objectToProgress[objectID] and Cache.lootToProgress[guid] == nil then
+		local progress, item = unpack(Cache.objectToProgress[objectID])
 
-		progress:AddReward(nil, itemId, 1)
-		progress.rewards[#progress.rewards].guid = guid
+		if C_Item.GetItemInfoInstant(item) then
+			progress:AddReward(nil, item, 1)
+			progress.rewards[#progress.rewards].guid = guid
+		else
+			Util:Debug("No name for loot source: ", guid, quantity, itemId, currencyId, item, progress.name)
+		end
 
 		Cache.lootToProgress[guid] = progress
 	end
