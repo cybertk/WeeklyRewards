@@ -30,7 +30,7 @@ function CyrceCircletProgress:_UpdateRecords()
 	self.total = #reward.itemLevelRange
 
 	table.insert(self.records, {
-		text = self:GetCachedItemName(item and item:GetItemID() or reward.items[1]) .. (iLvl > 0 and format(" (%d)", iLvl) or ""),
+		text = format("{item:%d}", item and item:GetItemID() or reward.items[1]) .. (iLvl > 0 and format(" (%d)", iLvl) or ""),
 		fulfilled = iLvl > 0 and 1 or 0,
 		required = 1,
 	})
@@ -42,7 +42,7 @@ function CyrceCircletProgress:_UpdateRecords()
 	local numInBag = C_Item.GetItemCount(reward.upgradeItem, true)
 	if numInBag > 0 then
 		table.insert(self.records, {
-			text = format("%s x%d", self:GetCachedItemName(reward.upgradeItem), numInBag),
+			text = format("{item:%d} x%d", reward.upgradeItem, numInBag),
 			fulfilled = numInBag,
 			required = numInBag,
 		})
@@ -51,7 +51,7 @@ function CyrceCircletProgress:_UpdateRecords()
 
 	if self.position < self.total then
 		table.insert(self.records, {
-			text = format("%s x%d", self:GetCachedItemName(reward.upgradeItem), self.total - self.position),
+			text = format("{item:%d} x%d", reward.upgradeItem, self.total - self.position),
 			fulfilled = 0,
 			required = self.total - self.position,
 		})
