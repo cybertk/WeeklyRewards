@@ -12,7 +12,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 86371, items = { 265714 }, loot = { 581922 } } }, -- Hidden Trove
+		entries = { { quest = 86371, items = { 265714 }, loot = { 581922, name = { 235559 } } } }, -- Hidden Trove
 	},
 	{
 		id = "delve-stash",
