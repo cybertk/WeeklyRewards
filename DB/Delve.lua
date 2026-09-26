@@ -30,7 +30,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		group = RewardsGroup.DELVE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 0, currency = 3310, loot = { 584514, name = { 252415 } } } },
+		entries = { { quest = 0, currency = 3310, loot = { 584514, name = { 228942 } } } }, -- Bountiful Coffer
 	},
 	{
 		id = "delve-abundance",
