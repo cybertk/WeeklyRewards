@@ -717,7 +717,7 @@ function Main:AddProgressToGameTooltip(progress)
 		-- Show objectives of single quest
 		progress:ForEachRecord(function(record, completed)
 			GameTooltip:AddDoubleLine(
-				WHITE_FONT_COLOR:WrapTextInColorCode("- " .. record.text or "Loading"),
+				WHITE_FONT_COLOR:WrapTextInColorCode(Util:ResolveTags(record.text or "", true)),
 				record.s or CreateAtlasMarkup(completed and "common-icon-checkmark" or "common-icon-redx", 12, 12)
 			)
 		end)
