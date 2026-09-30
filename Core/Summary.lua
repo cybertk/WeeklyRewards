@@ -11,18 +11,11 @@ function RewardSummary:Init(store)
 	self.character = store:CurrentPlayer()
 end
 
-function RewardSummary:_AggregateObjects(aggregated, objects)
+function RewardSummary:_AggregateObjects(objects)
 	for _, o in ipairs(objects) do
-		local uniqueObject
-
 		if o.currency == 0 then
 			self.money = self.money + o.quantity
 		elseif o.currency then
-			if aggregated[o.currency] == nil then
-				aggregated[o.currency] = { currency = o.currency, quantity = 0 }
-			end
-			uniqueObject = aggregated[o.currency]
-
 			if self.currencies[o.currency] == nil then
 				self.currencies[o.currency] = { currency = o.currency, quantity = 0 }
 			end
@@ -30,31 +23,20 @@ function RewardSummary:_AggregateObjects(aggregated, objects)
 		elseif o.item then
 			local slot = select(4, C_Item.GetItemInfoInstant(o.item))
 			if slot and slot ~= "INVTYPE_NON_EQUIP_IGNORE" then
-				table.insert(self.gears, o.item)
+				table.insert(self.gears, o)
 			else
 				if self.items[o.item] == nil then
 					self.items[o.item] = { item = o.item, quantity = 0 }
 				end
 				self.items[o.item].quantity = self.items[o.item].quantity + o.quantity
 			end
-
-			if aggregated[o.item] == nil then
-				aggregated[o.item] = { item = o.item, quantity = 0 }
-			end
-			uniqueObject = aggregated[o.item]
-		end
-
-		if uniqueObject then
-			uniqueObject.quantity = uniqueObject.quantity + o.quantity
 		end
 	end
 end
 
-function RewardSummary:Create(rewardID)
+function RewardSummary:New()
 	local o = {
 		count = 0,
-		rewards = {},
-		drops = {},
 		items = {},
 		gears = {},
 		currencies = {},
@@ -62,6 +44,12 @@ function RewardSummary:Create(rewardID)
 	}
 
 	setmetatable(o, RewardSummary)
+
+	return o
+end
+
+function RewardSummary:Create(rewardID)
+	local o = self:New()
 
 	self.charactersStore:ForEach(function(character)
 		local progress = character:GetRewardProgress(rewardID)
@@ -72,8 +60,8 @@ function RewardSummary:Create(rewardID)
 			end
 
 			if not progress:IsExpired() then
-				o:_AggregateObjects(o.rewards, progress.rewards or {})
-				o:_AggregateObjects(o.drops, progress.drops or {})
+				o:_AggregateObjects(progress.rewards or {})
+				o:_AggregateObjects(progress.drops or {})
 			end
 		end
 	end)
@@ -86,6 +74,14 @@ function RewardSummary:Create(rewardID)
 	end
 
 	Util:Debug("Created summary", rewardID, o.name)
+
+	return o
+end
+
+function RewardSummary:FromRewards(rewards)
+	local o = self:New()
+
+	o:_AggregateObjects(rewards)
 
 	return o
 end
@@ -171,31 +167,28 @@ function RewardSummary:AddToTooltip(tooltip)
 		WHITE_FONT_COLOR
 	)
 
-	for _, o in pairs(self.items) do
-		local item = Item:CreateFromItemID(o.item)
-		GameTooltip_AddColoredDoubleLine(
-			tooltip,
-			item:IsItemDataCached() and format("|T%d:12|t %s", item:GetItemIcon(), item:GetItemName()) or LFG_LIST_LOADING,
-			o.quantity,
-			C_ColorOverrides.GetColorForQuality(item:GetItemQuality() or Enum.ItemQuality.Common),
-			WHITE_FONT_COLOR
-		)
+	RewardSummary.AddRewardsToTooltip(self, tooltip)
+end
+
+function RewardSummary.AddRewardsToTooltip(rewards, tooltip)
+	local aggregated = getmetatable(rewards) and rewards or RewardSummary:FromRewards(rewards)
+
+	tooltip = tooltip or GameTooltip
+
+	for _, o in ipairs(aggregated.gears) do
+		tooltip:AddLine(Util:ColoredText("{item:%d:1:%d}", o.item, o.ilvl or 0))
 	end
 
-	for _, o in pairs(self.currencies) do
-		local currency = C_CurrencyInfo.GetCurrencyInfo(o.currency)
-		local type = C_CurrencyInfo.IsAccountTransferableCurrency(o.currency) and CreateAtlasMarkup("warbands-icon") or ""
-		GameTooltip_AddColoredDoubleLine(
-			tooltip,
-			(currency and format("|T%d:12|t %s", currency.iconFileID, currency.name) or LFG_LIST_LOADING) .. type,
-			o.quantity,
-			currency and C_ColorOverrides.GetColorForQuality(currency.quality) or WHITE_FONT_COLOR,
-			WHITE_FONT_COLOR
-		)
+	for _, o in pairs(aggregated.items) do
+		GameTooltip_AddColoredDoubleLine(tooltip, Util:ColoredText("{item:%d:1}", o.item), o.quantity, NORMAL_FONT_COLOR, WHITE_FONT_COLOR)
 	end
 
-	if self.money > 0 then
-		tooltip:AddLine(GetMoneyString(math.floor(self.money / COPPER_PER_GOLD) * COPPER_PER_GOLD))
+	for _, o in pairs(aggregated.currencies) do
+		GameTooltip_AddColoredDoubleLine(tooltip, Util:ColoredText("{currency:%d}", o.currency), o.quantity, NORMAL_FONT_COLOR, WHITE_FONT_COLOR)
+	end
+
+	if aggregated.money > 0 then
+		tooltip:AddLine(GetMoneyString(math.floor(aggregated.money / COPPER_PER_GOLD) * COPPER_PER_GOLD))
 	end
 end
 

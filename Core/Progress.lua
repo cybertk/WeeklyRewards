@@ -443,39 +443,6 @@ function RewardProgress:ForEachRecord(callback)
 	end
 end
 
-function RewardProgress:ForEachRewardItem(callback, showDrops)
-	local items = showDrops == true and (self.drops or {}) or (self.rewards or {}) -- self.drops or self.rewards might be nil
-
-	for _, rewardItem in ipairs(items) do
-		local item
-		if rewardItem.currency == Util.MONEY_CURRENCY_ID then
-			item = {
-				quantity = rewardItem.quantity,
-				id = Util.MONEY_CURRENCY_ID,
-			}
-		elseif rewardItem.currency then
-			local currency = C_CurrencyInfo.GetCurrencyInfo(rewardItem.currency)
-			item = {
-				id = rewardItem.currency,
-				name = currency.name,
-				texture = currency.iconFileID,
-				quantity = rewardItem.quantity,
-				quality = currency.quality,
-			}
-		elseif rewardItem.item then
-			local itemID, itemType, itemSubType, itemEquipLoc, icon, classID, subClassID = C_Item.GetItemInfoInstant(rewardItem.item)
-			item = {
-				id = rewardItem.item,
-				name = C_Item.GetItemNameByID(rewardItem.item) or "Loading",
-				texture = icon,
-				quantity = rewardItem.quantity,
-				quality = C_Item.GetItemQualityByID(rewardItem.item) or Enum.ItemQuality.Common, -- It requires server query and might not get instance result
-			}
-		end
-		callback(item)
-	end
-end
-
 function RewardProgress:ForEachRewardLoot(callback)
 	local objects = {}
 

@@ -739,17 +739,14 @@ function Main:AddProgressToGameTooltip(progress)
 		GameTooltip:AddLine(L["progress_not_started"])
 	end
 
-	progress:ForEachRewardItem(function(item)
-		GameTooltip:AddLine(Util.FormatItem(item))
-	end)
+	if progress.rewards then
+		RewardSummary.AddRewardsToTooltip(progress.rewards)
+	end
 
-	if progress.drops and #progress.drops > 0 then
+	if progress.drops then
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(L["progress_drops"])
-
-		progress:ForEachRewardItem(function(item)
-			GameTooltip:AddLine(Util.FormatItem(item))
-		end, true)
+		RewardSummary.AddRewardsToTooltip(progress.drops)
 	end
 end
 

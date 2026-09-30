@@ -343,26 +343,30 @@ function Util.FormatLastUpdateTime(time)
 	return LASTONLINE_DAYS:format(days)
 end
 
--- item: name, texture, quality, quantity/amount
-Util.MONEY_CURRENCY_ID = 0
-function Util.FormatItem(item)
-	if item.id == Util.MONEY_CURRENCY_ID then
-		return GetMoneyString(item.quantity or item.amount)
+function Util:FormatItemDetails(itemID, itemLevel)
+	if not itemID then
+		return ""
 	end
 
-	local s = CreateSimpleTextureMarkup(item.texture or 0, 13, 13) -- There is hidden item, i.e. spark drops
+	local itemType, itemSubType, itemEquipLoc, _, classID, subClassID = select(2, C_Item.GetItemInfoInstant(itemID))
+	local parts = { itemSubType }
 
-	if item.quality then
-		s = s .. ITEM_QUALITY_COLORS[item.quality].color:WrapTextInColorCode(format(" [%s]", item.name))
-	else
-		s = s .. " " .. item.name
+	if
+		(classID == Enum.ItemClass.Consumable and subClassID == Enum.ItemConsumableSubclass.Other)
+		or (classID == Enum.ItemClass.Armor and subClassID == Enum.ItemArmorSubclass.Generic)
+	then
+		wipe(parts)
 	end
 
-	local quantity = item.quantity or item.amount or 0
-	if quantity > 1 then
-		s = s .. format(" x%d", quantity)
+	if classID == Enum.ItemClass.Armor then
+		table.insert(parts, _G[itemEquipLoc]) -- slot name
 	end
-	return WHITE_FONT_COLOR:WrapTextInColorCode(s)
+
+	if itemLevel and itemLevel > 0 then
+		table.insert(parts, itemLevel)
+	end
+
+	return table.concat(parts, "/")
 end
 
 function Util.WrapTextInClassColor(classFile, ...)
@@ -509,7 +513,8 @@ function Util:ResolveTags(s, autoColor)
 					name = format("|T%d:12|t %d %s|r", info.iconFileID, info.maxWeeklyQuantity or 0, info.name)
 				elseif autoColor then
 					local hex = select(4, C_Item.GetItemQualityColor(info.quality)) or "ffffffff"
-					name = format("|T%d:12|t |c%s%s|r", info.iconFileID, hex, info.name)
+					local type = C_CurrencyInfo.IsAccountTransferableCurrency(id) and CreateAtlasMarkup("warbands-icon", 12, 12) or ""
+					name = format("|T%d:12|t |c%s%s|r", info.iconFileID, hex, info.name) .. type
 				else
 					name = info.name
 				end
@@ -585,8 +590,17 @@ function Util:ResolveTags(s, autoColor)
 			end)
 
 			if arg1 == 0 then
+				-- show item description
 				name = select(18, C_Item.GetItemInfo(id))
 				color = nil
+			elseif arg1 == 1 and item:IsItemDataCached() then
+				-- show item details
+				name = format("|T%d:12|t %s%s|r", item:GetItemIcon(), item:GetItemQualityColor().hex, item:GetItemName())
+
+				local details = Util:FormatItemDetails(id, tonumber(arg2))
+				if details ~= "" then
+					name = format("%s (%s)", name, details)
+				end
 			end
 		elseif type == "faction" then
 			if arg1 and arg2 then
