@@ -68,6 +68,14 @@ L["progress_drops"] = "Дроп"
 -- Reward tooltips
 L["reward_rewards"] = "Награды"
 L["reward_time_left"] = "Осталось времени: "
+L["reward_objective_multi_quests_title"] = "Завершите %d из следующих заданий:"
+
+-- Candidate tooltips
+L["candidate_from_following_quests"] = "Награды за одно из следующих заданий:"
+L["candidate_from_quest_format"] = "Награды за {quest:%d}"
+L["candidate_one_of_following_quests"] = "Каждый персонаж может независимо выбрать одно из следующих заданий:"
+L["candidate_from_quest"] = "Награды за задание"
+L["candidate_not_active"] = "Награда неактивна на этой неделе"
 
 -- Summary
 L["summary_completed_count"] = "%s выполнено %d раз на этой неделе"
