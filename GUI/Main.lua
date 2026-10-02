@@ -374,10 +374,9 @@ function Main:CreateWindow()
 	self.window.table:SetPoint("TOPLEFT", self.window, "TOPLEFT", 0, -Constants.TITLEBAR_HEIGHT)
 	self.window.table:SetPoint("BOTTOMRIGHT", self.window, "BOTTOMRIGHT", 0, 0)
 
-	self.window.table.scrollFrame:HookScript("OnMouseWheel", function(frame, _)
-		if IsModifierKeyDown() or not frame.scrollbarV:IsVisible() then
-			self:LayoutHeader()
-		end
+	-- Sticky header is parented outside the scroll child, so follow horizontal scroll from both the wheel and the scrollbar.
+	hooksecurefunc(self.window.table.scrollFrame, "SetHorizontalScroll", function()
+		self:LayoutHeader()
 	end)
 
 	-- bugfix: horizontal scroll is always triggerd by mousewheel after adjusting window scale
