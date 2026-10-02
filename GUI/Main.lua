@@ -17,6 +17,7 @@ local ActiveRewards = namespace.ActiveRewards
 local RewardSummary = namespace.RewardSummary
 
 local Dialogs = namespace.Dialogs
+local Tips = namespace.Tips
 
 function Main:ToggleWindow()
 	if not self.window then
@@ -389,6 +390,10 @@ function Main:CreateWindow()
 	hooksecurefunc(self.window.table, "RenderTable", function()
 		C_Timer.After(0, GenerateClosure(self.LayoutHeader, self, true))
 	end)
+
+	Tips:SetOwner(self.window)
+	Tips:SetupVerticalScrollBarHelpTip(self.window.table.scrollFrame.scrollbarV)
+	Tips:SetupHorizontalScrollBarHelpTip(self.window.table.scrollFrame.scrollbarH)
 
 	table.insert(UISpecialFrames, frameName)
 end
