@@ -7,7 +7,7 @@ function Settings:RegisterSettings(savedVariableName, default)
 		for key, value in pairs(values) do
 			if tbl[key] == nil then
 				tbl[key] = value
-			elseif type(value) == "table" then
+			elseif type(value) == "table" and #value == 0 then
 				tbl[key] = tbl[key] or {}
 				PopulateDefaultValue(tbl[key], value)
 			end
