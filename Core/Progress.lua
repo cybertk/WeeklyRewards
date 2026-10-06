@@ -17,6 +17,7 @@ local RewardProgress = {
 namespace.RewardProgress = RewardProgress
 
 local Util = namespace.Util
+local NewItem = namespace.NewItem
 
 local WAPI_GetQuestTimeLeftSeconds = C_TaskQuest.GetQuestTimeLeftSeconds
 local WAPI_IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
@@ -340,8 +341,8 @@ function RewardProgress:Update(completedQuest)
 end
 
 -- Handle uniqueness
-function RewardProgress:AddReward(currency, item, quantity, asDrops)
-	Util:Debug("RewardProgress:AddReward", currency, item, quantity, asDrops)
+function RewardProgress:AddReward(currencyID, itemID, quantity, asDrops, OnItemGUIDUpdated)
+	Util:Debug("RewardProgress:AddReward", currencyID, itemID, quantity, asDrops)
 
 	local items
 	if asDrops == true then
@@ -352,23 +353,30 @@ function RewardProgress:AddReward(currency, item, quantity, asDrops)
 		items = self.rewards
 	end
 
-	for _, rewardItem in ipairs(items) do
-		if (currency and rewardItem.currency == currency) or (item and rewardItem.item == item) then
-			rewardItem.quantity = rewardItem.quantity + quantity
-			return
+	if currencyID then
+		for _, reward in ipairs(items) do
+			if reward.currency == currencyID then
+				reward.quantity = reward.quantity + quantity
+				return
+			end
+		end
+
+		table.insert(items, { currency = currencyID, quantity = quantity })
+	elseif itemID then
+		local reward = { item = itemID, quantity = quantity }
+		table.insert(items, reward)
+
+		if OnItemGUIDUpdated and select(6, C_Item.GetItemInfoInstant(itemID)) == Enum.ItemClass.Consumable then
+			NewItem:CreateFromItemID(itemID):ContinueOnItemPushed(function(item)
+				if item:HasLoot() then
+					reward.guid = item:GetItemGUID()
+					Util:Debug("Chest looted:", item:GetItemLink(), reward.guid)
+
+					OnItemGUIDUpdated(reward.guid)
+				end
+			end)
 		end
 	end
-
-	-- No exsiting reward found
-	if currency then
-		table.insert(items, { currency = currency, quantity = quantity })
-	elseif item then
-		table.insert(items, { item = item, quantity = quantity })
-	end
-
-	table.sort(items, function(a, b)
-		return a.quantity < b.quantity
-	end)
 
 	if self.state == PROGRESS_STATE.NOT_STARTED then
 		self.state = PROGRESS_STATE.IN_PROGRESS

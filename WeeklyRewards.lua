@@ -196,8 +196,6 @@ function WeeklyRewards:Init()
 		end
 		-- C_QuestLog.IsQuestFlaggedCompleted() might returns false in this context
 		self:UpdateProgress(questId)
-
-		self:UpdateRewardsGUIDSafe(character, questId)
 	end)
 
 	self:RegisterEvent("LFG_COMPLETION_REWARD", function(event)
@@ -211,8 +209,6 @@ function WeeklyRewards:Init()
 				character:ReceiveReward(quest, quantity, item)
 			end
 		end
-
-		self:UpdateRewardsGUIDSafe(character, quest)
 	end)
 
 	self:RegisterEvent("ZONE_CHANGED", function(event)
@@ -284,21 +280,6 @@ function WeeklyRewards:UpdateActiveRewards()
 		end, next)
 	end)
 	self.character:Scan(self.activeRewards)
-	self.character:UpdateRewardsGUID()
-end
-
-function WeeklyRewards:UpdateRewardsGUIDSafe(character, quest, attempts)
-	if attempts == nil then
-		attempts = 60
-	end
-
-	C_Timer.NewTicker(0.5, function(timer)
-		attempts = attempts - 1
-		if character:UpdateRewardsGUID(quest) or attempts < 0 then
-			Util:Debug("canceled")
-			timer:Cancel()
-		end
-	end)
 end
 
 function WeeklyRewards:UpdateProgress(quest)

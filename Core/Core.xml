@@ -2,6 +2,7 @@
     <Script file="Settings.lua" />
     <Script file="Reward.lua" />
     <Script file="ActiveRewards.lua" />
+    <Script file="NewItem.lua" />
     <Script file="Progress.lua" />
     <Script file="GreatVaultProgress.lua" />
     <Script file="LFGProgress.lua" />

@@ -171,55 +171,9 @@ function Character:ReceiveReward(quest, quantity, item, currencyId)
 		itemId = C_Item.GetItemInfoInstant(item)
 	end
 
-	progress:AddReward(currencyId, itemId, quantity)
-end
-
-function Character:UpdateRewardsGUID(quest)
-	local remainingItems = {} -- k,v
-	local count = 0
-
-	local progressList = quest and { Cache.questToProgress[quest] } or self.progress
-
-	for _, progress in pairs(progressList) do
-		for _, rewardItem in ipairs(progress.rewards or {}) do
-			if rewardItem.item and rewardItem.guid == nil then
-				remainingItems[rewardItem.item] = { rewardItem, progress }
-				count = count + 1
-			end
-		end
-	end
-
-	Util:Debug("UpdateRewardsGUID:", quest, count)
-
-	if count == 0 then
-		return true
-	end
-
-	local includeOldItems = quest == nil
-	local found = 0
-	for containerIndex = BACKPACK_CONTAINER, NUM_TOTAL_EQUIPPED_BAG_SLOTS do
-		for slotIndex = 1, C_Container.GetContainerNumSlots(containerIndex) do
-			local info = C_Container.GetContainerItemInfo(containerIndex, slotIndex)
-
-			if info and remainingItems[info.itemID] then
-				local item, progress = unpack(remainingItems[info.itemID])
-
-				if info.stackCount > 1 then
-					item.guid = false
-				elseif includeOldItems == true or C_NewItems.IsNewItem(containerIndex, slotIndex) then
-					item.guid = Item:CreateFromBagAndSlot(containerIndex, slotIndex):GetItemGUID()
-					Cache.lootToProgress[item.guid] = progress
-				end
-
-				if item.guid or item.guid == false then
-					found = found + 1
-					Util:Debug("guid updated for ", info.hyperlink, info.stackCount, containerIndex, slotIndex, item.guid)
-				end
-			end
-		end
-	end
-
-	return found == count
+	progress:AddReward(currencyId, itemId, quantity, false, function(itemGUID)
+		Cache.lootToProgress[itemGUID] = progress
+	end)
 end
 
 function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
