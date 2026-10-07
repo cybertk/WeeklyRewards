@@ -94,7 +94,7 @@ function SelectableLootScanner:Start()
 		local uniqueSources = {}
 
 		for i = 1, #sources, 2 do
-			uniqueSources[sources[i]] = { link = itemLink or format("%d coin?", quantity), quantity = sources[i + 1] }
+			uniqueSources[sources[i]] = { link = itemLink or format("%d coin?", quantity), quantity = quantity == 0 and sources[i + 1] or quantity }
 
 			if slotType == Enum.LootSlotType.Currency then
 				uniqueSources[sources[i]].currency = currencyID
