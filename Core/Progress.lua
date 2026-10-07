@@ -341,8 +341,8 @@ function RewardProgress:Update(completedQuest)
 end
 
 -- Handle uniqueness
-function RewardProgress:AddReward(currencyID, itemID, quantity, asDrops, OnItemGUIDUpdated)
-	Util:Debug("RewardProgress:AddReward", currencyID, itemID, quantity, asDrops)
+function RewardProgress:AddReward(currencyID, itemLink, quantity, asDrops, OnItemGUIDUpdated)
+	Util:Debug("RewardProgress:AddReward", currencyID, itemLink, quantity, asDrops, OnItemGUIDUpdated)
 
 	local items
 	if asDrops == true then
@@ -362,11 +362,14 @@ function RewardProgress:AddReward(currencyID, itemID, quantity, asDrops, OnItemG
 		end
 
 		table.insert(items, { currency = currencyID, quantity = quantity })
-	elseif itemID then
-		local reward = { item = itemID, quantity = quantity }
+	elseif itemLink then
+		local itemID, _, _, itemEquipLoc, _, itemClass = C_Item.GetItemInfoInstant(itemLink)
+		local itemLevel = itemEquipLoc ~= "INVTYPE_NON_EQUIP_IGNORE" and C_Item.GetDetailedItemLevelInfo(itemLink) or nil
+
+		local reward = { item = itemID, quantity = quantity, ilvl = itemLevel }
 		table.insert(items, reward)
 
-		if OnItemGUIDUpdated and select(6, C_Item.GetItemInfoInstant(itemID)) == Enum.ItemClass.Consumable then
+		if OnItemGUIDUpdated and itemClass == Enum.ItemClass.Consumable then
 			NewItem:CreateFromItemID(itemID):ContinueOnItemPushed(function(item)
 				if item:HasLoot() then
 					reward.guid = item:GetItemGUID()

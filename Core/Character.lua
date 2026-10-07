@@ -158,25 +158,20 @@ function Character:ResetProgress(reward, force)
 	return progress
 end
 
-function Character:ReceiveReward(quest, quantity, item, currencyId)
+function Character:ReceiveReward(quest, quantity, itemLink, currencyID)
 	local progress = Cache.questToProgress[quest]
 
-	Util:Debug("Character:ReceiveReward", quest, quantity, item, currencyId, progress)
+	Util:Debug("Character:ReceiveReward", quest, quantity, itemLink, currencyID, progress)
 	if progress == nil then
 		return
 	end
 
-	local itemId = item
-	if type(item) == "string" then
-		itemId = C_Item.GetItemInfoInstant(item)
-	end
-
-	progress:AddReward(currencyId, itemId, quantity, false, function(itemGUID)
+	progress:AddReward(currencyID, itemLink, quantity, false, function(itemGUID)
 		Cache.lootToProgress[itemGUID] = progress
 	end)
 end
 
-function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
+function Character:ReceiveDrop(guid, quantity, itemLink, currencyID)
 	local sourceItemID = C_Item.GetItemIDByGUID(guid)
 	local objectID = sourceItemID or tonumber(select(6, string.split("-", guid)) or nil)
 
@@ -187,7 +182,7 @@ function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
 			progress:AddReward(nil, item, 1)
 			progress.rewards[#progress.rewards].guid = guid
 		else
-			Util:Debug("No name for loot source: ", guid, quantity, itemId, currencyId, item, progress.name)
+			Util:Debug("No name for loot source: ", guid, quantity, itemLink, currencyID, item, progress.name)
 		end
 
 		Cache.lootToProgress[guid] = progress
@@ -198,9 +193,9 @@ function Character:ReceiveDrop(guid, quantity, itemId, currencyId)
 		return
 	end
 
-	Util:Debug("Received drop: ", guid, quantity, itemId, currencyId, progress)
+	Util:Debug("Received drop: ", guid, quantity, itemLink, currencyID, progress)
 
-	progress:AddReward(currencyId, itemId, quantity, true)
+	progress:AddReward(currencyID, itemLink, quantity, true)
 end
 
 function Character:GetFaction()

@@ -173,7 +173,7 @@ function SelectableLootScanner:UpdateSlot(slot)
 			item.item,
 			item.currency
 		)
-		EventRegistry:TriggerEvent("CK_LOOT_SCANNER_ITEM_LOOTED", item.source, item.quantity, item.item, item.currency)
+		EventRegistry:TriggerEvent("CK_LOOT_SCANNER_ITEM_LOOTED", item.source, item.quantity, item.link, item.currency)
 	end
 end
 
