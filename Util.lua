@@ -595,9 +595,17 @@ function Util:ResolveTags(s, autoColor)
 				color = nil
 			elseif arg1 == 1 and item:IsItemDataCached() then
 				-- show item details
-				name = format("|T%d:12|t %s%s|r", item:GetItemIcon(), item:GetItemQualityColor().hex, item:GetItemName())
+				local quality = item:GetItemQuality()
+				local itemLevel = tonumber(arg2)
 
-				local details = Util:FormatItemDetails(id, tonumber(arg2))
+				if itemLevel and itemLevel > 1000 then
+					quality = math.floor(itemLevel / 1000)
+					itemLevel = itemLevel % 1000
+				end
+
+				name = format("|T%d:12|t %s%s|r", item:GetItemIcon(), ITEM_QUALITY_COLORS[quality].hex, item:GetItemName())
+
+				local details = Util:FormatItemDetails(id, itemLevel)
 				if details ~= "" then
 					name = format("%s (%s)", name, details)
 				end

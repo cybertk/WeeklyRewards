@@ -364,7 +364,9 @@ function RewardProgress:AddReward(currencyID, itemLink, quantity, asDrops, OnIte
 		table.insert(items, { currency = currencyID, quantity = quantity })
 	elseif itemLink then
 		local itemID, _, _, itemEquipLoc, _, itemClass = C_Item.GetItemInfoInstant(itemLink)
-		local itemLevel = itemEquipLoc ~= "INVTYPE_NON_EQUIP_IGNORE" and C_Item.GetDetailedItemLevelInfo(itemLink) or nil
+		local itemLevel = itemEquipLoc ~= "INVTYPE_NON_EQUIP_IGNORE"
+				and C_Item.GetDetailedItemLevelInfo(itemLink) + ((C_Item.GetItemQualityByID(itemLink) or 0) * 1000)
+			or nil
 
 		local reward = { item = itemID, quantity = quantity, ilvl = itemLevel }
 		table.insert(items, reward)
