@@ -108,6 +108,10 @@ function Character:GetRewardProgress(rewardID)
 	return next(self.progress[rewardID]) and self.progress[rewardID] or nil, true
 end
 
+function Character:GetRewardProgressByQuestID(questID)
+	return Cache.questToProgress[questID]
+end
+
 function Character:UpdateProgress(quest)
 	local completionSet = {}
 

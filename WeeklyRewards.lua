@@ -247,6 +247,49 @@ function WeeklyRewards:Init()
 		Util:InvokeAfter(5, character.UpdateProgress, character)
 	end)
 
+	self:RegisterEvent("GOSSIP_SHOW", function()
+		print("GOSSIP_SHOW", GetQuestID())
+
+		-- for _, options in ipairs({ C_GossipInfo.GetActiveQuests(), C_GossipInfo.GetAvailableQuests() }) do
+		-- 	for _, option in ipairs(options) do
+		-- 		if self.character:GetRewardProgressByQuestID(option.questID) then
+		-- 			C_GossipInfo.SelectAvailableQuest(option.questID)
+		-- 			return
+		-- 		end
+		-- 	end
+		-- end
+
+		for _, option in ipairs(C_GossipInfo.GetActiveQuests()) do
+			if self.character:GetRewardProgressByQuestID(option.questID) then
+				C_GossipInfo.SelectActiveQuest(option.questID)
+				return
+			end
+		end
+
+		for _, option in ipairs(C_GossipInfo.GetAvailableQuests()) do
+			if self.character:GetRewardProgressByQuestID(option.questID) then
+				C_GossipInfo.SelectAvailableQuest(option.questID)
+				return
+			end
+		end
+	end)
+
+	self:RegisterEvent("QUEST_DETAIL", function()
+		print("QUEST_DETAIL", GetQuestID())
+		if self.character:GetRewardProgressByQuestID(GetQuestID()) then
+			AcceptQuest()
+			print("AutoCompleted Quest", GetQuestID(), self.character:GetRewardProgressByQuestID(GetQuestID()).name)
+		end
+	end)
+
+	self:RegisterEvent("QUEST_COMPLETE", function()
+		print("QUEST_COMPLETE", GetQuestID())
+		if self.character:GetRewardProgressByQuestID(GetQuestID()) then
+			GetQuestReward()
+			print("GetQuestReward Quest", GetQuestID(), self.character:GetRewardProgressByQuestID(GetQuestID()).name)
+		end
+	end)
+
 	self:RegisterEvent("QUEST_ACCEPTED", function()
 		self:UpdateActiveRewards()
 	end)
