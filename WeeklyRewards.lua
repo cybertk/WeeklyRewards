@@ -240,6 +240,9 @@ function WeeklyRewards:Init()
 	self:PurgeProgress()
 	self:UpdateActiveRewards()
 
+	QuestAutomator.filter = self.character.GetRewardProgressByQuestID
+	QuestAutomator:Start()
+
 	EventRegistry:RegisterCallback("CK_LOOT_SCANNER_ITEM_LOOTED", function(self, source, quantity, itemLink, currencyID)
 		character:ReceiveDrop(source, quantity, itemLink, currencyID)
 	end)
