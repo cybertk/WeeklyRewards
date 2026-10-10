@@ -3,6 +3,7 @@
     <Script file="Tips.lua" />
     <Script file="CharactersButton.lua" />
     <Script file="TrackingButton.lua" />
+    <Script file="ColumnHeader.lua" />
     <Script file="Main.lua" />
 
     <DropdownButton name="WeeklyRewardsCharactersButtonTemplate" mixin="WeeklyRewardsCharactersButtonMixin" virtual="true">

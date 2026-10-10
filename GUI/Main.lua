@@ -16,7 +16,6 @@ local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
 local RewardSummary = namespace.RewardSummary
 
-local Dialogs = namespace.Dialogs
 local Tips = namespace.Tips
 
 function Main:ToggleWindow()
@@ -411,282 +410,18 @@ function Main:ResetCell(character, reward)
 	end)
 end
 
-function Main:AddCharacterColumns()
-	local columns = {
-		{
-			name = NAME,
-			key = "name",
-			cell = function(character)
-				local note, tag = character:GetNote()
-
-				tag = #tag > 0 and format(" |cnGOLD_FONT_COLOR:(%s)|r", #tag > 4 and "*" or tag) or tag
-
-				local text = Util.WrapTextInClassColor(character.class, character.name)
-				return {
-					text = character:IsCurrent() and format("|T%s.tga:13:13|t%s%s", FRIENDS_TEXTURE_ONLINE, text, tag) or text .. tag,
-					onEnter = function(cellFrame)
-						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						GameTooltip:SetText(Util.WrapTextInClassColor(character.class, format("%s-%s", character.name, character.realmName)))
-						GameTooltip:AddLine(" ")
-						if #note > 0 then
-							GameTooltip:AddLine("|T131129:12|t" .. note, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
-							GameTooltip:AddLine(" ")
-						end
-						GameTooltip:AddLine(CLICK_TO_ENTER_COMMENT, GREEN_FONT_COLOR:GetRGB())
-						GameTooltip:Show()
-					end,
-					onLeave = GameTooltip_Hide,
-					onClick = function()
-						Dialogs.ShowCharacterNote(character)
-					end,
-				}
-			end,
-		},
-		{
-			name = L["column_realm"],
-			key = "realmName",
-			cell = function(character)
-				return { text = character.realmName }
-			end,
-		},
-		{
-			name = LEVEL,
-			key = "level",
-			align = "CENTER",
-			cell = function(character)
-				local _, timeToCharge = character:GetRestedXP()
-				return {
-					text = timeToCharge == 0 and GREEN_FONT_COLOR:WrapTextInColorCode(character.level) or character.level,
-					onEnter = function(cellFrame)
-						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						character:AddXPToTooltip(GameTooltip)
-						GameTooltip:Show()
-					end,
-					onLeave = GameTooltip_Hide,
-				}
-			end,
-		},
-		{
-			name = ITEM_LEVEL_ABBR,
-			key = "itemLevels",
-			align = "CENTER",
-			cell = function(character)
-				local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvP = character:GetAverageItemLevel()
-				return {
-					text = avgItemLevel and floor(avgItemLevel) or "-",
-					onEnter = function(cellFrame)
-						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-
-						if not avgItemLevel then
-							GameTooltip:SetText(L["table_alts_collect_hint"], GREEN_FONT_COLOR:GetRGB())
-						else
-							local title = format("%s %d", STAT_AVERAGE_ITEM_LEVEL, avgItemLevel)
-							if avgItemLevelEquipped ~= avgItemLevel then
-								title = title .. "  " .. STAT_AVERAGE_ITEM_LEVEL_EQUIPPED:format(avgItemLevelEquipped)
-							end
-							GameTooltip:SetText(title, HIGHLIGHT_FONT_COLOR:GetRGB())
-
-							GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL_TOOLTIP)
-							GameTooltip:AddLine(" ")
-							GameTooltip:AddLine(PVP_RATING_LINK_ITEM_LEVEL:format(avgItemLevelPvP))
-						end
-						GameTooltip:Show()
-					end,
-					onLeave = GameTooltip_Hide,
-				}
-			end,
-		},
-		{
-			name = FACTION,
-			key = "factionName",
-			align = "CENTER",
-			cell = function(character)
-				return { text = CreateAtlasMarkup(format("questlog-questtypeicon-%s", character:GetFaction():lower()), 20, 20) }
-			end,
-		},
-		{
-			name = L["column_covenant"],
-			key = "covenant",
-			align = "CENTER",
-			cell = function(character)
-				return {
-					text = character:GetCovenantName(),
-					onEnter = function(cellFrame)
-						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						GameTooltip:SetText(L["column_covenant"], YELLOW_FONT_COLOR:GetRGB())
-						GameTooltip:AddLine(" ")
-
-						if CharacterStore.IsCurrentPlayer(character) then
-							character:UpdateCovenant(true)
-						end
-						if character.covenantSanctum then
-							Util:AddCovenantSanctumUpgradeToTooltip(GameTooltip, character.covenant, character.covenantSanctum)
-						elseif character.covenant ~= 0 then
-							GameTooltip:AddLine(L["covenant_sanctum_unknown"], RED_FONT_COLOR:GetRGB())
-							GameTooltip:AddLine(" ")
-							GameTooltip:AddLine(L["table_alts_collect_hint"], GREEN_FONT_COLOR:GetRGB())
-						else
-							GameTooltip:AddLine(L["covenant_not_joined"])
-						end
-
-						GameTooltip:Show()
-					end,
-					onLeave = function()
-						GameTooltip:Hide()
-					end,
-				}
-			end,
-		},
-		{
-			name = L["column_location"],
-			key = "location",
-			align = "CENTER",
-			cell = function(character)
-				return {
-					text = character:IsCurrent() and GREEN_FONT_COLOR:WrapTextInColorCode(character.location) or character.location,
-					onEnter = function(cellFrame)
-						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						GameTooltip:SetText(character.location, HIGHLIGHT_FONT_COLOR:GetRGB())
-
-						local instruction = "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. INVITE .. ")|r"
-						character:AddPartyToTooltip(GameTooltip, CharacterStore.IsCurrentPlayer(character) and instruction or "")
-
-						GameTooltip:Show()
-					end,
-					onLeave = GameTooltip_Hide,
-					onClick = function()
-						if CharacterStore.IsCurrentPlayer(character) then
-							character:InviteLastParty()
-						end
-					end,
-				}
-			end,
-		},
-		{
-			name = L["column_last_update"],
-			key = "lastUpdate",
-			align = "CENTER",
-			cell = function(character)
-				local text = Util.FormatLastUpdateTime(character.lastUpdate)
-				return { text = character:IsCurrent() and GREEN_FONT_COLOR:WrapTextInColorCode(text) or text }
-			end,
-		},
-	}
-
-	for _, column in ipairs(columns) do
-		column.onEnter = function(cellFrame)
-			GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-			GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(L["table_sort_hint"]))
-			GameTooltip:Show()
-		end
-		column.onLeave = function()
-			GameTooltip:Hide()
-		end
-		table.insert(self.columns, column)
+function Main:AddColumns(headers)
+	for _, header in ipairs(headers) do
+		table.insert(self.columns, header:New())
 	end
 end
 
+function Main:AddCharacterColumns()
+	self:AddColumns(namespace.CharacterHeaderMixins)
+end
+
 function Main:AddRewardColumns()
-	for _, reward in ipairs(ActiveRewards.Get()) do
-		-- cache
-		reward:ForEachItem(type)
-
-		local column = {
-			name = reward.name,
-			reward = reward,
-			onEnter = function(cellFrame)
-				local function updateTooltip()
-					GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-					self:AddRewardToGameTooltip(reward)
-					GameTooltip:Show()
-				end
-				cellFrame:RegisterEvent("MODIFIER_STATE_CHANGED")
-				cellFrame:SetScript("OnEvent", updateTooltip)
-				updateTooltip()
-			end,
-			onLeave = function(cellFrame)
-				cellFrame:UnregisterEvent("MODIFIER_STATE_CHANGED")
-				cellFrame:SetScript("OnEvent", nil)
-				GameTooltip:Hide()
-			end,
-			toggleHidden = true,
-			align = "CENTER",
-			cell = function(character)
-				local progress, isScanned = character:GetRewardProgress(reward.id)
-				local text
-
-				if not isScanned and reward:PlayerMeetsRequiredLevel(character.level) then
-					text = " "
-				elseif progress == nil then
-					text = reward:PlayerMeetsRequiredLevel(character.level) and CreateAtlasMarkup("PlayerRaidBlip", 13, 13) or "-"
-				elseif progress.total == 0 then
-					text = "-"
-				elseif progress.claimedAt and progress:IsExpired() then
-					text = CreateAtlasMarkup("checkmark-minimal-disabled", 15, 15)
-				else
-					text = progress.total < 100 and format("%d / %d", progress.position, progress.total)
-						or format("%.0f%%", progress.position / progress.total * 100)
-
-					if progress:IsExpired() then
-						text = GRAY_FONT_COLOR:WrapTextInColorCode(text)
-					elseif progress.hasClaimed and progress:hasClaimed() then
-						text = CreateAtlasMarkup("common-icon-checkmark", 15, 15)
-					elseif progress.hasStarted and progress:hasStarted() then
-						text = YELLOW_FONT_COLOR:WrapTextInColorCode(text)
-					end
-				end
-
-				return {
-					text = text,
-					onEnter = function(cellFrame)
-						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						if progress == nil or progress:ObjectivesCount() == 0 then
-							if not reward:PlayerMeetsRequiredLevel(character.level) then
-								GameTooltip:AddLine(ITEM_MIN_LEVEL:format(reward.maximumLevel or reward.minimumLevel))
-							elseif isScanned then
-								GameTooltip_AddNormalLine(GameTooltip, character:GetNameInClassColor(true))
-								GameTooltip:AddLine(" ")
-								self:AddRewardObjectivesToGameTooltip(GameTooltip, reward)
-
-								GameTooltip:AddLine(" ")
-								GameTooltip_AddNormalLine(GameTooltip, L["progress_not_started"])
-							else
-								GameTooltip_AddNormalLine(GameTooltip, L["table_alts_collect_hint"])
-							end
-						elseif progress.total == 0 then
-							GameTooltip_AddNormalLine(GameTooltip, ERR_QUEST_NEED_PREREQS)
-						else
-							self:AddProgressToGameTooltip(progress)
-							cellFrame.hasInstructions = nil
-						end
-
-						GameTooltip:Show()
-					end,
-					onLeave = function()
-						GameTooltip:Hide()
-					end,
-					onClick = function(rowFrame, cellFrame)
-						if not CharacterStore.IsCurrentPlayer(character) then
-							return
-						end
-
-						if not cellFrame.hasInstructions then
-							GameTooltip:AddLine(" ")
-							GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(L["table_reset_progress_hint"]))
-							GameTooltip:Show()
-							cellFrame.hasInstructions = true
-						end
-
-						if IsControlKeyDown() then
-							self:ResetCell(character, reward)
-						end
-					end,
-				}
-			end,
-		}
-
-		table.insert(self.columns, column)
-	end
+	self:AddColumns(namespace.RewardHeaderMixin:Collect())
 end
 
 function Main:AddRewardObjectivesToGameTooltip(tooltip, reward)
@@ -776,24 +511,6 @@ function Main:UpdateSortArrow()
 		i = i + 1
 
 		local cellFrame = self.window.table.rows[1].columns[i]
-		local characterField = column.key or column.reward.id
-
-		cellFrame.data.onClick = function()
-			if IsControlKeyDown() then
-				if column.reward then
-					ActiveRewards.Get():ToggleExclusion(column.reward:GetCandidateID())
-				else
-					WeeklyRewards.db.global.main.hiddenColumns[column.name] = true
-				end
-			else
-				CharacterStore.Get():SetSortOrder(characterField)
-				local field, ascending = CharacterStore.Get():GetSortOrder()
-				WeeklyRewards.db.global.main.sortColumn = field
-				WeeklyRewards.db.global.main.sortAscending = ascending
-			end
-
-			self:Redraw()
-		end
 
 		if cellFrame.Arrow == nil then
 			local t = cellFrame:CreateTexture()
@@ -814,9 +531,9 @@ function Main:UpdateSortArrow()
 			cellFrame.Arrow.text = cellFrame.text:GetText()
 		end
 
-		cellFrame.Arrow:SetShown(sortOrder == characterField)
+		cellFrame.Arrow:SetShown(sortOrder == column.key)
 
-		if sortOrder == characterField then
+		if sortOrder == column.key then
 			if ascending then
 				cellFrame.Arrow:SetTexCoord(0, 1, 0, 1)
 			else
