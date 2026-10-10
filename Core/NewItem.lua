@@ -5,6 +5,7 @@ local NewItemsWatcher = CreateFrame("Frame")
 NewItemsWatcher:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 NewItemsWatcher:SetScript("OnEvent", function(self, event, ...)
+	print(event, ...)
 	if event == "PLAYER_ENTERING_WORLD" then
 		self:Init()
 	elseif event == "BAG_UPDATE_DELAYED" then
@@ -52,6 +53,7 @@ function NewItemsWatcher:Stop()
 end
 
 function NewItemsWatcher:CatchNewItems()
+	print("CatchNewItems", #self.watching, self.hasNewItems, self.containerIndex)
 	if #self.watching == 0 then
 		self:Stop()
 		return
@@ -81,6 +83,7 @@ function NewItemsWatcher:Watch(item)
 	end
 
 	table.insert(self.watching, 1, item)
+	print("Watching", item:GetItemLink(), #self.watching)
 end
 
 function NewItemsWatcher:Notify(itemLocation)
@@ -95,6 +98,7 @@ function NewItemsWatcher:Notify(itemLocation)
 
 			table.remove(self.watching, i)
 
+			print("Removed", itemID, item:GetItemLink(), #self.watching)
 			return
 		end
 	end

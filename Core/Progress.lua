@@ -376,6 +376,7 @@ function RewardProgress:AddReward(currencyID, itemLink, quantity, asDrops, OnIte
 				if item:HasLoot() then
 					reward.guid = item:GetItemGUID()
 					Util:Debug("Chest looted:", item:GetItemLink(), reward.guid)
+					print("Chest looted:", item:GetItemLink(), reward.guid)
 
 					OnItemGUIDUpdated(reward.guid)
 				end
