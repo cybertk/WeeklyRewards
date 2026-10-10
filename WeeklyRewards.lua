@@ -29,6 +29,7 @@ local defaultDB = {
 		main = {
 			candidates = { "vault", "mn-unity", "mn-trailing", "mn-cc-purge", "delve-shards", "delve-abundance", "mn-pquests", "mn-prey-beacon", "mn-prey-m" },
 			hiddenColumns = {},
+			showNumberColumn = true,
 			sortColumn = "lastUpdate",
 			sortAscending = true,
 			windowScale = 100,

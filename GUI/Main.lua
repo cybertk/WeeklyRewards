@@ -414,6 +414,15 @@ end
 function Main:AddCharacterColumns()
 	local columns = {
 		{
+			name = "#",
+			number = true,
+			align = "CENTER",
+			color = GRAY_FONT_COLOR,
+			cell = function(_, index)
+				return { text = GRAY_FONT_COLOR:WrapTextInColorCode(index) }
+			end,
+		},
+		{
 			name = NAME,
 			key = "name",
 			cell = function(character)
@@ -574,13 +583,15 @@ function Main:AddCharacterColumns()
 	}
 
 	for _, column in ipairs(columns) do
-		column.onEnter = function(cellFrame)
-			GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-			GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(L["table_sort_hint"]))
-			GameTooltip:Show()
-		end
-		column.onLeave = function()
-			GameTooltip:Hide()
+		if not column.number then
+			column.onEnter = function(cellFrame)
+				GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+				GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(L["table_sort_hint"]))
+				GameTooltip:Show()
+			end
+			column.onLeave = function()
+				GameTooltip:Hide()
+			end
 		end
 		table.insert(self.columns, column)
 	end
@@ -774,6 +785,9 @@ function Main:UpdateSortArrow()
 	local i = 0
 	Main:ForEachColumn(function(column)
 		i = i + 1
+		if column.number then
+			return
+		end
 
 		local cellFrame = self.window.table.rows[1].columns[i]
 		local characterField = column.key or column.reward.id
@@ -868,6 +882,8 @@ function Main:ForEachColumn(callback, visibleOnly)
 
 	visibleOnly = visibleOnly or true
 
+	local main = WeeklyRewards.db.global.main
+
 	for _, column in ipairs(self.columns) do
 		if not visibleOnly then
 			callback(column)
@@ -875,9 +891,13 @@ function Main:ForEachColumn(callback, visibleOnly)
 		end
 
 		local reward = column.reward
-		if reward and not activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
+		if column.number then
+			if main.showNumberColumn then
+				callback(column)
+			end
+		elseif reward and not activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
 			callback(column)
-		elseif reward == nil and not WeeklyRewards.db.global.main.hiddenColumns[column.name] then
+		elseif reward == nil and not main.hiddenColumns[column.name] then
 			callback(column)
 		end
 	end
@@ -915,7 +935,7 @@ function Main:Redraw()
 		Main:ForEachColumn(function(dataColumn)
 			---@type WK_TableDataCell
 			local cell = {
-				text = NORMAL_FONT_COLOR:WrapTextInColorCode(dataColumn.name),
+				text = (dataColumn.color or NORMAL_FONT_COLOR):WrapTextInColorCode(dataColumn.name),
 				onEnter = dataColumn.onEnter,
 				onLeave = dataColumn.onLeave,
 				onClick = dataColumn.onClick,
@@ -927,11 +947,13 @@ function Main:Redraw()
 	end
 
 	do -- Table data
+		local index = 0
 		CharacterStore.Get():ForEach(function(character)
+			index = index + 1
 			local row = { columns = {} }
 
 			Main:ForEachColumn(function(dataColumn)
-				table.insert(row.columns, dataColumn.cell(character))
+				table.insert(row.columns, dataColumn.cell(character, index))
 			end)
 
 			row.onEnter = function(data, columnFrame)

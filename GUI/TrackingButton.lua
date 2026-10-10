@@ -94,7 +94,14 @@ function WeeklyRewardsTrackingButtonMixin:AddCharacterInfoFilterToMenu(rootMenu)
 
 	local button = rootMenu:CreateButton(CHARACTER_BUTTON)
 	for _, column in ipairs(main.columns) do
-		if column.reward == nil then
+		if column.number then
+			button:CreateCheckbox(column.name, function()
+				return WeeklyRewards.db.global.main.showNumberColumn
+			end, function()
+				WeeklyRewards.db.global.main.showNumberColumn = not WeeklyRewards.db.global.main.showNumberColumn
+				main:Redraw()
+			end)
+		elseif column.reward == nil then
 			button:CreateCheckbox(column.name, function()
 				return not hidden[column.name]
 			end, function(columnName)
