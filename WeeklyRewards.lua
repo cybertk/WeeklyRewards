@@ -55,6 +55,7 @@ local defaultSettings = {
 	utilsUntrackQuests = false,
 	utilsAnnounceRewards = { enabled = true, option = "SELF" },
 	utilsAutoEnter = false,
+	utilsRideAlong = false,
 }
 
 local WeeklyRewards = { ns = namespace }
@@ -182,6 +183,20 @@ function WeeklyRewards:OnLoaded()
 	LibDBIcon:AddButtonToCompartment(addonName)
 	Settings:RegisterCallback("^minimap", function()
 		LibDBIcon:Refresh(addonName, Settings:Get("minimap"))
+	end, self)
+
+	Settings:InvokeAndRegisterCallback("utilsRideAlong", function(_, value)
+		print("v", value)
+		if value and C_Traits.SetSelection(23963636, 100167, 123785) then
+			local r = C_Traits.CommitConfig(23963636)
+			print(
+				"enabled ride along",
+				r,
+				C_Traits.GetNodeInfo(23963636, 100167).activeEntry.entryID,
+				C_Traits.GetNodeInfo(23963636, 100167).activeEntry.entryID == 123785
+			)
+			-- C_Traits.GetNodeInfo(23963636, 100167)
+		end
 	end, self)
 
 	self:MigrateDB()

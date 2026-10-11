@@ -35,6 +35,19 @@ function WeeklyRewardsAutomationButtonMixin:OnLoad()
 			},
 		}, L["settings_broadcast_rewards_tooltip"], MenuResponse.Refresh)
 
+		local xx = Settings:CreateCheckboxMenu("utilsRideAlong", rootMenu, "Ride Along")
+		-- xx:SetScript("OnClick", function() print("hi") end)
+
+		xx:AddInitializer(function(button, description, menu)
+			local b = CreateFrame("Button", nil, button)
+			b:SetSize(18, 18)
+			b:SetNormalTexture(618976)
+			b:SetPoint("RIGHT")
+			b:SetScript("OnClick", function()
+				TraitUtil.OpenTraitFrame(672)
+			end)
+		end)
+
 		for _, entry in ipairs(newEntries) do
 			local checkbox =
 				Settings:CreateCheckboxMenu(self.flag .. entry.key, rootMenu, Flags:Format(entry.title, self.flag, entry.key), nil, entry.tooltip)
