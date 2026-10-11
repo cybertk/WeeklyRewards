@@ -198,6 +198,13 @@ function Main:AddSettingsButton()
 			self:Redraw()
 		end)
 
+		rootMenu:CreateCheckbox(L["settings_show_row_numbers"], function()
+			return WeeklyRewards.db.global.main.windowRowNumbers
+		end, function()
+			WeeklyRewards.db.global.main.windowRowNumbers = not WeeklyRewards.db.global.main.windowRowNumbers
+			self:Redraw()
+		end)
+
 		rootMenu:CreateTitle(L["settings_utility_title"])
 		local untrackQuests = rootMenu:CreateCheckbox(L["settings_auto_untrack_quests"], function()
 			return WeeklyRewards.db.global.utils.untrackQuests
@@ -414,6 +421,14 @@ end
 function Main:AddCharacterColumns()
 	local columns = {
 		{
+			name = "#",
+			tooltip = "",
+			align = "CENTER",
+			cell = function(_, index)
+				return { text = GRAY_FONT_COLOR:WrapTextInColorCode(index) }
+			end,
+		},
+		{
 			name = NAME,
 			key = "name",
 			cell = function(character)
@@ -576,13 +591,17 @@ function Main:AddCharacterColumns()
 	for _, column in ipairs(columns) do
 		column.onEnter = function(cellFrame)
 			GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-			GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(L["table_sort_hint"]))
+			GameTooltip:AddLine(column.tooltip or GREEN_FONT_COLOR:WrapTextInColorCode(L["table_sort_hint"]))
 			GameTooltip:Show()
 		end
 		column.onLeave = function()
 			GameTooltip:Hide()
 		end
 		table.insert(self.columns, column)
+	end
+
+	if not WeeklyRewards.db.global.main.windowRowNumbers then
+		table.remove(self.columns, 1)
 	end
 end
 
@@ -775,6 +794,10 @@ function Main:UpdateSortArrow()
 	Main:ForEachColumn(function(column)
 		i = i + 1
 
+		if not column.key and not column.reward then
+			return
+		end
+
 		local cellFrame = self.window.table.rows[1].columns[i]
 		local characterField = column.key or column.reward.id
 
@@ -801,7 +824,6 @@ function Main:UpdateSortArrow()
 			t:SetAtlas("auctionhouse-ui-sortarrow", true)
 
 			cellFrame.Arrow = t
-			cellFrame:SetHighlightTexture("auctionhouse-ui-row-highlight", "ADD")
 		end
 
 		if cellFrame.Arrow.text ~= cellFrame.text:GetText() then
@@ -839,6 +861,7 @@ function Main:LayoutHeader(force)
 		for _, column in ipairs({ header:GetChildren() }) do
 			AnchorUtil.AdjustPointByName(column, "TOPLEFT", offset, 0)
 			AnchorUtil.AdjustPointByName(column, "BOTTOMLEFT", offset, 0)
+			column:SetHighlightTexture("auctionhouse-ui-row-highlight", "ADD")
 		end
 	end
 
@@ -927,11 +950,13 @@ function Main:Redraw()
 	end
 
 	do -- Table data
+		local index = 0
 		CharacterStore.Get():ForEach(function(character)
+			index = index + 1
 			local row = { columns = {} }
 
 			Main:ForEachColumn(function(dataColumn)
-				table.insert(row.columns, dataColumn.cell(character))
+				table.insert(row.columns, dataColumn.cell(character, index))
 			end)
 
 			row.onEnter = function(data, columnFrame)
