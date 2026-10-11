@@ -292,9 +292,7 @@ function Settings:CreateOptionsTree(key, menu, text, options, tooltipText, respo
 
 		local radio = rootMenu:CreateRadio(option.text, Comparator, Setter, option.value)
 
-		if response then
-			radio:SetResponse(response)
-		end
+		radio:SetResponse(response or MenuResponse.Refresh)
 
 		if option.tooltip then
 			radio:SetTooltip(self:GenerateTooltip(option.tooltip, option.text))
