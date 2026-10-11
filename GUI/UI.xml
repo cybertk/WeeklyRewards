@@ -1,9 +1,30 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <Script file="Dialogs.lua" />
     <Script file="Tips.lua" />
+    <Script file="SettingsButton.lua" />
     <Script file="CharactersButton.lua" />
     <Script file="TrackingButton.lua" />
     <Script file="Main.lua" />
+
+    <DropdownButton name="WeeklyRewardsSettingsButtonTemplate" mixin="WeeklyRewardsSettingsButtonMixin" virtual="true">
+        <Size x="30" y="30" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="Icon" atlas="GM-icon-settings">
+                    <Size x="30" y="30" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <Color r="0.7" g="0.7" b="0.7" a="1" />
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+        </Scripts>
+    </DropdownButton>
 
     <DropdownButton name="WeeklyRewardsCharactersButtonTemplate" mixin="WeeklyRewardsCharactersButtonMixin" virtual="true">
         <Size x="30" y="30" />

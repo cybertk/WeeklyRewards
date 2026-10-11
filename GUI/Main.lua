@@ -3,14 +3,13 @@ local addonName, namespace = ...
 local Main = {}
 namespace.GUIMain = Main
 
-local LibDBIcon = LibStub("LibDBIcon-1.0")
-
 -- Imported by Embeds/WeeklyKnowledge
 local Constants = namespace.Constants
 local UI = namespace.UI
 local Utils = namespace.Utils
 
 local L = namespace.L
+local Settings = namespace.Settings
 local Util = namespace.Util
 local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
@@ -69,170 +68,8 @@ function Main:AddCloseButton()
 end
 
 function Main:AddSettingsButton()
-	self.window.titlebar.SettingsButton = CreateFrame("DropdownButton", "$parentSettingsButton", self.window.titlebar)
+	self.window.titlebar.SettingsButton = CreateFrame("DropdownButton", "$parentSettingsButton", self.window.titlebar, "WeeklyRewardsSettingsButtonTemplate")
 	self.window.titlebar.SettingsButton:SetPoint("RIGHT", self.window.titlebar.closeButton, "LEFT", 0, 0)
-	self.window.titlebar.SettingsButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
-	self.window.titlebar.SettingsButton:SetScript("OnEnter", function()
-		self.window.titlebar.SettingsButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.SettingsButton, 1, 1, 1, 0.05)
-		self:SetTooltipOwner(GameTooltip, self.window.titlebar.SettingsButton)
-		GameTooltip:SetText(L["settings_button_tooltip"], 1, 1, 1, 1, true)
-		GameTooltip:AddLine(L["settings_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-		GameTooltip:Show()
-	end)
-	self.window.titlebar.SettingsButton:SetScript("OnLeave", function()
-		self.window.titlebar.SettingsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.SettingsButton, 1, 1, 1, 0)
-		GameTooltip:Hide()
-	end)
-	self.window.titlebar.SettingsButton:SetupMenu(function(_, rootMenu)
-		local showMinimapIcon = rootMenu:CreateCheckbox(L["settings_show_minimap_button"], function()
-			return not WeeklyRewards.db.global.minimap.hide
-		end, function()
-			WeeklyRewards.db.global.minimap.hide = not WeeklyRewards.db.global.minimap.hide
-			LibDBIcon:Refresh(addonName, WeeklyRewards.db.global.minimap)
-		end)
-		showMinimapIcon:SetTooltip(function(tooltip, elementDescription)
-			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
-			GameTooltip_AddNormalLine(tooltip, L["settings_show_minimap_tooltip"])
-		end)
-
-		local lockMinimapIcon = rootMenu:CreateCheckbox(L["settings_lock_minimap_button"], function()
-			return WeeklyRewards.db.global.minimap.lock
-		end, function()
-			WeeklyRewards.db.global.minimap.lock = not WeeklyRewards.db.global.minimap.lock
-			LibDBIcon:Refresh(addonName, WeeklyRewards.db.global.minimap)
-		end)
-		lockMinimapIcon:SetTooltip(function(tooltip, elementDescription)
-			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
-			GameTooltip_AddNormalLine(tooltip, L["settings_lock_minimap_tooltip"])
-		end)
-
-		rootMenu:CreateTitle(L["settings_window_title"])
-		local windowScale = rootMenu:CreateButton(L["settings_scaling"])
-		for i = 80, 200, 10 do
-			windowScale:CreateRadio(i .. "%", function()
-				return WeeklyRewards.db.global.main.windowScale == i
-			end, function(data)
-				WeeklyRewards.db.global.main.windowScale = data
-				self:Redraw()
-			end, i)
-		end
-
-		local windowMaxWidth = rootMenu:CreateButton(L["settings_max_width"])
-		windowMaxWidth:CreateTitle(L["settings_max_width_percent"])
-		for i = 20, 100, 10 do
-			windowMaxWidth:CreateRadio(i .. "%", function()
-				return WeeklyRewards.db.global.main.windowMaxRelativeWidth == i
-			end, function(data)
-				WeeklyRewards.db.global.main.windowMaxRelativeWidth = data
-				self:Redraw()
-			end, i)
-		end
-
-		local windowMaxRows = rootMenu:CreateButton(L["settings_max_rows"])
-		windowMaxRows:CreateTitle(HUD_EDIT_MODE_SETTING_ACTION_BAR_NUM_ROWS)
-		for i = 5, 70, 5 do
-			if i < 40 or i % 10 == 0 then
-				windowMaxRows:CreateRadio(i, function()
-					return WeeklyRewards.db.global.main.windowMaxRows == i
-				end, function(data)
-					WeeklyRewards.db.global.main.windowMaxRows = data
-					self:Redraw()
-				end, i)
-			end
-		end
-
-		local colorInfo = {
-			r = WeeklyRewards.db.global.main.windowBackgroundColor.r,
-			g = WeeklyRewards.db.global.main.windowBackgroundColor.g,
-			b = WeeklyRewards.db.global.main.windowBackgroundColor.b,
-			opacity = WeeklyRewards.db.global.main.windowBackgroundColor.a,
-			swatchFunc = function()
-				local r, g, b = ColorPickerFrame:GetColorRGB()
-				local a = ColorPickerFrame:GetColorAlpha()
-				if r then
-					WeeklyRewards.db.global.main.windowBackgroundColor.r = r
-					WeeklyRewards.db.global.main.windowBackgroundColor.g = g
-					WeeklyRewards.db.global.main.windowBackgroundColor.b = b
-					if a then
-						WeeklyRewards.db.global.main.windowBackgroundColor.a = a
-					end
-					Utils:SetBackgroundColor(
-						self.window,
-						WeeklyRewards.db.global.main.windowBackgroundColor.r,
-						WeeklyRewards.db.global.main.windowBackgroundColor.g,
-						WeeklyRewards.db.global.main.windowBackgroundColor.b,
-						WeeklyRewards.db.global.main.windowBackgroundColor.a
-					)
-				end
-			end,
-			opacityFunc = function() end,
-			cancelFunc = function(color)
-				if color.r then
-					WeeklyRewards.db.global.main.windowBackgroundColor.r = color.r
-					WeeklyRewards.db.global.main.windowBackgroundColor.g = color.g
-					WeeklyRewards.db.global.main.windowBackgroundColor.b = color.b
-					if color.a then
-						WeeklyRewards.db.global.main.windowBackgroundColor.a = color.a
-					end
-					Utils:SetBackgroundColor(
-						self.window,
-						WeeklyRewards.db.global.main.windowBackgroundColor.r,
-						WeeklyRewards.db.global.main.windowBackgroundColor.g,
-						WeeklyRewards.db.global.main.windowBackgroundColor.b,
-						WeeklyRewards.db.global.main.windowBackgroundColor.a
-					)
-				end
-			end,
-			hasOpacity = 1,
-		}
-		rootMenu:CreateColorSwatch(L["settings_background_color"], function()
-			ColorPickerFrame:SetupColorPickerAndShow(colorInfo)
-		end, colorInfo)
-
-		rootMenu:CreateCheckbox(L["settings_show_border"], function()
-			return WeeklyRewards.db.global.main.windowBorder
-		end, function()
-			WeeklyRewards.db.global.main.windowBorder = not WeeklyRewards.db.global.main.windowBorder
-			self:Redraw()
-		end)
-
-		rootMenu:CreateCheckbox(L["settings_show_row_numbers"], function()
-			return WeeklyRewards.db.global.main.windowRowNumbers
-		end, function()
-			WeeklyRewards.db.global.main.windowRowNumbers = not WeeklyRewards.db.global.main.windowRowNumbers
-			self:Redraw()
-		end)
-
-		rootMenu:CreateTitle(L["settings_utility_title"])
-		local untrackQuests = rootMenu:CreateCheckbox(L["settings_auto_untrack_quests"], function()
-			return WeeklyRewards.db.global.utils.untrackQuests
-		end, function()
-			WeeklyRewards.db.global.utils.untrackQuests = not WeeklyRewards.db.global.utils.untrackQuests
-		end)
-		untrackQuests:SetTooltip(function(tooltip, elementDescription)
-			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
-			GameTooltip_AddNormalLine(tooltip, L["settings_auto_untrack_quests_tooltip"])
-		end)
-
-		local broadcastRewards = rootMenu:CreateCheckbox(L["settings_broadcast_rewards"], function()
-			return WeeklyRewards.db.global.utils.broadcastRewards
-		end, function()
-			WeeklyRewards.db.global.utils.broadcastRewards = not WeeklyRewards.db.global.utils.broadcastRewards
-		end)
-		broadcastRewards:SetTooltip(function(tooltip, elementDescription)
-			GameTooltip_SetTitle(tooltip, MenuUtil.GetElementText(elementDescription))
-			GameTooltip_AddNormalLine(tooltip, L["settings_broadcast_rewards_tooltip"])
-		end)
-	end)
-
-	self.window.titlebar.SettingsButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.SettingsButton:GetName() .. "Icon", "ARTWORK")
-	self.window.titlebar.SettingsButton.Icon:SetPoint("CENTER", self.window.titlebar.SettingsButton, "CENTER")
-	self.window.titlebar.SettingsButton.Icon:SetSize(30, 30)
-	self.window.titlebar.SettingsButton.Icon:SetAtlas("GM-icon-settings")
-
-	self.window.titlebar.SettingsButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
 end
 
 function Main:AddCharactersButton()
@@ -308,13 +145,8 @@ function Main:CreateWindow()
 		self.window:StopMovingOrSizing()
 	end)
 	self.window:Hide()
-	Utils:SetBackgroundColor(
-		self.window,
-		WeeklyRewards.db.global.main.windowBackgroundColor.r,
-		WeeklyRewards.db.global.main.windowBackgroundColor.g,
-		WeeklyRewards.db.global.main.windowBackgroundColor.b,
-		WeeklyRewards.db.global.main.windowBackgroundColor.a
-	)
+	local backgroundColor = Settings:Get("windowBackgroundColor")
+	Utils:SetBackgroundColor(self.window, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a)
 
 	self.window.border = CreateFrame("Frame", "$parentBorder", self.window, "BackdropTemplate")
 	self.window.border:SetPoint("TOPLEFT", self.window, "TOPLEFT", -3, 3)
@@ -401,6 +233,14 @@ function Main:CreateWindow()
 	Tips:SetOwner(self.window)
 	Tips:SetupVerticalScrollBarHelpTip(self.window.table.scrollFrame.scrollbarV)
 	Tips:SetupHorizontalScrollBarHelpTip(self.window.table.scrollFrame.scrollbarH)
+
+	Settings:RegisterCallback("^window", function(_, value, key)
+		if key == "windowBackgroundColor" then
+			Utils:SetBackgroundColor(self.window, value.r, value.g, value.b, value.a)
+		elseif self.window and self.window:IsVisible() then
+			self:Redraw()
+		end
+	end, self)
 
 	table.insert(UISpecialFrames, frameName)
 end
@@ -600,7 +440,7 @@ function Main:AddCharacterColumns()
 		table.insert(self.columns, column)
 	end
 
-	if not WeeklyRewards.db.global.main.windowRowNumbers then
+	if not Settings:Get("windowRowNumbers") then
 		table.remove(self.columns, 1)
 	end
 end
@@ -789,6 +629,7 @@ end
 
 function Main:UpdateSortArrow()
 	local sortOrder, ascending = CharacterStore.Get():GetSortOrder()
+	local hiddenColumns = Settings:Get("hiddenColumns")
 
 	local i = 0
 	Main:ForEachColumn(function(column)
@@ -806,13 +647,13 @@ function Main:UpdateSortArrow()
 				if column.reward then
 					ActiveRewards.Get():ToggleExclusion(column.reward:GetCandidateID())
 				else
-					WeeklyRewards.db.global.main.hiddenColumns[column.name] = true
+					hiddenColumns[column.name] = true
 				end
 			else
 				CharacterStore.Get():SetSortOrder(characterField)
 				local field, ascending = CharacterStore.Get():GetSortOrder()
-				WeeklyRewards.db.global.main.sortColumn = field
-				WeeklyRewards.db.global.main.sortAscending = ascending
+				Settings:Set("sortColumn", field)
+				Settings:Set("sortAscending", ascending)
 			end
 
 			self:Redraw()
@@ -888,6 +729,7 @@ end
 
 function Main:ForEachColumn(callback, visibleOnly)
 	local activeRewards = ActiveRewards.Get()
+	local hiddenColumns = Settings:Get("hiddenColumns")
 
 	visibleOnly = visibleOnly or true
 
@@ -900,7 +742,7 @@ function Main:ForEachColumn(callback, visibleOnly)
 		local reward = column.reward
 		if reward and not activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
 			callback(column)
-		elseif reward == nil and not WeeklyRewards.db.global.main.hiddenColumns[column.name] then
+		elseif reward == nil and not hiddenColumns[column.name] then
 			callback(column)
 		end
 	end
@@ -914,7 +756,7 @@ function Main:Redraw()
 		return
 	end
 
-	local windowScale = WeeklyRewards.db.global.main.windowScale / 100
+	local windowScale = Settings:Get("windowScale")
 	self.window:SetScale(windowScale)
 
 	local tableWidth = 0
@@ -995,12 +837,12 @@ function Main:Redraw()
 		end)
 	end
 
-	local desiredTableHeight = WeeklyRewards.db.global.main.windowMaxRows * Constants.TABLE_ROW_HEIGHT + Constants.TABLE_HEADER_HEIGHT
+	local desiredTableHeight = Settings:Get("windowMaxRows") * Constants.TABLE_ROW_HEIGHT + Constants.TABLE_HEADER_HEIGHT
 
-	self.window.border:SetShown(WeeklyRewards.db.global.main.windowBorder)
+	self.window.border:SetShown(Settings:Get("windowBorder"))
 	self.window.table:SetData(tableData)
 
-	self.window:SetWidth(math.min(math.max(tableWidth, minWindowWidth), GetScreenWidth() * WeeklyRewards.db.global.main.windowMaxRelativeWidth / 100 / windowScale))
+	self.window:SetWidth(math.min(math.max(tableWidth, minWindowWidth), GetScreenWidth() * Settings:Get("windowMaxRelativeWidth") / windowScale))
 	self.window:SetHeight(math.min(GetScreenHeight() / windowScale, math.min(tableHeight, desiredTableHeight) + Constants.TITLEBAR_HEIGHT + 2))
 
 	self.window:SetClampRectInsets(self.window:GetWidth() / 2, self.window:GetWidth() / -2, 0, self.window:GetHeight() / 2)

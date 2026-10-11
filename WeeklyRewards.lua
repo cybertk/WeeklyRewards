@@ -17,33 +17,31 @@ local Main = namespace.GUIMain
 WeeklyRewardsArchive = WeeklyRewardsArchive or {}
 
 local defaultDB = {
-	---@type WR_DefaultGlobal
 	global = {
 		activeRewards = {},
 		characters = {},
-		minimap = {
-			minimapPos = 235,
-			hide = false,
-			lock = false,
-		},
-		main = {
-			candidates = { "vault", "mn-unity", "mn-trailing", "mn-cc-purge", "delve-shards", "delve-abundance", "mn-pquests", "mn-prey-beacon", "mn-prey-m" },
-			hiddenColumns = {},
-			sortColumn = "lastUpdate",
-			sortAscending = true,
-			windowScale = 100,
-			windowMaxRelativeWidth = 80,
-			windowMaxRows = 20,
-			windowBackgroundColor = { r = 0, g = 0, b = 0, a = 1 },
-			windowBorder = true,
-			windowRowNumbers = true,
-		},
-		utils = {
-			untrackQuests = false,
-			broadcastRewards = false,
-		},
 		dbVersion = 8,
 	},
+}
+
+local defaultSettings = {
+	minimap = {
+		hide = false,
+		minimapPos = 235,
+		lock = false,
+	},
+	candidates = { "vault", "mn-unity", "mn-trailing", "mn-cc-purge", "delve-shards", "delve-abundance", "mn-pquests", "mn-prey-beacon", "mn-prey-m" },
+	hiddenColumns = {},
+	sortColumn = "lastUpdate",
+	sortAscending = true,
+	windowScale = 1,
+	windowMaxRelativeWidth = 0.8,
+	windowMaxRows = 20,
+	windowBackgroundColor = { r = 0, g = 0, b = 0, a = 1 },
+	windowBorder = true,
+	windowRowNumbers = true,
+	utilsUntrackQuests = false,
+	utilsBroadcastRewards = false,
 }
 
 local WeeklyRewards = { ns = namespace }
@@ -94,16 +92,17 @@ function WeeklyRewards:MigrateDB()
 		end
 	end
 
-	if self.db.global.activeRewards.excluded then
-		self.db.global.main.candidates = {}
+	if self.db.global.main then
+		Mixin(WeeklyRewardsSettings, self.db.global.main)
 
-		for _, c in pairs(candidatesMap) do
-			if not self.db.global.activeRewards.excluded[c.id] and not c.expansion then
-				table.insert(self.db.global.main.candidates, c.id)
-			end
-		end
+		WeeklyRewardsSettings.windowScale = self.db.global.main.windowScale / 100
+		WeeklyRewardsSettings.windowMaxRelativeWidth = self.db.global.main.windowMaxRelativeWidth / 100
 
-		self.db.global.activeRewards.excluded = nil
+		WeeklyRewardsSettings.utilsUntrackQuests = self.db.global.utils.untrackQuests
+		WeeklyRewardsSettings.utilsBroadcastRewards = self.db.global.utils.broadcastRewards
+
+		self.db.global.main = nil
+		self.db.global.utils = nil
 	end
 end
 
@@ -112,6 +111,8 @@ function WeeklyRewards:OnLoaded()
 
 	Settings:RegisterSettings("WeeklyRewardsDB", defaultDB)
 	self.db = WeeklyRewardsDB
+
+	Settings:RegisterSettings("WeeklyRewardsSettings", defaultSettings)
 
 	Util.debug = self.db.global.debug
 	Util:Debug("Debug Mode:", Util.debug)
@@ -127,14 +128,17 @@ function WeeklyRewards:OnLoaded()
 			tooltip:SetText(addonName, 1, 1, 1)
 			tooltip:AddLine(L["minimap_tooltip_left_click"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 			local dragText = L["minimap_tooltip_drag"]
-			if self.db.global.minimap.lock then
+			if Settings:Get("minimap").lock then
 				dragText = dragText .. L["minimap_tooltip_locked"]
 			end
 			tooltip:AddLine(dragText .. ".", NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 		end,
 	})
-	LibDBIcon:Register(addonName, WRLDB, self.db.global.minimap)
+	LibDBIcon:Register(addonName, WRLDB, Settings:Get("minimap"))
 	LibDBIcon:AddButtonToCompartment(addonName)
+	Settings:RegisterCallback("^minimap", function()
+		LibDBIcon:Refresh(addonName, Settings:Get("minimap"))
+	end, self)
 
 	self:MigrateDB()
 end
@@ -146,10 +150,10 @@ function WeeklyRewards:Init()
 	local characterStore = CharacterStore.Load(self.db.global.characters)
 
 	do
-		local main = self.db.global.main
-		characterStore:SetSortOrder(main.sortColumn)
-		if main.sortAscending ~= select(2, characterStore:GetSortOrder()) then
-			characterStore:SetSortOrder(main.sortColumn)
+		local sortColumn = Settings:Get("sortColumn")
+		characterStore:SetSortOrder(sortColumn)
+		if Settings:Get("sortAscending") ~= select(2, characterStore:GetSortOrder()) then
+			characterStore:SetSortOrder(sortColumn)
 		end
 	end
 
@@ -157,7 +161,7 @@ function WeeklyRewards:Init()
 
 	local character = characterStore:CurrentPlayer()
 	local activeRewards = ActiveRewards:New(self.db.global.activeRewards)
-	activeRewards:SetSelectedCandidates(self.db.global.main.candidates)
+	activeRewards:SetSelectedCandidates(Settings:Get("candidates"))
 
 	RewardSummary:Init(characterStore)
 
@@ -172,7 +176,7 @@ function WeeklyRewards:Init()
 
 	character:UpdateFaction()
 
-	if self.db.global.utils.untrackQuests then
+	if Settings:Get("utilsUntrackQuests") then
 		character:RemoveQuestsWatch()
 	end
 
@@ -286,7 +290,7 @@ end
 function WeeklyRewards:UpdateProgress(quest)
 	local completion = self.character:UpdateProgress(quest)
 
-	if self.db.global.utils.broadcastRewards ~= true then
+	if Settings:Get("utilsBroadcastRewards") ~= true then
 		return
 	end
 

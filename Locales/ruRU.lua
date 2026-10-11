@@ -17,7 +17,6 @@ L["minimap_tooltip_locked"] = " |cffff0000(заблокировано)|r"
 L["close_button_tooltip"] = "Закрыть окно"
 L["settings_button_tooltip"] = "Настройки"
 L["settings_button_description"] = "Давайте немного изменим настройки"
-L["characters_button_tooltip"] = "Персонажи"
 L["characters_button_description"] = "Вкл./откл. Ваших персонажей."
 L["characters_button_remove_hint"] = "<Ctrl+ЛКМ - удалить персонажа>"
 L["columns_button_tooltip"] = "Колонки"
@@ -27,11 +26,8 @@ L["sort_button_description"] = "Выберите параметры сортир
 
 -- Settings menu
 L["settings_show_minimap_button"] = "Показывать кнопку у миникарты"
-L["settings_show_minimap_tooltip"] = "Иногда вокруг миникарты становится тесно."
 L["settings_lock_minimap_button"] = "Заблокировать кнопку у миникарты"
-L["settings_lock_minimap_tooltip"] = "Больше не будете случайно перемещать кнопку!"
 L["settings_window_title"] = "Окно"
-L["settings_scaling"] = "Масштаб"
 L["settings_max_width"] = "Макс. ширина"
 L["settings_max_width_percent"] = "% от полного экрана"
 L["settings_max_rows"] = "Макс. кол-во строк"
@@ -70,7 +66,6 @@ L["progress_not_started"] = "<Не начато>"
 L["progress_drops"] = "Дроп"
 
 -- Reward tooltips
-L["reward_rewards"] = "Награды"
 L["reward_time_left"] = "Осталось времени: "
 L["reward_objective_multi_quests_title"] = "Завершите %d из следующих заданий:"
 

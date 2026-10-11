@@ -4,11 +4,13 @@ local L = namespace.L
 local Util = namespace.Util
 local CharacterStore = namespace.CharacterStore
 local Settings = namespace.Settings
-local Utils = namespace.Utils
 
-WeeklyRewardsCharactersButtonMixin = {}
+WeeklyRewardsCharactersButtonMixin = CreateFromMixins(namespace.TitleBarButtonMixin)
 
 function WeeklyRewardsCharactersButtonMixin:OnLoad()
+	self.tooltip = L["characters_button_title"]
+	self.tooltipText = L["characters_button_description"]
+
 	Settings:SetupPagedMenu(self, function(_, rootMenu)
 		local characterStore = CharacterStore.Get()
 		rootMenu:CreateTitle():AddInitializer(function(frame)
@@ -51,19 +53,4 @@ function WeeklyRewardsCharactersButtonMixin:RemoveCharacter(character)
 		CharacterStore.Get():RemoveCharacter(character.GUID)
 		namespace.GUIMain:Redraw()
 	end)
-end
-
-function WeeklyRewardsCharactersButtonMixin:OnEnter()
-	self.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
-	Utils:SetBackgroundColor(self, 1, 1, 1, 0.05)
-	namespace.GUIMain:SetTooltipOwner(GameTooltip, self)
-	GameTooltip:SetText(L["characters_button_title"], 1, 1, 1, 1, true)
-	GameTooltip:AddLine(L["characters_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-	GameTooltip:Show()
-end
-
-function WeeklyRewardsCharactersButtonMixin:OnLeave()
-	self.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-	Utils:SetBackgroundColor(self, 1, 1, 1, 0)
-	GameTooltip:Hide()
 end

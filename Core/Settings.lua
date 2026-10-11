@@ -242,10 +242,12 @@ function Settings:CreateOptionsTree(key, menu, text, options, tooltipText, respo
 		end
 	else
 		rootMenu = menu:CreateButton(text)
-		rootMenu:SetTooltip(function(tooltip)
-			GameTooltip_SetTitle(tooltip, text)
-			GameTooltip_AddNormalLine(tooltip, tooltipText)
-		end)
+		if tooltipText then
+			rootMenu:SetTooltip(function(tooltip)
+				GameTooltip_SetTitle(tooltip, text)
+				GameTooltip_AddNormalLine(tooltip, tooltipText)
+			end)
+		end
 
 		Comparator = Settings:GenerateComparator(key)
 		Setter = Settings:GenerateSetter(key)
@@ -254,10 +256,18 @@ function Settings:CreateOptionsTree(key, menu, text, options, tooltipText, respo
 	if options.range then
 		local values = {}
 		local start, stop, step = unpack(options.range)
+		local percentage = options.percentage
+
+		if math.abs(step) < 1 then
+			start, stop, step = start * 100, stop * 100, step * 100
+			percentage = true
+		end
 
 		for i = start, stop, step do
-			if options.percentage then
+			if percentage then
 				table.insert(values, { text = format("%d%%", i), value = i / 100 })
+			elseif options.e and (stop - start) / options.e < i - start and i % options.e * step ~= 0 then
+				-- nop()
 			else
 				table.insert(values, { text = format("%d", i), value = i })
 			end
@@ -285,6 +295,38 @@ function Settings:CreateOptionsTree(key, menu, text, options, tooltipText, respo
 			radio:SetEnabled(Settings:GenerateTableGetter(key, "enabled"))
 		end
 	end
+end
+
+function Settings:CreateColorSwatch(key, menu, text)
+	local color = Settings:Get(key)
+	local colorInfo = {
+		r = color.r,
+		g = color.g,
+		b = color.b,
+		opacity = color.a,
+		swatchFunc = function()
+			local r, g, b = ColorPickerFrame:GetColorRGB()
+			if r then
+				local nextColor = { r = r, g = g, b = b, a = color.a }
+				local a = ColorPickerFrame:GetColorAlpha()
+				if a then
+					nextColor.a = a
+				end
+				Settings:Set(key, nextColor)
+			end
+		end,
+		opacityFunc = function() end,
+		cancelFunc = function(previous)
+			if previous.r then
+				local nextColor = { r = previous.r, g = previous.g, b = previous.b, a = previous.a and previous.a or color.a }
+				Settings:Set(key, nextColor)
+			end
+		end,
+		hasOpacity = 1,
+	}
+	menu:CreateColorSwatch(text, function()
+		ColorPickerFrame:SetupColorPickerAndShow(colorInfo)
+	end, colorInfo)
 end
 
 local function AdvanceMenuPage(pageOwner, pageDelta)

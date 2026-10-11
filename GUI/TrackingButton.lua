@@ -1,16 +1,18 @@
 local _, namespace = ...
 
 local L = namespace.L
+local Settings = namespace.Settings
 
 local Util = namespace.Util
 local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
 
-local Utils = namespace.Utils
-
-WeeklyRewardsTrackingButtonMixin = {}
+WeeklyRewardsTrackingButtonMixin = CreateFromMixins(namespace.TitleBarButtonMixin)
 
 function WeeklyRewardsTrackingButtonMixin:OnLoad()
+	self.tooltip = L["columns_button_tooltip"]
+	self.tooltipText = L["columns_button_description"]
+
 	self:SetupMenu(function(_, rootMenu)
 		self:AddCharacterInfoFilterToMenu(rootMenu)
 
@@ -33,23 +35,6 @@ function WeeklyRewardsTrackingButtonMixin:OnLoad()
 		rootMenu:CreateTitle(GARRISON_FOLLOWER_INACTIVE)
 		self:AddRewardsFilterToMenu(rootMenu, inactiveGroups, true, GRAY_FONT_COLOR)
 	end)
-end
-
-function WeeklyRewardsTrackingButtonMixin:OnEnter()
-	self.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
-	Utils:SetBackgroundColor(self, 1, 1, 1, 0.05)
-
-	namespace.GUIMain:SetTooltipOwner(GameTooltip, self)
-	GameTooltip:SetText(L["columns_button_tooltip"], 1, 1, 1, 1, true)
-	GameTooltip:AddLine(L["columns_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-	GameTooltip:Show()
-end
-
-function WeeklyRewardsTrackingButtonMixin:OnLeave()
-	self.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-	Utils:SetBackgroundColor(self, 1, 1, 1, 0)
-
-	GameTooltip:Hide()
 end
 
 function WeeklyRewardsTrackingButtonMixin:GenerateRewardTooltip(candidate)
@@ -90,7 +75,7 @@ function WeeklyRewardsTrackingButtonMixin:AddCharacterInfoFilterToMenu(rootMenu)
 		return
 	end
 
-	local hidden = WeeklyRewards.db.global.main.hiddenColumns
+	local hidden = Settings:Get("hiddenColumns")
 
 	local button = rootMenu:CreateButton(CHARACTER_BUTTON)
 	for _, column in ipairs(main.columns) do
