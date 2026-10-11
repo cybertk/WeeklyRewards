@@ -91,7 +91,7 @@ function RewardSummary:GetReportChannel()
 end
 
 function RewardSummary:GetPrinter(channel)
-	if channel == nil then
+	if channel == nil or channel == print then
 		return print
 	end
 

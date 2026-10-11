@@ -53,7 +53,7 @@ local defaultSettings = {
 	windowPlayerRowColor = { r = 0.2, g = 1, b = 0.2, a = 0.07 },
 	windowTutorials = true,
 	utilsUntrackQuests = false,
-	utilsBroadcastRewards = false,
+	utilsAnnounceRewards = { enabled = true, option = "SELF" },
 	utilsAutoEnter = false,
 }
 
@@ -348,13 +348,14 @@ end
 function WeeklyRewards:UpdateProgress(quest)
 	local completion = self.character:UpdateProgress(quest)
 
-	if Settings:Get("utilsBroadcastRewards") ~= true then
+	local option = Settings:GetOption("utilsAnnounceRewards")
+	if not option then
 		return
 	end
 
 	local lastClaimed
 	for rewardID, _ in pairs(completion) do
-		self:Broadcast(rewardID)
+		self:Broadcast(rewardID, option == "SELF" and print or nil)
 		lastClaimed = rewardID
 	end
 

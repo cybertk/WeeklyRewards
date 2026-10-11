@@ -27,7 +27,13 @@ function WeeklyRewardsAutomationButtonMixin:OnLoad()
 		rootMenu:CreateTitle(L["automation_button_tooltip"])
 
 		Settings:CreateCheckboxMenu("utilsUntrackQuests", rootMenu, L["settings_auto_untrack_quests"], nil, L["settings_auto_untrack_quests_tooltip"])
-		Settings:CreateCheckboxMenu("utilsBroadcastRewards", rootMenu, L["settings_broadcast_rewards"], nil, L["settings_broadcast_rewards_tooltip"])
+		Settings:CreateOptionsTree("utilsAnnounceRewards", rootMenu, L["settings_broadcast_rewards"], {
+			{ text = "self", value = "SELF" },
+			{
+				text = "LARGEST",
+				value = "LARGEST",
+			},
+		}, L["settings_broadcast_rewards_tooltip"], MenuResponse.Refresh)
 
 		for _, entry in ipairs(newEntries) do
 			local checkbox =
