@@ -560,45 +560,46 @@ end
 function Main:AddProgressToGameTooltip(progress)
 	local questColor = progress:ObjectivesCount() == 1 and YELLOW_FONT_COLOR or WHITE_FONT_COLOR
 
-	local status = ""
-	if progress:IsExpired() then
-		status = "|cnGRAY_FONT_COLOR:(" .. RAID_INSTANCE_EXPIRES_EXPIRED .. ")|r"
-	end
+	local tooltip = GameTooltip
+	local expired = progress:IsExpired()
+	local status = expired and ("|cnGRAY_FONT_COLOR:(%s)|r"):format(RAID_INSTANCE_EXPIRES_EXPIRED) or ""
+	local redx, checkmark = CreateAtlasMarkup("common-icon-redx", 12, 12), CreateAtlasMarkup("common-icon-checkmark", 12, 12)
 
 	if progress.numObjectives > 1 then
 		-- Show quests as high-level objectives
 		GameTooltip:AddDoubleLine(YELLOW_FONT_COLOR:WrapTextInColorCode(progress.name), status)
 		progress:ForEachObjective(function(objective, completed)
-			GameTooltip:AddDoubleLine(
-				WHITE_FONT_COLOR:WrapTextInColorCode("- " .. progress:GetCachedObjectiveName(objective)),
-				CreateAtlasMarkup(completed and "common-icon-checkmark" or "common-icon-redx", 12, 12)
-			)
+			local color = (expired or completed) and GRAY_FONT_COLOR or WHITE_FONT_COLOR
+			local text = progress:GetCachedObjectiveName(objective)
+
+			GameTooltip_AddColoredDoubleLine(tooltip, text, completed and checkmark or redx, color, WHITE_FONT_COLOR, false)
 		end)
 	else
 		local questName = QuestUtils_GetQuestName(progress:Quest()) or ""
 		GameTooltip:AddDoubleLine(YELLOW_FONT_COLOR:WrapTextInColorCode(#questName > 0 and questName or progress.name), status)
 		-- Show objectives of single quest
 		progress:ForEachRecord(function(record, completed)
-			GameTooltip:AddDoubleLine(
-				WHITE_FONT_COLOR:WrapTextInColorCode(Util:ResolveTags(record.text or "", true)),
-				record.s or CreateAtlasMarkup(completed and "common-icon-checkmark" or "common-icon-redx", 12, 12)
-			)
+			local color = (expired or completed) and GRAY_FONT_COLOR or WHITE_FONT_COLOR
+			local text = Util:ResolveTags(record.text or UNKNOWN, true)
+
+			GameTooltip_AddColoredDoubleLine(tooltip, text, record.s or completed and checkmark or redx, color, WHITE_FONT_COLOR, false)
 		end)
 	end
 
-	GameTooltip:AddLine(" ")
-
 	if progress.claimedAt then
 		local duration = progress.startedAt and format(" (%s used)", Util.FormatTimeDuration(progress.claimedAt - progress.startedAt, true)) or ""
+		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine(L["progress_rewards_received_at"], WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.claimedAt) .. duration))
 	elseif progress.startedAt then
+		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine(L["progress_started_at"], WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.startedAt)))
 
 		if progress.rewards then
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(L["progress_rewards_received"])
 		end
-	else
+	elseif progress:IsNotStarted() then
+		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(L["progress_not_started"])
 	end
 
