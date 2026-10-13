@@ -69,14 +69,6 @@ function WeeklyRewards:MigrateDB()
 			reward.description = candidate.description
 		end
 
-		if reward.id == "mn-trailing" and reward.rollover then
-			table.remove(self.db.global.activeRewards, i)
-		elseif reward.id:sub(1, 5) == "delve" then
-			reward.objectives = candidate.entries
-		elseif reward.id == "mn-prey-anguish" then
-			reward.resetTime = GetServerTime() + C_DateAndTime.GetSecondsUntilDailyReset()
-		end
-
 		rewardsMap[reward.id] = reward
 	end
 
@@ -84,7 +76,26 @@ function WeeklyRewards:MigrateDB()
 		for n, p in pairs(c.progress) do
 			local reward = rewardsMap[n]
 
-			if n == "mn-pquests" or n == "mn-pdrops" or n == "vault" or not p.state then
+			if n == "vault" then
+				if p.records then
+					local v = {}
+					local i = #p.records == 10 and 1 or 0
+
+					for _, shift in ipairs({ 0, 3, -3 }) do
+						for _ = 1, 3 do
+							i = i + 1
+							local r = p.records[i + shift]
+							table.insert(v, r.s and tonumber(r.s:sub(#r.s - 4, #r.s - 2)) or -r.fulfilled)
+						end
+					end
+
+					table.insert(v, p.position > 0 and p.position or #p.records == 10 and 0 or -1)
+					p.v = v
+					p.state = p.state == 3 and 3 or 2
+					p.records = nil
+					p.startedAt = nil
+				end
+			elseif n == "mn-pquests" or n == "mn-pdrops" or not p.state then
 				nop()
 			elseif p.state == 1 or (p.state > 1 and p.numObjectives > 1 and p.position == 0) or (p.state == 3 and not p.startedAt) then
 				c.progress[n] = {}

@@ -325,7 +325,7 @@ function RewardProgress:Update(completedQuest)
 			table.insert(self.fulfilledObjectives, objective)
 			self.pendingObjectives = {}
 			newState = PROGRESS_STATE.CLAIMED
-		elseif self.position > 0 or (objective.quest and WAPI_IsOnQuest(objective.quest)) then
+		elseif self.position > 0 or self.v or (objective.quest and WAPI_IsOnQuest(objective.quest)) then
 			newState = PROGRESS_STATE.IN_PROGRESS
 		end
 	end
@@ -416,6 +416,26 @@ end
 function RewardProgress:SetExpired()
 	self.state = PROGRESS_STATE.EXPIRED
 	Util:Debug(self.name .. " is expired")
+end
+
+function RewardProgress:GetStatusLabel()
+	if self.total == 0 then
+		return "-"
+	elseif self.claimedAt and self:IsExpired() then
+		return CreateAtlasMarkup("checkmark-minimal-disabled", 15, 15)
+	else
+		local text = self.total < 100 and format("%d / %d", self.position, self.total) or format("%.0f%%", self.position / self.total * 100)
+
+		if self:IsExpired() then
+			text = GRAY_FONT_COLOR:WrapTextInColorCode(text)
+		elseif self.state == PROGRESS_STATE.CLAIMED then
+			text = CreateAtlasMarkup("common-icon-checkmark", 15, 15)
+		elseif self.state == PROGRESS_STATE.IN_PROGRESS then
+			text = YELLOW_FONT_COLOR:WrapTextInColorCode(text)
+		end
+
+		return text
+	end
 end
 
 function RewardProgress:ForEachRewardQuest(callback)

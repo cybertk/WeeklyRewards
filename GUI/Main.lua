@@ -478,21 +478,8 @@ function Main:AddRewardColumns()
 					text = " "
 				elseif progress == nil then
 					text = reward:PlayerMeetsRequiredLevel(character.level) and CreateAtlasMarkup("PlayerRaidBlip", 13, 13) or "-"
-				elseif progress.total == 0 then
-					text = "-"
-				elseif progress.claimedAt and progress:IsExpired() then
-					text = CreateAtlasMarkup("checkmark-minimal-disabled", 15, 15)
 				else
-					text = progress.total < 100 and format("%d / %d", progress.position, progress.total)
-						or format("%.0f%%", progress.position / progress.total * 100)
-
-					if progress:IsExpired() then
-						text = GRAY_FONT_COLOR:WrapTextInColorCode(text)
-					elseif progress.hasClaimed and progress:hasClaimed() then
-						text = CreateAtlasMarkup("common-icon-checkmark", 15, 15)
-					elseif progress.hasStarted and progress:hasStarted() then
-						text = YELLOW_FONT_COLOR:WrapTextInColorCode(text)
-					end
+					text = progress:GetStatusLabel()
 				end
 
 				return {
