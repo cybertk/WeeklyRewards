@@ -383,8 +383,23 @@ function RewardProgress:AddReward(currencyID, itemLink, quantity, asDrops, OnIte
 				if item:HasLoot() then
 					reward.guid = item:GetItemGUID()
 					Util:Debug("Chest looted:", item:GetItemLink(), reward.guid)
+					print("Chest looted:", item:GetItemLink(), reward.guid, item:GetItemLocation():GetBagAndSlot())
 
 					OnItemGUIDUpdated(reward.guid)
+
+					C_Container.UseContainerItem(item:GetItemLocation():GetBagAndSlot())
+
+					print("Item is locked:", item:GetItemLink(), C_Item.IsLocked(item:GetItemLocation()))
+					C_Timer.After(1, function()
+						local l = item:GetItemLocation()
+						print("Item is locked after 1s:", item:GetItemLink(), l:IsValid(), l:IsValid() and C_Item.IsLocked(l))
+
+						if l:IsValid() and C_Item.IsLocked(l) then
+							-- /dump C_Item.IsLocked(ItemLocationMixin:CreateFromBagAndSlot{sloteIndex=1, bagID=2})
+							C_Item.UnlockItem(item:GetItemLocation())
+							C_Container.UseContainerItem(item:GetItemLocation():GetBagAndSlot())
+						end
+					end)
 				end
 			end)
 		end
