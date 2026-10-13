@@ -66,12 +66,37 @@ function NewItemsWatcher:CatchNewItems()
 			local itemLocation = ItemLocation:CreateFromBagAndSlot(self.containerIndex, slotIndex)
 			local guid = C_Item.GetItemGUID(itemLocation)
 
+			print("found new item:", self.containerIndex, slotIndex, guid, self.seen[guid])
+
 			if guid and not self.seen[guid] then
 				self.seen[guid] = true
 				self.hasNewItems = false
 				self:Notify(itemLocation)
 			end
 		end
+	end
+
+	if self.hasNewItems then
+		print("|cffff0000queue retry")
+		C_Timer.After(0.4, function()
+			print("|cffff0000retrying")
+			for containerIndex = BACKPACK_CONTAINER, NUM_TOTAL_EQUIPPED_BAG_SLOTS do
+				for slotIndex = 1, C_Container.GetContainerNumSlots(containerIndex) do
+					if C_NewItems.IsNewItem(containerIndex, slotIndex) then
+						local itemLocation = ItemLocation:CreateFromBagAndSlot(containerIndex, slotIndex)
+						local guid = C_Item.GetItemGUID(itemLocation)
+
+						print("found new item:", containerIndex, slotIndex, guid, self.seen[guid])
+
+						if guid and not self.seen[guid] then
+							self.seen[guid] = true
+							self.hasNewItems = false
+							self:Notify(itemLocation)
+						end
+					end
+				end
+			end
+		end)
 	end
 end
 
