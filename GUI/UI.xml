@@ -1,10 +1,21 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <Script file="Dialogs.lua" />
     <Script file="Tips.lua" />
+    <Script file="VersionButton.lua" />
     <Script file="SettingsButton.lua" />
     <Script file="CharactersButton.lua" />
     <Script file="TrackingButton.lua" />
     <Script file="Main.lua" />
+
+    <Button name="WeeklyRewardsVersionButton" mixin="WeeklyRewardsVersionButtonMixin" hidden="true">
+        <Size y="10" />
+        <HighlightTexture atlas="questlog-quest-glow-yellow" alphaMode="ADD" />
+        <NormalFont style="GameFontDisable" />
+        <HighlightFont style="GameFontHighlight" />
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Button>
 
     <DropdownButton name="WeeklyRewardsSettingsButtonTemplate" mixin="WeeklyRewardsSettingsButtonMixin" virtual="true">
         <Size x="30" y="30" />

@@ -40,6 +40,12 @@ function Main:SetTooltipOwner(tooltip, owner)
 	end
 end
 
+function Main:AddVersionButton()
+	WeeklyRewardsVersionButton:SetParent(self.window.titlebar)
+	WeeklyRewardsVersionButton:SetPoint("LEFT", self.window.titlebar.title, "RIGHT", 5, -2)
+	WeeklyRewardsVersionButton:Show()
+end
+
 function Main:AddCloseButton()
 	self.window.titlebar.closeButton = CreateFrame("Button", "$parentCloseButton", self.window.titlebar)
 	self.window.titlebar.closeButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
@@ -180,10 +186,11 @@ function Main:CreateWindow()
 
 	self.window.titlebar.title = self.window.titlebar:CreateFontString("$parentText", "OVERLAY")
 	self.window.titlebar.title:SetFontObject("SystemFont_Med2")
-	self.window.titlebar.title:SetPoint("LEFT", self.window.titlebar, 28, 0)
+	self.window.titlebar.title:SetPoint("LEFT", self.window.titlebar.icon, "RIGHT", 4, 0)
 	self.window.titlebar.title:SetJustifyH("LEFT")
 	self.window.titlebar.title:SetJustifyV("MIDDLE")
-	self.window.titlebar.title:SetText(addonName)
+	self.window.titlebar.title:SetText(C_AddOns.GetAddOnMetadata(addonName, "Title"))
+	self:AddVersionButton()
 
 	self.window.titlebar.season = self.window.titlebar:CreateFontString("$parentText", "OVERLAY")
 	self.window.titlebar.season:SetFontObject("SystemFont_Med2")
