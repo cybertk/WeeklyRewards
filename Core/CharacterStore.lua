@@ -167,8 +167,10 @@ function CharacterStore:SetFlatField(field)
 	Cache.flatField = field
 end
 
+local ReturnCharacters = {}
 function CharacterStore:ForEach(callback, filter)
-	local characters = {}
+	local characters = ReturnCharacters
+	wipe(characters)
 
 	filter = filter or function(x)
 		return x.enabled
