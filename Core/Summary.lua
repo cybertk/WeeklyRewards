@@ -175,8 +175,10 @@ function RewardSummary.AddRewardsToTooltip(rewards, tooltip)
 
 	tooltip = tooltip or GameTooltip
 
-	for _, o in ipairs(aggregated.gears) do
-		tooltip:AddLine(Util:ColoredText("{item:%d:1:%d}", o.item, o.ilvl or 0))
+	if #aggregated.gears < 5 then
+		for i, o in ipairs(aggregated.gears) do
+			tooltip:AddLine(Util:ColoredText("{item:%d:1:%d}", o.item, o.ilvl or 0))
+		end
 	end
 
 	for _, o in pairs(aggregated.items) do
