@@ -6,6 +6,7 @@
     <Script file="CharactersButton.lua" />
     <Script file="TrackingButton.lua" />
     <Script file="AutomationButton.lua" />
+    <Script file="TableCells.lua" />
     <Script file="TableRows.lua" />
     <Script file="Main.lua" />
 

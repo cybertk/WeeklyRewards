@@ -197,6 +197,14 @@ function TableHeaderRowMixin:OnLoad()
 	for _, column in ipairs(self.columns) do
 		self:AddReorderSource(column, column.data.selectedIndex)
 
+		Mixin(column, column.data.selectedIndex and WeeklyRewardsRewardHeaderCellMixin or WeeklyRewardsCharacterHeaderCellMixin)
+		_G.xx = column
+		if not column.Arrow then
+			column:OnLoad()
+		end
+
+		column:Layout()
+
 		if column.data.selectedIndex == 1 and (ActiveRewards:IsNewCandidateSelected() or Flags:IsSet("dragTip")) then
 			C_Timer.After(0.2, function()
 				Tips:ShowDragToOrderHelpTip(column)
