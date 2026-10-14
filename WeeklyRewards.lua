@@ -52,6 +52,7 @@ local defaultSettings = {
 	sortColumn = "lastUpdate",
 	sortAscending = true,
 	windowPosition = { enabled = false },
+	windowHeaderStyle = "COMPLETE",
 	windowScale = 1,
 	windowMaxRelativeWidth = 0.8,
 	windowMaxRows = 20,
@@ -59,6 +60,7 @@ local defaultSettings = {
 	windowBorder = true,
 	windowRowNumbers = true,
 	windowPlayerRowColor = { r = 0.2, g = 1, b = 0.2, a = 0.07 },
+	windowColumnSpacing = 0,
 	windowTutorials = true,
 	utilsUntrackQuests = false,
 	utilsAnnounceRewards = { enabled = true, option = "SELF" },
@@ -341,6 +343,11 @@ function WeeklyRewards:ExecuteChatCommands(command)
 		self.db.global.debug = not self.db.global.debug
 		Util.debug = self.db.global.debug
 		print("Debug Mode:", self.db.global.debug)
+		return
+	end
+
+	if command == "new" then
+		namespace.GUITable:Toggle()
 		return
 	end
 

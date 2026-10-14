@@ -83,9 +83,11 @@ function GreatVaultProgress:ForEachRecord(callback)
 	end
 end
 
-function GreatVaultProgress:GetStatusLabel()
+function GreatVaultProgress:GetStatusLabel(minimal)
 	if not self.v then
 		return " "
+	elseif minimal then
+		return ("|cn%s_FONT_COLOR:%d|r"):format(self:GetNumUnclaimedRewards() and "GREEN" or "WHITE", self:IsExpired() and 0 or self.position)
 	elseif self:IsExpired() and (self.position > 0 or self.v[10] >= 0) then
 		return ("%s |cnGREEN_FONT_COLOR:(%s)|r"):format(CRAFTING_ORDER_NOT_CLAIMED, self.position > 0 and self.position or "?")
 	end

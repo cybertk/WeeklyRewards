@@ -4,6 +4,7 @@ namespace.DB.rewardCandidiates["bonus"] = {
 	{
 		id = "bonus", -- Weekly Bonus Event
 		key = "BonusEvent",
+		atlas = "bonus-objective-star",
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {

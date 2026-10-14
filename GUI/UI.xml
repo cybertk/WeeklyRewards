@@ -6,8 +6,10 @@
     <Script file="CharactersButton.lua" />
     <Script file="TrackingButton.lua" />
     <Script file="AutomationButton.lua" />
+    <Script file="TableCells.lua" />
     <Script file="TableRows.lua" />
     <Script file="Main.lua" />
+    <Include file="TableBuilder.xml" />
 
     <Button name="WeeklyRewardsVersionButton" mixin="WeeklyRewardsVersionButtonMixin" hidden="true">
         <Size y="10" />
@@ -71,4 +73,23 @@
             <KeyValue key="flag" value="utils" type="string" />
         </KeyValues>
     </DropdownButton>
+
+    <Button name="WeeklyRewardsTableHeaderCellTemplate" mixin="WeeklyRewardsTableHeaderCellMixin" virtual="true">
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+
+    <Button name="WeeklyRewardsTableHeaderCellCharacterTemplate" inherits="WeeklyRewardsTableHeaderCellTemplate" mixin="WeeklyRewardsTableHeaderCellCharacterMixin" virtual="true">
+        <KeyValues>
+            <KeyValue key="disableIcon" value="true" type="boolean" />
+        </KeyValues>
+    </Button>
+
+    <Button name="WeeklyRewardsTableHeaderCellRewardTemplate" inherits="WeeklyRewardsTableHeaderCellTemplate" mixin="WeeklyRewardsTableHeaderCellRewardMixin" virtual="true">
+
+    </Button>
 </Ui>

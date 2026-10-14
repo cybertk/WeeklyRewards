@@ -450,13 +450,14 @@ function RewardProgress:SetExpired()
 	self.state = PROGRESS_STATE.EXPIRED
 end
 
-function RewardProgress:GetStatusLabel()
+function RewardProgress:GetStatusLabel(minimal)
 	if self.total == 0 then
 		return "-"
 	elseif self.claimedAt and self:IsExpired() then
 		return CreateAtlasMarkup("checkmark-minimal-disabled", 15, 15)
 	else
-		local text = self.total < 100 and format("%d / %d", self.position, self.total) or format("%.0f%%", self.position / self.total * 100)
+		local text = self.total < 100 and format(minimal and "%d/%d" or "%d / %d", self.position, self.total)
+			or format("%.0f%%", self.position / self.total * 100)
 
 		if self:IsExpired() then
 			text = GRAY_FONT_COLOR:WrapTextInColorCode(text)

@@ -218,6 +218,9 @@ function Main:CreateWindow()
 					break
 				end
 			end
+		elseif key == "windowColumnSpacing" then
+			self.window.table.config.cells.padding = value
+			self:Redraw()
 		elseif key == "windowTutorials" then
 			Tips:SetEnabled(value)
 			Flags:Set("dragTip")
@@ -235,6 +238,13 @@ function Main:CreateWindow()
 	end, self)
 
 	table.insert(UISpecialFrames, frameName)
+
+	self.tableBuilder = CreateTableBuilder()
+	local headerContainer = CreateFrame("BUTTON", nil, self.window)
+	Mixin(headerContainer, WeeklyRewardsTableHeaderRowMixin)
+	self.tableBuilder:SetHeaderContainer(headerContainer)
+	self.tableBuilder:SetTableMargins(0, 0)
+	self.tableBuilder:SetColumnHeaderOverlap(0)
 end
 
 function Main:ResetCell(character, reward)
@@ -250,6 +260,7 @@ function Main:ResetCell(character, reward)
 	end)
 end
 
+local CharacterColumns
 function Main:AddCharacterColumns()
 	local columns = {
 		{
@@ -420,112 +431,68 @@ function Main:AddCharacterColumns()
 		},
 	}
 
-	for _, column in ipairs(columns) do
-		column.onEnter = function(cellFrame)
-			GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-			GameTooltip:AddLine(column.tooltip or GREEN_FONT_COLOR:WrapTextInColorCode(L["table_sort_hint"]))
-			GameTooltip:Show()
-		end
-		column.onLeave = function()
-			GameTooltip:Hide()
-		end
-		table.insert(self.columns, column)
-	end
-
-	if not Settings:Get("windowRowNumbers") then
-		table.remove(self.columns, 1)
-	end
+	CharacterColumns = columns
+	self.columns = columns
 end
 
-function Main:AddRewardColumns()
-	for index, reward in ActiveRewards.Get():EnumerateSelected() do
-		-- cache
-		reward:ForEachItem(type)
+local Cell = function(character, reward)
+	local progress, isScanned = character:GetRewardProgress(reward.id)
+	local text
 
-		local column = {
-			name = reward.name,
-			reward = reward,
-			selectedIndex = index,
-			onEnter = function(cellFrame)
-				local function updateTooltip()
-					GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-					self:AddRewardToGameTooltip(reward)
-					GameTooltip:Show()
-				end
-				cellFrame:RegisterEvent("MODIFIER_STATE_CHANGED")
-				cellFrame:SetScript("OnEvent", updateTooltip)
-				updateTooltip()
-			end,
-			onLeave = function(cellFrame)
-				cellFrame:UnregisterEvent("MODIFIER_STATE_CHANGED")
-				cellFrame:SetScript("OnEvent", nil)
-				GameTooltip:Hide()
-			end,
-			toggleHidden = true,
-			align = "CENTER",
-			cell = function(character)
-				local progress, isScanned = character:GetRewardProgress(reward.id)
-				local text
-
-				if not isScanned and reward:PlayerMeetsRequiredLevel(character.level) then
-					text = " "
-				elseif progress == nil then
-					text = reward:PlayerMeetsRequiredLevel(character.level) and CreateAtlasMarkup("PlayerRaidBlip", 13, 13) or "-"
-				else
-					text = progress:GetStatusLabel()
-				end
-
-				return {
-					text = text,
-					onEnter = function(cellFrame)
-						GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
-						if progress == nil or progress:ObjectivesCount() == 0 then
-							if not reward:PlayerMeetsRequiredLevel(character.level) then
-								GameTooltip:AddLine(ITEM_MIN_LEVEL:format(reward.maximumLevel or reward.minimumLevel))
-							elseif isScanned then
-								GameTooltip_AddNormalLine(GameTooltip, character:GetNameInClassColor(true))
-								GameTooltip:AddLine(" ")
-								self:AddRewardObjectivesToGameTooltip(GameTooltip, reward)
-
-								GameTooltip:AddLine(" ")
-								GameTooltip_AddNormalLine(GameTooltip, L["progress_not_started"])
-							else
-								GameTooltip_AddNormalLine(GameTooltip, L["table_alts_collect_hint"])
-							end
-						elseif progress.total == 0 then
-							GameTooltip_AddNormalLine(GameTooltip, ERR_QUEST_NEED_PREREQS)
-						else
-							self:AddProgressToGameTooltip(progress)
-							cellFrame.hasInstructions = nil
-						end
-
-						GameTooltip:Show()
-					end,
-					onLeave = function()
-						GameTooltip:Hide()
-					end,
-					onClick = function(rowFrame, cellFrame)
-						if not CharacterStore.IsCurrentPlayer(character) then
-							return
-						end
-
-						if not cellFrame.hasInstructions then
-							GameTooltip:AddLine(" ")
-							GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(L["table_reset_progress_hint"]))
-							GameTooltip:Show()
-							cellFrame.hasInstructions = true
-						end
-
-						if IsControlKeyDown() then
-							self:ResetCell(character, reward)
-						end
-					end,
-				}
-			end,
-		}
-
-		table.insert(self.columns, column)
+	if not isScanned and reward:PlayerMeetsRequiredLevel(character.level) then
+		text = " "
+	elseif progress == nil then
+		text = reward:PlayerMeetsRequiredLevel(character.level) and CreateAtlasMarkup("PlayerRaidBlip", 13, 13) or "-"
+	else
+		text = progress:GetStatusLabel(Settings:Get("windowHeaderStyle") == "MINIMAL")
 	end
+
+	return {
+		text = text,
+		onEnter = function(cellFrame)
+			GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
+			if progress == nil or progress:ObjectivesCount() == 0 then
+				if not reward:PlayerMeetsRequiredLevel(character.level) then
+					GameTooltip:AddLine(ITEM_MIN_LEVEL:format(reward.maximumLevel or reward.minimumLevel))
+				elseif isScanned then
+					GameTooltip_AddNormalLine(GameTooltip, character:GetNameInClassColor(true))
+					GameTooltip:AddLine(" ")
+					Main:AddRewardObjectivesToGameTooltip(GameTooltip, reward)
+
+					GameTooltip:AddLine(" ")
+					GameTooltip_AddNormalLine(GameTooltip, L["progress_not_started"])
+				else
+					GameTooltip_AddNormalLine(GameTooltip, L["table_alts_collect_hint"])
+				end
+			elseif progress.total == 0 then
+				GameTooltip_AddNormalLine(GameTooltip, ERR_QUEST_NEED_PREREQS)
+			else
+				Main:AddProgressToGameTooltip(progress)
+				cellFrame.hasInstructions = nil
+			end
+
+			GameTooltip:Show()
+		end,
+		onLeave = function()
+			GameTooltip:Hide()
+		end,
+		onClick = function(rowFrame, cellFrame)
+			if not CharacterStore.IsCurrentPlayer(character) then
+				return
+			end
+
+			if not cellFrame.hasInstructions then
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddLine(GREEN_FONT_COLOR:WrapTextInColorCode(L["table_reset_progress_hint"]))
+				GameTooltip:Show()
+				cellFrame.hasInstructions = true
+			end
+
+			if IsControlKeyDown() then
+				Main:ResetCell(character, reward)
+			end
+		end,
+	}
 end
 
 function Main:AddRewardObjectivesToGameTooltip(tooltip, reward)
@@ -593,85 +560,6 @@ function Main:AddProgressToGameTooltip(progress)
 	end
 end
 
-function Main:AddRewardToGameTooltip(reward)
-	local tooltip = GameTooltip
-
-	GameTooltip:AddDoubleLine(reward.name, "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. (IsControlKeyDown() and HIDE or STABLE_FILTER_BUTTON_LABEL) .. ")|r")
-	GameTooltip_AddColoredLine(tooltip, reward:GetGroupName(), GREEN_FONT_COLOR)
-	GameTooltip_AddNormalLine(tooltip, reward:GetDescription())
-
-	GameTooltip:AddLine(" ")
-
-	if reward.resetTime then
-		GameTooltip:AddLine(BONUS_OBJECTIVE_TIME_LEFT:format(WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime()))))
-	end
-
-	GameTooltip:AddLine(" ")
-	RewardSummary:Create(reward.id):AddToTooltip(GameTooltip)
-end
-
-function Main:UpdateSortArrow()
-	local sortOrder, ascending = CharacterStore.Get():GetSortOrder()
-	local hiddenColumns = Settings:Get("hiddenColumns")
-
-	local i = 0
-	Main:ForEachColumn(function(column)
-		i = i + 1
-
-		if not column.key and not column.reward then
-			return
-		end
-
-		local cellFrame = self.window.table.rows[1].columns[i]
-		local characterField = column.key or column.reward.id
-
-		cellFrame.data.onClick = function()
-			if IsControlKeyDown() then
-				if column.reward then
-					ActiveRewards.Get():ToggleExclusion(column.reward:GetCandidateID())
-				else
-					hiddenColumns[column.name] = true
-				end
-			else
-				CharacterStore.Get():SetSortOrder(characterField)
-				local field, ascending = CharacterStore.Get():GetSortOrder()
-				Settings:Set("sortColumn", field)
-				Settings:Set("sortAscending", ascending)
-			end
-
-			self:Redraw()
-		end
-
-		if cellFrame.Arrow == nil then
-			local t = cellFrame:CreateTexture()
-
-			t:SetAtlas("auctionhouse-ui-sortarrow", true)
-
-			cellFrame.Arrow = t
-		end
-
-		if cellFrame.Arrow.text ~= cellFrame.text:GetText() then
-			local offset = cellFrame.text:GetStringWidth() - cellFrame.text:GetWidth()
-			if cellFrame.text:GetJustifyH() == "CENTER" then
-				offset = offset / 2
-			end
-
-			cellFrame.Arrow:SetPoint("LEFT", cellFrame.text, "RIGHT", offset, 1)
-			cellFrame.Arrow.text = cellFrame.text:GetText()
-		end
-
-		cellFrame.Arrow:SetShown(sortOrder == characterField)
-
-		if sortOrder == characterField then
-			if ascending then
-				cellFrame.Arrow:SetTexCoord(0, 1, 0, 1)
-			else
-				cellFrame.Arrow:SetTexCoord(0, 1, 1, 0)
-			end
-		end
-	end)
-end
-
 function Main:LayoutHeader(force)
 	local header = self.window.table.rows[1]
 	if not header then
@@ -682,10 +570,10 @@ function Main:LayoutHeader(force)
 	local offset = anchor and -self.window.table.scrollFrame.scrollbarH:GetValue() - select(4, anchor:GetPointByName("TOPLEFT")) or 0
 
 	if offset ~= 0 or force then
-		for _, column in ipairs({ header:GetChildren() }) do
+		for _, column in ipairs(header.columns) do
 			AnchorUtil.AdjustPointByName(column, "TOPLEFT", offset, 0)
 			AnchorUtil.AdjustPointByName(column, "BOTTOMLEFT", offset, 0)
-			column:SetHighlightTexture("auctionhouse-ui-row-highlight", "ADD")
+			column:Layout()
 		end
 	end
 
@@ -694,15 +582,12 @@ end
 
 function Main:UpdateLayout()
 	for i, row in ipairs(self.window.table.rows) do
-		if i == 1 then
-			Mixin(row, WeeklyRewardsTableHeaderRowMixin)
-		elseif i > 1 then
+		if i > 1 then
 			Mixin(row, WeeklyRewardsTableDataRowMixin)
 			row.index = i
+			row.window = self.window
+			row:OnLoad()
 		end
-
-		row.window = self.window
-		row:OnLoad()
 
 		for _, cell in ipairs(row.columns) do
 			cell.text:SetWordWrap(false)
@@ -710,35 +595,91 @@ function Main:UpdateLayout()
 	end
 end
 
-function Main:MeasureTextWidth(text)
-	if not self.measureText then
-		self.measureText = self.window:CreateFontString("$parentMeasureText", "OVERLAY")
-		self.measureText:SetFontObject("GameFontHighlightSmall")
-		self.measureText:Hide()
+local function ResizeTable(t, len)
+	t = t or {}
+	for i = #t + 1, len do
+		table.insert(t, {})
 	end
-	self.measureText:SetText(text or "")
-	return self.measureText:GetStringWidth()
+
+	for i = #t, len + 1, -1 do
+		t[i] = nil
+	end
+
+	return t
 end
 
-function Main:ForEachColumn(callback, visibleOnly)
-	local activeRewards = ActiveRewards.Get()
+local Columns = {}
+function Main:RefreshAllData()
+	self.data = self.data or { columns = Columns, rows = { { columns = Columns } } }
+
+	if not CharacterColumns then
+		self:AddCharacterColumns()
+	end
+
 	local hiddenColumns = Settings:Get("hiddenColumns")
 
-	visibleOnly = visibleOnly or true
+	local headerRow = self.tableBuilder:GetHeaderContainer()
+	self.window.table.rows[1] = headerRow
+	self.tableBuilder:Reset()
 
-	for _, column in ipairs(self.columns) do
-		if not visibleOnly then
-			callback(column)
-			return
-		end
+	headerRow.columns = headerRow.columns or {}
+	wipe(headerRow.columns)
+	wipe(self.data.columns)
 
-		local reward = column.reward
-		if reward and not activeRewards:IsCandidateExcluded(reward:GetCandidateID()) then
-			callback(column)
-		elseif reward == nil and not hiddenColumns[column.name] then
-			callback(column)
+	-- Character Headers
+	for j = Settings:Get("windowRowNumbers") and 1 or 2, #CharacterColumns do
+		local info = CharacterColumns[j]
+
+		if not hiddenColumns[info.name] then
+			local header = {}
+			header.key = info.key
+			header.text = info.name
+			header.cell = info.cell
+			header.align = info.align
+
+			local column = self.tableBuilder:AddColumn()
+			column:ConstructHeader("Button", "WeeklyRewardsTableHeaderCellCharacterTemplate", header)
+
+			table.insert(headerRow.columns, column.headerFrame)
+			table.insert(self.data.columns, header)
 		end
 	end
+
+	-- Reward Headers
+	for index, reward in ActiveRewards.Get():EnumerateSelected() do
+		local header = {}
+		header.reward = reward
+		header.selectedIndex = index
+		header.text = reward.name
+		header.align = "CENTER"
+
+		local column = self.tableBuilder:AddColumn()
+		column:ConstructHeader("Button", "WeeklyRewardsTableHeaderCellRewardTemplate", header)
+
+		table.insert(headerRow.columns, column.headerFrame)
+		table.insert(self.data.columns, header)
+	end
+
+	-- Data Rows
+	local numRows = CharacterStore.Get():GetNumEnabledCharacters() + 1
+	ResizeTable(self.data.rows, numRows)
+
+	for i, character in ipairs(CharacterStore.Get():ForEach(nop)) do
+		local row = self.data.rows[i + 1]
+
+		row.columns = ResizeTable(row.columns, #self.tableBuilder.columns)
+		row.character = character
+
+		for j, header in ipairs(self.data.columns) do
+			local cell = row.columns[j]
+			cell.character = character
+
+			Mixin(cell, header.reward and Cell(character, header.reward) or header.cell(character, i))
+			headerRow.columns[j]:UpdateDesiredWidth(cell.text)
+		end
+	end
+
+	print("DATA", #self.data.rows, #self.data.columns)
 end
 
 function Main:Redraw()
@@ -755,87 +696,31 @@ function Main:Redraw()
 	local tableWidth = 0
 	local tableHeight = 0
 	local minWindowWidth = 300
-	---@type WK_TableData
-	local tableData = {
-		columns = {},
-		rows = {},
-	}
 
-	do -- Refresh
-		self.columns = self.columns or {}
-		wipe(self.columns)
-		self:AddCharacterColumns()
-		self:AddRewardColumns()
-	end
+	if true then
+		self:RefreshAllData()
 
-	do -- Table Header row
-		---@type WK_TableDataRow
-		local row = { columns = {} }
-		Main:ForEachColumn(function(dataColumn)
-			---@type WK_TableDataCell
-			local cell = {
-				text = NORMAL_FONT_COLOR:WrapTextInColorCode(dataColumn.name),
-				onEnter = dataColumn.onEnter,
-				onLeave = dataColumn.onLeave,
-				onClick = dataColumn.onClick,
-				selectedIndex = dataColumn.selectedIndex,
-			}
-			table.insert(row.columns, cell)
-		end)
-		table.insert(tableData.rows, row)
-		tableHeight = tableHeight + self.window.table.config.header.height
-	end
+		if namespace.GUITable and namespace.GUITable:IsShown() then
+			namespace.GUITable:Refresh(true)
+		end
 
-	do -- Table data
-		local index = 0
-		CharacterStore.Get():ForEach(function(character)
-			index = index + 1
-			local row = { columns = {}, character = character }
+		local style = Settings:Get("windowHeaderStyle")
+		self.window.table.config.cells.padding = style == "MINIMAL" and 2 or style == "COMPACT" and 3 or 4
 
-			Main:ForEachColumn(function(dataColumn)
-				table.insert(row.columns, dataColumn.cell(character, index))
-			end)
+		local spacing = self.window.table.config.cells.padding * 2
+		tableHeight = (#self.data.rows - 1) * self.window.table.config.rows.height + self.window.table.config.header.height
+		for _, header in ipairs(self.data.columns) do
+			header.width = header.width + spacing
+			tableWidth = tableWidth + header.width
+		end
 
-			row.onEnter = function(data, columnFrame)
-				local rowFrame = columnFrame:GetParent()
-				if rowFrame.Highlight then
-					rowFrame.Highlight:SetVertexColor(0.3, 0.3, 0.7, 0.2)
-				end
-			end
-
-			table.insert(tableData.rows, row)
-			tableHeight = tableHeight + self.window.table.config.rows.height
-		end, function(character) -- filter
-			return CharacterStore.IsCurrentPlayer(character) or character.enabled
-		end)
-	end
-
-	do -- Auto column widths from header and cell text
-		local padding = Constants.TABLE_CELL_PADDING * 2
-		local col = 0
-		Main:ForEachColumn(function(dataColumn)
-			col = col + 1
-			local headerWidth = self:MeasureTextWidth(dataColumn.name)
-			local cellWidth = 0
-			for rowIndex = 2, #tableData.rows do
-				local cell = tableData.rows[rowIndex].columns[col]
-				cellWidth = math.max(cellWidth, self:MeasureTextWidth(cell and cell.text))
-			end
-
-			---@type WK_TableDataColumn
-			local column = {
-				width = math.max(headerWidth, cellWidth) + padding,
-				align = dataColumn.align or "LEFT",
-			}
-			table.insert(tableData.columns, column)
-			tableWidth = tableWidth + column.width
-		end)
+		tableWidth = tableWidth + 5
+		print("tableWidth", tableWidth, "tableHeight", tableHeight, "minWindowWidth", minWindowWidth)
 	end
 
 	local desiredTableHeight = Settings:Get("windowMaxRows") * Constants.TABLE_ROW_HEIGHT + Constants.TABLE_HEADER_HEIGHT
 
 	self.window.border:SetShown(Settings:Get("windowBorder"))
-	self.window.table:SetData(tableData)
 
 	self.window:SetWidth(math.min(math.max(tableWidth, minWindowWidth), GetScreenWidth() * Settings:Get("windowMaxRelativeWidth") / windowScale))
 	self.window:SetHeight(math.min(GetScreenHeight() / windowScale, math.min(tableHeight, desiredTableHeight) + Constants.TITLEBAR_HEIGHT + 2))
@@ -844,7 +729,8 @@ function Main:Redraw()
 	self.window.titlebar.title:SetShown(self.window:GetWidth() > (240 / windowScale))
 	self.window.titlebar.season:SetShown(self.window:GetWidth() > (600 / windowScale))
 
-	self:UpdateSortArrow()
+	self.window.table.data = self.data
+	self.window.table:RenderTable()
 	self:LayoutHeader(true)
 	self:UpdateLayout()
 end

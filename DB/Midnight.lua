@@ -39,6 +39,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-hope",
 		key = "Hope",
+		atlas = "quest-wrapper-available",
 		group = RewardsGroup.LEVELING,
 		minimumLevel = 80,
 		maximumLevel = 89,
@@ -49,6 +50,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-veteran",
 		key = "Veteran",
+		atlas = "quest-wrapper-available",
 		description = "{item:279527:0:2}",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 90,
@@ -62,6 +64,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-unity",
 		key = "Unity",
+		atlas = "quest-wrapper-available",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 90,
 		timeLeft = GenerateClosure(GetSecondsUntilReset, time({ year = 2026, month = 8, day = 17 }), 2),
@@ -93,6 +96,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-worldboss",
 		key = "WorldBoss",
+		atlas = "worldquest-icon-boss",
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
@@ -105,6 +109,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-abundant",
 		key = "Abundance",
+		atlas = "UI-EventPoi-abundancebountiful",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -113,6 +118,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-stormarion",
 		key = "Stormarion",
+		atlas = "UI-EventPoi-stormarionassault",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -121,6 +127,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-soiree",
 		key = "Runestones",
+		atlas = "ui-eventpoi-saltherilssoiree",
 		description = "{quest:91966}",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 80,
@@ -136,6 +143,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-legends",
 		key = "Legends",
+		atlas = "UI-EventPoi-legendsoftheharanir",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -157,6 +165,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-war",
 		key = "WarSparks",
+		atlas = "UI-EventPoi-pvp",
 		group = RewardsGroup.PVP,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -170,6 +179,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-sr-battle",
 		key = "SR:Battle",
+		atlas = "UI-EventPoi-pvp",
 		group = RewardsGroup.PVP,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -178,6 +188,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-sa-eversong",
 		key = "SA:Eversong",
+		atlas = "worldquest-Capstone-questmarker-epic-Toast",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 80,
 		rollover = true,
@@ -189,6 +200,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-sa-zulaman",
 		key = "SA:Zul'Aman",
+		atlas = "worldquest-Capstone-questmarker-epic-Toast",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 80,
 		rollover = true,
@@ -200,6 +212,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-sa-harandar",
 		key = "SA:Harandar",
+		atlas = "worldquest-Capstone-questmarker-epic-Toast",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 80,
 		rollover = true,
@@ -211,6 +224,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-sa-voidstorm",
 		key = "SA:Voidstorm",
+		atlas = "worldquest-Capstone-questmarker-epic-Toast",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 80,
 		rollover = true,
@@ -221,7 +235,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 	},
 	{
 		id = "mn-prey-n", -- Weekly Prey Quests (Normal)
-		key = "|A:worldquest-Prey-Crystal:16:16|aNormal",
+		key = "Normal",
+		atlas = "UI-EventPoi-PreyCrystal",
 		group = RewardsGroup.PREY,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -229,7 +244,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 	},
 	{
 		id = "mn-prey-h", -- Weekly Prey Quests (Hard)
-		key = "|A:worldquest-Prey-Crystal:16:16|aHard",
+		key = "Hard",
+		atlas = "UI-EventPoi-PreyCrystal",
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -238,7 +254,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 
 	{
 		id = "mn-prey-m", -- Weekly Prey Quests (Nightmare)
-		key = "|A:worldquest-Prey-Crystal:16:16|aNightmare",
+		key = "Nightmare",
+		atlas = "UI-EventPoi-PreyCrystal",
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -248,7 +265,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 	},
 	{
 		id = "mn-prey-beacon",
-		key = "|A:worldquest-Prey-Crystal:16:16|aBeacon",
+		key = "Beacon",
+		texture = 1928595,
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		rollover = true,
@@ -257,7 +275,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 	},
 	{
 		id = "mn-prey-anguish",
-		key = "|A:worldquest-Prey-Crystal:16:16|aAnguish",
+		key = "Anguish",
+		texture = 4554435,
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		rollover = true,
@@ -266,7 +285,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 	},
 	{
 		id = "mn-assaults-void",
-		key = "|A:ui-eventpoi-majorattacks:20:20|aVoid",
+		key = "Void",
+		atlas = "ui-eventpoi-majorattacks",
 		group = RewardsGroup.FIELD_ACCOLADES,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -278,6 +298,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-showdown-n",
 		key = "Showdown:N",
+		atlas = "TaxiNode_Continent_Neutral",
 		group = RewardsGroup.FIELD_ACCOLADES,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -289,6 +310,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-showdown-h",
 		key = "Showdown:H",
+		atlas = "TaxiNode_Continent_Neutral",
 		group = RewardsGroup.FIELD_ACCOLADES,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -300,6 +322,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-disruptions",
 		key = "Disruptions",
+		atlas = "TaxiNode_Continent_Neutral",
 		group = RewardsGroup.FIELD_ACCOLADES,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -311,6 +334,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-enemies",
 		key = "Enemies",
+		atlas = "TaxiNode_Continent_Neutral",
 		group = RewardsGroup.FIELD_ACCOLADES,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -322,6 +346,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-trailing",
 		key = "Trailing",
+		atlas = "quest-wrapper-available",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 90,
 		timeLeft = GenerateClosure(GetSecondsUntilReset, time({ year = 2026, month = 8, day = 24 }), 2),
@@ -330,6 +355,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-surge",
 		key = "Surges",
+		atlas = "UI-EventPoi-venomoustides",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 90,
 		rollover = true,
@@ -338,7 +364,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 	},
 	{
 		id = "mn-cc-purge",
-		key = "|A:ulatek-minor:20:20|aPurge",
+		key = "Purge",
+		atlas = "UI-eventpoi-ulatekmajor-2x",
 		group = RewardsGroup.CORROSIVE_COIN,
 		minimumLevel = 90,
 		rollover = true,
@@ -348,6 +375,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-foe",
 		key = "AncientFoe",
+		atlas = "vignettekillboss",
 		group = RewardsGroup.CORROSIVE_COIN,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -361,6 +389,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-ralkala",
 		key = "Ral'kala",
+		atlas = "Prey-HauntedBrazier",
 		description = "{faction:2808:-6:1}",
 		group = RewardsGroup.CORROSIVE_COIN,
 		minimumLevel = 90,
@@ -370,6 +399,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-lair",
 		key = "Lair",
+		atlas = "Lairs",
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
@@ -379,6 +409,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-sa-coiled",
 		key = "SA:Coiled",
+		atlas = "worldquest-Capstone-questmarker-epic-Toast",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 90,
 		rollover = true,
@@ -390,7 +421,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 	},
 	{
 		id = "mn-aqir-satchel",
-		key = "|A:ui-eventpoi-aqirinvasion:20:20|aSatchel",
+		key = "Satchel",
+		atlas = "ui-eventpoi-aqirinvasion",
 		group = RewardsGroup.AQIR,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -409,6 +441,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-voidcore",
 		key = "Voidcore",
+		texture = 7658129,
 		description = "{currency:3418:0}",
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,

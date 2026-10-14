@@ -15,7 +15,8 @@ end
 namespace.DB.rewardCandidiates["PROFESSION"] = {
 	{
 		id = "mn-pquests", -- Weekly Profession Quests
-		key = "|A:Profession:16:16:-5:0|aQuests",
+		key = "Quests",
+		atlas = "poi-workorders",
 		group = RewardsGroup.PROFESSION,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -29,7 +30,8 @@ namespace.DB.rewardCandidiates["PROFESSION"] = {
 	},
 	{
 		id = "mn-pdrops", -- Weekly Profession Knowledge Drops from Treasures around the World
-		key = "|A:Profession:16:16:-5:0|aDrops",
+		key = "Drops",
+		atlas = "VignetteLoot",
 		group = RewardsGroup.PROFESSION,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
