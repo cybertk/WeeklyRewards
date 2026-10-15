@@ -803,6 +803,9 @@ function Main:Redraw()
 				end
 			end
 
+			-- Set a flag, so we can highlight the current char in Interface.lua /tf
+			row.isCurrentchar = CharacterStore.IsCurrentPlayer(character)
+			
 			table.insert(tableData.rows, row)
 			tableHeight = tableHeight + self.window.table.config.rows.height
 		end, function(character) -- filter
