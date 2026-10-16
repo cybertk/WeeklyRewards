@@ -46,6 +46,19 @@ namespace.DB.rewardCandidiates["MN"] = {
 		entries = { { quest = 95468 } }, -- Hope in the Darkest Corners
 	},
 	{
+		id = "mn-veteran",
+		key = "Veteran",
+		description = "{item:279527:0:2}",
+		group = RewardsGroup.PINNACLE_CACHE,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		pick = 2,
+		entries = {
+			{ quest = 93790, name = "{quest:94432}" },
+			{ quest = 93793, name = "{quest:94432}" },
+		},
+	},
+	{
 		id = "mn-unity",
 		key = "Unity",
 		group = RewardsGroup.PINNACLE_CACHE,

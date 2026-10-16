@@ -452,26 +452,44 @@ function Util:GetCurrentSeasonName()
 	return EXPANSION_SEASON_NAME:format(GetExpansionName(expansion), season) .. " - " .. WEEK_NAME:format(self:GetCurrentSeasonWeek())
 end
 
-local function GetFirstSentence(text)
+local SentencesEndIndex = {}
+local function GetSentence(text, n)
 	if not text or text == "" then
 		return text
 	end
 
-	local n = #text
-	for i = 1, n do
+	n = n or 1
+	wipe(SentencesEndIndex)
+	table.insert(SentencesEndIndex, 1)
+
+	for i = 1, #text do
 		local b = string.byte(text, i)
 		if b == 46 then -- .
 			local nxt = string.byte(text, i + 1)
 			-- skip decimals: 1.5
 			if not (nxt and nxt >= 48 and nxt <= 57) then
-				return string.sub(text, 1, i)
+				if #SentencesEndIndex == n then
+					return string.sub(text, SentencesEndIndex[n], i)
+				end
+				table.insert(SentencesEndIndex, i + 1)
+			end
+		elseif b == 13 and string.byte(text, i + 1) == 10 then -- \r\n
+			if SentencesEndIndex[#SentencesEndIndex] == i then
+				SentencesEndIndex[#SentencesEndIndex] = SentencesEndIndex[#SentencesEndIndex] + 2
+			elseif #SentencesEndIndex == n then
+				return string.sub(text, SentencesEndIndex[n], i)
+			else
+				table.insert(SentencesEndIndex, i + 2)
 			end
 		elseif
 			b == 227 -- 。 = E3 80 82
 			and string.byte(text, i + 1) == 128
 			and string.byte(text, i + 2) == 130
 		then
-			return string.sub(text, 1, i)
+			if #SentencesEndIndex == n then
+				return string.sub(text, SentencesEndIndex[n], i)
+			end
+			table.insert(SentencesEndIndex, i + 3)
 		end
 	end
 	return text
@@ -592,6 +610,9 @@ function Util:ResolveTags(s, autoColor)
 			if arg1 == 0 then
 				-- show item description
 				name = select(18, C_Item.GetItemInfo(id))
+				if arg2 and name then
+					name = GetSentence(name, tonumber(arg2))
+				end
 				color = nil
 			elseif arg1 == 1 and item:IsItemDataCached() then
 				-- show item details
@@ -617,7 +638,7 @@ function Util:ResolveTags(s, autoColor)
 				if rewards and rewards[i] then
 					name = rewards[i].description
 					if arg1 < 0 then
-						name = GetFirstSentence(name)
+						name = GetSentence(name)
 					end
 				end
 
