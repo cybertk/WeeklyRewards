@@ -22,6 +22,8 @@ L["columns_button_tooltip"] = "Columns"
 L["columns_button_description"] = "Enable/Disable Tracking Rewards."
 L["sort_button_tooltip"] = "Sort"
 L["sort_button_description"] = "Select sorting options for Reward Columns."
+L["changelog_title"] = "Changelog"
+L["changelog_click_hint"] = "|cff00ff00Click|r to view the full changelog."
 
 -- Settings menu
 L["settings_show_minimap_button"] = "Show Minimap Button"

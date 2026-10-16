@@ -38,6 +38,7 @@ Util.lua
 
 DB\Data.xml
 Core\Core.xml
+changelog.lua
 GUI\UI.xml
 
 WeeklyRewards.lua
