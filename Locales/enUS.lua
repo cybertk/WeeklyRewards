@@ -20,6 +20,8 @@ L["characters_button_description"] = "Enable/Disable your characters."
 L["characters_button_remove_hint"] = "Press CTRL + |A:NPE_LeftClick:16:16|a to delete the character"
 L["columns_button_tooltip"] = "Columns"
 L["columns_button_description"] = "Enable/Disable Tracking Rewards."
+L["changelog_title"] = "Changelog"
+L["changelog_click_hint"] = "|cff00ff00Click|r to view the full changelog."
 
 -- Settings menu
 L["settings_show_minimap_button"] = "Show Minimap Button"
