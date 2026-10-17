@@ -86,8 +86,8 @@ end
 function GreatVaultProgress:GetStatusLabel()
 	if not self.v then
 		return " "
-	elseif self:IsExpired() and self.position > 0 then
-		return ("%s |cnGREEN_FONT_COLOR:(%s)|r"):format(CRAFTING_ORDER_NOT_CLAIMED, self.position)
+	elseif self:IsExpired() and (self.position > 0 or self.v[10] >= 0) then
+		return ("%s |cnGREEN_FONT_COLOR:(%s)|r"):format(CRAFTING_ORDER_NOT_CLAIMED, self.position > 0 and self.position or "?")
 	end
 
 	local atlas = CreateAtlasMarkup("PlayerPartyBlip", 8, 8)
