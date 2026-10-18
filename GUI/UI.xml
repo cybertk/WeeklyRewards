@@ -5,6 +5,7 @@
     <Script file="SettingsButton.lua" />
     <Script file="CharactersButton.lua" />
     <Script file="TrackingButton.lua" />
+    <Script file="TableRows.lua" />
     <Script file="Main.lua" />
 
     <Button name="WeeklyRewardsVersionButton" mixin="WeeklyRewardsVersionButtonMixin" hidden="true">

@@ -244,6 +244,13 @@ function Main:CreateWindow()
 	Settings:RegisterCallback("^window", function(_, value, key)
 		if key == "windowBackgroundColor" then
 			Utils:SetBackgroundColor(self.window, value.r, value.g, value.b, value.a)
+		elseif key == "windowPlayerRowColor" then
+			for _, row in ipairs(self.window.table.rows) do
+				if row.data.character and row.data.character:IsCurrent() then
+					row:UpdateBackgroundColor(value)
+					break
+				end
+			end
 		elseif self.window and self.window:IsVisible() then
 			self:Redraw()
 		end
@@ -705,7 +712,13 @@ function Main:LayoutHeader(force)
 end
 
 function Main:UpdateLayout()
-	for _, row in ipairs(self.window.table.rows) do
+	for i, row in ipairs(self.window.table.rows) do
+		if i > 1 then
+			Mixin(row, WeeklyRewardsTableDataRowMixin)
+			row.index = i
+			row:OnLoad()
+		end
+
 		for _, cell in ipairs(row.columns) do
 			cell.text:SetWordWrap(false)
 		end
@@ -764,7 +777,8 @@ function Main:Redraw()
 	}
 
 	do -- Refresh
-		self.columns = {}
+		self.columns = self.columns or {}
+		wipe(self.columns)
 		self:AddCharacterColumns()
 		self:AddRewardColumns()
 	end
@@ -790,7 +804,7 @@ function Main:Redraw()
 		local index = 0
 		CharacterStore.Get():ForEach(function(character)
 			index = index + 1
-			local row = { columns = {} }
+			local row = { columns = {}, character = character }
 
 			Main:ForEachColumn(function(dataColumn)
 				table.insert(row.columns, dataColumn.cell(character, index))
