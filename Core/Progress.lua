@@ -183,14 +183,7 @@ function RewardProgress:_UpdateRecords()
 
 	for _, reward in ipairs(self.pendingObjectives) do
 		if reward.items then
-			local uniqueItems = {}
-			for _, item in ipairs(reward.items) do
-				uniqueItems[item] = 1 + (uniqueItems[item] or 0)
-			end
-
-			for item, count in pairs(uniqueItems) do
-				self:_AddRecord({ text = format("{item:%d}", item), fulfilled = WAPI_GetItemCount(item), required = count })
-			end
+			self.total = #reward.items
 		elseif reward.name and reward.progressType == nil then
 			self:_AddRecord({ text = reward.name, fulfilled = 0, required = 1 })
 		end
@@ -470,9 +463,33 @@ function RewardProgress:ForEachObjective(callback)
 	end
 end
 
+local ForEachRecord = { RecordToReturn = {} }
+function ForEachRecord.GenerateRecord(objective, completed)
+	wipe(ForEachRecord.RecordToReturn)
+
+	if objective.items then
+		for _, item in ipairs(objective.items) do
+			ForEachRecord.RecordToReturn.text = format("{item:%d}", item)
+			ForEachRecord.RecordToReturn.fulfilled = completed and 1 or 0
+			ForEachRecord.RecordToReturn.required = 1
+
+			ForEachRecord.callback(ForEachRecord.RecordToReturn, completed)
+		end
+	end
+end
+
 function RewardProgress:ForEachRecord(callback)
-	for _, record in ipairs(self.records or {}) do
+	if not self.records then
+		return
+	end
+
+	for _, record in ipairs(self.records) do
 		callback(record, record.fulfilled == record.required)
+	end
+
+	if #self.records == 0 then
+		ForEachRecord.callback = callback
+		self:ForEachObjective(ForEachRecord.GenerateRecord)
 	end
 end
 
