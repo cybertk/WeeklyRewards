@@ -42,7 +42,7 @@ end
 
 function Main:AddVersionButton()
 	WeeklyRewardsVersionButton:SetParent(self.window.titlebar)
-	WeeklyRewardsVersionButton:SetPoint("LEFT", self.window.titlebar.title, "RIGHT", 5, -2)
+	WeeklyRewardsVersionButton:SetPoint("LEFT", self.window.titlebar.title, "RIGHT", 5, -1)
 	WeeklyRewardsVersionButton:Show()
 end
 
