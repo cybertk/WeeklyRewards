@@ -10,7 +10,7 @@
     <Button name="WeeklyRewardsVersionButton" mixin="WeeklyRewardsVersionButtonMixin" hidden="true">
         <Size y="10" />
         <HighlightTexture atlas="questlog-quest-glow-yellow" alphaMode="ADD" />
-        <NormalFont style="GameFontDisable" />
+        <NormalFont style="GameFontNormal" />
         <HighlightFont style="GameFontHighlight" />
         <Scripts>
             <OnLoad method="OnLoad" />
@@ -19,6 +19,78 @@
             <OnClick method="OnClick" />
         </Scripts>
     </Button>
+
+    <Frame name="WeeklyRewardsVersionWindow" mixin="WeeklyRewardsVersionWindowMixin" parent="UIParent" hidden="true" frameStrata="DIALOG" toplevel="true" enableMouse="true" movable="true" clampedToScreen="true">
+        <Size x="460" y="480" />
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
+        <Frames>
+            <Frame parentKey="border" inherits="BackdropTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="-3" y="3" />
+                    <Anchor point="BOTTOMRIGHT" x="3" y="-3" />
+                </Anchors>
+            </Frame>
+            <Frame parentKey="titlebar" enableMouse="true">
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="TOPRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="icon" file="Interface/AddOns/WeeklyRewards/Media/Icon.blp">
+                            <Size x="20" y="20" />
+                            <Anchors>
+                                <Anchor point="LEFT" x="6" y="0" />
+                            </Anchors>
+                        </Texture>
+                        <FontString parentKey="title" inherits="SystemFont_Med2" justifyH="LEFT" />
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Button parentKey="closeButton">
+                        <Anchors>
+                            <Anchor point="RIGHT" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <Texture parentKey="Icon" atlas="uitools-icon-close">
+                                    <Size x="16" y="16" />
+                                    <Anchors>
+                                        <Anchor point="CENTER" />
+                                    </Anchors>
+                                    <Color r="0.7" g="0.7" b="0.7" />
+                                </Texture>
+                            </Layer>
+                        </Layers>
+                    </Button>
+                </Frames>
+            </Frame>
+            <ScrollFrame parentKey="scrollFrame" inherits="ScrollFrameTemplate" enableMouse="true">
+                <ScrollChild>
+                    <Frame parentKey="child">
+                        <Size x="1" y="1" />
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <FontString parentKey="text" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP">
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" />
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnDragStart method="OnDragStart" />
+            <OnDragStop method="OnDragStop" />
+        </Scripts>
+    </Frame>
 
     <DropdownButton name="WeeklyRewardsSettingsButtonTemplate" mixin="WeeklyRewardsSettingsButtonMixin" virtual="true">
         <Size x="30" y="30" />

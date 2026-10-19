@@ -6,15 +6,19 @@ local Utils = namespace.Utils
 local Settings = namespace.Settings
 
 local TOOLTIP_MAX_WIDTH = 420
+local CHANGE_BULLET = CreateAtlasMarkup("PlayerPartyBlip", 12, 12)
 
+WeeklyRewardsVersionWindowMixin = {}
 WeeklyRewardsVersionButtonMixin = {}
 
 local function FormatChange(change)
-	return "- " .. (change or ""):gsub("|n", "|n  ")
+	local text = "- " .. (change or ""):gsub("|n", "|n  ")
+	text = text:gsub("^%- ", CHANGE_BULLET .. " ")
+	return text:gsub("|n(%s*)%- ", "|n%1" .. CHANGE_BULLET .. " ")
 end
 
 local function FormatEntry(entry)
-	local header = format("|cffffd100%s|r", entry.v or "")
+	local header = NORMAL_FONT_COLOR:WrapTextInColorCode(entry.v or "")
 	if entry.date and entry.date > 0 then
 		header = format("%s  |cff808080%s|r", header, date("%Y-%m-%d", entry.date))
 	end
@@ -70,14 +74,14 @@ function WeeklyRewardsVersionButtonMixin:OnEnter()
 	end
 
 	namespace.GUIMain:SetTooltipOwner(GameTooltip, self)
-	GameTooltip:SetText(entry.v or "", 1, 1, 1, 1, true)
+	local r, g, b = NORMAL_FONT_COLOR:GetRGB()
+	GameTooltip:SetText(entry.v or "", r, g, b, 1, true)
 
 	if entry.date and entry.date > 0 then
 		GameTooltip:AddLine(date("%Y-%m-%d", entry.date), GRAY_FONT_COLOR:GetRGB())
 	end
 
 	for _, change in ipairs(entry.changes or {}) do
-		local r, g, b = HIGHLIGHT_FONT_COLOR:GetRGB()
 		GameTooltip:AddLine(FormatChange(change), r, g, b, true)
 	end
 
@@ -100,110 +104,42 @@ function WeeklyRewardsVersionButtonMixin:OnClick()
 		return
 	end
 
-	if not self.changelogWindow then
-		self:CreateChangelogWindow()
-	end
-
-	self.changelogWindow:SetShown(not self.changelogWindow:IsShown())
+	WeeklyRewardsVersionWindow:SetShown(not WeeklyRewardsVersionWindow:IsShown())
 end
 
-function WeeklyRewardsVersionButtonMixin:LayoutChangelogText()
-	local window = self.changelogWindow
-	if not window then
-		return
-	end
-
-	local scrollFrame = window.scrollFrame
-	local child = scrollFrame.child
-	local text = child.text
-	local width = scrollFrame:GetWidth()
-	if width <= 0 then
-		return
-	end
-
-	text:SetWidth(width)
-	child:SetWidth(width)
-
-	local height = text:GetStringHeight()
-	if height <= 0 and not window.layoutRetried then
-		window.layoutRetried = true
-		C_Timer.After(0, function()
-			self:LayoutChangelogText()
-		end)
-		return
-	end
-
-	window.layoutRetried = nil
-	child:SetHeight(math.max(height, 1) + 12)
-	scrollFrame:UpdateScrollChildRect()
-end
-
-function WeeklyRewardsVersionButtonMixin:CreateChangelogWindow()
-	local frameName = addonName .. "ChangelogFrame"
-	local window = CreateFrame("Frame", frameName, UIParent)
-	self.changelogWindow = window
-
-	window:SetSize(460, 480)
-	window:SetFrameStrata("DIALOG")
-	window:SetToplevel(true)
-	window:SetClampedToScreen(true)
-	window:SetMovable(true)
-	window:SetPoint("CENTER")
-	window:SetUserPlaced(true)
-	window:EnableMouse(true)
-	window:RegisterForDrag("LeftButton")
-	window:SetScript("OnDragStart", function()
-		window:StartMoving()
-	end)
-	window:SetScript("OnDragStop", function()
-		window:StopMovingOrSizing()
-	end)
-	window:Hide()
+function WeeklyRewardsVersionWindowMixin:OnLoad()
+	self:SetUserPlaced(true)
+	self:RegisterForDrag("LeftButton")
 
 	local backgroundColor = Settings:Get("windowBackgroundColor")
-	Utils:SetBackgroundColor(window, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a)
+	Utils:SetBackgroundColor(self, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a)
 
-	window.border = CreateFrame("Frame", nil, window, "BackdropTemplate")
-	window.border:SetPoint("TOPLEFT", window, "TOPLEFT", -3, 3)
-	window.border:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", 3, -3)
-	window.border:SetBackdrop({
+	self.border:SetBackdrop({
 		edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
 		edgeSize = 16,
 		insets = { left = 4, right = 4, top = 4, bottom = 4 },
 	})
-	window.border:SetBackdropBorderColor(0, 0, 0, 0.5)
-	window.border:SetShown(Settings:Get("windowBorder"))
+	self.border:SetBackdropBorderColor(0, 0, 0, 0.5)
+	self.border:SetShown(Settings:Get("windowBorder"))
 
-	window.titlebar = CreateFrame("Frame", nil, window)
-	window.titlebar:SetPoint("TOPLEFT", window, "TOPLEFT")
-	window.titlebar:SetPoint("TOPRIGHT", window, "TOPRIGHT")
-	window.titlebar:SetHeight(Constants.TITLEBAR_HEIGHT)
-	window.titlebar:EnableMouse(true)
-	window.titlebar:RegisterForDrag("LeftButton")
-	window.titlebar:SetScript("OnDragStart", function()
-		window:StartMoving()
+	local titlebarHeight = Constants.TITLEBAR_HEIGHT
+	local titlebar = self.titlebar
+	titlebar:SetHeight(titlebarHeight)
+	titlebar:RegisterForDrag("LeftButton")
+	titlebar:SetScript("OnDragStart", function()
+		self:StartMoving()
 	end)
-	window.titlebar:SetScript("OnDragStop", function()
-		window:StopMovingOrSizing()
+	titlebar:SetScript("OnDragStop", function()
+		self:StopMovingOrSizing()
 	end)
-	Utils:SetBackgroundColor(window.titlebar, 0, 0, 0, 0.5)
+	Utils:SetBackgroundColor(titlebar, 0, 0, 0, 0.5)
+	titlebar.title:SetPoint("LEFT", titlebar.icon, "RIGHT", 4, 0)
+	titlebar.title:SetText(L["changelog_title"])
 
-	window.titlebar.icon = window.titlebar:CreateTexture(nil, "ARTWORK")
-	window.titlebar.icon:SetPoint("LEFT", window.titlebar, "LEFT", 6, 0)
-	window.titlebar.icon:SetSize(20, 20)
-	window.titlebar.icon:SetTexture("Interface/AddOns/WeeklyRewards/Media/Icon.blp")
-
-	window.titlebar.title = window.titlebar:CreateFontString(nil, "OVERLAY", "SystemFont_Med2")
-	window.titlebar.title:SetPoint("LEFT", window.titlebar.icon, "RIGHT", 4, 0)
-	window.titlebar.title:SetJustifyH("LEFT")
-	window.titlebar.title:SetText(L["changelog_title"])
-
-	local closeButton = CreateFrame("Button", nil, window.titlebar)
-	window.titlebar.closeButton = closeButton
-	closeButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
-	closeButton:SetPoint("RIGHT", window.titlebar, "RIGHT", 0, 0)
+	local closeButton = titlebar.closeButton
+	closeButton:SetSize(titlebarHeight, titlebarHeight)
 	closeButton:SetScript("OnClick", function()
-		window:Hide()
+		self:Hide()
 	end)
 	closeButton:SetScript("OnEnter", function()
 		closeButton.Icon:SetVertexColor(1, 1, 1, 1)
@@ -218,56 +154,76 @@ function WeeklyRewardsVersionButtonMixin:CreateChangelogWindow()
 		GameTooltip:Hide()
 	end)
 
-	closeButton.Icon = closeButton:CreateTexture(nil, "ARTWORK")
-	closeButton.Icon:SetPoint("CENTER", closeButton, "CENTER")
-	closeButton.Icon:SetSize(16, 16)
-	closeButton.Icon:SetAtlas("uitools-icon-close")
-	closeButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-
-	local scrollFrame = CreateFrame("ScrollFrame", nil, window, "ScrollFrameTemplate")
-	window.scrollFrame = scrollFrame
-	scrollFrame:SetPoint("TOPLEFT", window, "TOPLEFT", 12, -(Constants.TITLEBAR_HEIGHT + 8))
-	scrollFrame:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", -26, 12)
-	scrollFrame:EnableMouse(true)
+	local scrollFrame = self.scrollFrame
+	scrollFrame:SetPoint("TOPLEFT", self, "TOPLEFT", 12, -(titlebarHeight + 8))
+	scrollFrame:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -26, 12)
 	scrollFrame:EnableMouseWheel(true)
-
-	local child = CreateFrame("Frame", nil, scrollFrame)
-	scrollFrame.child = child
-	child:SetSize(1, 1)
-	scrollFrame:SetScrollChild(child)
-
-	child.text = child:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-	child.text:SetPoint("TOPLEFT", child, "TOPLEFT", 0, 0)
-	child.text:SetJustifyH("LEFT")
-	child.text:SetJustifyV("TOP")
-	child.text:SetWordWrap(true)
-	child.text:SetSpacing(2)
-	child.text:SetText(BuildChangelogText())
-
+	scrollFrame:SetScrollChild(scrollFrame.child)
 	scrollFrame:HookScript("OnSizeChanged", function()
-		self:LayoutChangelogText()
+		self:LayoutText()
 	end)
-	window:SetScript("OnShow", function()
-		self:LayoutChangelogText()
-		scrollFrame:SetVerticalScroll(0)
-		local scrollBar = scrollFrame.ScrollBar
-		if scrollBar then
-			if scrollBar.SetScrollPercentage then
-				scrollBar:SetScrollPercentage(0)
-			elseif scrollBar.SetValue then
-				scrollBar:SetValue(0)
-			end
-		end
-	end)
+
+	local text = scrollFrame.child.text
+	text:SetWordWrap(true)
+	text:SetSpacing(2)
+	text:SetText(BuildChangelogText())
 
 	Settings:RegisterCallback("^window", function(_, value, key)
 		if key == "windowBackgroundColor" then
-			Utils:SetBackgroundColor(window, value.r, value.g, value.b, value.a)
+			Utils:SetBackgroundColor(self, value.r, value.g, value.b, value.a)
 		elseif key == "windowBorder" then
-			window.border:SetShown(value)
+			self.border:SetShown(value)
 		end
 	end, self)
 
-	table.insert(UISpecialFrames, frameName)
-	self:LayoutChangelogText()
+	table.insert(UISpecialFrames, self:GetName())
+	self:LayoutText()
+end
+
+function WeeklyRewardsVersionWindowMixin:OnDragStart()
+	self:StartMoving()
+end
+
+function WeeklyRewardsVersionWindowMixin:OnDragStop()
+	self:StopMovingOrSizing()
+end
+
+function WeeklyRewardsVersionWindowMixin:OnShow()
+	self:LayoutText()
+	local scrollFrame = self.scrollFrame
+	scrollFrame:SetVerticalScroll(0)
+	local scrollBar = scrollFrame.ScrollBar
+	if scrollBar then
+		if scrollBar.SetScrollPercentage then
+			scrollBar:SetScrollPercentage(0)
+		elseif scrollBar.SetValue then
+			scrollBar:SetValue(0)
+		end
+	end
+end
+
+function WeeklyRewardsVersionWindowMixin:LayoutText()
+	local scrollFrame = self.scrollFrame
+	local child = scrollFrame.child
+	local text = child.text
+	local width = scrollFrame:GetWidth()
+	if width <= 0 then
+		return
+	end
+
+	text:SetWidth(width)
+	child:SetWidth(width)
+
+	local height = text:GetStringHeight()
+	if height <= 0 and not self.layoutRetried then
+		self.layoutRetried = true
+		C_Timer.After(0, function()
+			self:LayoutText()
+		end)
+		return
+	end
+
+	self.layoutRetried = nil
+	child:SetHeight(math.max(height, 1) + 12)
+	scrollFrame:UpdateScrollChildRect()
 end
