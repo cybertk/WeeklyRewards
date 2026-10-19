@@ -71,7 +71,7 @@ L["reward_time_left"] = "Осталось времени: "
 L["reward_objective_multi_quests_title"] = "Завершите %d из следующих заданий:"
 
 -- Candidate tooltips
-L["candidate_from_following_quests"] = "Награды за одно из следующих заданий:"
+L["candidate_from_following_quests"] = "%s за одно из следующих заданий:"
 L["candidate_from_quest_format"] = "Награды за {quest:%d}"
 L["candidate_one_of_following_quests"] = "Каждый персонаж может независимо выбрать одно из следующих заданий:"
 L["candidate_from_quest"] = "Награды за задание"

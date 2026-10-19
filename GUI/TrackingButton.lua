@@ -46,7 +46,7 @@ function WeeklyRewardsTrackingButtonMixin.UpdateRewardTooltip(tooltip, descripti
 	if candidate.description then
 		GameTooltip_AddNormalLine(tooltip, Util:ColoredText(candidate.description))
 	elseif #candidate.entries > 1 then
-		GameTooltip_AddNormalLine(tooltip, L["candidate_from_following_quests"])
+		GameTooltip_AddNormalLine(tooltip, L["candidate_from_following_quests"]:format(REWARDS))
 		for _, entry in ipairs(candidate.entries) do
 			GameTooltip_AddHighlightLine(tooltip, entry:GetDescription(), false)
 		end
@@ -58,6 +58,20 @@ function WeeklyRewardsTrackingButtonMixin.UpdateRewardTooltip(tooltip, descripti
 		GameTooltip_AddNormalLine(tooltip, L["candidate_one_of_following_quests"])
 		for _, quest in ipairs(entry.questPool) do
 			GameTooltip_AddHighlightLine(tooltip, Util:Text("{quest:%d}", quest), false)
+		end
+	elseif candidate.entries[1].pois then
+		local entry = candidate.entries[1]
+		local rewards = REWARDS
+		if entry.items then
+			rewards = ""
+			for _, item in ipairs(entry.items) do
+				rewards = ("%s {item:%d}"):format(rewards, item)
+			end
+		end
+
+		GameTooltip_AddNormalLine(tooltip, L["candidate_from_following_quests"]:format(Util:ColoredText(rewards)))
+		for _, poi in ipairs(entry.pois) do
+			GameTooltip_AddHighlightLine(tooltip, Util:Text("{poi:%d}", poi), false)
 		end
 	else
 		GameTooltip_AddNormalLine(tooltip, L["candidate_from_quest"])

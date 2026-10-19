@@ -499,7 +499,7 @@ Util.TagCache = { {}, {} }
 Util.PointsTracked = {}
 Util.TrackableTags = {}
 function Util:ResolveTags(s, autoColor)
-	local resolvedString = s:gsub("{(%l+):(%d+):?(-?%d*):?(%d*)}", function(type, id, arg1, arg2)
+	local resolvedString = s:gsub("{(%l+):(%d+):?(-?%d*):?(%d*):?([^{]*)}", function(type, id, arg1, arg2, arg3)
 		id = tonumber(id)
 		arg1 = arg1 ~= "" and tonumber(arg1) or nil
 
@@ -580,6 +580,10 @@ function Util:ResolveTags(s, autoColor)
 				name = ""
 			end
 
+			if arg3 and (name == "" or not name) then
+				name = arg3
+			end
+
 			if name and name ~= "" and arg1 ~= 0 then
 				local atlas
 				local class = C_QuestInfoSystem.GetQuestClassification(id)
@@ -657,6 +661,16 @@ function Util:ResolveTags(s, autoColor)
 			name = CreateSimpleTextureMarkup(Util:GetProfessionIcon(id), 13, 13)
 		elseif type == "dungeon" then
 			name = GetLFGDungeonInfo(id)
+		elseif type == "poi" then
+			local info = C_AreaPoiInfo.GetAreaPOIInfo(nil, id)
+			if info then
+				name = info.name
+			end
+		elseif type == "storyline" then
+			local info = C_QuestLine.GetQuestLineInfo(C_QuestLine.GetQuestLineQuests(id)[1] or 0)
+			if info then
+				name = autoColor and format("%s %s", CreateAtlasMarkup("questlog-storylineicon", 14, 14), info.questLineName) or info.questLineName
+			end
 		end
 
 		if autoColor and color and name then

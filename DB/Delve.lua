@@ -63,4 +63,22 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 97628, items = { 276547, 276548 } } },
 	},
+	{
+		id = "delve-fragment-m",
+		key = "|A:overworld-active-64x64:16:16|aFragment",
+		description = "{item:285065} earned from the 6-week {storyline:6385}.|n|n{item:285065:0}",
+		group = RewardsGroup.DELVE,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		rollover = true,
+		pick = 6,
+		entries = {
+			{ quest = 98951, name = "{quest:98951}" },
+			{ quest = 98959, name = ("{quest:98959::(%s Week 11)}"):format(UNLOCKS_AT_LABEL) },
+			{ quest = 98960, name = ("{quest:98960::(%s Week 12)}"):format(UNLOCKS_AT_LABEL) },
+			{ quest = 98961, name = ("{quest:98961::(%s Week 13)}"):format(UNLOCKS_AT_LABEL) },
+			{ quest = 98962, name = ("{quest:98962::(%s Week 14)}"):format(UNLOCKS_AT_LABEL) },
+			{ quest = 98963, name = ("{quest:98963::(%s Week 15)}"):format(UNLOCKS_AT_LABEL) },
+		},
+	},
 }

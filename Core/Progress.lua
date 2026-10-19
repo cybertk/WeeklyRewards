@@ -167,7 +167,13 @@ end
 
 -- Mark records as done manualy, we cannot get progress=100% update sometime before
 function RewardProgress:_FinalizeRecords()
-	for _, record in ipairs(self.records or {}) do
+	if self.numObjectives ~= 1 then
+		return
+	end
+
+	self.records = self.records or {}
+
+	for _, record in ipairs(self.records) do
 		if record.fulfilled ~= record.required then
 			record.text = record.text:gsub(record.fulfilled .. "([/%%])", record.required .. "%1")
 			record.fulfilled = record.required
@@ -179,7 +185,8 @@ function RewardProgress:_UpdateRecords()
 	-- Reset progress
 	self.position = 0
 	self.total = 0
-	self.records = {}
+	self.records = self.records or {}
+	wipe(self.records)
 
 	for _, reward in ipairs(self.pendingObjectives) do
 		if reward.items then

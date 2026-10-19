@@ -7,6 +7,7 @@ local RewardsGroup = {
 	PREY = "Prey",
 	FIELD_ACCOLADES = "Field Accolades",
 	CORROSIVE_COIN = "Corrosive Coin",
+	AQIR = "Aqir Research Enclave",
 }
 
 local function range(start, stop, step)
@@ -357,6 +358,24 @@ namespace.DB.rewardCandidiates["MN"] = {
 			{ quest = 95918, unlockQuest = 96307 }, -- Special Assignment: Wraith Wrath
 			{ quest = 95921, unlockQuest = 96492 }, -- Special Assignment: Demand and Supply
 			{ quest = 95922, unlockQuest = 96029 }, -- Special Assignment: Face the Swarm
+		},
+	},
+	{
+		id = "mn-aqir-satchel",
+		key = "|A:ui-eventpoi-aqirinvasion:20:20|aSatchel",
+		group = RewardsGroup.AQIR,
+		minimumLevel = 80,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{
+				quest = 97456,
+				pois = {
+					8812, -- Aqir Invasion of Zul'Aman
+					8813, -- Aqir Invasion of Eversong
+				},
+				items = { 277283 },
+				loot = { 277283, 286563 }, -- Aqir Research Satchel, Aqir Research Token
+			},
 		},
 	},
 }

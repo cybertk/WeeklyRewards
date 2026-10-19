@@ -261,7 +261,7 @@ function Reward:GetDescription(short)
 	elseif self.description then
 		return Util:ResolveTags(self.description, true)
 	elseif self.objectives and #self.objectives > 0 then
-		return Util:ResolveTags("{quest:" .. self.objectives[1]:GetQuest() .. "}")
+		return self.objectives[1]:GetDescription()
 	else
 		return UNKNOWN
 	end
