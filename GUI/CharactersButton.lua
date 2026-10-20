@@ -8,6 +8,8 @@ local Settings = namespace.Settings
 WeeklyRewardsCharactersButtonMixin = CreateFromMixins(namespace.TitleBarButtonMixin)
 
 function WeeklyRewardsCharactersButtonMixin:OnLoad()
+	namespace.TitleBarButtonMixin.OnLoad(self)
+
 	self.tooltip = L["characters_button_title"]
 	self.tooltipText = L["characters_button_description"]
 

@@ -19,7 +19,7 @@
 ## Category-zhCN: 任务
 ## Category-zhTW: 任務
 
-## SavedVariables: WeeklyRewardsDB, WeeklyRewardsArchive, WeeklyRewardsSettings
+## SavedVariables: WeeklyRewardsDB, WeeklyRewardsArchive, WeeklyRewardsSettings, WeeklyRewardsFlags
 ## IconTexture: Interface\AddOns\WeeklyRewards\Media\Icon.blp
 
 ## X-Flavor: retail

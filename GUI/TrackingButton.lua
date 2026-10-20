@@ -1,6 +1,7 @@
 local _, namespace = ...
 
 local L = namespace.L
+local Flags = namespace.Flags
 local Settings = namespace.Settings
 
 local Util = namespace.Util
@@ -11,6 +12,8 @@ local Reward = namespace.Reward
 WeeklyRewardsTrackingButtonMixin = CreateFromMixins(namespace.TitleBarButtonMixin)
 
 function WeeklyRewardsTrackingButtonMixin:OnLoad()
+	namespace.TitleBarButtonMixin.OnLoad(self)
+
 	self.tooltip = L["columns_button_tooltip"]
 	self.tooltipText = L["columns_button_description"]
 
@@ -90,6 +93,8 @@ function WeeklyRewardsTrackingButtonMixin.UpdateRewardTooltip(tooltip, descripti
 		GameTooltip_AddBlankLineToTooltip(tooltip)
 		GameTooltip_AddColoredLine(tooltip, L["candidate_not_active"], inactiveColor)
 	end
+
+	Flags:Clear(description.flag, candidate.id)
 end
 
 function WeeklyRewardsTrackingButtonMixin:AddCharacterInfoFilterToMenu(rootMenu)
@@ -126,7 +131,7 @@ function WeeklyRewardsTrackingButtonMixin:AddRewardsFilterToMenu(rootMenu, group
 		elseif not shouldCreateSubmenu then
 			button:CreateTitle(name)
 		else
-			button = rootMenu:CreateCheckbox((color or WHITE_FONT_COLOR):WrapTextInColorCode(name), function()
+			button = rootMenu:CreateCheckbox((color or WHITE_FONT_COLOR):WrapTextInColorCode(Flags:Format(name, self.flag, candidates, "id")), function()
 				return not activeRewards:IsGroupExcluded(name)
 			end, function()
 				activeRewards:ToggleExclusionByGroup(name)
@@ -137,7 +142,7 @@ function WeeklyRewardsTrackingButtonMixin:AddRewardsFilterToMenu(rootMenu, group
 		for _, candidate in ipairs(candidates) do
 			local rewardColor = color or activeRewards:IsCandidateActive(candidate.id) and WHITE_FONT_COLOR or GRAY_FONT_COLOR
 
-			local checkbox = button:CreateCheckbox(rewardColor:WrapTextInColorCode(candidate.key), function()
+			local checkbox = button:CreateCheckbox(rewardColor:WrapTextInColorCode(Flags:Format(candidate.key, self.flag, candidate.id)), function()
 				return not activeRewards:IsCandidateExcluded(candidate.id)
 			end, function()
 				activeRewards:ToggleExclusion(candidate.id)
@@ -151,6 +156,7 @@ function WeeklyRewardsTrackingButtonMixin:AddRewardsFilterToMenu(rootMenu, group
 			end)
 
 			checkbox.candidate = candidate
+			checkbox.flag = self.flag
 			checkbox:SetTooltip(self.UpdateRewardTooltip)
 		end
 

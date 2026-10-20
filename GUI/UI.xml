@@ -30,24 +30,12 @@
                     <Color r="0.7" g="0.7" b="0.7" a="1" />
                 </Texture>
             </Layer>
-        </Layers>
-        <Scripts>
-            <OnLoad method="OnLoad" />
-            <OnEnter method="OnEnter" />
-            <OnLeave method="OnLeave" />
-        </Scripts>
-    </DropdownButton>
-
-    <DropdownButton name="WeeklyRewardsCharactersButtonTemplate" mixin="WeeklyRewardsCharactersButtonMixin" virtual="true">
-        <Size x="30" y="30" />
-        <Layers>
-            <Layer level="ARTWORK">
-                <Texture parentKey="Icon" atlas="squad_size_trios">
-                    <Size x="18" y="18" />
+            <Layer level="OVERLAY">
+                <Texture parentKey="Notification" atlas="UI-HUD-MicroMenu-Communities-Icon-Notification" hidden="true">
+                    <Size x="15" y="15" />
                     <Anchors>
-                        <Anchor point="CENTER" />
+                        <Anchor point="CENTER" y="-13" />
                     </Anchors>
-                    <Color r="0.7" g="0.7" b="0.7" a="1" />
                 </Texture>
             </Layer>
         </Layers>
@@ -58,23 +46,19 @@
         </Scripts>
     </DropdownButton>
 
-    <DropdownButton name="WeeklyRewardsTrackingButtonTemplate" mixin="WeeklyRewardsTrackingButtonMixin" virtual="true">
-        <Size x="30" y="30" />
-        <Layers>
-            <Layer level="ARTWORK">
-                <Texture parentKey="Icon" atlas="UI-HUD-Minimap-Tracking-Up">
-                    <Size x="15" y="14" />
-                    <Anchors>
-                        <Anchor point="CENTER" />
-                    </Anchors>
-                    <Color r="0.7" g="0.7" b="0.7" a="1" />
-                </Texture>
-            </Layer>
-        </Layers>
-        <Scripts>
-            <OnLoad method="OnLoad" />
-            <OnEnter method="OnEnter" />
-            <OnLeave method="OnLeave" />
-        </Scripts>
+    <DropdownButton name="WeeklyRewardsCharactersButtonTemplate" inherits="WeeklyRewardsSettingsButtonTemplate" mixin="WeeklyRewardsCharactersButtonMixin" virtual="true">
+        <KeyValues>
+            <KeyValue key="iconAtlas" value="squad_size_trios" type="string" />
+            <KeyValue key="iconWidth" value="18" type="number" />
+        </KeyValues>
+    </DropdownButton>
+
+    <DropdownButton name="WeeklyRewardsTrackingButtonTemplate" inherits="WeeklyRewardsSettingsButtonTemplate" mixin="WeeklyRewardsTrackingButtonMixin" virtual="true">
+        <KeyValues>
+            <KeyValue key="iconAtlas" value="UI-HUD-Minimap-Tracking-Up" type="string" />
+            <KeyValue key="iconWidth" value="15" type="number" />
+            <KeyValue key="iconHeight" value="14" type="number" />
+            <KeyValue key="flag" value="rewards" type="string" />
+        </KeyValues>
     </DropdownButton>
 </Ui>

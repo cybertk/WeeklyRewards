@@ -1,9 +1,23 @@
 local _, namespace = ...
 
 local L = namespace.L
+local Flags = namespace.Flags
 local Settings = namespace.Settings
 
 local TitleBarButtonMixin = {}
+
+function TitleBarButtonMixin:OnLoad()
+	if self.iconAtlas then
+		self.Icon:SetAtlas(self.iconAtlas, false)
+		self.Icon:SetSize(self.iconWidth, self.iconHeight or self.iconWidth)
+	end
+
+	if self.flag then
+		Flags:InvokeAndRegisterCallback(self.flag, function(isSet)
+			self.Notification:SetShown(isSet)
+		end)
+	end
+end
 
 function TitleBarButtonMixin:OnEnter()
 	self.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
@@ -25,6 +39,8 @@ namespace.TitleBarButtonMixin = TitleBarButtonMixin
 WeeklyRewardsSettingsButtonMixin = CreateFromMixins(namespace.TitleBarButtonMixin)
 
 function WeeklyRewardsSettingsButtonMixin:OnLoad()
+	namespace.TitleBarButtonMixin.OnLoad(self)
+
 	self.tooltip = L["settings_button_tooltip"]
 	self.tooltipText = L["settings_button_description"]
 

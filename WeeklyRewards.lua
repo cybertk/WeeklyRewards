@@ -8,6 +8,7 @@ local Archivist = namespace.Archivist
 local L = namespace.L
 local DB = namespace.DB
 local Util = namespace.Util
+local Flags = namespace.Flags
 local Settings = namespace.Settings
 local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
@@ -15,6 +16,10 @@ local RewardSummary = namespace.RewardSummary
 local Main = namespace.GUIMain
 
 WeeklyRewardsArchive = WeeklyRewardsArchive or {}
+
+local Changes = {
+	{ r = 1, rewards = { "delve-fragment-m", "mn-aqir-satchel" } },
+}
 
 local defaultDB = {
 	global = {
@@ -121,6 +126,7 @@ end
 function WeeklyRewards:OnLoaded()
 	_G["BINDING_NAME_WeeklyRewards"] = L["BINDING_NAME_WeeklyRewards"]
 
+	Flags:Init("WeeklyRewardsFlags", Changes)
 	Settings:RegisterSettings("WeeklyRewardsDB", defaultDB)
 	self.db = WeeklyRewardsDB
 
