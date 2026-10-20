@@ -24,6 +24,7 @@ local Cache = {
 	rewards = {}, -- active rewards: table<CandidateID: Reward>
 	candidates = {},
 	candidatesSelected = {}, -- selected candidates: table<CandidateID: Candidate>
+	candidatesToScan = {}, -- candidates to scan: list<Candidate>
 	selected = {}, -- selected candidates: list<CandidateID>
 	instance = nil,
 }
@@ -140,33 +141,35 @@ function ActiveRewards:_Remove(i)
 	RemoveRewardFromCache(reward)
 end
 
-function ActiveRewards:_FindCandidatesToScan(candidates)
+function ActiveRewards:UpdateCandidatesToScan(candidates)
 	local playerLevel = WAPI_UnitLevel("player")
 	local activeEvents = Util:GetCalendarActiveEvents()
 
-	return Util:Filter(candidates, function(candidate)
-		if candidate.unlockEvent and activeEvents[candidate.unlockEvent] == nil then
-			Util:Debug("Event is not active: ", candidate.id)
-			return false
-		end
+	wipe(Cache.candidatesToScan)
 
-		if candidate.timeLeft == "end-of-event" then
-			-- Append actual event end time
-			candidate.timeLeft = function()
-				local eventEndTime = Util:GetTimestampFromCalendarTime(activeEvents[candidate.unlockEvent].endTime)
-				local now = Util:GetTimestampFromCalendarTime(C_DateAndTime.GetCurrentCalendarTime())
+	for _, candidate in ipairs(candidates) do
+		if candidate.unlockEvent and activeEvents[candidate.unlockEvent] == nil then -- nop()
+		elseif candidate.expansion and not Cache.candidatesSelected[candidate.id] then -- nop()
+		else
+			local reward = Cache.rewards[candidate.id]
 
-				return eventEndTime - now
+			if not reward or #reward.objectives ~= (candidate.pick or 1) then
+				table.insert(Cache.candidatesToScan, candidate)
+
+				if candidate.timeLeft == "end-of-event" then
+					-- Append actual event end time
+					candidate.timeLeft = function()
+						local eventEndTime = Util:GetTimestampFromCalendarTime(activeEvents[candidate.unlockEvent].endTime)
+						local now = Util:GetTimestampFromCalendarTime(C_DateAndTime.GetCurrentCalendarTime())
+
+						return eventEndTime - now
+					end
+				end
 			end
 		end
+	end
 
-		local reward = Cache.rewards[candidate.id]
-		if reward and #reward.objectives ~= (candidate.pick or 1) then
-			return true
-		end
-
-		return reward == nil
-	end)
+	return Cache.candidatesToScan
 end
 
 function ActiveRewards:GetCandidate(rewardID)
@@ -217,36 +220,16 @@ function ActiveRewards:Reset(teardown_func, force)
 end
 
 function ActiveRewards:Update(candidates, OnRewardAddedCallback)
-	local candidatesToScan = self:_FindCandidatesToScan(candidates or Cache.candidates)
+	local candidatesToScan = self:UpdateCandidatesToScan(candidates or Cache.candidates)
 
-	Util:Debug("Scanning candidates: ", #candidatesToScan)
+	Util:Debug("Scanning candidates: ", #candidatesToScan, Util:DebugTableField(candidatesToScan, "id"))
 
 	if #candidatesToScan == 0 then
 		return
 	end
 
 	for _, candidate in ipairs(candidatesToScan) do
-		local reward = Reward:New({
-			id = candidate.id,
-			name = candidate.key,
-			description = candidate.description,
-			group = candidate.group,
-			expansion = candidate.expansion,
-			minimumLevel = candidate.minimumLevel,
-			maximumLevel = candidate.maximumLevel,
-			rollover = candidate.rollover,
-			items = candidate.items,
-		})
-		local pick = candidate.pick or 1
-
-		reward:DetermineObjectives(candidate.entries, pick, candidate.rollover == true)
-		reward:DetermineResetTime(candidate.timeLeft and candidate.timeLeft() or nil)
-		reward:DetermineState(pick)
-		reward:UpdateDescription()
-
-		if candidate.rollover and #candidate.entries ~= pick and #reward.objectives > 0 then
-			reward.id = reward.id .. ":" .. reward.objectives[1].quest
-		end
+		local reward = Reward:FromCandidate(candidate)
 
 		if self:_Add(reward) and OnRewardAddedCallback then
 			OnRewardAddedCallback(reward)

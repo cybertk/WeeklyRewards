@@ -45,6 +45,19 @@ function Util:DebugQuest(questID)
 	print(RED_FONT_COLOR:WrapTextInColorCode("DebugQuest:"), s)
 end
 
+function Util:DebugTableField(tbl, field)
+	if self.debug ~= true then
+		return
+	end
+
+	local values = {}
+	for _, v in pairs(tbl) do
+		table.insert(values, tostring(type(field) == "function" and field(v) or v[field]))
+	end
+
+	return table.concat(values, ", ")
+end
+
 function Util:Filter(t, pattern, inplace, asList)
 	asList = asList or true
 
@@ -86,10 +99,12 @@ function Util:Filter(t, pattern, inplace, asList)
 	return newTable
 end
 
+Util.ReturnEvents = {}
 function Util:GetCalendarActiveEvents(calendarType)
 	local now = C_DateAndTime.GetCurrentCalendarTime()
-	local events = {}
+	local events = self.ReturnEvents
 
+	wipe(events)
 	calendarType = calendarType or "HOLIDAY"
 
 	for i = 1, C_Calendar.GetNumDayEvents(0, now.monthDay) do

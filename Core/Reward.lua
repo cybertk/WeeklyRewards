@@ -64,6 +64,7 @@ end
 local Reward = {
 	CandidatesById = {},
 	Objectives = {},
+	Pool = {},
 }
 
 local function GetRewardID(candidate, index)
@@ -104,6 +105,33 @@ function Reward:New(o)
 	return o
 end
 
+function Reward:FromCandidate(candidate)
+	local reward = Reward.Pool[GetRewardID(candidate)]
+		or Reward:New({
+			id = GetRewardID(candidate),
+			name = candidate.key,
+			description = candidate.description,
+			group = candidate.group,
+			expansion = candidate.expansion,
+			minimumLevel = candidate.minimumLevel,
+			maximumLevel = candidate.maximumLevel,
+			rollover = candidate.rollover,
+			items = candidate.items,
+		})
+
+	if reward.state ~= STATE.CONFIRMED then
+		local pick = candidate.pick or 1
+
+		reward:DetermineObjectives(candidate.entries, pick, candidate.rollover)
+		reward:DetermineResetTime(candidate.timeLeft and candidate.timeLeft() or nil)
+		reward:DetermineState(pick)
+
+		Reward.Pool[reward.id] = reward
+	end
+
+	return reward
+end
+
 function Reward:GetCandidate()
 	return Reward.CandidatesById[self.id]
 end
@@ -138,10 +166,6 @@ function Reward:AddObjective(objective)
 end
 
 function Reward:DetermineObjectives(entries, pick, isRollover)
-	if self.state == STATE.CONFIRMED then
-		return
-	end
-
 	self.objectives = {}
 
 	-- Scenario: Fixed target
@@ -247,16 +271,6 @@ function Reward:DetermineResetTime(timeLeft)
 
 	self.startTime = WAPI_GetServerTime()
 	self.resetTime = self.startTime + timeLeft
-end
-
-function Reward:UpdateDescription()
-	if self.description and #self.description > 0 then
-		return
-	end
-
-	if self.objectives and #self.objectives > 0 then
-		self.description = "{quest:" .. self.objectives[1]:GetQuest() .. "}"
-	end
 end
 
 function Reward:GetDescription(short)

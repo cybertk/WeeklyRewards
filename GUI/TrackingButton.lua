@@ -6,6 +6,7 @@ local Settings = namespace.Settings
 local Util = namespace.Util
 local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
+local Reward = namespace.Reward
 
 WeeklyRewardsTrackingButtonMixin = CreateFromMixins(namespace.TitleBarButtonMixin)
 
@@ -29,7 +30,7 @@ function WeeklyRewardsTrackingButtonMixin:OnLoad()
 			local groups = activeRewards:GetAllCandidatesByExpansion(i)
 			if groups then
 				local button = rootMenu:CreateButton(_G["EXPANSION_NAME" .. i])
-				self:AddRewardsFilterToMenu(button, groups)
+				self:AddRewardsFilterToMenu(button, groups, false, WHITE_FONT_COLOR)
 			end
 		end
 
@@ -78,9 +79,16 @@ function WeeklyRewardsTrackingButtonMixin.UpdateRewardTooltip(tooltip, descripti
 		GameTooltip_AddHighlightLine(tooltip, Util:Text("{quest:%d}", candidate.entries[1].quest), false)
 	end
 
-	if not activeRewards:IsCandidateActive(candidate.id) then
+	local inactiveColor = nil
+	if candidate.expansion then
+		inactiveColor = not Reward:FromCandidate(candidate):HasConfirmed() and RED_FONT_COLOR or nil
+	elseif not activeRewards:IsCandidateActive(candidate.id) then
+		inactiveColor = GRAY_FONT_COLOR
+	end
+
+	if inactiveColor then
 		GameTooltip_AddBlankLineToTooltip(tooltip)
-		GameTooltip_AddDisabledLine(tooltip, L["candidate_not_active"])
+		GameTooltip_AddColoredLine(tooltip, L["candidate_not_active"], inactiveColor)
 	end
 end
 
