@@ -297,8 +297,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 96713 }, -- Showdown on Val
-			{ quest = 96717 }, -- Showdown on Naigtal
+			{ quest = 96713, unlockPoi = 8819 }, -- Showdown on Val
+			{ quest = 96717, unlockPoi = 8820 }, -- Showdown on Naigtal
 		},
 	},
 	{
@@ -308,8 +308,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 96714 }, -- Showdown on Val: Heroic
-			{ quest = 96718 }, -- Showdown on Naigtal: Heroic
+			{ quest = 96714, unlockPoi = 8819 }, -- Showdown on Val: Heroic
+			{ quest = 96718, unlockPoi = 8820 }, -- Showdown on Naigtal: Heroic
 		},
 	},
 	{

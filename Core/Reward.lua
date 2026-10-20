@@ -170,6 +170,10 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 				then
 					confirmed = true
 				end
+			elseif entry.unlockPoi then
+				if C_AreaPoiInfo.GetAreaPOISecondsLeft(entry.unlockPoi) then
+					confirmed = true
+				end
 			else
 				local quests = entry.questPool and entry.questPool or { entry.quest }
 
