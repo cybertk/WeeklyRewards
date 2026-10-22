@@ -197,6 +197,15 @@ function WeeklyRewards:Init()
 	local character = characterStore:CurrentPlayer()
 	local activeRewards = ActiveRewards:New(self.db.global.activeRewards)
 	activeRewards:SetSelectedCandidates(Settings:Get("candidates"))
+	activeRewards:RegisterRewardAddedCallback(function(reward)
+		CharacterStore.Get():ForEach(function(character)
+			local outdatedProgress = character:ResetProgress(reward)
+			if self.db.global.archive and outdatedProgress then
+				local store = self.archive:Load("RawData", character.GUID)
+				table.insert(store, outdatedProgress)
+			end
+		end, next)
+	end)
 
 	RewardSummary:Init(characterStore)
 
@@ -310,15 +319,7 @@ end
 
 function WeeklyRewards:UpdateActiveRewards()
 	self.activeRewards:Reset(nop)
-	self.activeRewards:Update(nil, function(reward)
-		CharacterStore.Get():ForEach(function(x)
-			local outdatedProgress = x:ResetProgress(reward)
-			if self.db.global.archive and outdatedProgress then
-				local store = self.archive:Load("RawData", x.GUID)
-				table.insert(store, outdatedProgress)
-			end
-		end, next)
-	end)
+	self.activeRewards:Update()
 	self.character:Scan(self.activeRewards)
 end
 
@@ -340,13 +341,19 @@ end
 
 function WeeklyRewards:PurgeProgress()
 	CharacterStore.Get():ForEach(function(character)
-		for rewardID, _ in pairs(character.progress) do
+		for rewardID, progress in pairs(character.progress) do
 			local candidate = ActiveRewards:GetCandidate(rewardID)
+			local reward = candidate and ActiveRewards:GetReward(candidate.id) or nil
 
 			if not candidate or (ActiveRewards:IsCandidateExcluded(candidate.id) and candidate.expansion) then
 				character.progress[rewardID] = nil
 
 				Util:Debug("Purged progress", character.name, rewardID)
+			elseif candidate.rollover or not reward or not progress.startedAt then -- nop
+			elseif progress.IsExpired and not progress:IsExpired() and reward.startTime > progress.startedAt then
+				character:ResetProgress(reward)
+
+				Util:Debug("Reset progress", character.name, rewardID)
 			end
 		end
 	end, next)

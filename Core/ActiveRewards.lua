@@ -26,6 +26,7 @@ local Cache = {
 	candidatesSelected = {}, -- selected candidates: table<CandidateID: Candidate>
 	candidatesToScan = {}, -- candidates to scan: list<Candidate>
 	selected = {}, -- selected candidates: list<CandidateID>
+	callbacks = {},
 	instance = nil,
 }
 
@@ -131,7 +132,11 @@ function ActiveRewards:_Add(reward)
 	table.insert(self, reward)
 	AddRewardToCache(reward)
 
-	return not outdatedReward
+	if not outdatedReward then
+		for _, callback in ipairs(Cache.callbacks) do
+			callback(reward)
+		end
+	end
 end
 
 function ActiveRewards:_Remove(i)
@@ -197,6 +202,14 @@ function ActiveRewards:GetAllCandidatesByExpansion(expansionLevel)
 	return Cache.expansions[expansionLevel]
 end
 
+function ActiveRewards:GetReward(candidateID)
+	return Cache.rewards[candidateID]
+end
+
+function ActiveRewards:RegisterRewardAddedCallback(callback, ...)
+	table.insert(Cache.callbacks, GenerateClosure(callback, ...))
+end
+
 function ActiveRewards:Reset(teardown_func, force)
 	local now = WAPI_GetServerTime()
 
@@ -219,7 +232,7 @@ function ActiveRewards:Reset(teardown_func, force)
 	end
 end
 
-function ActiveRewards:Update(candidates, OnRewardAddedCallback)
+function ActiveRewards:Update(candidates)
 	local candidatesToScan = self:UpdateCandidatesToScan(candidates or Cache.candidates)
 
 	Util:Debug("Scanning candidates: ", #candidatesToScan, Util:DebugTableField(candidatesToScan, "id"))
@@ -229,11 +242,7 @@ function ActiveRewards:Update(candidates, OnRewardAddedCallback)
 	end
 
 	for _, candidate in ipairs(candidatesToScan) do
-		local reward = Reward:FromCandidate(candidate)
-
-		if self:_Add(reward) and OnRewardAddedCallback then
-			OnRewardAddedCallback(reward)
-		end
+		self:_Add(Reward:FromCandidate(candidate))
 	end
 
 	self:Sort()
