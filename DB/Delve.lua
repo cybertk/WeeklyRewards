@@ -74,11 +74,11 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		pick = 6,
 		entries = {
 			{ quest = 98951, name = "{quest:98951}" },
-			{ quest = 98959, name = ("{quest:98959::(%s Week 11)}"):format(UNLOCKS_AT_LABEL) },
-			{ quest = 98960, name = ("{quest:98960::(%s Week 12)}"):format(UNLOCKS_AT_LABEL) },
+			{ quest = 98963, name = "{quest:98963}" },
+			{ quest = 98962, name = ("{quest:98962::(%s Week 12)}"):format(UNLOCKS_AT_LABEL) },
 			{ quest = 98961, name = ("{quest:98961::(%s Week 13)}"):format(UNLOCKS_AT_LABEL) },
-			{ quest = 98962, name = ("{quest:98962::(%s Week 14)}"):format(UNLOCKS_AT_LABEL) },
-			{ quest = 98963, name = ("{quest:98963::(%s Week 15)}"):format(UNLOCKS_AT_LABEL) },
+			{ quest = 98960, name = ("{quest:98960::(%s Week 14)}"):format(UNLOCKS_AT_LABEL) },
+			{ quest = 98959, name = ("{quest:98959::(%s Week 15)}"):format(UNLOCKS_AT_LABEL) },
 		},
 	},
 }
