@@ -93,31 +93,45 @@ function Reward.SetCandidates(candidates)
 	end
 end
 
+function Reward.__index(instance, key)
+	local classValue = rawget(Reward, key)
+	if classValue ~= nil then
+		return classValue
+	end
+
+	local candidate = Reward.CandidatesById[instance.id]
+	if key == "name" then
+		return candidate.key
+	end
+
+	if key == "objectives" then
+		if instance.o then
+			if not Reward.Objectives[instance] then
+				Reward.Objectives[instance] = {}
+
+				for _, r in ipairs(instance.o) do
+					table.insert(Reward.Objectives[instance], candidate.entries[r])
+				end
+			end
+
+			return Reward.Objectives[instance]
+		else
+			return candidate.entries
+		end
+	end
+
+	return candidate[key]
+end
+
 function Reward:New(o)
 	o = o or {}
-	self.__index = self
 	setmetatable(o, self)
-
-	for _, objective in ipairs(o.objectives or {}) do
-		setmetatable(objective, RewardObjective)
-	end
 
 	return o
 end
 
 function Reward:FromCandidate(candidate)
-	local reward = Reward.Pool[GetRewardID(candidate)]
-		or Reward:New({
-			id = GetRewardID(candidate),
-			name = candidate.key,
-			description = candidate.description,
-			group = candidate.group,
-			expansion = candidate.expansion,
-			minimumLevel = candidate.minimumLevel,
-			maximumLevel = candidate.maximumLevel,
-			rollover = candidate.rollover,
-			items = candidate.items,
-		})
+	local reward = Reward.Pool[GetRewardID(candidate)] or Reward:New({ id = GetRewardID(candidate) })
 
 	if reward.state ~= STATE.CONFIRMED then
 		local pick = candidate.pick or 1
@@ -160,20 +174,14 @@ function Reward:IsLegacy()
 	return self.expansion ~= nil
 end
 
-function Reward:AddObjective(objective)
-	setmetatable(objective, RewardObjective)
-	table.insert(self.objectives, objective)
+function Reward:AddObjective(index)
+	self.o = self.o or {}
+	table.insert(self.o, index)
 end
 
 function Reward:DetermineObjectives(entries, pick, isRollover)
-	self.objectives = {}
-
 	-- Scenario: Fixed target
 	if pick == #entries then
-		for _, entry in ipairs(entries) do
-			self:AddObjective(entry)
-		end
-
 		return
 	end
 
@@ -210,7 +218,7 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 
 			if confirmed then
 				Util:Debug("Reward [" .. self.name .. "] confirmed: " .. QuestUtils_GetQuestName(entry.quest or 0))
-				self:AddObjective(entry)
+				self:AddObjective(i)
 				if #self.objectives == pick then
 					Util:Debug("Reward [" .. self.name .. "] all confirmed: " .. pick)
 					break
