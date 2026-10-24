@@ -123,18 +123,19 @@ end
 function WeeklyRewardsTrackingButtonMixin:AddRewardsFilterToMenu(rootMenu, groups, shouldCreateSubmenu, color)
 	local activeRewards = ActiveRewards.Get()
 
-	for name, candidates in pairs(groups) do
+	for group, candidates in pairs(groups) do
 		local button = rootMenu
+		local name = Util:ResolveTags(group)
 
-		if name == "" then
+		if group == "" then
 			-- candidiate w/o group
 		elseif not shouldCreateSubmenu then
 			button:CreateTitle(name)
 		else
 			button = rootMenu:CreateCheckbox((color or WHITE_FONT_COLOR):WrapTextInColorCode(Flags:Format(name, self.flag, candidates, "id")), function()
-				return not activeRewards:IsGroupExcluded(name)
+				return not activeRewards:IsGroupExcluded(group)
 			end, function()
-				activeRewards:ToggleExclusionByGroup(name)
+				activeRewards:ToggleExclusionByGroup(group)
 				namespace.GUIMain:Redraw()
 			end)
 		end
@@ -160,7 +161,7 @@ function WeeklyRewardsTrackingButtonMixin:AddRewardsFilterToMenu(rootMenu, group
 			checkbox:SetTooltip(self.UpdateRewardTooltip)
 		end
 
-		if not shouldCreateSubmenu and name ~= "" then
+		if not shouldCreateSubmenu and group ~= "" then
 			button:QueueDivider()
 		end
 	end

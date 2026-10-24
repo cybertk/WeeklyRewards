@@ -1,7 +1,7 @@
 local _, namespace = ...
 
 local RewardsGroup = {
-	DELVE = "Delves",
+	DELVE = DELVES_LABEL,
 }
 
 namespace.DB.rewardCandidiates["Delve"] = {

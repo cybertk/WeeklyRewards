@@ -1,7 +1,7 @@
 local _, namespace = ...
 
 local RewardsGroup = {
-	MIDSUMMER_EVENT = "Midsummer Fire Festival",
+	MIDSUMMER_EVENT = "{event:341}",
 }
 
 namespace.DB.rewardCandidiates["midsummer"] = {

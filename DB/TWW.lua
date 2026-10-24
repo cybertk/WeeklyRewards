@@ -1,12 +1,12 @@
 local _, namespace = ...
 
 local RewardsGroup = {
-	PINNACLE_CACHE = "Pinnacle Cache - TWW",
-	WEEKLY_CACHE = "Weekly Cache",
-	SIREN_ISLE = "Siren Isle",
-	UNDERMINE = "Undermine",
-	NIGHTFALL = "Nightfall",
-	KARESH = "K'aresh",
+	PINNACLE_CACHE = "{item:224784}",
+	WEEKLY_CACHE = RATED_PVP_WEEKLY_CHEST,
+	SIREN_ISLE = "{map:2369}",
+	UNDERMINE = "{map:2346}",
+	NIGHTFALL = "{poi:8175}",
+	KARESH = "{map:2371}",
 }
 
 namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {

@@ -1,7 +1,7 @@
 local _, namespace = ...
 
 local RewardsGroup = {
-	TIMEWALKING_EVENTS = "Timewalking Events",
+	TIMEWALKING_EVENTS = PLAYER_DIFFICULTY_TIMEWALKER,
 }
 
 namespace.DB.rewardCandidiates["timewalking"] = {

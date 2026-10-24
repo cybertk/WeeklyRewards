@@ -99,6 +99,46 @@ function Util:Filter(t, pattern, inplace, asList)
 	return newTable
 end
 
+Util.CalendarEvents = { monthToCollect = 1 }
+function Util:GetHolidayEventName(eventID)
+	if not Util.CalendarEvents.monthToCollect or Util.CollectCalendarEvents then
+		return Util.CalendarEvents[eventID]
+	end
+
+	Util.CollectCalendarEvents = function()
+		if InCombatLockdown() then
+			C_Timer.After(1, Util.CollectCalendarEvents)
+			return
+		end
+
+		local events = Util.CalendarEvents
+		local month = Util.CalendarEvents.monthToCollect
+		local year = C_DateAndTime.GetCurrentCalendarTime().year
+
+		C_Calendar.SetAbsMonth(month, year)
+
+		for d = 2, 30, 4 do
+			for i = 1, C_Calendar.GetNumDayEvents(0, d) do
+				local event = C_Calendar.GetDayEvent(0, d, i)
+
+				if event and not events[event.eventID] then
+					events[event.eventID] = event.title
+				end
+			end
+		end
+
+		if month < 12 then
+			Util.CalendarEvents.monthToCollect = Util.CalendarEvents.monthToCollect + 1
+			C_Timer.After(0, Util.CollectCalendarEvents)
+		else
+			Util.CalendarEvents.monthToCollect = nil
+			Util.CollectCalendarEvents = nil
+		end
+	end
+
+	Util.CollectCalendarEvents()
+end
+
 Util.ReturnEvents = {}
 function Util:GetCalendarActiveEvents(calendarType)
 	local now = C_DateAndTime.GetCurrentCalendarTime()
@@ -106,6 +146,8 @@ function Util:GetCalendarActiveEvents(calendarType)
 
 	wipe(events)
 	calendarType = calendarType or "HOLIDAY"
+
+	C_Calendar.SetAbsMonth(now.month, now.year)
 
 	for i = 1, C_Calendar.GetNumDayEvents(0, now.monthDay) do
 		local event = C_Calendar.GetDayEvent(0, now.monthDay, i)
@@ -686,6 +728,8 @@ function Util:ResolveTags(s, autoColor)
 			if info then
 				name = autoColor and format("%s %s", CreateAtlasMarkup("questlog-storylineicon", 14, 14), info.questLineName) or info.questLineName
 			end
+		elseif type == "event" then
+			name = Util:GetHolidayEventName(id)
 		end
 
 		if autoColor and color and name then

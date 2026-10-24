@@ -616,8 +616,11 @@ function Main:AddProgressToGameTooltip(progress)
 end
 
 function Main:AddRewardToGameTooltip(reward)
+	local tooltip = GameTooltip
+
 	GameTooltip:AddDoubleLine(reward.name, "|A:NPE_LeftClick:16:16|a|cnGREEN_FONT_COLOR:(" .. (IsControlKeyDown() and HIDE or STABLE_FILTER_BUTTON_LABEL) .. ")|r")
-	GameTooltip:AddLine(format("|cnNORMAL_FONT_COLOR:%s|r%s", reward.group and reward.group .. ": " or "", reward:GetDescription()), 1, 1, 1, true)
+	GameTooltip_AddColoredLine(tooltip, reward:GetGroupName(), GREEN_FONT_COLOR)
+	GameTooltip_AddNormalLine(tooltip, reward:GetDescription())
 
 	GameTooltip:AddLine(" ")
 

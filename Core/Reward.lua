@@ -281,16 +281,25 @@ function Reward:DetermineResetTime(timeLeft)
 	self.resetTime = self.startTime + timeLeft
 end
 
-function Reward:GetDescription(short)
-	if short and self.description and self.description:match("|n") then
-		return self.name
-	elseif self.description then
-		return Util:ResolveTags(self.description, true)
-	elseif self.objectives and #self.objectives > 0 then
+function Reward:GetDescription()
+	if self.description then
+		return NORMAL_FONT_COLOR:WrapTextInColorCode(Util:ResolveTags(self.description, true))
+	elseif not self.objectives then
+		return UNKNOWN
+	elseif #self.objectives == 1 then
 		return self.objectives[1]:GetDescription()
 	else
-		return UNKNOWN
+		local lines = {}
+		for _, objective in ipairs(self.objectives) do
+			table.insert(line, objective:GetDescription())
+		end
+
+		return table.concat(lines, "|n")
 	end
+end
+
+function Reward:GetGroupName()
+	return self.group and Util:ResolveTags(self.group) or ""
 end
 
 function Reward:HasConfirmed()
