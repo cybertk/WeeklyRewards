@@ -290,7 +290,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = L["column_realm"],
+			name = FRIENDS_LIST_REALM:match("^([^:]+)"),
 			key = "realmName",
 			cell = function(character)
 				return { text = character.realmName }
@@ -385,7 +385,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = L["column_location"],
+			name = Util.Capitalize(SPELL_TARGET_TYPE6_DESC),
 			key = "location",
 			align = "CENTER",
 			cell = function(character)
@@ -410,12 +410,12 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = L["column_last_update"],
+			name = LASTONLINE,
 			key = "lastUpdate",
 			align = "CENTER",
 			cell = function(character)
 				local text = Util.FormatLastUpdateTime(character.lastUpdate)
-				return { text = character:IsCurrent() and GREEN_FONT_COLOR:WrapTextInColorCode(text) or text }
+				return { text = character:IsCurrent() and GREEN_FONT_COLOR:WrapTextInColorCode(FRIENDS_LIST_ONLINE) or text }
 			end,
 		},
 	}
