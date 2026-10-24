@@ -758,6 +758,10 @@ function Util:ColoredText(...)
 	return self:ResolveTags(format(...), true)
 end
 
+function Util.Capitalize(word)
+	return word:gsub("^%l", string.upper)
+end
+
 Util.pendingExecution = {}
 function Util:InvokeAfter(delay, callback, owner)
 	if self.pendingExecution[callback] then
