@@ -21,8 +21,6 @@ L["characters_button_description"] = "Вкл./откл. Ваших персон�
 L["characters_button_remove_hint"] = "<Ctrl+ЛКМ - удалить персонажа>"
 L["columns_button_tooltip"] = "Колонки"
 L["columns_button_description"] = "Вкл./откл. отслеживание наград."
-L["sort_button_tooltip"] = "Сортировка"
-L["sort_button_description"] = "Выберите параметры сортировки для столбцов с наградами."
 
 -- Settings menu
 L["settings_show_minimap_button"] = "Показывать кнопку у миникарты"
@@ -82,8 +80,3 @@ L["candidate_not_active"] = "Награда неактивна на этой н�
 L["summary_completed_count"] = "%s выполнено %d раз на этой неделе"
 L["summary_progress"] = "Прогресс Отряда:"
 L["summary_rewards_received"] = "Всего получено наград: "
-
--- Sorting options
-L["sort_reward_group"] = "Группа наград"
-L["sort_reward_name"] = "Название награды"
-L["sort_time_left"] = "Осталось времени"

@@ -19,6 +19,7 @@ WeeklyRewardsArchive = WeeklyRewardsArchive or {}
 
 local Changes = {
 	{ r = 1, rewards = { "delve-fragment-m", "mn-aqir-satchel" } },
+	{ r = 2, dragTip = true },
 }
 
 local defaultDB = {

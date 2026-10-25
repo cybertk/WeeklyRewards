@@ -14,6 +14,10 @@ function Tips:SetupHorizontalScrollBarHelpTip(scrollBar)
 	self:SetupFrameHelpTip(scrollBar, L["tips_scrollbar_horizontal"], HelpTip.Point.BottomEdgeCenter)
 end
 
+function Tips:ShowDragToOrderHelpTip(frame)
+	self:ShowHelpTip(L["tips_drag_to_reorder"], HelpTip.Point.BottomEdgeCenter, frame)
+end
+
 function Tips:SetupFrameHelpTip(frame, text, targetPoint)
 	frame:HookScript("OnShow", function()
 		if frame:IsVisible() then

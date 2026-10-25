@@ -20,8 +20,6 @@ L["characters_button_description"] = "Enable/Disable your characters."
 L["characters_button_remove_hint"] = "Press CTRL + |A:NPE_LeftClick:16:16|a to delete the character"
 L["columns_button_tooltip"] = "Columns"
 L["columns_button_description"] = "Enable/Disable Tracking Rewards."
-L["sort_button_tooltip"] = "Sort"
-L["sort_button_description"] = "Select sorting options for Reward Columns."
 
 -- Settings menu
 L["settings_show_minimap_button"] = "Show Minimap Button"
@@ -58,6 +56,7 @@ L["table_alts_collect_hint"] = "Log in on this character to collect it"
 -- Tips
 L["tips_scrollbar_vertical"] = "Drag or use the mouse wheel to scroll for more rows."
 L["tips_scrollbar_horizontal"] = "Drag or use the mouse wheel to scroll for more columns.|n|nIf vertical scrolling is also active, hold a |cffffff00modifier|r key while using the mouse wheel."
+L["tips_drag_to_reorder"] = "Drag the reward name to a new position to change its order."
 
 -- Progress tooltips
 L["progress_rewards_received_at"] = "Rewards Received At:"
@@ -81,8 +80,3 @@ L["candidate_not_active"] = "Reward is not active this week"
 L["summary_completed_count"] = "%s completed %d times this week"
 L["summary_progress"] = "Warband Progress:"
 L["summary_rewards_received"] = "Total Rewards Received: "
-
--- Sorting options
-L["sort_reward_group"] = "Reward Group"
-L["sort_reward_name"] = "Reward Name"
-L["sort_time_left"] = "Time Left"

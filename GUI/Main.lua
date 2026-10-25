@@ -88,49 +88,6 @@ function Main:AddRewardsFilterButton()
 	self.window.titlebar.ColumnsButton:SetPoint("RIGHT", self.window.titlebar.CharactersButton, "LEFT", 0, 0)
 end
 
-function Main:AddSortButton()
-	self.window.titlebar.SortButton = CreateFrame("DropdownButton", "$parentSettingsButton", self.window.titlebar)
-	self.window.titlebar.SortButton:SetPoint("RIGHT", self.window.titlebar.ColumnsButton, "LEFT", 0, 0)
-	self.window.titlebar.SortButton:SetSize(Constants.TITLEBAR_HEIGHT, Constants.TITLEBAR_HEIGHT)
-	self.window.titlebar.SortButton:SetScript("OnEnter", function()
-		self.window.titlebar.SortButton.Icon:SetVertexColor(0.9, 0.9, 0.9, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.SortButton, 1, 1, 1, 0.05)
-		self:SetTooltipOwner(GameTooltip, self.window.titlebar.SortButton)
-		GameTooltip:SetText(L["sort_button_tooltip"], 1, 1, 1, 1, true)
-		GameTooltip:AddLine(L["sort_button_description"], NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-		GameTooltip:Show()
-	end)
-	self.window.titlebar.SortButton:SetScript("OnLeave", function()
-		self.window.titlebar.SortButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-		Utils:SetBackgroundColor(self.window.titlebar.SortButton, 1, 1, 1, 0)
-		GameTooltip:Hide()
-	end)
-	self.window.titlebar.SortButton:SetupMenu(function(_, rootMenu)
-		local activeRewards = ActiveRewards.Get()
-		local sortingFields = {
-			group = L["sort_reward_group"],
-			name = L["sort_reward_name"],
-			resetTime = L["sort_time_left"],
-		}
-		for field, name in pairs(sortingFields) do
-			rootMenu:CreateCheckbox(name, function()
-				return activeRewards.sortBy == field
-			end, function()
-				activeRewards.sortBy = field
-				activeRewards:Sort()
-				self:Redraw()
-			end)
-		end
-		-- end
-	end)
-
-	self.window.titlebar.SortButton.Icon = self.window.titlebar:CreateTexture(self.window.titlebar.SortButton:GetName() .. "Icon", "ARTWORK")
-	self.window.titlebar.SortButton.Icon:SetPoint("CENTER", self.window.titlebar.SortButton, "CENTER")
-	self.window.titlebar.SortButton.Icon:SetSize(20, 20)
-	self.window.titlebar.SortButton.Icon:SetAtlas("shop-header-arrow-disabled")
-	self.window.titlebar.SortButton.Icon:SetVertexColor(0.7, 0.7, 0.7, 1)
-end
-
 function Main:CreateWindow()
 	local frameName = addonName .. "MainWindow"
 	self.window = CreateFrame("Frame", frameName, UIParent)
@@ -203,7 +160,6 @@ function Main:CreateWindow()
 	self:AddSettingsButton()
 	self:AddCharactersButton()
 	self:AddRewardsFilterButton()
-	self:AddSortButton()
 
 	self.window.table = UI:CreateTableFrame({
 		header = {
@@ -460,13 +416,14 @@ function Main:AddCharacterColumns()
 end
 
 function Main:AddRewardColumns()
-	for _, reward in ipairs(ActiveRewards.Get()) do
+	for index, reward in ActiveRewards.Get():EnumerateSelected() do
 		-- cache
 		reward:ForEachItem(type)
 
 		local column = {
 			name = reward.name,
 			reward = reward,
+			selectedIndex = index,
 			onEnter = function(cellFrame)
 				local function updateTooltip()
 					GameTooltip:SetOwner(cellFrame, "ANCHOR_RIGHT")
@@ -716,11 +673,15 @@ end
 
 function Main:UpdateLayout()
 	for i, row in ipairs(self.window.table.rows) do
-		if i > 1 then
+		if i == 1 then
+			Mixin(row, WeeklyRewardsTableHeaderRowMixin)
+		elseif i > 1 then
 			Mixin(row, WeeklyRewardsTableDataRowMixin)
 			row.index = i
-			row:OnLoad()
 		end
+
+		row.window = self.window
+		row:OnLoad()
 
 		for _, cell in ipairs(row.columns) do
 			cell.text:SetWordWrap(false)
@@ -796,6 +757,7 @@ function Main:Redraw()
 				onEnter = dataColumn.onEnter,
 				onLeave = dataColumn.onLeave,
 				onClick = dataColumn.onClick,
+				selectedIndex = dataColumn.selectedIndex,
 			}
 			table.insert(row.columns, cell)
 		end)

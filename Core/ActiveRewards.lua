@@ -78,6 +78,55 @@ function ActiveRewards:SetSelectedCandidates(list)
 	end
 end
 
+local function RewardsIterator(_, i)
+	while true do
+		i = i + 1
+
+		local candidateID = Cache.selected[i]
+		if not candidateID then
+			return
+		end
+		local reward = Cache.rewards[candidateID]
+		if reward then
+			return i, reward
+		end
+	end
+end
+
+function ActiveRewards:EnumerateSelected()
+	return RewardsIterator, nil, 0
+end
+
+function ActiveRewards:MoveSelected(index, newIndex, insertBefore)
+	local n = #Cache.selected
+	if not index or not newIndex or index < 1 or index > n then
+		return false
+	end
+
+	newIndex = insertBefore and newIndex or (newIndex + 1)
+
+	if newIndex < 1 then
+		newIndex = 1
+	elseif newIndex > n + 1 then
+		newIndex = n + 1
+	end
+
+	if index == newIndex or index + 1 == newIndex then
+		return false
+	end
+
+	local candidateID = table.remove(Cache.selected, index)
+	if index < newIndex then
+		newIndex = newIndex - 1
+	end
+	table.insert(Cache.selected, newIndex, candidateID)
+	return true
+end
+
+function ActiveRewards:IsNewCandidateSelected()
+	return Cache.newCandidateSelected ~= nil
+end
+
 function ActiveRewards:New(o)
 	if Cache.instance ~= nil then
 		Util:Debug("ActiveRewards RESET")
@@ -104,17 +153,6 @@ end
 
 function ActiveRewards.Get()
 	return Cache.instance
-end
-
-function ActiveRewards:Sort()
-	local field = self.sortBy or "resetTime"
-
-	table.sort(self, function(x, y)
-		local xV = x[field] or "0"
-		local yV = y[field] or "0"
-
-		return xV .. x.name < yV .. y.name
-	end)
 end
 
 function ActiveRewards:_Add(reward)
@@ -244,15 +282,14 @@ function ActiveRewards:Update(candidates)
 	for _, candidate in ipairs(candidatesToScan) do
 		self:_Add(Reward:FromCandidate(candidate))
 	end
-
-	self:Sort()
 end
 
 function ActiveRewards:ToggleExclusion(candidateID)
 	if Cache.candidatesSelected[candidateID] then
 		tDeleteItem(Cache.selected, candidateID)
 	else
-		table.insert(Cache.selected, candidateID)
+		table.insert(Cache.selected, 1, candidateID)
+		Cache.newCandidateSelected = candidateID
 	end
 
 	Cache.candidatesSelected[candidateID] = not Cache.candidatesSelected[candidateID]
