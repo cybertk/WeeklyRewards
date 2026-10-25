@@ -291,7 +291,7 @@ function Reward:GetDescription()
 	else
 		local lines = {}
 		for _, objective in ipairs(self.objectives) do
-			table.insert(line, objective:GetDescription())
+			table.insert(lines, objective:GetDescription())
 		end
 
 		return table.concat(lines, "|n")
