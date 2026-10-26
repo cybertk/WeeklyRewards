@@ -169,7 +169,7 @@ function Main:CreateWindow()
 		},
 		rows = {
 			height = Constants.TABLE_ROW_HEIGHT,
-			highlight = true,
+			highlight = false,
 			striped = true,
 		},
 	})
@@ -190,6 +190,7 @@ function Main:CreateWindow()
 	end)
 
 	hooksecurefunc(self.window.table, "RenderTable", function()
+		self:UpdateLayout()
 		C_Timer.After(0, GenerateClosure(self.LayoutHeader, self, true))
 	end)
 
@@ -205,6 +206,12 @@ function Main:CreateWindow()
 				if row.data.character and row.data.character:IsCurrent() then
 					row:UpdateBackgroundColor(value)
 					break
+				end
+			end
+		elseif key == "windowRowHighlightColor" then
+			for _, row in ipairs(self.window.table.rows) do
+				if row.UpdateHighlightColor then
+					row:UpdateHighlightColor(value)
 				end
 			end
 		elseif self.window and self.window:IsVisible() then
@@ -774,13 +781,6 @@ function Main:Redraw()
 			Main:ForEachColumn(function(dataColumn)
 				table.insert(row.columns, dataColumn.cell(character, index))
 			end)
-
-			row.onEnter = function(data, columnFrame)
-				local rowFrame = columnFrame:GetParent()
-				if rowFrame.Highlight then
-					rowFrame.Highlight:SetVertexColor(0.3, 0.3, 0.7, 0.2)
-				end
-			end
 
 			table.insert(tableData.rows, row)
 			tableHeight = tableHeight + self.window.table.config.rows.height

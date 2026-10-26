@@ -47,6 +47,7 @@ local defaultSettings = {
 	windowBorder = true,
 	windowRowNumbers = true,
 	windowPlayerRowColor = { r = 0.2, g = 1, b = 0.2, a = 0.07 },
+	windowRowHighlightColor = { r = 0.3, g = 0.3, b = 0.7, a = 0.2 },
 	utilsUntrackQuests = false,
 	utilsBroadcastRewards = false,
 }

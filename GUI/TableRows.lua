@@ -250,6 +250,8 @@ function TableDataRowMixin:OnLoad()
 	TableRowMixin.OnLoad(self)
 
 	self:UpdateBackgroundColor(self.data.character:IsCurrent() and Settings:Get("windowPlayerRowColor") or nil)
+	self:UpdateHighlightColor(Settings:Get("windowRowHighlightColor"))
+	self:InstallHighlightHandlers()
 end
 
 function TableDataRowMixin:UpdateBackgroundColor(color)
@@ -267,6 +269,51 @@ function TableDataRowMixin:UpdateBackgroundColor(color)
 
 	if self.Background then
 		self.Background:SetShown(color == nil)
+	end
+end
+
+function TableDataRowMixin:UpdateHighlightColor(color)
+	self.highlightColor = color
+
+	if color then
+		if not self.RowHighlight then
+			self.RowHighlight = self:CreateTexture(nil, "HIGHLIGHT")
+			self.RowHighlight:SetTexture("Interface/BUTTONS/WHITE8X8")
+			self.RowHighlight:SetAllPoints()
+		end
+
+		self.RowHighlight:SetVertexColor(color.r, color.g, color.b, color.a)
+	end
+
+	self:SetHighlightShown(color ~= nil and self:IsMouseOver())
+end
+
+function TableDataRowMixin:SetHighlightShown(shown)
+	-- WeeklyKnowledge paints rowFrame.Highlight while the cursor is over a row. Keep that hidden.
+	if self.Highlight then
+		self.Highlight:Hide()
+	end
+
+	if self.RowHighlight then
+		self.RowHighlight:SetShown(shown and self.highlightColor ~= nil)
+	end
+end
+
+function TableDataRowMixin:InstallHighlightHandlers()
+	self.onEnterHandler = function(frame)
+		self:SetHighlightShown(true)
+		if self.data.onEnter then
+			self.data:onEnter(frame)
+		end
+	end
+
+	self.onLeaveHandler = function(frame)
+		if not self:IsMouseOver() then
+			self:SetHighlightShown(false)
+		end
+		if self.data.onLeave then
+			self.data:onLeave(frame)
+		end
 	end
 end
 
