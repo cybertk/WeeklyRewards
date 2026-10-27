@@ -198,6 +198,14 @@ function Character:ReceiveDrop(guid, quantity, itemLink, currencyID)
 	progress:AddReward(currencyID, itemLink, quantity, true)
 end
 
+function Character:ReceiveBonusRoll(itemLink)
+	local progress = self:GetRewardProgress("mn-voidcore")
+	if progress then
+		progress:AddReward(nil, itemLink, 1)
+		Util:Debug("Received Bonus Roll", itemLink)
+	end
+end
+
 function Character:GetFaction()
 	return self.faction or ""
 end

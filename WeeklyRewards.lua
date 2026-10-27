@@ -20,6 +20,7 @@ WeeklyRewardsArchive = WeeklyRewardsArchive or {}
 local Changes = {
 	{ r = 1, rewards = { "delve-fragment-m", "mn-aqir-satchel" } },
 	{ r = 2, dragTip = true },
+	{ r = 3, rewards = { "delve-hero", "mn-voidcore" } },
 }
 
 local defaultDB = {
@@ -303,6 +304,12 @@ function WeeklyRewards:Init()
 
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", function()
 		character:UpdateParty()
+	end)
+
+	self:RegisterEvent("BONUS_ROLL_RESULT", function(event, typeIdentifier, itemLink, ...)
+		if typeIdentifier == "item" then
+			character:ReceiveBonusRoll(itemLink)
+		end
 	end)
 end
 

@@ -64,6 +64,15 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		entries = { { quest = 97628, items = { 276547, 276548 } } },
 	},
 	{
+		id = "delve-hero",
+		key = "|A:delves-bountiful:16:16|aHero",
+		description = "{faction:2796:-9:1}",
+		group = RewardsGroup.DELVE,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 93935, name = "{faction:2796:9:1:0}" } },
+	},
+	{
 		id = "delve-fragment-m",
 		key = "|A:overworld-active-64x64:16:16|aFragment",
 		description = "{item:285065} earned from the 6-week {storyline:6385}.|n|n{item:285065:0}",

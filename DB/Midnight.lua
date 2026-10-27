@@ -378,4 +378,12 @@ namespace.DB.rewardCandidiates["MN"] = {
 			},
 		},
 	},
+	{
+		id = "mn-voidcore",
+		key = "Voidcore",
+		description = "{currency:3418:0}",
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = { { quest = 0, currency = 3418 } },
+	},
 }

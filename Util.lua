@@ -697,9 +697,13 @@ function Util:ResolveTags(s, autoColor)
 				local i = tonumber(arg2)
 				local rewards = C_MajorFactions.GetRenownRewardsForLevel(id, math.abs(arg1))
 				if rewards and rewards[i] then
-					name = rewards[i].description
-					if arg1 < 0 then
-						name = GetSentence(name)
+					if arg3 == "0" then
+						name = format("|T%d:12|t %s", rewards[i].icon, rewards[i].name)
+					else
+						name = rewards[i].description
+						if arg1 < 0 then
+							name = GetSentence(name)
+						end
 					end
 				end
 

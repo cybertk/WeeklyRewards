@@ -400,12 +400,23 @@ function RewardProgress:hasClaimed()
 	return self.state == PROGRESS_STATE.CLAIMED
 end
 
+function RewardProgress:SetClaimed()
+	self.state = PROGRESS_STATE.CLAIMED
+	self:_UpdateTimestamp()
+	Util:Debug(self.name .. " is claimed")
+end
+
 function RewardProgress:hasStarted()
 	return self.state == PROGRESS_STATE.IN_PROGRESS
 end
 
 function RewardProgress:IsNotStarted()
 	return self.state == PROGRESS_STATE.NOT_STARTED
+end
+
+function RewardProgress:SetStarted()
+	self.state = PROGRESS_STATE.IN_PROGRESS
+	Util:Debug(self.name .. " is started")
 end
 
 function RewardProgress:ObjectivesCount()

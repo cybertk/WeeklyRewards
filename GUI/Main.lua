@@ -551,17 +551,16 @@ function Main:AddProgressToGameTooltip(progress)
 	elseif progress.startedAt then
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine(L["progress_started_at"], WHITE_FONT_COLOR:WrapTextInColorCode(date("%Y-%m-%d %H:%M", progress.startedAt)))
-
-		if progress.rewards then
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(L["progress_rewards_received"])
-		end
 	elseif progress:IsNotStarted() then
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(L["progress_not_started"])
 	end
 
 	if progress.rewards then
+		if not progress.claimedAt then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(L["progress_rewards_received"])
+		end
 		RewardSummary.AddRewardsToTooltip(progress.rewards)
 	end
 
