@@ -40,14 +40,21 @@ function RewardProgress.__eq(a, b)
 	return a.position == b.position and a.state == b.state
 end
 
+local ProgressStateSortOrder = {
+	[PROGRESS_STATE.CLAIMED] = 4,
+	[PROGRESS_STATE.IN_PROGRESS] = 3,
+	[PROGRESS_STATE.NOT_STARTED] = 2,
+	[PROGRESS_STATE.EXPIRED] = 1,
+}
+
 function RewardProgress.__lt(a, b)
-	if a.position == b.position then
-		local s1 = a.state == PROGRESS_STATE.CLAIMED and 99 or a.state
-		local s2 = b.state == PROGRESS_STATE.CLAIMED and 99 or b.state
-		return s1 < s2
+	local s1, s2 = ProgressStateSortOrder[a.state], ProgressStateSortOrder[b.state]
+
+	if s1 == s2 then
+		return a.position < b.position
 	end
 
-	return a.position < b.position
+	return s1 < s2
 end
 
 function RewardProgress:New(o)

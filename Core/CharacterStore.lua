@@ -49,7 +49,7 @@ local function CharacterComparator(lhs, rhs, field)
 	elseif lhs == nil then
 		return -1
 	elseif rhs == nil then
-		return -1
+		return 1
 	end
 
 	local data = Cache.instance:CurrentPlayer()[field]
