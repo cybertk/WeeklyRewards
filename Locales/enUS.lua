@@ -37,6 +37,7 @@ L["settings_auto_untrack_quests"] = "Untrack Quests on Login"
 L["settings_auto_untrack_quests_tooltip"] = "Remove WeeklyRewards quests from the system Objective Tracker when you log in."
 L["settings_broadcast_rewards"] = "Announce Claimed Rewards"
 L["settings_broadcast_rewards_tooltip"] = "Post a Warband reward summary to the largest available chat channel when you claim a reward."
+L["auto_accept_quest_tooltip"] = "Automatically select this quest for all your characters."
 
 -- Table columns
 L["column_realm"] = "Realm"

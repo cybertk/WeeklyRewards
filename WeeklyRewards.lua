@@ -26,6 +26,7 @@ local defaultDB = {
 	global = {
 		activeRewards = {},
 		characters = {},
+		autoAcceptQuests = {},
 		dbVersion = 8,
 	},
 }
