@@ -275,7 +275,7 @@ function RewardProgress:Update(completedQuest)
 		return
 	end
 
-	if self.state == PROGRESS_STATE.CLAIMED then
+	if self.state == PROGRESS_STATE.CLAIMED or self.state == PROGRESS_STATE.EXPIRED then
 		return false
 	end
 
@@ -433,7 +433,6 @@ end
 
 function RewardProgress:SetExpired()
 	self.state = PROGRESS_STATE.EXPIRED
-	Util:Debug(self.name .. " is expired")
 end
 
 function RewardProgress:GetStatusLabel()
