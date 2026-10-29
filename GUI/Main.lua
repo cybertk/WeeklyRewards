@@ -9,6 +9,7 @@ local UI = namespace.UI
 local Utils = namespace.Utils
 
 local L = namespace.L
+local Flags = namespace.Flags
 local Settings = namespace.Settings
 local Util = namespace.Util
 local CharacterStore = namespace.CharacterStore
@@ -193,6 +194,7 @@ function Main:CreateWindow()
 		C_Timer.After(0, GenerateClosure(self.LayoutHeader, self, true))
 	end)
 
+	Tips:SetEnabled(Settings:Get("windowTutorials"))
 	Tips:SetOwner(self.window)
 	Tips:SetupVerticalScrollBarHelpTip(self.window.table.scrollFrame.scrollbarV)
 	Tips:SetupHorizontalScrollBarHelpTip(self.window.table.scrollFrame.scrollbarH)
@@ -207,6 +209,12 @@ function Main:CreateWindow()
 					break
 				end
 			end
+		elseif key == "windowTutorials" then
+			Tips:SetEnabled(value)
+			Flags:Set("dragTip")
+			self.window:Hide()
+			self.window:Show()
+			self:Redraw()
 		elseif self.window and self.window:IsVisible() then
 			self:Redraw()
 		end

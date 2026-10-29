@@ -12,7 +12,7 @@ function TitleBarButtonMixin:OnLoad()
 		self.Icon:SetSize(self.iconWidth, self.iconHeight or self.iconWidth)
 	end
 
-	if self.flag then
+	if self.flag and self.flag ~= "" then
 		Flags:InvokeAndRegisterCallback(self.flag, function(isSet)
 			self.Notification:SetShown(isSet)
 		end)
@@ -34,15 +34,26 @@ function TitleBarButtonMixin:OnLeave()
 	GameTooltip:Hide()
 end
 
+function TitleBarButtonMixin.AddExtraStuffToTooltip(tooltip, description)
+	local entry = description.entry
+
+	Flags:Clear(description.flag, entry.key)
+end
+
 namespace.TitleBarButtonMixin = TitleBarButtonMixin
 
 WeeklyRewardsSettingsButtonMixin = CreateFromMixins(namespace.TitleBarButtonMixin)
+WeeklyRewardsSettingsButtonMixin.flag = "settings"
 
 function WeeklyRewardsSettingsButtonMixin:OnLoad()
 	namespace.TitleBarButtonMixin.OnLoad(self)
 
 	self.tooltip = L["settings_button_tooltip"]
 	self.tooltipText = L["settings_button_description"]
+
+	local newEntries = {
+		{ key = "windowTutorials", title = SHOW_TUTORIALS, tooltip = L["settings_tutorials_tooltip"] },
+	}
 
 	self:SetupMenu(function(_, rootMenu)
 		rootMenu:CreateTitle(MINIMAP_LABEL)
@@ -61,6 +72,13 @@ function WeeklyRewardsSettingsButtonMixin:OnLoad()
 		Settings:CreateColorSwatch("windowPlayerRowColor", rootMenu, L["settings_player_row_color"])
 		Settings:CreateCheckboxMenu("windowBorder", rootMenu, L["settings_show_border"])
 		Settings:CreateCheckboxMenu("windowRowNumbers", rootMenu, L["settings_show_row_numbers"])
+
+		for _, entry in ipairs(newEntries) do
+			local checkbox = Settings:CreateCheckboxMenu(entry.key, rootMenu, Flags:Format(entry.title, self.flag, entry.key), nil, entry.tooltip)
+			checkbox.AddExtraStuffToTooltip = self.AddExtraStuffToTooltip
+			checkbox.entry = entry
+			checkbox.flag = self.flag
+		end
 
 		rootMenu:CreateTitle(L["settings_utility_title"])
 		Settings:CreateCheckboxMenu("utilsUntrackQuests", rootMenu, L["settings_auto_untrack_quests"], nil, L["settings_auto_untrack_quests_tooltip"])

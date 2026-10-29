@@ -21,6 +21,7 @@ local Changes = {
 	{ r = 1, rewards = { "delve-fragment-m", "mn-aqir-satchel" } },
 	{ r = 2, dragTip = true },
 	{ r = 3, rewards = { "delve-hero", "mn-voidcore" } },
+	{ r = 4, settings = { "windowTutorials" } },
 }
 
 local defaultDB = {
@@ -48,6 +49,7 @@ local defaultSettings = {
 	windowBorder = true,
 	windowRowNumbers = true,
 	windowPlayerRowColor = { r = 0.2, g = 1, b = 0.2, a = 0.07 },
+	windowTutorials = true,
 	utilsUntrackQuests = false,
 	utilsBroadcastRewards = false,
 }

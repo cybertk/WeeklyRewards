@@ -37,7 +37,12 @@ function Settings:RegisterCallback(keyPattern, callback, owner, ...)
 end
 
 function Settings:InvokeAndRegisterCallback(keyPattern, callback, ...)
-	callback(..., self.settings[keyPattern], keyPattern)
+	for key, value in pairs(self.settings) do
+		if key:find(keyPattern) then
+			callback(..., value, key)
+		end
+	end
+
 	self:RegisterCallback(keyPattern, callback, ...)
 end
 
@@ -118,7 +123,7 @@ function Settings:WrapOptionCallback(key, callback, owner)
 end
 
 function Settings:GenerateTooltip(description, title)
-	return function(tooltip)
+	return function(tooltip, elementDescription)
 		if type(description) == "string" then
 			GameTooltip_SetTitle(tooltip, title)
 			GameTooltip_AddNormalLine(tooltip, description)
@@ -126,6 +131,10 @@ function Settings:GenerateTooltip(description, title)
 			tooltip:SetItemByID(description.itemID)
 		elseif description.currencyID then
 			tooltip:SetCurrencyByID(description.currencyID)
+		end
+
+		if elementDescription.AddExtraStuffToTooltip then
+			elementDescription.AddExtraStuffToTooltip(tooltip, elementDescription)
 		end
 	end
 end

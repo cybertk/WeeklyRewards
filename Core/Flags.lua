@@ -28,6 +28,10 @@ function Flags:InvokeAndRegisterCallback(key, callback)
 	callback(self.data[key])
 end
 
+function Flags:Set(key)
+	self.data[key] = true
+end
+
 function Flags:Clear(key, value)
 	if not self.data[key] then
 		return

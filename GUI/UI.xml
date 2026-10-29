@@ -50,6 +50,7 @@
         <KeyValues>
             <KeyValue key="iconAtlas" value="squad_size_trios" type="string" />
             <KeyValue key="iconWidth" value="18" type="number" />
+            <KeyValue key="flag" value="" type="string" />
         </KeyValues>
     </DropdownButton>
 

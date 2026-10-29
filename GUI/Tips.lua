@@ -4,6 +4,7 @@ local L = namespace.L
 
 local Tips = {
 	tipsShown = {},
+	enabled = true,
 }
 
 function Tips:SetupVerticalScrollBarHelpTip(scrollBar)
@@ -26,12 +27,17 @@ function Tips:SetupFrameHelpTip(frame, text, targetPoint)
 	end)
 end
 
+function Tips:SetEnabled(enabled)
+	self.enabled = enabled
+	wipe(self.tipsShown)
+end
+
 function Tips:SetOwner(owner)
 	self.owner = owner
 end
 
 function Tips:ShowHelpTip(text, targetPoint, relativeRegion)
-	if self.tipsShown[text] then
+	if not self.enabled or self.tipsShown[text] then
 		return
 	end
 
