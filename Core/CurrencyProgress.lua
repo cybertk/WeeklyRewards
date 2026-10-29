@@ -48,7 +48,7 @@ end
 function CurrencyProgress:SetExpired()
 	local currency = C_CurrencyInfo.GetCurrencyInfo((self.pendingObjectives[1] or self.fulfilledObjectives[1]).currency)
 
-	if currency.maxQuantity > self.total then
+	if currency.maxQuantity > self.total and currency.maxWeeklyQuantity == 0 then
 		self.total = currency.maxQuantity
 		self.claimedAt = nil
 		self:SetStarted()
