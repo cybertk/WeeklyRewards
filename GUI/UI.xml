@@ -5,6 +5,7 @@
     <Script file="SettingsButton.lua" />
     <Script file="CharactersButton.lua" />
     <Script file="TrackingButton.lua" />
+    <Script file="AutomationButton.lua" />
     <Script file="TableRows.lua" />
     <Script file="Main.lua" />
 
@@ -60,6 +61,14 @@
             <KeyValue key="iconWidth" value="15" type="number" />
             <KeyValue key="iconHeight" value="14" type="number" />
             <KeyValue key="flag" value="rewards" type="string" />
+        </KeyValues>
+    </DropdownButton>
+
+    <DropdownButton name="WeeklyRewardsAutomationButtonTemplate" inherits="WeeklyRewardsSettingsButtonTemplate" mixin="WeeklyRewardsAutomationButtonMixin" virtual="true">
+        <KeyValues>
+            <KeyValue key="iconAtlas" value="UI-Frame-DastardlyDuos-icon-Speed" type="string" />
+            <KeyValue key="iconWidth" value="16" type="number" />
+            <KeyValue key="flag" value="utils" type="string" />
         </KeyValues>
     </DropdownButton>
 </Ui>

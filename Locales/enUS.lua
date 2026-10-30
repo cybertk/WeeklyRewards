@@ -14,7 +14,7 @@ L["minimap_tooltip_locked"] = " |cffff0000(locked)|r"
 -- Window titlebar buttons
 L["close_button_tooltip"] = "Close the window"
 L["settings_button_tooltip"] = "Settings"
-L["settings_button_description"] = "Customize the window and automations"
+L["settings_button_description"] = "Customize the window"
 L["characters_button_title"] = "Tracking Characters"
 L["characters_button_description"] = "Enable/Disable your characters."
 L["characters_button_remove_hint"] = "Press CTRL + |A:NPE_LeftClick:16:16|a to delete the character"
@@ -33,11 +33,17 @@ L["settings_player_row_color"] = "Current Character Row Color"
 L["settings_show_border"] = "Show Border"
 L["settings_show_row_numbers"] = "Show Row Numbers"
 L["settings_tutorials_tooltip"] = "Display tutorials which help introduce you to addon."
-L["settings_utility_title"] = "Automation"
 L["settings_auto_untrack_quests"] = "Untrack Quests on Login"
 L["settings_auto_untrack_quests_tooltip"] = "Remove WeeklyRewards quests from the system Objective Tracker when you log in."
 L["settings_broadcast_rewards"] = "Announce Claimed Rewards"
 L["settings_broadcast_rewards_tooltip"] = "Post a Warband reward summary to the largest available chat channel when you claim a reward."
+
+-- automation menu
+L["automation_button_tooltip"] = "Automation & Tools"
+L["automation_button_description"] = "Speed up farming and enhance quality of life for all characters."
+L["automation_disable_hint"] = "Hold any modifier key (Ctrl/Shift/Alt) to temporarily disable the automation"
+L["automation_auto_enter_title"] = "Auto Enter"
+L["automation_auto_enter_tooltip"] = "Automatically enter Val and Naigtal at the selected difficulty."
 
 -- Table columns
 L["column_realm"] = "Realm"

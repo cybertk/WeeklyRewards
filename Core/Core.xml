@@ -1,6 +1,7 @@
 <Ui>
     <Script file="Flags.lua" />
     <Script file="Settings.lua" />
+    <Script file="EventHandler.lua" />
     <Script file="Reward.lua" />
     <Script file="ActiveRewards.lua" />
     <Script file="NewItem.lua" />

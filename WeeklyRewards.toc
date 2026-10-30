@@ -42,6 +42,4 @@ GUI\UI.xml
 
 WeeklyRewards.lua
 
-Modules\SelectableLootScanner.lua
-Modules\AtomicContainerLootScanner.lua
-
+Modules\Modules.xml

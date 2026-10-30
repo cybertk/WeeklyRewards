@@ -89,6 +89,11 @@ function Main:AddRewardsFilterButton()
 	self.window.titlebar.ColumnsButton:SetPoint("RIGHT", self.window.titlebar.CharactersButton, "LEFT", 0, 0)
 end
 
+function Main:AddAutomationButton()
+	self.window.titlebar.AutomationButton = CreateFrame("DropdownButton", "$parentAutomationButton", self.window.titlebar, "WeeklyRewardsAutomationButtonTemplate")
+	self.window.titlebar.AutomationButton:SetPoint("RIGHT", self.window.titlebar.ColumnsButton, "LEFT", 0, 0)
+end
+
 function Main:CreateWindow()
 	local frameName = addonName .. "MainWindow"
 	self.window = CreateFrame("Frame", frameName, UIParent)
@@ -161,6 +166,7 @@ function Main:CreateWindow()
 	self:AddSettingsButton()
 	self:AddCharactersButton()
 	self:AddRewardsFilterButton()
+	self:AddAutomationButton()
 
 	self.window.table = UI:CreateTableFrame({
 		header = {

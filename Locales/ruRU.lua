@@ -16,7 +16,7 @@ L["minimap_tooltip_locked"] = " |cffff0000(заблокировано)|r"
 -- Window titlebar buttons
 L["close_button_tooltip"] = "Закрыть окно"
 L["settings_button_tooltip"] = "Настройки"
-L["settings_button_description"] = "Настройки окна и автоматизации"
+L["settings_button_description"] = "Настройки окна"
 L["characters_button_description"] = "Вкл./откл. Ваших персонажей."
 L["characters_button_remove_hint"] = "<Ctrl+ЛКМ - удалить персонажа>"
 L["columns_button_tooltip"] = "Колонки"
@@ -33,11 +33,14 @@ L["settings_background_color"] = "Цвет фона"
 L["settings_player_row_color"] = "Цвет строки текущего персонажа"
 L["settings_show_border"] = "Показывать границу"
 L["settings_show_row_numbers"] = "Показывать номера строк"
-L["settings_utility_title"] = "Утилиты"
 L["settings_auto_untrack_quests"] = "Отключение заданий"
 L["settings_auto_untrack_quests_tooltip"] = "Отключить отслеживание всех заданий, управляемых WeeklyRewards, при входе в игру, что позволит сделать панель журнала заданий более удобной."
 L["settings_broadcast_rewards"] = "Оповещать о наградах"
 L["settings_broadcast_rewards_tooltip"] = "После получения наград Отряда Вы сможете опубликовать сводку по ней. Для этого автоматически выбирается канал чата с наибольшей аудиторией."
+
+-- automation menu
+L["automation_button_tooltip"] = "Автоматизация и инструменты"
+L["automation_button_description"] = "Автоматизация и инструменты для ускорения фарма и повышения удобства игры для всех персонажей."
 
 -- Table columns
 L["column_realm"] = "Игровой мир"

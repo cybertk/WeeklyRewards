@@ -79,9 +79,5 @@ function WeeklyRewardsSettingsButtonMixin:OnLoad()
 			checkbox.entry = entry
 			checkbox.flag = self.flag
 		end
-
-		rootMenu:CreateTitle(L["settings_utility_title"])
-		Settings:CreateCheckboxMenu("utilsUntrackQuests", rootMenu, L["settings_auto_untrack_quests"], nil, L["settings_auto_untrack_quests_tooltip"])
-		Settings:CreateCheckboxMenu("utilsBroadcastRewards", rootMenu, L["settings_broadcast_rewards"], nil, L["settings_broadcast_rewards_tooltip"])
 	end)
 end

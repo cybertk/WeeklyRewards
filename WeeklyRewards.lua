@@ -10,6 +10,7 @@ local DB = namespace.DB
 local Util = namespace.Util
 local Flags = namespace.Flags
 local Settings = namespace.Settings
+local ModuleManager = namespace.ModuleManager
 local CharacterStore = namespace.CharacterStore
 local ActiveRewards = namespace.ActiveRewards
 local RewardSummary = namespace.RewardSummary
@@ -22,6 +23,7 @@ local Changes = {
 	{ r = 2, dragTip = true },
 	{ r = 3, rewards = { "delve-hero", "mn-voidcore" } },
 	{ r = 4, settings = { "windowTutorials" } },
+	{ r = 5, utils = { "AutoEnter" } },
 }
 
 local defaultDB = {
@@ -52,6 +54,7 @@ local defaultSettings = {
 	windowTutorials = true,
 	utilsUntrackQuests = false,
 	utilsBroadcastRewards = false,
+	utilsAutoEnter = false,
 }
 
 local WeeklyRewards = { ns = namespace }
@@ -229,6 +232,10 @@ function WeeklyRewards:Init()
 	if Settings:Get("utilsUntrackQuests") then
 		character:RemoveQuestsWatch()
 	end
+
+	Settings:InvokeAndRegisterCallback("^utils", function(_, value, key)
+		ModuleManager.SetModuleEnabled(key:gsub("^utils", ""), value)
+	end, self)
 
 	self:PurgeProgress()
 	self:UpdateActiveRewards()
