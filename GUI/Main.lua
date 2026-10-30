@@ -541,7 +541,8 @@ function Main:AddProgressToGameTooltip(progress)
 			GameTooltip_AddColoredDoubleLine(tooltip, text, completed and checkmark or redx, color, WHITE_FONT_COLOR, false)
 		end)
 	else
-		local questName = QuestUtils_GetQuestName(progress:Quest()) or ""
+		local objective = progress.pendingObjectives[1] or progress.fulfilledObjectives[1]
+		local questName = objective and objective.quest and QuestUtils_GetQuestName(objective.quest) or ""
 		GameTooltip:AddDoubleLine(YELLOW_FONT_COLOR:WrapTextInColorCode(#questName > 0 and questName or progress.name), status)
 		-- Show objectives of single quest
 		progress:ForEachRecord(function(record, completed)

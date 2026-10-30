@@ -328,7 +328,7 @@ function RewardProgress:Update(completedQuest)
 
 		local objective = self.pendingObjectives[1]
 
-		if self.position == self.total and objective.quest == 0 then
+		if self.position == self.total and not objective.quest then
 			table.insert(self.fulfilledObjectives, objective)
 			self.pendingObjectives = {}
 			newState = PROGRESS_STATE.CLAIMED
@@ -421,10 +421,6 @@ end
 
 function RewardProgress:ObjectivesCount()
 	return #self.pendingObjectives + #self.fulfilledObjectives
-end
-
-function RewardProgress:Quest()
-	return #self.pendingObjectives > 0 and self.pendingObjectives[1].quest or self.fulfilledObjectives[1].quest
 end
 
 function RewardProgress:IsExpired()

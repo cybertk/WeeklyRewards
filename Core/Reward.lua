@@ -24,7 +24,7 @@ local RewardObjective = {}
 RewardObjective.__index = RewardObjective
 
 function RewardObjective:GetQuest()
-	return self.quest or self.questPool[1]
+	return self.quest or (self.questPool and self.questPool[1])
 end
 
 function RewardObjective:GetDescription()
@@ -43,7 +43,7 @@ function RewardObjective:GetDescription()
 		end
 
 		return Util:ColoredText(table.concat(tags, "|n"), unpack(self.items)), #self.items > 1
-	elseif self.quest and self.quest ~= 0 then
+	elseif self.quest then
 		return Util:Text("{quest:%d}", self.quest)
 	elseif self.questPool then
 		local quests = {}
@@ -217,7 +217,8 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 			end
 
 			if confirmed then
-				Util:Debug("Reward [" .. self.name .. "] confirmed: " .. QuestUtils_GetQuestName(entry.quest or 0))
+				local quest = entry:GetQuest()
+				Util:Debug("Reward [" .. self.name .. "] confirmed: " .. (quest and QuestUtils_GetQuestName(quest) or ""))
 				self:AddObjective(i)
 				if #self.objectives == pick then
 					Util:Debug("Reward [" .. self.name .. "] all confirmed: " .. pick)
@@ -408,12 +409,15 @@ function Reward:ForEachItem(callback)
 	local uniqueItems = {}
 	local items = {}
 	for _, objective in ipairs(self.objectives) do
-		for _, item in ipairs(GetCachedQuestRewardItems(objective:GetQuest()) or {}) do
-			if uniqueItems[item.id] then
-				uniqueItems[item.id].amount = item.amount + uniqueItems[item.id].amount
-			else
-				-- copy
-				uniqueItems[item.id] = { id = item.id, name = item.name, texture = item.texture, amount = item.amount, quality = item.quality }
+		local quest = objective:GetQuest()
+		if quest then
+			for _, item in ipairs(GetCachedQuestRewardItems(quest) or {}) do
+				if uniqueItems[item.id] then
+					uniqueItems[item.id].amount = item.amount + uniqueItems[item.id].amount
+				else
+					-- copy
+					uniqueItems[item.id] = { id = item.id, name = item.name, texture = item.texture, amount = item.amount, quality = item.quality }
+				end
 			end
 		end
 	end

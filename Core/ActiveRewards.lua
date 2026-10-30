@@ -34,7 +34,10 @@ local function AddRewardToCache(reward)
 	Cache.rewards[reward:GetCandidateID()] = reward
 
 	for _, objective in ipairs(reward.objectives) do
-		Cache.questToReward[objective:GetQuest()] = reward
+		local quest = objective:GetQuest()
+		if quest then
+			Cache.questToReward[quest] = reward
+		end
 	end
 end
 

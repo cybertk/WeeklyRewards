@@ -68,7 +68,7 @@ namespace.DB.rewardCandidiates["love"] = {
 		unlockEvent = 423,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		entries = {
-			{ quest = 0, questPool = { 78683, 78912 }, unlockQuest = { 78683, 78912 } },
+			{ questPool = { 78683, 78912 }, unlockQuest = { 78683, 78912 } },
 		},
 		items = {
 			{

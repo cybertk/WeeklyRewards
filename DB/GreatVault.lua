@@ -10,7 +10,7 @@ namespace.DB.rewardCandidiates["vault"] = {
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 0, progressType = 1 },
+			{ progressType = 1 },
 		},
 	},
 }

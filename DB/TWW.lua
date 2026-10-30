@@ -273,7 +273,6 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		rollover = true,
 		entries = {
 			{
-				quest = 0,
 				unlockQuest = 84724, -- The Radiant Vault
 				progressType = 3,
 				items = { 228411 }, -- Cyrce's Circlet
@@ -381,7 +380,6 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		entries = {
 			{ quest = 87296, items = { 236682, 235053 }, itemsMaxCount = { 0, 1 }, removeOnCompletion = true },
 			{
-				quest = 0,
 				maxCompletion = 4,
 				unlockItem = 235053,
 				questPool = {

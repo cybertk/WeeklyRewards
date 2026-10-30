@@ -228,7 +228,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		group = RewardsGroup.PREY,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 0, questPool = range(91095, 91124), maxCompletion = 5 } },
+		entries = { { questPool = range(91095, 91124), maxCompletion = 5 } },
 	},
 	{
 		id = "mn-prey-h",
@@ -237,7 +237,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 0, questPool = concat(range(91210, 91242, 2), range(91243, 91255)), maxCompletion = 5 } },
+		entries = { { questPool = concat(range(91210, 91242, 2), range(91243, 91255)), maxCompletion = 5 } },
 	},
 
 	{
@@ -248,7 +248,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
-			{ quest = 0, questPool = concat(range(91211, 91241, 2), range(91256, 91269), range(95021, 95024)), maxCompletion = 5 },
+			{ questPool = concat(range(91211, 91241, 2), range(91256, 91269), range(95021, 95024)), maxCompletion = 5 },
 		},
 	},
 	{
@@ -384,6 +384,6 @@ namespace.DB.rewardCandidiates["MN"] = {
 		description = "{currency:3418:0}",
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 0, currency = 3418 } },
+		entries = { { currency = 3418 } },
 	},
 }

@@ -68,7 +68,9 @@ function RewardSummary:Create(rewardID)
 
 	local progress = self.character:GetRewardProgress(rewardID)
 	if progress then
-		o.name = progress:ObjectivesCount() == 1 and GetQuestLink(progress:Quest()) or format("<%s>", progress.name)
+		local objective = progress.pendingObjectives[1] or progress.fulfilledObjectives[1]
+		local quest = objective and objective.quest
+		o.name = (progress:ObjectivesCount() == 1 and quest and GetQuestLink(quest)) or format("<%s>", progress.name)
 	else
 		o.name = ""
 	end

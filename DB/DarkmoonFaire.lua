@@ -36,7 +36,6 @@ namespace.DB.rewardCandidiates["darkmoon"] = {
 		timeLeft = "end-of-event",
 		entries = {
 			{
-				quest = 0,
 				questPool = {
 					29506, -- A Fizzy Fusion
 					29507, -- Fun for the Little Ones
