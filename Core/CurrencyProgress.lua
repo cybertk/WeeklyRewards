@@ -10,8 +10,6 @@ function CurrencyProgress:Update()
 
 	local currency = C_CurrencyInfo.GetCurrencyInfo((self.pendingObjectives[1] or self.fulfilledObjectives[1]).currency)
 
-	self:SetStarted()
-
 	if currency.maxWeeklyQuantity > 0 then
 		self.position = currency.quantityEarnedThisWeek
 		self.total = currency.maxWeeklyQuantity
@@ -22,6 +20,10 @@ function CurrencyProgress:Update()
 	else
 		self.position = currency.totalEarned
 		self.total = currency.maxQuantity
+	end
+
+	if self.position > 0 then
+		self:SetStarted()
 	end
 
 	self.records = nil
