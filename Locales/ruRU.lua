@@ -33,6 +33,7 @@ L["settings_background_color"] = "Цвет фона"
 L["settings_player_row_color"] = "Цвет строки текущего персонажа"
 L["settings_show_border"] = "Показывать границу"
 L["settings_show_row_numbers"] = "Показывать номера строк"
+L["settings_tutorials_tooltip"] = "Показывать обучающие подсказки, помогающие познакомиться с аддоном."
 L["settings_auto_untrack_quests"] = "Отключение заданий"
 L["settings_auto_untrack_quests_tooltip"] = "Отключить отслеживание всех заданий, управляемых WeeklyRewards, при входе в игру, что позволит сделать панель журнала заданий более удобной."
 L["settings_broadcast_rewards"] = "Оповещать о наградах"
@@ -40,7 +41,10 @@ L["settings_broadcast_rewards_tooltip"] = "После получения наг�
 
 -- automation menu
 L["automation_button_tooltip"] = "Автоматизация и инструменты"
-L["automation_button_description"] = "Автоматизация и инструменты для ускорения фарма и повышения удобства игры для всех персонажей."
+L["automation_button_description"] = "Ускорьте фарм и повысьте комфорт игры для всех персонажей."
+L["automation_disable_hint"] = "Удерживайте любой модификатор (Ctrl/Shift/Alt), чтобы временно отключить автоматизацию"
+L["automation_auto_enter_title"] = "Автовход"
+L["automation_auto_enter_tooltip"] = "Автоматически входить в Вал и Найтал на выбранной сложности."
 
 -- Table columns
 L["column_realm"] = "Игровой мир"
@@ -60,6 +64,7 @@ L["table_alts_collect_hint"] = "Войдите в игру этим персон
 -- Tips
 L["tips_scrollbar_vertical"] = "Перетащите или используйте колесо мыши для прокрутки дополнительных строк."
 L["tips_scrollbar_horizontal"] = "Перетащите или используйте колесо мыши для прокрутки дополнительных столбцов.|n|nЕсли вертикальная прокрутка также активна, удерживайте клавишу |cffffff00модификатор|r при использовании колеса мыши."
+L["tips_drag_to_reorder"] = "Перетащите название награды на новую позицию, чтобы изменить её порядок."
 
 -- Progress tooltips
 L["progress_rewards_received_at"] = "Награды получены:"
