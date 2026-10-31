@@ -211,7 +211,34 @@ function Settings:CreateMenuTree(key, menu, text, submenuTextGetter, sortDescend
 	end
 end
 
-function Settings:CreateCheckboxMenu(key, menu, text, tableIndex, tooltipText, response)
+local function AttachCheckboxSideButton(elementDescription, sideButton)
+	elementDescription:AddInitializer(function(frame, _, menu)
+		local size = sideButton.size or 16
+		local button = MenuTemplates.AttachUtilityButton(frame, sideButton.texture, size, size)
+		if sideButton.atlas then
+			button.Texture:SetAtlas(sideButton.atlas)
+		end
+		button:SetPoint("RIGHT")
+
+		-- The menu measures this row before it stretches every row to the same width.
+		-- Padding the label keeps the hover button from covering the text on the widest row.
+		local fontString = frame.fontString
+		if fontString then
+			fontString:SetWidth(fontString:GetUnboundedStringWidth() + size + 6)
+		end
+
+		if sideButton.tooltip then
+			MenuTemplates.SetUtilityButtonTooltipText(button, sideButton.tooltip)
+		end
+
+		MenuTemplates.SetUtilityButtonClickHandler(button, function()
+			sideButton.onClick()
+			menu:Close()
+		end)
+	end)
+end
+
+function Settings:CreateCheckboxMenu(key, menu, text, tableIndex, tooltipText, response, sideButton)
 	local checkbox
 
 	if tableIndex then
@@ -226,6 +253,10 @@ function Settings:CreateCheckboxMenu(key, menu, text, tableIndex, tooltipText, r
 
 	if response then
 		checkbox:SetResponse(response)
+	end
+
+	if type(sideButton) == "table" then
+		AttachCheckboxSideButton(checkbox, sideButton)
 	end
 
 	return checkbox

@@ -24,6 +24,7 @@ local Changes = {
 	{ r = 3, rewards = { "delve-hero", "mn-voidcore" } },
 	{ r = 4, settings = { "windowTutorials" } },
 	{ r = 5, utils = { "AutoEnter" } },
+	{ r = 6, utils = { "RideAlong" } },
 }
 
 local defaultDB = {
@@ -55,6 +56,7 @@ local defaultSettings = {
 	utilsUntrackQuests = false,
 	utilsBroadcastRewards = false,
 	utilsAutoEnter = false,
+	utilsRideAlong = false,
 }
 
 local WeeklyRewards = { ns = namespace }

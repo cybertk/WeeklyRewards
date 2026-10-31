@@ -44,6 +44,9 @@ L["automation_button_description"] = "Speed up farming and enhance quality of li
 L["automation_disable_hint"] = "Hold any modifier key (Ctrl/Shift/Alt) to temporarily disable the automation"
 L["automation_auto_enter_title"] = "Auto Enter"
 L["automation_auto_enter_tooltip"] = "Automatically enter Val and Naigtal at the selected difficulty."
+L["automation_ride_along_title"] = "Ride Along"
+L["automation_ride_along_tooltip"] = "Hover the row, then use the button to open the skyriding talent tree."
+L["automation_ride_along_open_tooltip"] = "Open the skyriding talent tree."
 
 -- Table columns
 L["column_realm"] = "Realm"
