@@ -30,6 +30,7 @@ local defaultDB = {
 	global = {
 		activeRewards = {},
 		characters = {},
+		compressProgress = false,
 		dbVersion = 8,
 	},
 }
@@ -103,7 +104,7 @@ function WeeklyRewards:MigrateDB()
 	end
 
 	for _, c in pairs(self.db.global.characters) do
-		for n, p in pairs(c.progress) do
+		for n, p in pairs(c.progress or {}) do
 			local reward = rewardsMap[n]
 
 			if n == "vault" then
@@ -149,6 +150,64 @@ function WeeklyRewards:MigrateDB()
 	end
 end
 
+-- One blob for every character's progress. In memory, progress stays on the character.
+-- The blob is written on logout and read back before MigrateDB.
+function WeeklyRewards:RestoreCompressedProgress()
+	if not self.db.global.compressProgress then
+		return
+	end
+
+	local encoded = self.db.global.compressedProgress
+	if type(encoded) ~= "string" or encoded == "" then
+		return
+	end
+
+	local ok, snapshot = pcall(Archivist.DeArchive, Archivist, encoded)
+	if not ok or type(snapshot) ~= "table" then
+		-- Leave the blob in place. Logout must not replace it with empty progress tables.
+		self.compressRestoreFailed = true
+		print("WeeklyRewards: failed to decompress progress")
+		return
+	end
+
+	for guid, progress in pairs(snapshot) do
+		local character = self.db.global.characters[guid]
+		if type(character) == "table" and type(progress) == "table" then
+			character.progress = progress
+		end
+	end
+end
+
+function WeeklyRewards:CommitCompressedProgress()
+	if not self.progressReady or not self.db or self.compressRestoreFailed then
+		return
+	end
+
+	if not self.db.global.compressProgress then
+		self.db.global.compressedProgress = nil
+		return
+	end
+
+	local snapshot = {}
+	for guid, character in pairs(self.db.global.characters) do
+		snapshot[guid] = character.progress or {}
+	end
+
+	local ok, encoded = pcall(Archivist.Archive, Archivist, snapshot)
+	if not ok then
+		self.db.global.compressProgress = false
+		print("WeeklyRewards: failed to compress progress")
+		return
+	end
+
+	self.db.global.compressedProgress = encoded
+	for _, character in pairs(self.db.global.characters) do
+		character.progress = nil
+	end
+
+	Util:Debug("Compressed progress bytes:", #encoded)
+end
+
 function WeeklyRewards:OnLoaded()
 	_G["BINDING_NAME_WeeklyRewards"] = L["BINDING_NAME_WeeklyRewards"]
 
@@ -184,7 +243,9 @@ function WeeklyRewards:OnLoaded()
 		LibDBIcon:Refresh(addonName, Settings:Get("minimap"))
 	end, self)
 
+	self:RestoreCompressedProgress()
 	self:MigrateDB()
+	self.progressReady = true
 end
 
 function WeeklyRewards:Init()
@@ -331,6 +392,10 @@ function WeeklyRewards:ExecuteChatCommands(command)
 		Util.debug = self.db.global.debug
 		print("Debug Mode:", self.db.global.debug)
 		return
+	elseif strtrim(command or "") == "compress" then
+		self.db.global.compressProgress = not self.db.global.compressProgress
+		print("Compress Progress:", self.db.global.compressProgress)
+		return
 	end
 
 	Main:ToggleWindow()
@@ -424,5 +489,9 @@ do
 		end
 
 		WeeklyRewards:Init()
+	end)
+
+	WeeklyRewards:RegisterEvent("PLAYER_LOGOUT", function()
+		WeeklyRewards:CommitCompressedProgress()
 	end)
 end

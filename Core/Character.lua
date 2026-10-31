@@ -41,7 +41,9 @@ function Character:New(o)
 		Character._Init(o)
 	end
 
-	for k, v in pairs(o.progress or {}) do
+	o.progress = o.progress or {}
+
+	for k, v in pairs(o.progress) do
 		if next(v) then
 			Character._AddProgress(o, ProgressFactory:Create(v.type, v), k)
 		end
