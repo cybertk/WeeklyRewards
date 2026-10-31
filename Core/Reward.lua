@@ -23,10 +23,6 @@ local WAPI_UnitLevel = UnitLevel
 local RewardObjective = {}
 RewardObjective.__index = RewardObjective
 
-function RewardObjective:GetQuest()
-	return self.quest or (self.questPool and self.questPool[1])
-end
-
 function RewardObjective:GetDescription()
 	if self.name or self.text then
 		return Util:ResolveTags(self.name or self.text)
@@ -217,7 +213,7 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 			end
 
 			if confirmed then
-				local quest = entry:GetQuest()
+				local quest = entry.quest or (entry.questPool and entry.questPool[1])
 				Util:Debug("Reward [" .. self.name .. "] confirmed: " .. (quest and QuestUtils_GetQuestName(quest) or ""))
 				self:AddObjective(i)
 				if #self.objectives == pick then
@@ -265,11 +261,12 @@ function Reward:DetermineResetTime(timeLeft)
 	if timeLeft == nil then
 		-- Cannot always get valid reset time when just logged in
 		for _, objective in ipairs(self.objectives) do
-			for _, quest in ipairs({ objective:GetQuest(), objective.unlockQuest }) do
+			local quest = objective.quest or (objective.questPool and objective.questPool[1])
+			if quest then
 				timeLeft = WAPI_GetQuestTimeLeftSeconds(quest)
-				if timeLeft then
-					break
-				end
+			end
+			if not timeLeft and type(objective.unlockQuest) == "number" then
+				timeLeft = WAPI_GetQuestTimeLeftSeconds(objective.unlockQuest)
 			end
 		end
 	end
@@ -409,7 +406,7 @@ function Reward:ForEachItem(callback)
 	local uniqueItems = {}
 	local items = {}
 	for _, objective in ipairs(self.objectives) do
-		local quest = objective:GetQuest()
+		local quest = objective.quest or (objective.questPool and objective.questPool[1])
 		if quest then
 			for _, item in ipairs(GetCachedQuestRewardItems(quest) or {}) do
 				if uniqueItems[item.id] then
