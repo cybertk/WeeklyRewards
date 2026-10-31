@@ -24,12 +24,14 @@ local Changes = {
 	{ r = 3, rewards = { "delve-hero", "mn-voidcore" } },
 	{ r = 4, settings = { "windowTutorials" } },
 	{ r = 5, utils = { "AutoEnter" } },
+	{ r = 6, utils = { "AutoFlight" } },
 }
 
 local defaultDB = {
 	global = {
 		activeRewards = {},
 		characters = {},
+		modules = {},
 		dbVersion = 8,
 	},
 }
@@ -55,6 +57,7 @@ local defaultSettings = {
 	utilsUntrackQuests = false,
 	utilsBroadcastRewards = false,
 	utilsAutoEnter = false,
+	utilsAutoFlight = false,
 }
 
 local WeeklyRewards = { ns = namespace }
@@ -233,6 +236,7 @@ function WeeklyRewards:Init()
 		character:RemoveQuestsWatch()
 	end
 
+	ModuleManager.SetDB(self.db.global.modules)
 	Settings:InvokeAndRegisterCallback("^utils", function(_, value, key)
 		ModuleManager.SetModuleEnabled(key:gsub("^utils", ""), value)
 	end, self)

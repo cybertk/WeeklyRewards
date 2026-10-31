@@ -45,6 +45,12 @@ L["automation_button_description"] = "Ускорьте фарм и повысь�
 L["automation_disable_hint"] = "Удерживайте любой модификатор (Ctrl/Shift/Alt), чтобы временно отключить автоматизацию"
 L["automation_auto_enter_title"] = "Автовход"
 L["automation_auto_enter_tooltip"] = "Автоматически входить в Вал и Найтал на выбранной сложности."
+L["automation_auto_flight_title"] = "Автополёт"
+L["automation_auto_flight_tooltip"] =
+	"Запоминает маршрут, выбранный у распорядителя полётов, и автоматически выбирает его в следующий раз на этом и остальных персонажах. Берутся только изученные маршруты, стоимость списывается как обычно. Удерживайте модификатор, чтобы выбрать другой маршрут: он заменит сохранённый."
+L["automation_auto_flight_saved"] = "|cff00ccffWeeklyRewards:|r Перелёт из %s в |cff71d5ff%s|r сохранён. Все персонажи будут выбирать его автоматически."
+L["automation_auto_flight_clear"] = "Очистить сохранённые маршруты"
+L["automation_auto_flight_clear_confirm"] = "Очистить все сохранённые маршруты?"
 
 -- Table columns
 L["column_realm"] = "Игровой мир"

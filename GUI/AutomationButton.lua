@@ -21,6 +21,7 @@ function WeeklyRewardsAutomationButtonMixin:OnLoad()
 
 	local newEntries = {
 		{ key = "AutoEnter", title = L["automation_auto_enter_title"], tooltip = L["automation_auto_enter_tooltip"] },
+		{ key = "AutoFlight", title = L["automation_auto_flight_title"], tooltip = L["automation_auto_flight_tooltip"] },
 	}
 
 	self:SetupMenu(function(_, rootMenu)
@@ -35,6 +36,16 @@ function WeeklyRewardsAutomationButtonMixin:OnLoad()
 			checkbox.AddExtraStuffToTooltip = self.AddExtraStuffToTooltip
 			checkbox.entry = entry
 			checkbox.flag = self.flag
+		end
+
+		local autoFlight = namespace.ModuleManager.Modules.AutoFlight
+		if autoFlight and autoFlight:HasRoutes() then
+			rootMenu:CreateSpacer()
+			rootMenu:CreateButton(L["automation_auto_flight_clear"], function()
+				StaticPopup_ShowGenericConfirmation(L["automation_auto_flight_clear_confirm"], function()
+					autoFlight:ClearRoutes()
+				end)
+			end)
 		end
 	end)
 end

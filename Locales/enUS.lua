@@ -44,6 +44,12 @@ L["automation_button_description"] = "Speed up farming and enhance quality of li
 L["automation_disable_hint"] = "Hold any modifier key (Ctrl/Shift/Alt) to temporarily disable the automation"
 L["automation_auto_enter_title"] = "Auto Enter"
 L["automation_auto_enter_tooltip"] = "Automatically enter Val and Naigtal at the selected difficulty."
+L["automation_auto_flight_title"] = "Auto Flight"
+L["automation_auto_flight_tooltip"] =
+	"Remember the flight you choose at each flight master and take it automatically next time, on this character and your others. Only learned flight paths are taken, and the usual flight cost is paid. Hold a modifier key to choose a different flight; that choice replaces the saved one."
+L["automation_auto_flight_saved"] = "|cff00ccffWeeklyRewards:|r Flight from %s to |cff71d5ff%s|r saved. All your characters will take it automatically."
+L["automation_auto_flight_clear"] = "Clear Saved Flights"
+L["automation_auto_flight_clear_confirm"] = "Clear all saved flight paths?"
 
 -- Table columns
 L["column_realm"] = "Realm"
