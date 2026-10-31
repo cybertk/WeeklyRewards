@@ -198,11 +198,7 @@ function TableHeaderRowMixin:OnLoad()
 		self:AddReorderSource(column, column.data.selectedIndex)
 
 		Mixin(column, WeeklyRewardsTableHeaderCellMixin)
-		_G.xx = column
-		if not column.Arrow then
-			column:OnLoad()
-		end
-
+		column:OnLoad()
 		column:Layout()
 
 		if column.data.selectedIndex == 1 and (ActiveRewards:IsNewCandidateSelected() or Flags:IsSet("dragTip")) then
@@ -258,6 +254,15 @@ function TableDataRowMixin:OnLoad()
 	TableRowMixin.OnLoad(self)
 
 	self:UpdateBackgroundColor(self.data.character:IsCurrent() and Settings:Get("windowPlayerRowColor") or nil)
+
+	local columns = self.window.table.data.columns
+	for index, cell in ipairs(self.columns) do
+		local dataMixin = columns[index] and columns[index].dataMixin
+		if dataMixin then
+			Mixin(cell, dataMixin)
+			cell:OnLoad()
+		end
+	end
 end
 
 function TableDataRowMixin:UpdateBackgroundColor(color)
