@@ -14,8 +14,6 @@ L["minimap_tooltip_drag"] = "|cff00ff00Перетаскивание|r - пере
 L["minimap_tooltip_locked"] = " |cffff0000(заблокировано)|r"
 
 -- Window titlebar buttons
-L["close_button_tooltip"] = "Закрыть окно"
-L["settings_button_tooltip"] = "Настройки"
 L["settings_button_description"] = "Настройки окна"
 L["characters_button_description"] = "Вкл./откл. Ваших персонажей."
 L["characters_button_remove_hint"] = "<Ctrl+ЛКМ - удалить персонажа>"
@@ -80,7 +78,6 @@ L["progress_not_started"] = "<Не начато>"
 L["progress_drops"] = "Дроп"
 
 -- Reward tooltips
-L["reward_time_left"] = "Осталось времени: "
 L["reward_objective_multi_quests_title"] = "Завершите %d из следующих заданий:"
 
 -- Candidate tooltips

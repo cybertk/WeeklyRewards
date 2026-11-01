@@ -48,7 +48,7 @@ WeeklyRewardsSettingsButtonMixin.flag = "settings"
 function WeeklyRewardsSettingsButtonMixin:OnLoad()
 	namespace.TitleBarButtonMixin.OnLoad(self)
 
-	self.tooltip = L["settings_button_tooltip"]
+	self.tooltip = SETTINGS
 	self.tooltipText = L["settings_button_description"]
 
 	local newEntries = {
