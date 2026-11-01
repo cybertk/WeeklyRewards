@@ -27,6 +27,7 @@ local Changes = {
 	{ r = 4, settings = { "windowTutorials" } },
 	{ r = 5, utils = { "AutoEnter" } },
 	{ r = 6, utils = { "AutoFlight" } },
+	{ r = 7, rewards = { "mn-disruptions", "mn-enemies" } },
 }
 
 local defaultDB = {

@@ -313,6 +313,28 @@ namespace.DB.rewardCandidiates["MN"] = {
 		},
 	},
 	{
+		id = "mn-disruptions",
+		key = "Disruptions",
+		group = RewardsGroup.FIELD_ACCOLADES,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 97081, unlockPoi = 8819 }, -- More Disruptions: Val (Heroic)
+			{ quest = 97087, unlockPoi = 8820 }, -- More Disruptions: Naigtal (Heroic)
+		},
+	},
+	{
+		id = "mn-enemies",
+		key = "Enemies",
+		group = RewardsGroup.FIELD_ACCOLADES,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		entries = {
+			{ quest = 97083, unlockPoi = 8819 }, -- Dangerous Enemies: Val (Heroic)
+			{ quest = 97086, unlockPoi = 8820 }, -- Dangerous Enemies: Naigtal (Heroic)
+		},
+	},
+	{
 		id = "mn-trailing",
 		key = "Trailing",
 		group = RewardsGroup.PINNACLE_CACHE,
