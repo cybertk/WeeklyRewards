@@ -1,5 +1,7 @@
 local _, namespace = ...
 
+local L = namespace.L
+
 local RewardsGroup = {
 	DARKMOON_EVENT = "{event:479}",
 }
@@ -77,7 +79,7 @@ namespace.DB.rewardCandidiates["darkmoon"] = {
 				amount = 0,
 			},
 			{
-				name = "Profession Knownledge Points",
+				name = L["df_profession_knowledge"],
 				texture = 3615911, -- Algrai Enchanter's Folio
 				quality = Enum.ItemQuality.Artifact,
 			},

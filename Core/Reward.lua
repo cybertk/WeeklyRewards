@@ -281,9 +281,14 @@ function Reward:DetermineResetTime(timeLeft)
 	self.resetTime = self.startTime + timeLeft
 end
 
+function Reward.DescriptionText(id, fallback)
+	return L["desc:" .. id] or fallback
+end
+
 function Reward:GetDescription()
-	if self.description then
-		return NORMAL_FONT_COLOR:WrapTextInColorCode(Util:ResolveTags(self.description, true))
+	local description = Reward.DescriptionText(self:GetCandidateID(), self.description)
+	if description then
+		return NORMAL_FONT_COLOR:WrapTextInColorCode(Util:ResolveTags(description, true))
 	elseif not self.objectives then
 		return UNKNOWN
 	elseif #self.objectives == 1 then

@@ -67,7 +67,7 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 	{
 		id = "tww-worldsoul",
 		key = "Worldsoul",
-		description = "The Call of the Worldsoul",
+		description = "{quest:82449}",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 70,
 		entries = {
@@ -134,7 +134,7 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 	{
 		id = "tww-pact",
 		key = "Spider",
-		description = "Weekly Azj-Kahet Pact Choice",
+		description = "Weekly {map:2255} pact choice",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 70,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -232,8 +232,8 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 	{
 		id = "tww-invasion",
 		key = "Invasion",
-		description = "Siren Isle Invasion Quests|n|n"
-			.. "Enemies cycle every week from a pool of three types:|n"
+		description = "{map:2369} invasion quests|n|n"
+			.. "Enemies cycle each week among three types:|n"
 			.. "|cffffff00Vrykul|r, |cffffff00Naga|r, and |cffffff00Pirate|r.",
 		group = RewardsGroup.SIREN_ISLE,
 		minimumLevel = 80,
@@ -263,10 +263,10 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 	{
 		id = "tww-circlet",
 		key = "Circlet",
-		description = "|T6215518:12|t |cffa335ee[Cyrce's Circlet]|r|n|n"
-			.. "The ring starts at Item Level 642 by completing |cffffff00[A Radiant Vault]|r.|n|n"
-			.. "|T6215533:12|t |cffa335ee[Raw Singing Citrine]|r upgrades the ring to maximum Item Level 658.|n"
-			.. "It drops from all Siren Isle content.",
+		description = "{item:228411}|n|n"
+			.. "The ring starts at item level 642 after completing {quest:84724}.|n|n"
+			.. "{item:229365} upgrades the ring to a maximum item level of 658.|n"
+			.. "It drops from all {map:2369} content.",
 		group = RewardsGroup.SIREN_ISLE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -409,7 +409,7 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 	{
 		id = "tww-incursion",
 		key = "Incursion",
-		description = "Daily incursions in Hollowfall or Azj-Kahet",
+		description = "Daily incursions in {map:2215} or {map:2255}",
 		group = RewardsGroup.NIGHTFALL,
 		minimumLevel = 70,
 		rollover = true,

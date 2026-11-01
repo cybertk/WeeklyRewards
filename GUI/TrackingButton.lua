@@ -47,8 +47,9 @@ function WeeklyRewardsTrackingButtonMixin.UpdateRewardTooltip(tooltip, descripti
 	local candidate = description.candidate
 	local activeRewards = ActiveRewards.Get()
 
-	if candidate.description then
-		GameTooltip_AddNormalLine(tooltip, Util:ColoredText(candidate.description))
+	local descriptionText = Reward.DescriptionText(candidate.id, candidate.description)
+	if descriptionText then
+		GameTooltip_AddNormalLine(tooltip, Util:ColoredText(descriptionText))
 	elseif #candidate.entries > 1 then
 		GameTooltip_AddNormalLine(tooltip, L["candidate_from_following_quests"]:format(REWARDS))
 		for _, entry in ipairs(candidate.entries) do

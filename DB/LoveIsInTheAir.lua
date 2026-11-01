@@ -1,5 +1,7 @@
 local _, namespace = ...
 
+local L = namespace.L
+
 local RewardsGroup = {
 	LOVE_EVENT = "{event:423}",
 }
@@ -63,7 +65,7 @@ namespace.DB.rewardCandidiates["love"] = {
 		key = "Love:Dono",
 		group = RewardsGroup.LOVE_EVENT,
 		description = "Donate gold to the Artisan's Consortium to support the Gala of Gifts.|n|n"
-			.. "The rewards is delivered by mail in several minutes after the donation.",
+			.. "The reward arrives by mail a few minutes after you donate.",
 		minimumLevel = 1,
 		unlockEvent = 423,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
@@ -72,11 +74,11 @@ namespace.DB.rewardCandidiates["love"] = {
 		},
 		items = {
 			{
-				name = "|cff1eff00[Bundle of Love Tokens]|r for offering 500 gold, contains 3-5 |T135453:12|t |cffffffff[Love Token]|r",
+				name = L["love_bundle_500"],
 				texture = 135454, -- Bundle of Love Tokens
 			},
 			{
-				name = "|cff0070dd[Bundle of Love Tokens]|r for offering 10,000 gold, contains 10-15 |T135453:12|t |cffffffff[Love Token]|r",
+				name = L["love_bundle_10000"],
 				texture = 135454,
 			},
 		},

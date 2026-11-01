@@ -1,5 +1,6 @@
 local _, namespace = ...
 
+local Util = namespace.Util
 local Settings = { callbacks = {}, keysMonitored = {} }
 
 function Settings:RegisterSettings(savedVariableName, default)
@@ -126,7 +127,7 @@ function Settings:GenerateTooltip(description, title)
 	return function(tooltip, elementDescription)
 		if type(description) == "string" then
 			GameTooltip_SetTitle(tooltip, title)
-			GameTooltip_AddNormalLine(tooltip, description)
+			GameTooltip_AddNormalLine(tooltip, Util:ResolveTags(description))
 		elseif description.itemID then
 			tooltip:SetItemByID(description.itemID)
 		elseif description.currencyID then
@@ -254,7 +255,7 @@ function Settings:CreateOptionsTree(key, menu, text, options, tooltipText, respo
 		if tooltipText then
 			rootMenu:SetTooltip(function(tooltip)
 				GameTooltip_SetTitle(tooltip, text)
-				GameTooltip_AddNormalLine(tooltip, tooltipText)
+				GameTooltip_AddNormalLine(tooltip, Util:ResolveTags(tooltipText))
 			end)
 		end
 

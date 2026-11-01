@@ -17,6 +17,7 @@ local Character = {
 namespace.Character = Character
 
 local Util = namespace.Util
+local L = namespace.L
 local ProgressFactory = namespace.ProgressFactory
 
 local WAPI = {
@@ -364,11 +365,11 @@ function Character:AddXPToTooltip(tooltip)
 	local xp, timeToCharge = self:GetRestedXP()
 	local color = (timeToCharge == 0 and "GREEN" or self.resting and "LIGHTBLUE" or "RED") .. "_FONT_COLOR"
 
-	tooltip:AddLine(format("|cn%s:%s|r", color, timeToCharge == 0 and "Fully Rested" or self.resting and TUTORIAL_TITLE30 or EXHAUST_TOOLTIP2))
+	tooltip:AddLine(format("|cn%s:%s|r", color, timeToCharge == 0 and L["character_fully_rested"] or self.resting and TUTORIAL_TITLE30 or EXHAUST_TOOLTIP2))
 	tooltip:AddLine(" ")
 	tooltip:AddLine(CreateAtlasMarkup("GarrMission_CurrencyIcon-Xp", 18, 18) .. format("|cffffd200%s:|r |cn%s:%.1f%%|r", TUTORIAL_TITLE26, color, xp * 100))
 	if timeToCharge and timeToCharge > 0 then
-		tooltip:AddLine(format("Time To Fully Rested: |cffffffff%s|r", Util.FormatTimeDuration(timeToCharge)), 1, NORMAL_FONT_COLOR.g, 0, false, 18)
+		tooltip:AddLine(L["character_time_to_fully_rested"]:format(Util.FormatTimeDuration(timeToCharge)), 1, NORMAL_FONT_COLOR.g, 0, false, 18)
 	end
 end
 
@@ -452,7 +453,7 @@ function Character:AddPartyToTooltip(tooltip, instruction)
 	end
 
 	tooltip:AddLine(" ")
-	tooltip:AddDoubleLine("Last Party:", instruction)
+	tooltip:AddDoubleLine(L["character_last_party"], instruction)
 
 	for _, member in ipairs(self.party) do
 		local battleTag, class, name, realm = unpack(member)

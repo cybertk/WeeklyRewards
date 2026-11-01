@@ -1,5 +1,7 @@
 local _, namespace = ...
 
+local L = namespace.L
+
 local RewardsGroup = {
 	DELVE = DELVES_LABEL,
 }
@@ -36,8 +38,8 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		id = "delve-abundance",
 		key = "|A:delves-bountiful:16:16|aAbundance",
 		description = "{faction:2796:-3:1}|n|n"
-			.. "The first time you find Dundun within delve each week, "
-			.. "it will be made {spell:1297887}, and you will receive below extra chests at the end:|n"
+			.. "The first time you find Dundun in a delve each week, "
+			.. "that delve becomes {spell:1297887}. You then receive these extra chests:|n"
 			.. "- 1 |cnEPIC_PURPLE_COLOR:Bountiful Coffer|r|n"
 			.. "- 2 |cnRARE_BLUE_COLOR:Abundantly Bountiful Heavy Trunk|r",
 		group = RewardsGroup.DELVE,
@@ -75,7 +77,7 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	{
 		id = "delve-fragment-m",
 		key = "|A:overworld-active-64x64:16:16|aFragment",
-		description = "{item:285065} earned from the 6-week {storyline:6385}.|n|n{item:285065:0}",
+		description = "{item:285065}, earned from the 6-week {storyline:6385}.|n|n{item:285065:0}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -84,10 +86,10 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		entries = {
 			{ quest = 98951, name = "{quest:98951}" },
 			{ quest = 98963, name = "{quest:98963}" },
-			{ quest = 98962, name = ("{quest:98962::(%s Week 12)}"):format(UNLOCKS_AT_LABEL) },
-			{ quest = 98961, name = ("{quest:98961::(%s Week 13)}"):format(UNLOCKS_AT_LABEL) },
-			{ quest = 98960, name = ("{quest:98960::(%s Week 14)}"):format(UNLOCKS_AT_LABEL) },
-			{ quest = 98959, name = ("{quest:98959::(%s Week 15)}"):format(UNLOCKS_AT_LABEL) },
+			{ quest = 98962, name = ("{quest:98962::(%s %s)}"):format(UNLOCKS_AT_LABEL, L["week_count"]:format(12)) },
+			{ quest = 98961, name = ("{quest:98961::(%s %s)}"):format(UNLOCKS_AT_LABEL, L["week_count"]:format(13)) },
+			{ quest = 98960, name = ("{quest:98960::(%s %s)}"):format(UNLOCKS_AT_LABEL, L["week_count"]:format(14)) },
+			{ quest = 98959, name = ("{quest:98959::(%s %s)}"):format(UNLOCKS_AT_LABEL, L["week_count"]:format(15)) },
 		},
 	},
 }

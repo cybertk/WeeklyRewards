@@ -4,7 +4,7 @@ namespace.DB.rewardCandidiates["bonus"] = {
 	{
 		id = "bonus",
 		key = "BonusEvent",
-		description = "Weekly Bonus Event provides a weekly quest that rewards equipment."
+		description = "The weekly bonus event provides a quest that rewards equipment."
 			.. "|n|nThese events rotate on a set schedule, including:"
 			.. "|n- {quest:93593}" -- A Call to Battle
 			.. "|n- {quest:93595}" -- A Call to Delves
