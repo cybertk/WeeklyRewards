@@ -1,4 +1,4 @@
-local _, namespace = ...
+local addonName, namespace = ...
 
 local Util = {
 	debug = false,
@@ -7,6 +7,10 @@ local Util = {
 namespace.Util = Util
 namespace.debug = function(...)
 	Util:Debug(...)
+end
+
+namespace.message = function(...)
+	print(format("%s|cffffff00:", namespace.addonName or addonName), ...)
 end
 
 function Util:Debug(...)

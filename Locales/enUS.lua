@@ -42,8 +42,12 @@ L["settings_broadcast_rewards_tooltip"] = "Post a Warband reward summary to the 
 L["automation_button_tooltip"] = "Automation & Tools"
 L["automation_button_description"] = "Speed up farming and enhance quality of life for all characters."
 L["automation_disable_hint"] = "Hold any modifier key (Ctrl/Shift/Alt) to temporarily disable the automation"
+L["automation_reset_hint"] = "To avoid replacing the saved automation, hold a modifier key while selecting."
 L["automation_auto_enter_title"] = "Auto Enter"
 L["automation_auto_enter_tooltip"] = "Automatically enter Val and Naigtal at the selected difficulty."
+L["automation_auto_flight_title"] = "Auto Flight"
+L["automation_auto_flight_tooltip"] = "Remember the flight you choose at each portal bridge and flight master, and take it automatically next time on all characters."
+L["automation_auto_flight_saved"] = "Flight from %s to |cff71d5ff%s|r saved. All your characters will take it automatically."
 
 -- Table columns
 L["column_realm"] = "Realm"
