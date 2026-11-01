@@ -43,8 +43,12 @@ L["settings_broadcast_rewards_tooltip"] = "После получения наг�
 L["automation_button_tooltip"] = "Автоматизация и инструменты"
 L["automation_button_description"] = "Ускорьте фарм и повысьте комфорт игры для всех персонажей."
 L["automation_disable_hint"] = "Удерживайте любой модификатор (Ctrl/Shift/Alt), чтобы временно отключить автоматизацию"
+L["automation_reset_hint"] = "Чтобы не заменить сохранённую автоматизацию, удерживайте модификатор при выборе."
 L["automation_auto_enter_title"] = "Автовход"
 L["automation_auto_enter_tooltip"] = "Автоматически входить в Вал и Найтал на выбранной сложности."
+L["automation_auto_flight_title"] = "Автополёт"
+L["automation_auto_flight_tooltip"] = "Запоминает маршрут, выбранный у распорядителя полётов, и автоматически выбирает его в следующий раз на этом и остальных персонажах. Берутся только изученные маршруты, стоимость списывается как обычно."
+L["automation_auto_flight_saved"] = "Перелёт из %s в |cff71d5ff%s|r сохранён. Все персонажи будут выбирать его автоматически."
 
 -- Table columns
 L["column_realm"] = "Игровой мир"

@@ -16,6 +16,8 @@ local ActiveRewards = namespace.ActiveRewards
 local RewardSummary = namespace.RewardSummary
 local Main = namespace.GUIMain
 
+namespace.addonName = ("|cff00ccff%s|r"):format(addonName)
+
 WeeklyRewardsArchive = WeeklyRewardsArchive or {}
 
 local Changes = {
@@ -24,6 +26,7 @@ local Changes = {
 	{ r = 3, rewards = { "delve-hero", "mn-voidcore" } },
 	{ r = 4, settings = { "windowTutorials" } },
 	{ r = 5, utils = { "AutoEnter" } },
+	{ r = 6, utils = { "AutoFlight" } },
 }
 
 local defaultDB = {
@@ -32,6 +35,7 @@ local defaultDB = {
 		characters = {},
 		dbVersion = 8,
 	},
+	utils = {},
 }
 
 local defaultSettings = {
@@ -55,6 +59,7 @@ local defaultSettings = {
 	utilsUntrackQuests = false,
 	utilsBroadcastRewards = false,
 	utilsAutoEnter = false,
+	utilsAutoFlight = false,
 }
 
 local WeeklyRewards = { ns = namespace }
@@ -233,6 +238,7 @@ function WeeklyRewards:Init()
 		character:RemoveQuestsWatch()
 	end
 
+	ModuleManager.SetDB(self.db.utils)
 	Settings:InvokeAndRegisterCallback("^utils", function(_, value, key)
 		ModuleManager.SetModuleEnabled(key:gsub("^utils", ""), value)
 	end, self)

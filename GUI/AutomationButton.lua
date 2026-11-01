@@ -21,6 +21,7 @@ function WeeklyRewardsAutomationButtonMixin:OnLoad()
 
 	local newEntries = {
 		{ key = "AutoEnter", title = L["automation_auto_enter_title"], tooltip = L["automation_auto_enter_tooltip"] },
+		{ key = "AutoFlight", title = L["automation_auto_flight_title"], tooltip = L["automation_auto_flight_tooltip"] },
 	}
 
 	self:SetupMenu(function(_, rootMenu)

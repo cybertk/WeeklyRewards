@@ -2,4 +2,5 @@
     <Script file="SelectableLootScanner.lua" />
     <Script file="AtomicContainerLootScanner.lua" />
     <Script file="EntranceSelector.lua" />
+    <Script file="AutoFlight.lua" />
 </Ui>
