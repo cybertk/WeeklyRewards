@@ -28,6 +28,7 @@ local Changes = {
 	{ r = 5, utils = { "AutoEnter" } },
 	{ r = 6, utils = { "AutoFlight" } },
 	{ r = 7, rewards = { "mn-disruptions", "mn-enemies" } },
+	{ r = 8, utils = { "FastLoot" } },
 }
 
 local defaultDB = {
@@ -59,6 +60,7 @@ local defaultSettings = {
 	windowTutorials = true,
 	utilsUntrackQuests = false,
 	utilsBroadcastRewards = false,
+	utilsFastLoot = false,
 	utilsAutoEnter = false,
 	utilsAutoFlight = false,
 }

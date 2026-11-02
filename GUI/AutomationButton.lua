@@ -9,8 +9,11 @@ WeeklyRewardsAutomationButtonMixin = CreateFromMixins(namespace.TitleBarButtonMi
 function WeeklyRewardsAutomationButtonMixin.AddExtraStuffToTooltip(tooltip, description)
 	namespace.TitleBarButtonMixin.AddExtraStuffToTooltip(tooltip, description)
 
-	tooltip:AddLine(" ")
-	GameTooltip_AddInstructionLine(tooltip, L["automation_disable_hint"])
+	local entry = description.entry
+	if not entry.hint or entry.hint ~= "" then
+		tooltip:AddLine(" ")
+		GameTooltip_AddInstructionLine(tooltip, L["automation_disable_hint"])
+	end
 end
 
 function WeeklyRewardsAutomationButtonMixin:OnLoad()
@@ -22,6 +25,7 @@ function WeeklyRewardsAutomationButtonMixin:OnLoad()
 	local newEntries = {
 		{ key = "AutoEnter", title = L["automation_auto_enter_title"], tooltip = L["automation_auto_enter_tooltip"] },
 		{ key = "AutoFlight", title = L["automation_auto_flight_title"], tooltip = L["automation_auto_flight_tooltip"] },
+		{ key = "FastLoot", title = L["automation_fast_loot_title"], tooltip = L["automation_fast_loot_tooltip"], hint = "" },
 	}
 
 	self:SetupMenu(function(_, rootMenu)

@@ -3,4 +3,5 @@
     <Script file="AtomicContainerLootScanner.lua" />
     <Script file="EntranceSelector.lua" />
     <Script file="AutoFlight.lua" />
+    <Script file="FastLoot.lua" />
 </Ui>

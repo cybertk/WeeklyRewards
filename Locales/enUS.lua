@@ -48,6 +48,8 @@ L["automation_auto_enter_tooltip"] = "Automatically enter Val and Naigtal at the
 L["automation_auto_flight_title"] = "Auto Flight"
 L["automation_auto_flight_tooltip"] = "Remember the flight you choose at each portal bridge and flight master, and take it automatically next time on all characters."
 L["automation_auto_flight_saved"] = "Flight from %s to |cff71d5ff%s|r saved. All your characters will take it automatically."
+L["automation_fast_loot_title"] = "Fast Loot"
+L["automation_fast_loot_tooltip"] = "Loot at maximum speed by removing the delay with the loot frame.|nWhen checked the Auto Loot will also be enabled on all characters."
 
 -- Table columns
 L["column_realm"] = "Realm"
