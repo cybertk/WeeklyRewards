@@ -2,6 +2,9 @@
 Libs/
 Embeds/
 
+# downloaded by make minify
+.github/scripts/minify_lua.py
+
 # pkgmeta local
 .release/
 

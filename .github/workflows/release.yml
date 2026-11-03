@@ -19,6 +19,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Minify Lua
+        uses: cybertk/minify-lua@v1
+        with:
+          exclude: .git,Libs,Embeds
+
       - name: Release
         uses: BigWigsMods/packager@v2
         env:
