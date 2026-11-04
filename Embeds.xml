@@ -17,9 +17,6 @@
   -->
   <Include file='Libs\LibDBIcon-1.0\lib.xml' />
 
-  <!-- Archivist: https://github.com/emptyrivers/Archivist -->
-  <Include file="Embeds\Archivist\Archivist.xml" />
-
   <!-- WeeklyKnowledge GUI: https://github.com/DennisRas/WeeklyKnowledge-->
   <Script file='Embeds\WeeklyKnowledge\Types.lua' />
   <Script file='Embeds\WeeklyKnowledge\Constants.lua' />

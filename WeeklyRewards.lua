@@ -3,8 +3,6 @@ local addonName, namespace = ...
 local LibDataBroker = LibStub("LibDataBroker-1.1")
 local LibDBIcon = LibStub("LibDBIcon-1.0")
 
-local Archivist = namespace.Archivist
-
 local L = namespace.L
 local DB = namespace.DB
 local Util = namespace.Util
@@ -230,7 +228,7 @@ function WeeklyRewards:Init()
 	self.activeRewards = activeRewards
 
 	if self.db.global.archive then
-		self.archive = Archivist:Initialize(WeeklyRewardsArchive)
+		self.archive = namespace.Archivist:Initialize(WeeklyRewardsArchive)
 	else
 		wipe(WeeklyRewardsArchive)
 	end

@@ -20,9 +20,6 @@ externals:
         url: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
         tag: 1.0.9
 
-    Embeds/Archivist:
-        url: https://github.com/emptyrivers/Archivist
-        tag: v2.0.2
     Embeds/WeeklyKnowledge:
         url: https://github.com/DennisRas/WeeklyKnowledge
         tag: v1.1.7
