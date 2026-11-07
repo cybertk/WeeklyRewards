@@ -66,7 +66,7 @@ function WeeklyRewardsTrackingButtonMixin.UpdateRewardTooltip(tooltip, descripti
 		end
 
 		if entry.quest and entry.quest ~= 0 then
-			GameTooltip_AddNormalLine(tooltip, Util:Text(L["candidate_from_quest_format"], entry.quest), false)
+			GameTooltip_AddNormalLine(tooltip, Util:Text(L["candidate_earned_from"], format("{quest:%d}", entry.quest)), false)
 			tooltip:AddLine(" ")
 		end
 
@@ -105,8 +105,7 @@ function WeeklyRewardsTrackingButtonMixin.UpdateRewardTooltip(tooltip, descripti
 		end
 	elseif not entry.items and not entry.name and not entry.currency and not entry.progressType then
 		Util:AddBlankLineAfterHeaderToTooltip(tooltip)
-		GameTooltip_AddNormalLine(tooltip, L["candidate_from_quest"])
-		GameTooltip_AddHighlightLine(tooltip, Util:Text("{quest:%d}", candidate.entries[1].quest), false)
+		GameTooltip_AddNormalLine(tooltip, Util:Text(L["candidate_earned_from"], format("{quest:%d}", entry.quest)), false)
 	end
 
 	local inactiveColor = nil
