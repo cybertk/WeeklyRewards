@@ -71,11 +71,11 @@ function WeeklyRewardsTrackingButtonMixin.UpdateRewardTooltip(tooltip, descripti
 		end
 
 		if entry.maxCompletion == 1 then
-			GameTooltip_AddNormalLine(tooltip, L["candidate_1_of_following_quests"])
+			GameTooltip_AddNormalLine(tooltip, L["candidate_1_of_following_per_character"])
 		elseif not entry.maxCompletion then
-			GameTooltip_AddNormalLine(tooltip, L["candidate_x_of_following_quests"])
+			GameTooltip_AddNormalLine(tooltip, L["candidate_x_of_following_per_character"])
 		else
-			GameTooltip_AddNormalLine(tooltip, L["candidate_n_of_following_quests"]:format(entry.maxCompletion))
+			GameTooltip_AddNormalLine(tooltip, L["candidate_n_of_following_per_character"]:format(entry.maxCompletion))
 		end
 
 		for i, quest in ipairs(entry.questPool) do
