@@ -447,8 +447,10 @@ function Character:AddPartyToTooltip(tooltip, instruction)
 	if Cache.battleTag == nil then
 		local account = C_BattleNet.GetAccountInfoByGUID(UnitGUID("player"))
 
-		Cache.battleTag = account.battleTag
-		Cache.accountID = account.gameAccountInfo.gameAccountID
+		if account then
+			Cache.battleTag = account.battleTag
+			Cache.accountID = account.gameAccountInfo.gameAccountID
+		end
 	end
 
 	tooltip:AddLine(" ")
