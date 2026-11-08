@@ -11,6 +11,14 @@ function DB:GetAllCandidates()
 		for category, rewards in pairs(self.rewardCandidiates) do
 			for _, reward in ipairs(rewards) do
 				reward.expansion = type(category) == "number" and category or nil
+
+				-- Localization key is reward:<id>. An id of "<id>:<arg>" is formatted in, for example {map:%s}.
+				local id, arg1 = (":"):split(reward.id)
+				local description = namespace.L["reward:" .. id]
+				if description then
+					reward.description = reward.description and reward.description .. "|n|n" .. description:format(arg1) or description:format(arg1)
+				end
+
 				table.insert(self.all, reward)
 			end
 		end

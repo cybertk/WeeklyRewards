@@ -93,7 +93,6 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-worldboss",
 		key = "WorldBoss",
-		description = "Weekly World Boss",
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
@@ -221,18 +220,16 @@ namespace.DB.rewardCandidiates["MN"] = {
 		},
 	},
 	{
-		id = "mn-prey-n",
+		id = "mn-prey-n", -- Weekly Prey Quests (Normal)
 		key = "|A:worldquest-Prey-Crystal:16:16|aNormal",
-		description = "Weekly Prey Quests (Normal)",
 		group = RewardsGroup.PREY,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { quest = 0, questPool = range(91095, 91124), maxCompletion = 5 } },
 	},
 	{
-		id = "mn-prey-h",
+		id = "mn-prey-h", -- Weekly Prey Quests (Hard)
 		key = "|A:worldquest-Prey-Crystal:16:16|aHard",
-		description = "Weekly Prey Quests (Hard)",
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -240,9 +237,8 @@ namespace.DB.rewardCandidiates["MN"] = {
 	},
 
 	{
-		id = "mn-prey-m",
+		id = "mn-prey-m", -- Weekly Prey Quests (Nightmare)
 		key = "|A:worldquest-Prey-Crystal:16:16|aNightmare",
-		description = "Weekly Prey Quests (Nightmare)",
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -262,7 +258,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-prey-select",
 		key = "|A:worldquest-Prey-Crystal:16:16|aSelect",
-		description = "Preferential Killing|n|cnLIGHTBLUE_FONT_COLOR:Unlocked after reaching Renown 10 in the Preyhunter's Journey.|r",
+		description = "{quest:91277}|n|cnLIGHTBLUE_FONT_COLOR:" .. COVENANT_SANCTUM_RENOWN_REWARD_DESC:format(10) .. ": {faction:2808}|r",
 		group = RewardsGroup.PREY,
 		minimumLevel = 90,
 		rollover = true,
@@ -384,7 +380,6 @@ namespace.DB.rewardCandidiates["MN"] = {
 	{
 		id = "mn-lair",
 		key = "Lair",
-		description = "Weekly Lair World Boss",
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
