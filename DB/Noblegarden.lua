@@ -6,10 +6,9 @@ local RewardsGroup = {
 
 namespace.DB.rewardCandidiates["noble"] = {
 	{
-		id = "noble-main",
+		id = "noble-main", -- One-time introductory quests
 		key = "Noble:Main",
 		group = RewardsGroup.NOBLE_EVENT,
-		description = "One-time introductory quests",
 		minimumLevel = 1,
 		unlockEvent = 181, -- Noblegarden
 		timeLeft = "end-of-event",
@@ -23,10 +22,10 @@ namespace.DB.rewardCandidiates["noble"] = {
 		},
 	},
 	{
-		id = "noble-daily",
+		id = "noble-daily", -- Daily Quests
 		key = "Noble:Daily",
+		description = DAILY_QUEST_TAG_TEMPLATE:format(MAP_LEGEND_CATEGORY_QUESTS),
 		group = RewardsGroup.NOBLE_EVENT,
-		description = "Daily Quests",
 		minimumLevel = 1,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		unlockEvent = 181,
@@ -40,7 +39,6 @@ namespace.DB.rewardCandidiates["noble"] = {
 		id = "noble-boss",
 		key = "Noble:Boss",
 		group = RewardsGroup.NOBLE_EVENT,
-		description = "Daily Holiday Boss: Daetan Swiftplume.|n|nThe nest of this feathery fiend is located in both Elwyn Forest and Durotar.",
 		minimumLevel = 1,
 		unlockEvent = 181,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,

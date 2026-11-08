@@ -2,9 +2,8 @@ local _, namespace = ...
 
 namespace.DB.rewardCandidiates["bonus"] = {
 	{
-		id = "bonus",
+		id = "bonus", -- Weekly Bonus Event
 		key = "BonusEvent",
-		description = "Weekly Bonus Event provides a weekly quest that rewards equipment.",
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {

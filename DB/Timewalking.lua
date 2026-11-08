@@ -6,9 +6,9 @@ local RewardsGroup = {
 
 namespace.DB.rewardCandidiates["timewalking"] = {
 	{
-		id = "tw-dd",
+		id = "tw-dd", -- Timewalking Raid
 		key = "TW:Raid",
-		description = "Timewalking Raid",
+		description = PLAYER_DIFFICULTY_TIMEWALKER .. ": " .. LFG_TYPE_RAID,
 		group = RewardsGroup.TIMEWALKING_EVENTS,
 		minimumLevel = 30,
 		entries = {
@@ -19,9 +19,9 @@ namespace.DB.rewardCandidiates["timewalking"] = {
 		},
 	},
 	{
-		id = "tw-lfd",
+		id = "tw-lfd", -- Timewalking Dungeon
 		key = "TW:LFD",
-		description = "Timewalking Dungeon",
+		description = PLAYER_DIFFICULTY_TIMEWALKER .. ": " .. LFG_TYPE_DUNGEON,
 		group = RewardsGroup.TIMEWALKING_EVENTS,
 		minimumLevel = 1,
 		entries = {

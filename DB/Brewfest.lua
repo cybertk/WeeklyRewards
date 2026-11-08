@@ -6,10 +6,9 @@ local RewardsGroup = {
 
 namespace.DB.rewardCandidiates["brewfest"] = {
 	{
-		id = "brew-main",
+		id = "brew-main", -- Brewfest One-time Quests
 		key = "Brew:Main",
 		group = RewardsGroup.BREWFEST_EVENT,
-		description = "Brewfest One-time Mainline Quests",
 		minimumLevel = 1,
 		unlockEvent = 372, -- Brewfest
 		timeLeft = "end-of-event",
@@ -25,10 +24,10 @@ namespace.DB.rewardCandidiates["brewfest"] = {
 		},
 	},
 	{
-		id = "brew-daily",
+		id = "brew-daily", -- Brewfest Daily Quests
 		key = "Brew:Daily",
+		description = DAILY_QUEST_TAG_TEMPLATE:format(MAP_LEGEND_CATEGORY_QUESTS),
 		group = RewardsGroup.BREWFEST_EVENT,
-		description = "Brewfest Daily Quests",
 		minimumLevel = 10,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		unlockEvent = 372,
@@ -61,10 +60,10 @@ namespace.DB.rewardCandidiates["brewfest"] = {
 		},
 	},
 	{
-		id = "brew-boss",
+		id = "brew-boss", -- Daily Blackrock Depths Dungeon Boss: Coren Direbrew
 		key = "Brew:Boss",
+		description = LFG_TYPE_DAILY_DUNGEON .. ": {dungeon:287}",
 		group = RewardsGroup.BREWFEST_EVENT,
-		description = "Daily Blackrock Depths Dungeon Boss: Coren Direbrew",
 		minimumLevel = 10,
 		unlockEvent = 372,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
@@ -76,10 +75,9 @@ namespace.DB.rewardCandidiates["brewfest"] = {
 		},
 	},
 	{
-		id = "brew-di",
+		id = "brew:1978", -- Donate to taverns across the Dragon Isles to cover the tab!
 		key = "BarTab:DI",
 		group = RewardsGroup.BREWFEST_EVENT,
-		description = "Donate to taverns across the Dragon Isles to cover the tab!",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 372,
@@ -100,10 +98,9 @@ namespace.DB.rewardCandidiates["brewfest"] = {
 		},
 	},
 	{
-		id = "brew-ka",
+		id = "brew:2274", -- Donate to taverns across the Khaz Algar to cover the tab!
 		key = "BarTab:KA",
 		group = RewardsGroup.BREWFEST_EVENT,
-		description = "Donate to taverns across the Khaz Algar to cover the tab!",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 372,
@@ -122,10 +119,9 @@ namespace.DB.rewardCandidiates["brewfest"] = {
 		},
 	},
 	{
-		id = "brew-qt",
+		id = "brew:2537", -- Donate to taverns across the Quel'Thalas to cover the tab!
 		key = "BarTab:QT",
 		group = RewardsGroup.BREWFEST_EVENT,
-		description = "Donate to taverns across the Quel'Thalas to cover the tab!",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 372,

@@ -14,19 +14,17 @@ end
 
 namespace.DB.rewardCandidiates["PROFESSION"] = {
 	{
-		id = "mn-pquests",
+		id = "mn-pquests", -- Weekly Profession Quests
 		key = "|A:Profession:16:16:-5:0|aQuests",
 		group = RewardsGroup.PROFESSION,
-		description = "Weekly Profession Quests",
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = { { questPool = range(93690, 93714), maxCompletion = 2 } },
 	},
 	{
-		id = "mn-pdrops",
+		id = "mn-pdrops", -- Weekly Profession Knowledge Drops from Treasures around the World
 		key = "|A:Profession:16:16:-5:0|aDrops",
 		group = RewardsGroup.PROFESSION,
-		description = "Weekly Profession Knowledge Drops from Treasures around the World",
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {

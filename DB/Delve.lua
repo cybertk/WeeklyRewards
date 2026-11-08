@@ -33,13 +33,9 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		entries = { { quest = 0, currency = 3310, loot = { 584514, 584515, 584518, name = { 228942, 257387, 257387 } } } }, -- Bountiful Coffer, Bountiful Heavy Trunk
 	},
 	{
-		id = "delve-abundance",
+		id = "delve-abundance", -- Weekly abundance made by finding Dundun within delve
 		key = "|A:delves-bountiful:16:16|aAbundance",
-		description = "{faction:2796:-3:1}|n|n"
-			.. "The first time you find Dundun within delve each week, "
-			.. "it will be made {spell:1297887}, and you will receive below extra chests at the end:|n"
-			.. "- 1 |cnEPIC_PURPLE_COLOR:Bountiful Coffer|r|n"
-			.. "- 2 |cnRARE_BLUE_COLOR:Abundantly Bountiful Heavy Trunk|r",
+		description = "{faction:2796:-3:1}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -73,9 +69,9 @@ namespace.DB.rewardCandidiates["Delve"] = {
 		entries = { { quest = 93935, name = "{faction:2796:9:1:0}" } },
 	},
 	{
-		id = "delve-fragment-m",
+		id = "delve-fragment-m", -- Mythical Soul Fragments
 		key = "|A:overworld-active-64x64:16:16|aFragment",
-		description = "{item:285065} earned from the 6-week {storyline:6385}.|n|n{item:285065:0}",
+		description = "{item:285065}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
