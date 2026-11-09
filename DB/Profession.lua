@@ -20,7 +20,13 @@ namespace.DB.rewardCandidiates["PROFESSION"] = {
 		description = "Weekly Profession Quests",
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { questPool = range(93690, 93714), maxCompletion = 2 } },
+		entries = {
+			{
+				name = PVP_WEEKLY_BONUS:format(PROFESSIONS_TRACKER_HEADER_PROFESSION),
+				questPool = range(93690, 93714),
+				maxCompletion = 2,
+			},
+		},
 	},
 	{
 		id = "mn-pdrops",

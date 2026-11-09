@@ -74,7 +74,6 @@ namespace.DB.rewardCandidiates["MN"] = {
 					93769, -- Midnight: Housing
 					93889, -- Midnight: Saltheril's Soiree
 					93890, -- Midnight: Abundance
-					93891, -- Midnight: Legends of the Haranir
 					93892, -- Midnight: Stormarion Assault
 					93909, -- Midnight: Delves
 					93910, -- Midnight: Prey
@@ -294,7 +293,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		id = "mn-showdown-n",
 		key = "Showdown:N",
 		group = RewardsGroup.FIELD_ACCOLADES,
-		minimumLevel = 90,
+		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 96713, unlockPoi = 8819 }, -- Showdown on Val

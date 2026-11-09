@@ -665,7 +665,7 @@ function Util:ResolveTags(s, autoColor)
 				name = ""
 			end
 
-			if arg3 ~= "" and (name == "" or not name) then
+			if arg3 and (name == "" or not name) then
 				name = arg3
 			end
 
