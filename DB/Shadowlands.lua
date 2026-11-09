@@ -63,10 +63,10 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_SHADOWLANDS] = {
 		minimumLevel = 60,
 		pick = 1,
 		entries = {
-			{ quest = 63543 }, -- Necrolord Assault
-			{ quest = 63822 }, -- Venthyr Assault
-			{ quest = 63823 }, -- Night Fae Assault
-			{ quest = 63824 }, -- Kyrian Assault
+			{ quest = 63543, unlockPoi = 6989, name = "{poi:6989}" }, -- Necrolord Assault
+			{ quest = 63822, unlockPoi = 6990, name = "{poi:6990}" }, -- Venthyr Assault
+			{ quest = 63823, unlockPoi = 6992, name = "{poi:6992}" }, -- Night Fae Assault
+			{ quest = 63824, unlockPoi = 6991, name = "{poi:6991}" }, -- Kyrian Assault
 		},
 	},
 }

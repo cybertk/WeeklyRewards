@@ -289,7 +289,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		id = "mn-showdown-n",
 		key = "Showdown:N",
 		group = RewardsGroup.FIELD_ACCOLADES,
-		minimumLevel = 90,
+		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 96713, unlockPoi = 8819 }, -- Showdown on Val

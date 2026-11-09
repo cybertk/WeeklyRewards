@@ -644,6 +644,11 @@ function Util:ResolveTags(s, autoColor)
 		elseif type == "quest" then
 			if not arg1 then
 				name = C_QuestLog.GetTitleForQuestID(id)
+				if name == "" then
+					name = nil
+				elseif not name then
+					name = ""
+				end
 			elseif arg2 ~= "" and tonumber(arg2) ~= select(3, UnitClass("player")) then
 				name = ""
 			elseif arg1 == 0 then
@@ -665,8 +670,9 @@ function Util:ResolveTags(s, autoColor)
 				name = ""
 			end
 
-			if arg3 and (name == "" or not name) then
-				name = arg3
+			print("tags", "arg1", arg1, "arg3", arg3, "name", name)
+			if name == "" or not name then
+				name = arg1 and arg3 or name
 			end
 
 			if name and name ~= "" and arg1 ~= 0 then
@@ -753,7 +759,7 @@ function Util:ResolveTags(s, autoColor)
 		elseif type == "poi" then
 			local info = C_AreaPoiInfo.GetAreaPOIInfo(nil, id)
 			if info then
-				name = info.name
+				name = format("|A:minimap-genericevent-hornicon-small:12:12|a %s", info.name)
 			end
 		elseif type == "storyline" then
 			local info = C_QuestLine.GetQuestLineInfo(C_QuestLine.GetQuestLineQuests(id)[1] or 0)
