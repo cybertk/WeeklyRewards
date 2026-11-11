@@ -456,7 +456,7 @@ function RewardProgress:GetStatusLabel()
 	elseif self.claimedAt and self:IsExpired() then
 		return CreateAtlasMarkup("checkmark-minimal-disabled", 15, 15)
 	else
-		local text = self.total < 100 and format("%d / %d", self.position, self.total) or format("%.0f%%", self.position / self.total * 100)
+		local text = self.total < 100 and format("%d/%d", self.position, self.total) or format("%.0f%%", self.position / self.total * 100)
 
 		if self:IsExpired() then
 			text = GRAY_FONT_COLOR:WrapTextInColorCode(text)

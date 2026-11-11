@@ -197,7 +197,7 @@ function TableHeaderRowMixin:OnLoad()
 	for _, column in ipairs(self.columns) do
 		self:AddReorderSource(column, column.data.selectedIndex)
 
-		Mixin(column, column.data.selectedIndex and WeeklyRewardsRewardHeaderCellMixin or WeeklyRewardsCharacterHeaderCellMixin)
+		Mixin(column, column.data.selectedIndex and WeeklyRewardsTableHeaderCellRewardMixin or WeeklyRewardsTableHeaderCellCharacterMixin)
 		_G.xx = column
 		if not column.Arrow then
 			column:OnLoad()

@@ -67,6 +67,7 @@ function WeeklyRewardsSettingsButtonMixin:OnLoad()
 
 		rootMenu:CreateTitle(L["settings_window_title"])
 		Settings:CreateOptionsTree("windowScale", rootMenu, RENDER_SCALE, { range = { 0.8, 2, 0.1 } })
+		Settings:CreateOptionsTree("windowColumnSpacing", rootMenu, "Spacing between columns", { range = { 0, 10, 1 } })
 		Settings:CreateOptionsTree("windowMaxRelativeWidth", rootMenu, L["settings_max_width"], { range = { 0.2, 1, 0.1 } }, L["settings_max_width_percent"])
 		Settings:CreateOptionsTree("windowMaxRows", rootMenu, L["settings_max_rows"], { range = { 5, 70, 5 }, e = 2 }, HUD_EDIT_MODE_SETTING_ACTION_BAR_NUM_ROWS)
 		Settings:CreateColorSwatch("windowBackgroundColor", rootMenu, L["settings_background_color"])
