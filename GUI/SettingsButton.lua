@@ -52,6 +52,7 @@ function WeeklyRewardsSettingsButtonMixin:OnLoad()
 	self.tooltipText = L["settings_button_description"]
 
 	local newEntries = {
+		{ key = "windowPosition", title = LOCK_WINDOW, tooltip = LOCK_FOCUS_FRAME, index = "enabled" },
 		{ key = "windowTutorials", title = SHOW_TUTORIALS, tooltip = L["settings_tutorials_tooltip"] },
 	}
 
@@ -74,7 +75,7 @@ function WeeklyRewardsSettingsButtonMixin:OnLoad()
 		Settings:CreateCheckboxMenu("windowRowNumbers", rootMenu, L["settings_show_row_numbers"])
 
 		for _, entry in ipairs(newEntries) do
-			local checkbox = Settings:CreateCheckboxMenu(entry.key, rootMenu, Flags:Format(entry.title, self.flag, entry.key), nil, entry.tooltip)
+			local checkbox = Settings:CreateCheckboxMenu(entry.key, rootMenu, Flags:Format(entry.title, self.flag, entry.key), entry.index, entry.tooltip)
 			checkbox.AddExtraStuffToTooltip = self.AddExtraStuffToTooltip
 			checkbox.entry = entry
 			checkbox.flag = self.flag

@@ -111,7 +111,7 @@ function Settings:GetOption(key)
 		return
 	end
 
-	return self.settings[key].option
+	return self.settings[key].option or ""
 end
 
 function Settings:WrapOptionCallback(key, callback, owner)

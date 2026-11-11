@@ -29,7 +29,7 @@ local Changes = {
 	{ r = 6, utils = { "AutoFlight" } },
 	{ r = 7, rewards = { "mn-disruptions", "mn-enemies" } },
 	{ r = 8, utils = { "FastLoot" } },
-	{ r = 9, rewards = { "mn-foe", "mn-ralkala" } },
+	{ r = 9, rewards = { "mn-foe", "mn-ralkala" }, settings = { "windowPosition" } },
 }
 
 local defaultDB = {
@@ -51,6 +51,7 @@ local defaultSettings = {
 	hiddenColumns = {},
 	sortColumn = "lastUpdate",
 	sortAscending = true,
+	windowPosition = { enabled = false },
 	windowScale = 1,
 	windowMaxRelativeWidth = 0.8,
 	windowMaxRows = 20,

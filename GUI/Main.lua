@@ -103,16 +103,15 @@ function Main:CreateWindow()
 	self.window:SetToplevel(true)
 	self.window:SetClampedToScreen(true)
 	self.window:SetMovable(true)
-	self.window:SetPoint("CENTER")
+	if Settings:GetOption("windowPosition") then
+		local pos = Settings:Get("windowPosition")
+		self.window:SetPoint(pos.point, UIParent, pos.relativePoint, pos.x, pos.y)
+	else
+		self.window:SetPoint("CENTER")
+	end
+
 	self.window:SetUserPlaced(true)
-	self.window:RegisterForDrag("LeftButton")
 	self.window:EnableMouse(true)
-	self.window:SetScript("OnDragStart", function()
-		self.window:StartMoving()
-	end)
-	self.window:SetScript("OnDragStop", function()
-		self.window:StopMovingOrSizing()
-	end)
 	self.window:Hide()
 	local backgroundColor = Settings:Get("windowBackgroundColor")
 	Utils:SetBackgroundColor(self.window, backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a)
@@ -135,6 +134,10 @@ function Main:CreateWindow()
 	self.window.titlebar:RegisterForDrag("LeftButton")
 	self.window.titlebar:EnableMouse(true)
 	self.window.titlebar:SetScript("OnDragStart", function()
+		if Settings:GetOption("windowPosition") then
+			PlaySound(SOUNDKIT.UI_GARRISON_ARCHITECT_TABLE_BUILDING_PLACEMENT_ERROR)
+			return
+		end
 		self.window:StartMoving()
 	end)
 	self.window.titlebar:SetScript("OnDragStop", function()
@@ -221,6 +224,11 @@ function Main:CreateWindow()
 			self.window:Hide()
 			self.window:Show()
 			self:Redraw()
+		elseif key == "windowPosition" then
+			local position = Settings:Get("windowPosition")
+			if position.enabled then
+				position.point, _, position.relativePoint, position.x, position.y = self.window:GetPoint(1)
+			end
 		elseif self.window and self.window:IsVisible() then
 			self:Redraw()
 		end
