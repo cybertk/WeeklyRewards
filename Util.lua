@@ -501,6 +501,16 @@ function Util:AddBlankLineAfterHeaderToTooltip(tooltip)
 	end
 end
 
+function Util:GetExpansionWeek(expansion)
+	local expansionsStartTime = {
+		[LE_EXPANSION_MIDNIGHT] = 1783363200, -- 2026-03-08 00:00:00
+	}
+
+	expansion = expansion or LE_EXPANSION_LEVEL_CURRENT
+
+	return math.ceil((GetServerTime() + C_DateAndTime.GetSecondsUntilWeeklyReset() - expansionsStartTime[expansion]) / 7 / SECONDS_PER_DAY)
+end
+
 function Util:GetCurrentSeasonWeek()
 	local seasonStartWeeks = {
 		{ year = 2026, month = 3, day = 22 },
@@ -752,6 +762,8 @@ function Util:ResolveTags(s, autoColor)
 			end
 		elseif type == "event" then
 			name = Util:GetHolidayEventName(id)
+		elseif type == "scenario" then
+			name = C_ScenarioInfo.GetScenarioStepInfo(id).title
 		end
 
 		if autoColor and color and name then

@@ -185,6 +185,12 @@ function Reward:DetermineObjectives(entries, pick, isRollover)
 		return
 	end
 
+	-- Scenario: Fixed Rotation
+	if self.rotation then
+		self:AddObjective((Util:GetExpansionWeek(self.expansion) - self.rotation) % #entries)
+		return
+	end
+
 	-- Scenario: Dynamic targets
 	if pick < #entries then
 		for i, entry in pairs(entries) do

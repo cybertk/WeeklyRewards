@@ -361,6 +361,28 @@ namespace.DB.rewardCandidiates["MN"] = {
 		entries = { { quest = 95520 } }, -- Purging the Vaults
 	},
 	{
+		id = "mn-foe",
+		key = "AncientFoe",
+		group = RewardsGroup.CORROSIVE_COIN,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
+		rotation = 35,
+		entries = {
+			{ quest = 97768, name = "{scenario:17033}" }, -- Congealed Malice
+			{ quest = 97769, name = "{scenario:17082}" }, -- Khu'tulak
+			{ quest = 97770, name = "{scenario:17083}" }, -- Susarikk
+		},
+	},
+	{
+		id = "mn-ralkala",
+		key = "Ral'kala",
+		description = "{faction:2808:-6:1}",
+		group = RewardsGroup.CORROSIVE_COIN,
+		minimumLevel = 90,
+		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
+		entries = { { quest = 97810, name = "{npc:258928}" } },
+	},
+	{
 		id = "mn-lair",
 		key = "Lair",
 		description = "Weekly Lair World Boss",

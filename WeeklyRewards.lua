@@ -29,6 +29,7 @@ local Changes = {
 	{ r = 6, utils = { "AutoFlight" } },
 	{ r = 7, rewards = { "mn-disruptions", "mn-enemies" } },
 	{ r = 8, utils = { "FastLoot" } },
+	{ r = 9, rewards = { "mn-foe", "mn-ralkala" } },
 }
 
 local defaultDB = {
