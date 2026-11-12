@@ -51,13 +51,12 @@ function TableHeaderCellMixin:OnLoad()
 
 	self.Icon = self:CreateTexture(nil, "ARTWORK")
 	self.Icon:SetSize(20, 20)
-	self.Icon:SetAtlas(self:GetIconAtlas() or "")
 
 	self.Text = self:CreateFontString(nil, "OVERLAY")
 	self.Text:SetFontObject("GameFontHighlightSmall")
-	self.Text:SetTextColor(NORMAL_FONT_COLOR:GetRGB())
 	self.Text:SetPoint("LEFT", self.Icon, "RIGHT", 5, 0)
 	self.Text:SetText(self.data.text)
+	self.Text:SetTextColor(NORMAL_FONT_COLOR:GetRGB())
 
 	self.Arrow = self:CreateTexture(nil, "ARTWORK")
 	self.Arrow:SetAtlas("auctionhouse-ui-sortarrow", true)
@@ -116,30 +115,44 @@ end
 
 function TableHeaderCellMixin:GetSortKey() end
 
-function TableHeaderCellMixin:GetIconAtlas() end
-
 function TableHeaderCellMixin:Layout()
-	-- self.reward = self.data and self.data.reward or nil
-	-- self.key = self.data and self.data.key or nil
-
-	-- self.Icon:SetShown(true)
-
-	-- self.Arrow:SetShown(true)
 	self:UpdateArrow()
 
-	self.Text:Hide()
-	self.Icon:SetWidth(self:GetIconAtlas() and 20 or 0)
-	-- self.Text:SetWidth(self.showIconOnly and 0 or self.data.width)
-	self.Text:SetWidth(self.showIconOnly and 0 or 1)
-
-	print("width", self.Text:GetWidth(), "icon width", self.Icon:GetWidth())
-
-	if self.data.align == "LEFT" then
-		self.Icon:SetPoint("LEFT", self.padding)
-	else
-		self.Icon:SetPoint("CENTER", 0, 0)
-		-- self.Icon:SetPoint("CENTER", -self.Text:GetWidth() / 2, 0)
+	if self.Icon:IsShown() then
+		self:UpdateIcon()
+		-- self.Icon:SetPoint("CENTER", self.Text:IsShown() and -self.Text:GetWidth() / 2 or 0, 0)
 	end
+
+	self.Icon:ClearAllPoints()
+	self.Text:ClearAllPoints()
+	if self.Icon:IsShown() and self.Text:IsShown() then
+		self.Icon:SetPoint("RIGHT", self.Text, "LEFT")
+		self.Text:SetPoint("CENTER", self.Icon:GetWidth() / 2, 0)
+	elseif self.Icon:IsShown() then
+		self.Icon:SetPoint("CENTER")
+	else
+		self.Text:SetPoint(self.data.align or "LEFT", self.data.align == "LEFT" and self.padding or 0, 0)
+	end
+
+	-- if self.Text:IsShown() then
+	-- 	local iconWidth = self.Icon:IsShown() and self.Icon:GetWidth() or 0
+	-- 	self.Text:SetPoint(self.data.align or "CENTER", self.data.align == "LEFT" and self.padding + iconWidth or 0, 0)
+	-- end
+
+	-- self.Text:SetWidth(self.showIconOnly and 0 or 1)
+	-- -- self.Text:Hide()
+	-- self.Icon:SetWidth(self:GetIconAtlas() and 20 or 0)
+	-- -- self.Text:SetWidth(self.showIconOnly and 0 or self.data.width)
+	-- self.Text:SetWidth(self.showIconOnly and 0 or 1)
+
+	-- print("width", self.Text:GetWidth(), "icon width", self.Icon:GetWidth())
+
+	-- if self.data.align == "LEFT" then
+	-- 	self.Icon:SetPoint("LEFT", self.padding)
+	-- else
+	-- 	self.Icon:SetPoint("CENTER", 0, 0)
+	-- 	-- self.Icon:SetPoint("CENTER", -self.Text:GetWidth() / 2, 0)
+	-- end
 
 	-- self.Text:ClearAllPoints()
 	-- print("align", self.data.align)
@@ -187,23 +200,28 @@ function TableHeaderCellRewardMixin:GetSortKey()
 	return self.data.reward.id
 end
 
-function TableHeaderCellRewardMixin:GetIconAtlas()
-	return GetRandomArrayEntry({
-		"poi-prey",
-		"worldquest-Capstone-questmarker-epic-Toast",
-		"worldquest-icon-boss",
-		"vignettekillboss",
-		"quest-wrapper-available",
-		"UI-EventPoi-abundancebountiful-2x",
-		"UI-EventPoi-stormarionassault",
-		"UI-EventPoi-legendsoftheharanir",
-		"UI-EventPoi-venomoustides",
-		"UI-eventpoi-ulatekminor",
-		"UI-EventPoi-venomoustides",
-		"UI-EventPoi-ecodome",
-		"UI-EventPoi-AqirInvasion",
-		"ui-eventpoi-saltherilssoiree",
-	})
+function TableHeaderCellRewardMixin:UpdateIcon()
+	if self.data.reward.texture then
+		self.Icon:SetTexture(self.data.reward.texture)
+		self.Icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
+	else
+		self.Icon:SetAtlas(GetRandomArrayEntry({
+			"poi-prey",
+			"worldquest-Capstone-questmarker-epic-Toast",
+			"worldquest-icon-boss",
+			"vignettekillboss",
+			"quest-wrapper-available",
+			"UI-EventPoi-abundancebountiful-2x",
+			"UI-EventPoi-stormarionassault",
+			"UI-EventPoi-legendsoftheharanir",
+			"UI-EventPoi-venomoustides",
+			"UI-eventpoi-ulatekminor",
+			"UI-EventPoi-venomoustides",
+			"UI-EventPoi-ecodome",
+			"UI-EventPoi-AqirInvasion",
+			"ui-eventpoi-saltherilssoiree",
+		}))
+	end
 end
 
 function TableHeaderCellRewardMixin:HideColumn()

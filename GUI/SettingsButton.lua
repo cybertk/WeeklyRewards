@@ -70,6 +70,11 @@ function WeeklyRewardsSettingsButtonMixin:OnLoad()
 		Settings:CreateOptionsTree("windowColumnSpacing", rootMenu, "Spacing between columns", { range = { 0, 10, 1 } })
 		Settings:CreateOptionsTree("windowMaxRelativeWidth", rootMenu, L["settings_max_width"], { range = { 0.2, 1, 0.1 } }, L["settings_max_width_percent"])
 		Settings:CreateOptionsTree("windowMaxRows", rootMenu, L["settings_max_rows"], { range = { 5, 70, 5 }, e = 2 }, HUD_EDIT_MODE_SETTING_ACTION_BAR_NUM_ROWS)
+		Settings:CreateOptionsTree("windowHeaderStyle", rootMenu, NARRATION_OBJECT_COLUMN_HEADER, {
+			{ text = HUD_EDIT_MODE_SETTING_DAMAGE_METER_NUMBERS_MINIMAL, value = "MINIMAL" },
+			{ text = HUD_EDIT_MODE_SETTING_DAMAGE_METER_NUMBERS_COMPACT, value = "COMPACT" },
+			{ text = HUD_EDIT_MODE_SETTING_DAMAGE_METER_NUMBERS_COMPLETE, value = "COMPLETE" },
+		})
 		Settings:CreateColorSwatch("windowBackgroundColor", rootMenu, L["settings_background_color"])
 		Settings:CreateColorSwatch("windowPlayerRowColor", rootMenu, L["settings_player_row_color"])
 		Settings:CreateCheckboxMenu("windowBorder", rootMenu, L["settings_show_border"])

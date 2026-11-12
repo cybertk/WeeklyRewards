@@ -203,6 +203,12 @@ function TableHeaderRowMixin:OnLoad()
 			column:OnLoad()
 		end
 
+		if column.data.selectedIndex then
+			local style = Settings:Get("windowHeaderStyle")
+			column.Text:SetShown(mode ~= "MINIMAL")
+			column.Icon:SetShown(mode ~= "COMPACT")
+		end
+
 		column:Layout()
 
 		if column.data.selectedIndex == 1 and (ActiveRewards:IsNewCandidateSelected() or Flags:IsSet("dragTip")) then

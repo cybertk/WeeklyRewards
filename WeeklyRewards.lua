@@ -53,6 +53,7 @@ local defaultSettings = {
 	sortAscending = true,
 	windowPosition = { enabled = false },
 	windowHiddenColumns = {},
+	windowHeaderStyle = "COMPLETE",
 	windowScale = 1,
 	windowMaxRelativeWidth = 0.8,
 	windowMaxRows = 20,
