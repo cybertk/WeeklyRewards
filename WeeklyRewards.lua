@@ -339,11 +339,18 @@ function WeeklyRewards:Init()
 end
 
 function WeeklyRewards:ExecuteChatCommands(command)
+	command = strtrim(command or "")
+
 	if command == "debug" then
 		-- Toggle Debug Mode
 		self.db.global.debug = not self.db.global.debug
 		Util.debug = self.db.global.debug
 		print("Debug Mode:", self.db.global.debug)
+		return
+	end
+
+	if command == "new" then
+		namespace.GUITable:Toggle()
 		return
 	end
 

@@ -266,6 +266,23 @@ function TableDataRowMixin:OnLoad()
 	self:UpdateBackgroundColor(self.data.character:IsCurrent() and Settings:Get("windowPlayerRowColor") or nil)
 end
 
+function TableDataRowMixin:Populate(rowData)
+	self.data = rowData
+	self:UpdateBackgroundColor(rowData.character and rowData.character:IsCurrent() and Settings:Get("windowPlayerRowColor") or nil)
+
+	self:RegisterForDrag("RightButton")
+	self:SetScript("OnDragStart", function()
+		if namespace.GUITable then
+			namespace.GUITable:DragStart()
+		end
+	end)
+	self:SetScript("OnDragStop", function()
+		if namespace.GUITable then
+			namespace.GUITable:DragStop()
+		end
+	end)
+end
+
 function TableDataRowMixin:UpdateBackgroundColor(color)
 	if color then
 		if not self:GetNormalTexture() then

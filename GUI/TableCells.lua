@@ -12,7 +12,9 @@ local TableCellMixin = { padding = 8 }
 
 function TableCellMixin:OnLoad()
 	-- self.Text = self.text
-	self.text:Hide()
+	if self.text then
+		self.text:Hide()
+	end
 	self:SetScript("OnShow", self.OnShow)
 end
 
@@ -94,6 +96,38 @@ function TableHeaderCellMixin:OnClick()
 	end
 
 	namespace.GUIMain:Redraw()
+
+	local mainWindow = namespace.GUIMain.window
+	if namespace.GUITable and namespace.GUITable:IsShown() and not (mainWindow and mainWindow:IsVisible()) then
+		namespace.GUITable:Refresh()
+	end
+end
+
+local function DragTableBuilderWindow()
+	if namespace.GUITable then
+		namespace.GUITable:DragStart()
+	end
+end
+
+local function StopDragTableBuilderWindow()
+	if namespace.GUITable then
+		namespace.GUITable:DragStop()
+	end
+end
+
+function TableHeaderCellMixin:Init(data)
+	self.data = data
+	if not self.Arrow then
+		self:OnLoad()
+	else
+		self.Text:SetText(data.text)
+	end
+	self.Text:SetWordWrap(false)
+	self:Layout()
+
+	self:RegisterForDrag("RightButton")
+	self:SetScript("OnDragStart", DragTableBuilderWindow)
+	self:SetScript("OnDragStop", StopDragTableBuilderWindow)
 end
 
 function TableHeaderCellMixin:AddRewardToGameTooltip(reward)
@@ -179,6 +213,12 @@ end
 
 local TableHeaderCellCharacterMixin = CreateFromMixins(TableHeaderCellMixin)
 
+function TableHeaderCellCharacterMixin:OnLoad()
+	TableHeaderCellMixin.OnLoad(self)
+	self.Icon:Hide()
+	self.Text:Show()
+end
+
 function TableHeaderCellCharacterMixin:GetSortKey()
 	return self.data.key
 end
@@ -233,5 +273,55 @@ function TableHeaderCellRewardMixin:AddExtraStuffToTooltip(tooltip)
 	self:AddRewardToGameTooltip(self.data.reward)
 end
 
+local TableDataCellMixin = CreateFromMixins(TableCellMixin)
+
+function TableDataCellMixin:Init(column)
+	self.column = column
+	self.Text:SetWordWrap(false)
+
+	self:RegisterForDrag("RightButton")
+	self:SetScript("OnDragStart", DragTableBuilderWindow)
+	self:SetScript("OnDragStop", StopDragTableBuilderWindow)
+end
+
+function TableDataCellMixin:Populate(rowData, columnIndex)
+	local cell = rowData.columns and rowData.columns[columnIndex]
+	self.cellData = cell
+
+	local align = self.column and self.column.align or "CENTER"
+	self.Text:SetJustifyH(align)
+	self.Text:ClearAllPoints()
+	local pad = align == "LEFT" and self.padding or 0
+	self.Text:SetPoint(align, self, align, pad, 0)
+
+	local text = ""
+	if cell and cell.text ~= nil then
+		text = type(cell.text) == "string" and cell.text or tostring(cell.text)
+	end
+	self.Text:SetText(text)
+end
+
+function TableDataCellMixin:OnEnter()
+	local cell = self.cellData
+	if cell and cell.onEnter then
+		cell.onEnter(self)
+	end
+end
+
+function TableDataCellMixin:OnLeave()
+	local cell = self.cellData
+	if cell and cell.onLeave then
+		cell.onLeave(self)
+	end
+end
+
+function TableDataCellMixin:OnClick()
+	local cell = self.cellData
+	if cell and cell.onClick then
+		cell.onClick(self:GetParent(), self)
+	end
+end
+
 WeeklyRewardsTableHeaderCellCharacterMixin = TableHeaderCellCharacterMixin
 WeeklyRewardsTableHeaderCellRewardMixin = TableHeaderCellRewardMixin
+WeeklyRewardsTableDataCellMixin = TableDataCellMixin

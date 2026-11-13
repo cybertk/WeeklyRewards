@@ -9,6 +9,7 @@
     <Script file="TableCells.lua" />
     <Script file="TableRows.lua" />
     <Script file="Main.lua" />
+    <Include file="TableBuilder.xml" />
 
     <Button name="WeeklyRewardsVersionButton" mixin="WeeklyRewardsVersionButtonMixin" hidden="true">
         <Size y="10" />

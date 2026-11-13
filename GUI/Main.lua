@@ -630,9 +630,15 @@ end
 
 function Main:MeasureTextWidth(text)
 	if not self.measureText then
-		self.measureText = self.window:CreateFontString("$parentMeasureText", "OVERLAY")
+		self.measureText = UIParent:CreateFontString(nil, "OVERLAY")
 		self.measureText:SetFontObject("GameFontHighlightSmall")
 		self.measureText:Hide()
+	end
+	if self.window and self.measureText:GetParent() ~= self.window then
+		self.measureText:SetParent(self.window)
+		self.measureText:SetScale(1)
+	elseif not self.window then
+		self.measureText:SetScale(Settings:Get("windowScale"))
 	end
 	self.measureText:SetText(text or "")
 	return self.measureText:GetStringWidth()
@@ -811,6 +817,10 @@ function Main:Redraw()
 
 	if true then
 		self:RefreshAllData()
+
+		if namespace.GUITable and namespace.GUITable:IsShown() then
+			namespace.GUITable:Refresh(true)
+		end
 
 		local padding = Constants.TABLE_CELL_PADDING * 2
 		local padding = Settings:Get("windowColumnSpacing") * 2

@@ -1,0 +1,42 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Script file="TableBuilderWindow.lua" />
+
+    <Button name="WeeklyRewardsTableHeaderCellCharacterTemplate" mixin="WeeklyRewardsTableHeaderCellCharacterMixin" virtual="true" registerForClicks="LeftButtonUp">
+        <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+
+    <Button name="WeeklyRewardsTableHeaderCellRewardTemplate" mixin="WeeklyRewardsTableHeaderCellRewardMixin" virtual="true" registerForClicks="LeftButtonUp">
+        <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+
+    <Button name="WeeklyRewardsTableDataCellTemplate" mixin="WeeklyRewardsTableDataCellMixin" virtual="true" registerForClicks="LeftButtonUp">
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString parentKey="Text" inherits="GameFontHighlightSmall" justifyH="CENTER" />
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+
+    <Button name="WeeklyRewardsTableDataRowTemplate" mixin="WeeklyRewardsTableDataRowMixin" virtual="true" enableMouse="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="Background" setAllPoints="true">
+                    <Color r="1" g="1" b="1" a="0.04" />
+                </Texture>
+            </Layer>
+        </Layers>
+    </Button>
+</Ui>
