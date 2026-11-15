@@ -6,10 +6,9 @@ local RewardsGroup = {
 
 namespace.DB.rewardCandidiates["love"] = {
 	{
-		id = "love-main",
+		id = "love-main", -- One-time Mainline Quests
 		key = "Love:Main",
 		group = RewardsGroup.LOVE_EVENT,
-		description = "One-time Mainline Quests",
 		minimumLevel = 1,
 		unlockEvent = 423, -- Love in the Air
 		timeLeft = "end-of-event",
@@ -24,10 +23,10 @@ namespace.DB.rewardCandidiates["love"] = {
 		},
 	},
 	{
-		id = "love-daily",
+		id = "love-daily", -- Daily Quests
 		key = "Love:Daily",
+		description = DAILY_QUEST_TAG_TEMPLATE:format(MAP_LEGEND_CATEGORY_QUESTS),
 		group = RewardsGroup.LOVE_EVENT,
-		description = "Daily Quests",
 		minimumLevel = 10,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		unlockEvent = 423,
@@ -44,10 +43,10 @@ namespace.DB.rewardCandidiates["love"] = {
 		},
 	},
 	{
-		id = "love-boss",
+		id = "love-boss", -- Daily Shadowfang Keep Dungeon Boss: Crown Chemical Co. Trio
 		key = "Love:Boss",
+		description = LFG_TYPE_DAILY_DUNGEON .. ": {dungeon:288}",
 		group = RewardsGroup.LOVE_EVENT,
-		description = "Daily Shadowfang Keep Dungeon Boss: Crown Chemical Co. Trio",
 		minimumLevel = 10,
 		unlockEvent = 423,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
@@ -59,11 +58,9 @@ namespace.DB.rewardCandidiates["love"] = {
 		},
 	},
 	{
-		id = "love-dono",
+		id = "love-dono", -- Donate gold to the Artisan's Consortium to support the Gala of Gifts.
 		key = "Love:Dono",
 		group = RewardsGroup.LOVE_EVENT,
-		description = "Donate gold to the Artisan's Consortium to support the Gala of Gifts.|n|n"
-			.. "The rewards is delivered by mail in several minutes after the donation.",
 		minimumLevel = 1,
 		unlockEvent = 423,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,

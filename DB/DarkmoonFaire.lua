@@ -6,10 +6,9 @@ local RewardsGroup = {
 
 namespace.DB.rewardCandidiates["darkmoon"] = {
 	{
-		id = "df-artifacts",
+		id = "df-artifacts", -- Darkmoon Faire Artifacts
 		key = "DF:Artf.",
 		group = RewardsGroup.DARKMOON_EVENT,
-		description = "Darkmoon Faire Artifacts",
 		minimumLevel = 1,
 		unlockEvent = 479, -- Darkmoon Faire
 		timeLeft = "end-of-event",
@@ -27,10 +26,9 @@ namespace.DB.rewardCandidiates["darkmoon"] = {
 		},
 	},
 	{
-		id = "df-prof",
+		id = "df-prof", -- Darkmoon Faire Profession Quests
 		key = "DF:Prof.",
 		group = RewardsGroup.DARKMOON_EVENT,
-		description = "Darkmoon Faire Profession Quests",
 		minimumLevel = 1,
 		unlockEvent = 479,
 		timeLeft = "end-of-event",
@@ -84,10 +82,10 @@ namespace.DB.rewardCandidiates["darkmoon"] = {
 		},
 	},
 	{
-		id = "df-daily",
+		id = "df-daily", -- Darkmoon Faire Daily Quests
 		key = "DF:Daily",
+		description = DAILY_QUEST_TAG_TEMPLATE:format(MAP_LEGEND_CATEGORY_QUESTS),
 		group = RewardsGroup.DARKMOON_EVENT,
-		description = "Darkmoon Faire Daily Quests",
 		minimumLevel = 1,
 		unlockEvent = 479,
 		pick = 10,
@@ -107,6 +105,7 @@ namespace.DB.rewardCandidiates["darkmoon"] = {
 	{
 		id = "df-test",
 		key = "DF:Test",
+		description = "{quest:29433}",
 		group = RewardsGroup.DARKMOON_EVENT,
 		minimumLevel = 1,
 		unlockEvent = 479,

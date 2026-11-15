@@ -17,10 +17,9 @@ namespace.DB.rewardCandidiates["lunar-festival"] = {
 		},
 	},
 	{
-		id = "lf-kal",
+		id = "lf:12", -- Visiting the Elders in Kalimdor
 		key = "Eld:KAL",
 		group = RewardsGroup.LUNAR_EVENT,
-		description = "Visiting the Elders in Kalimdor",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 327,
@@ -54,10 +53,9 @@ namespace.DB.rewardCandidiates["lunar-festival"] = {
 		},
 	},
 	{
-		id = "lf-ek",
+		id = "lf:13", -- Visiting the Elders in Eastern Kingdoms
 		key = "Eld:EK",
 		group = RewardsGroup.LUNAR_EVENT,
-		description = "Visiting the Elders in Eastern Kingdoms",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 327,
@@ -86,10 +84,9 @@ namespace.DB.rewardCandidiates["lunar-festival"] = {
 		},
 	},
 	{
-		id = "lf-nr",
+		id = "lf:113", -- Visiting the Elders in Northrend
 		key = "Eld:NR",
 		group = RewardsGroup.LUNAR_EVENT,
-		description = "Visiting the Elders in Northrend",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 327,
@@ -116,10 +113,9 @@ namespace.DB.rewardCandidiates["lunar-festival"] = {
 		},
 	},
 	{
-		id = "lf-maelstrom",
+		id = "lf:948", -- Visiting the Elders in The Maelstrom
 		key = "Eld:Maelstrom",
 		group = RewardsGroup.LUNAR_EVENT,
-		description = "Visiting the Elders in The Maelstrom",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 327,
@@ -130,10 +126,9 @@ namespace.DB.rewardCandidiates["lunar-festival"] = {
 		},
 	},
 	{
-		id = "lf-di",
+		id = "lf:1978", -- Visiting the Elders in Dragon Isles
 		key = "Eld:DI",
 		group = RewardsGroup.LUNAR_EVENT,
-		description = "Visiting the Elders in Dragon Isles",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 327,
@@ -150,10 +145,9 @@ namespace.DB.rewardCandidiates["lunar-festival"] = {
 		},
 	},
 	{
-		id = "lf-ka",
+		id = "lf:2274", -- Visiting the Elders in Khaz Algar
 		key = "Eld:KA",
 		group = RewardsGroup.LUNAR_EVENT,
-		description = "Visiting the Elders in Khaz Algar",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 327,
@@ -170,10 +164,9 @@ namespace.DB.rewardCandidiates["lunar-festival"] = {
 		},
 	},
 	{
-		id = "lf-dungeon",
+		id = "lf-dungeon", -- Visiting the Elders in Dungeons
 		key = "Eld:Dgn",
 		group = RewardsGroup.LUNAR_EVENT,
-		description = "Visiting the Elders in Dungeons",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 327,
@@ -195,10 +188,9 @@ namespace.DB.rewardCandidiates["lunar-festival"] = {
 		},
 	},
 	{
-		id = "lf-capital",
+		id = "lf-capital", -- Visiting the Elders in faction Capitals
 		key = "Eld:Capital",
 		group = RewardsGroup.LUNAR_EVENT,
-		description = "Visiting the Elders in faction Capitals",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 327,

@@ -13,7 +13,6 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 	{
 		id = "tww-worldboss",
 		key = "WorldBoss",
-		description = "Weekly World Boss",
 		minimumLevel = 80,
 		entries = {
 			{ quest = 81624 }, -- Orta, the Broken Mountain
@@ -23,9 +22,8 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		},
 	},
 	{
-		id = "tww-archives",
+		id = "tww-archives", -- Archives Meta Quest
 		key = "Archives",
-		description = "Archives Meta Quest",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 70,
 		timeLeft = function()
@@ -46,9 +44,8 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		},
 	},
 	{
-		id = "tww-delves",
+		id = "tww-delves", -- Delves Meta Quest
 		key = "Delves",
-		description = "Delves Meta Quest",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 70,
 		timeLeft = function()
@@ -67,12 +64,11 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 	{
 		id = "tww-worldsoul",
 		key = "Worldsoul",
-		description = "The Call of the Worldsoul",
 		group = RewardsGroup.PINNACLE_CACHE,
 		minimumLevel = 70,
 		entries = {
 			{
-				quest = 82511,
+				quest = 82449,
 				unlockQuest = 82449, -- The Call of the Worldsoul
 				maxCompletion = 1,
 				questPool = {
@@ -131,9 +127,8 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		},
 	},
 	{
-		id = "tww-pact",
+		id = "tww-pact", -- Weekly Azj-Kahet Pact Choice
 		key = "Spider",
-		description = "Weekly Azj-Kahet Pact Choice",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 70,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -170,9 +165,8 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		},
 	},
 	{
-		id = "tww-atm",
+		id = "tww-atm", -- Weekly Awakening the Machine Event
 		key = "Machine",
-		description = "Weekly Awakening the Machine Event",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 70,
 		entries = {
@@ -180,9 +174,8 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		},
 	},
 	{
-		id = "tww-wax",
+		id = "tww-wax", -- Collect wax for Kobolds
 		key = "Wax",
-		description = "Collect wax for Kobolds",
 		group = RewardsGroup.WEEKLY_CACHE,
 		minimumLevel = 80,
 		rollover = true,
@@ -191,9 +184,8 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		},
 	},
 	{
-		id = "tww-lfd",
+		id = "tww-lfd", -- Weekly Dungeon Quest
 		key = "Dungeon",
-		description = "Weekly Dungeon Quest",
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
@@ -229,11 +221,8 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		},
 	},
 	{
-		id = "tww-invasion",
+		id = "tww-invasion", -- Siren Isle Invasion Quests
 		key = "Invasion",
-		description = "Siren Isle Invasion Quests|n|n"
-			.. "Enemies cycle every week from a pool of three types:|n"
-			.. "|cffffff00Vrykul|r, |cffffff00Naga|r, and |cffffff00Pirate|r.",
 		group = RewardsGroup.SIREN_ISLE,
 		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
@@ -348,7 +337,6 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 	{
 		id = "tww-chett",
 		key = "C.H.E.T.T.",
-		description = "Weekly C.H.E.T.T. List",
 		group = RewardsGroup.UNDERMINE,
 		minimumLevel = 80,
 		rollover = true,
@@ -383,9 +371,8 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 		},
 	},
 	{
-		id = "tww-incursion",
+		id = "tww-incursion", -- Daily incursions in Hollowfall or Azj-Kahet
 		key = "Incursion",
-		description = "Daily incursions in Hollowfall or Azj-Kahet",
 		group = RewardsGroup.NIGHTFALL,
 		minimumLevel = 70,
 		rollover = true,

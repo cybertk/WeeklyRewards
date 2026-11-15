@@ -6,10 +6,9 @@ local RewardsGroup = {
 
 namespace.DB.rewardCandidiates["midsummer"] = {
 	{
-		id = "msf-main",
+		id = "msf-main", -- One-time Quests
 		key = "MSF:Main",
 		group = RewardsGroup.MIDSUMMER_EVENT,
-		description = "One-time Quests",
 		minimumLevel = 1,
 		unlockEvent = 341, -- Midsummer Fire Festival
 		timeLeft = "end-of-event",
@@ -26,10 +25,10 @@ namespace.DB.rewardCandidiates["midsummer"] = {
 		},
 	},
 	{
-		id = "msf-daily",
+		id = "msf-daily", -- Daily Quests
 		key = "MSF:Daily",
+		description = DAILY_QUEST_TAG_TEMPLATE:format(MAP_LEGEND_CATEGORY_QUESTS),
 		group = RewardsGroup.MIDSUMMER_EVENT,
-		description = "Daily Quests",
 		minimumLevel = 1,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
 		unlockEvent = 341,
@@ -41,10 +40,9 @@ namespace.DB.rewardCandidiates["midsummer"] = {
 		},
 	},
 	{
-		id = "msf-capital",
+		id = "msf-capital", -- Stealing Frame from faction Capitals
 		key = "MSF:Capital",
 		group = RewardsGroup.MIDSUMMER_EVENT,
-		description = "Stealing Frame from faction Capitals",
 		minimumLevel = 1,
 		timeLeft = "end-of-event",
 		unlockEvent = 341,
@@ -57,10 +55,10 @@ namespace.DB.rewardCandidiates["midsummer"] = {
 		},
 	},
 	{
-		id = "msf-boss",
+		id = "msf-boss", -- Daily Dungeon Boss: The Frost Lord Ahune
 		key = "MSF:Boss",
+		description = LFG_TYPE_DAILY_DUNGEON .. ": {dungeon:286}",
 		group = RewardsGroup.MIDSUMMER_EVENT,
-		description = "Daily Dungeon Boss: The Frost Lord Ahune",
 		minimumLevel = 10,
 		unlockEvent = 341,
 		timeLeft = C_DateAndTime.GetSecondsUntilDailyReset,
