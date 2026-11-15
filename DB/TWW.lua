@@ -79,7 +79,6 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 					82511, -- Worldsoul: Awakening Machine
 					82453, -- Worldsoul: Encore!
 					82516, -- Worldsoul: Forging a Pact
-					82458, -- Worldsoul: Renown
 					82482, -- Worldsoul: Snuffling
 					82483, -- Worldsoul: Spreading the Light
 					82512, -- Worldsoul: World Boss
@@ -259,29 +258,6 @@ namespace.DB.rewardCandidiates[LE_EXPANSION_WAR_WITHIN] = {
 			{ quest = 84299, unlockQuest = 84851 }, -- Pirate Plunder
 			{ quest = 84619, unlockQuest = 84851 }, -- Ooker Dooker Literature Club
 		},
-	},
-	{
-		id = "tww-circlet",
-		key = "Circlet",
-		description = "|T6215518:12|t |cffa335ee[Cyrce's Circlet]|r|n|n"
-			.. "The ring starts at Item Level 642 by completing |cffffff00[A Radiant Vault]|r.|n|n"
-			.. "|T6215533:12|t |cffa335ee[Raw Singing Citrine]|r upgrades the ring to maximum Item Level 658.|n"
-			.. "It drops from all Siren Isle content.",
-		group = RewardsGroup.SIREN_ISLE,
-		minimumLevel = 80,
-		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		rollover = true,
-		entries = {
-			{
-				quest = 0,
-				unlockQuest = 84724, -- The Radiant Vault
-				progressType = 3,
-				items = { 228411 }, -- Cyrce's Circlet
-				upgradeItem = 229365, -- Raw Singing Citrine
-				itemLevelRange = { 642, 645, 649, 652, 655, 658 },
-			},
-		},
-		items = { { item = 229365, amount = 1 } },
 	},
 	{
 		id = "tww-sa-um",

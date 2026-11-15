@@ -74,7 +74,6 @@ namespace.DB.rewardCandidiates["MN"] = {
 					93769, -- Midnight: Housing
 					93889, -- Midnight: Saltheril's Soiree
 					93890, -- Midnight: Abundance
-					93891, -- Midnight: Legends of the Haranir
 					93892, -- Midnight: Stormarion Assault
 					93909, -- Midnight: Delves
 					93910, -- Midnight: Prey
@@ -261,16 +260,6 @@ namespace.DB.rewardCandidiates["MN"] = {
 		entries = { { quest = 94446 } }, -- A Nightmarish Task
 	},
 	{
-		id = "mn-prey-select",
-		key = "|A:worldquest-Prey-Crystal:16:16|aSelect",
-		description = "Preferential Killing|n|cnLIGHTBLUE_FONT_COLOR:Unlocked after reaching Renown 10 in the Preyhunter's Journey.|r",
-		group = RewardsGroup.PREY,
-		minimumLevel = 90,
-		rollover = true,
-		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
-		entries = { { quest = 91277 } }, -- Prey: Preferential Killing
-	},
-	{
 		id = "mn-prey-anguish",
 		key = "|A:worldquest-Prey-Crystal:16:16|aAnguish",
 		group = RewardsGroup.PREY,
@@ -294,7 +283,7 @@ namespace.DB.rewardCandidiates["MN"] = {
 		id = "mn-showdown-n",
 		key = "Showdown:N",
 		group = RewardsGroup.FIELD_ACCOLADES,
-		minimumLevel = 90,
+		minimumLevel = 80,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
 			{ quest = 96713, unlockPoi = 8819 }, -- Showdown on Val
