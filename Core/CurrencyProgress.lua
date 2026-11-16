@@ -13,16 +13,14 @@ function CurrencyProgress:Update()
 	if currency.maxWeeklyQuantity > 0 then
 		self.position = currency.quantityEarnedThisWeek
 		self.total = currency.maxWeeklyQuantity
-
-		if self.total == self.position then
-			self:SetClaimed()
-		end
 	else
 		self.position = currency.totalEarned
 		self.total = currency.maxQuantity
 	end
 
-	if self.position > 0 then
+	if self.total == self.position then
+		self:SetClaimed()
+	elseif self.position > 0 then
 		self:SetStarted()
 	end
 

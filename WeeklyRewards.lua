@@ -137,7 +137,7 @@ function WeeklyRewards:MigrateDB()
 				end
 			elseif n == "mn-pquests" or n == "mn-pdrops" or not p.state then
 				nop()
-			elseif p.state == 1 or (p.state > 1 and p.numObjectives > 1 and p.position == 0) or (p.state == 3 and not p.startedAt) then
+			elseif p.state == 1 or (p.state > 1 and p.numObjectives > 1 and p.position == 0) then
 				c.progress[n] = {}
 			elseif p.type == 6 and p.state == 2 and p.position == 0 then
 				c.progress[n] = {}
