@@ -410,12 +410,12 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = L["column_last_update"],
+			name = LASTONLINE,
 			key = "lastUpdate",
 			align = "CENTER",
 			cell = function(character)
 				local text = Util.FormatLastUpdateTime(character.lastUpdate)
-				return { text = character:IsCurrent() and GREEN_FONT_COLOR:WrapTextInColorCode(text) or text }
+				return { text = character:IsCurrent() and GREEN_FONT_COLOR:WrapTextInColorCode(FRIENDS_LIST_ONLINE) or text }
 			end,
 		},
 	}

@@ -55,7 +55,6 @@ L["automation_fast_loot_tooltip"] = "Loot at maximum speed by removing the delay
 L["column_realm"] = "Realm"
 L["column_covenant"] = "Covenant"
 L["column_location"] = "Location"
-L["column_last_update"] = "LastUpdate"
 
 -- Covenant tooltips
 L["covenant_sanctum_unknown"] = "Sanctum Upgrade status is unknown"

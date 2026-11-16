@@ -56,7 +56,6 @@ L["automation_fast_loot_tooltip"] = "Сбор добычи с максималь
 L["column_realm"] = "Игровой мир"
 L["column_covenant"] = "Ковенант"
 L["column_location"] = "Местоположение"
-L["column_last_update"] = "Обновлено"
 
 -- Covenant tooltips
 L["covenant_sanctum_unknown"] = "Статус обновления Обители неизвестен"
