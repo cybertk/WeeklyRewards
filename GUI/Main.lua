@@ -58,7 +58,7 @@ function Main:AddCloseButton()
 		self.window.titlebar.closeButton.Icon:SetVertexColor(1, 1, 1, 1)
 		Utils:SetBackgroundColor(self.window.titlebar.closeButton, 1, 0, 0, 0.2)
 		self:SetTooltipOwner(GameTooltip, self.window.titlebar.closeButton)
-		GameTooltip:SetText(L["close_button_tooltip"], 1, 1, 1, 1, true)
+		GameTooltip:SetText(CLOSE_CHAT_WINDOW, 1, 1, 1, 1, true)
 		GameTooltip:Show()
 	end)
 	self.window.titlebar.closeButton:SetScript("OnLeave", function()
@@ -385,7 +385,7 @@ function Main:AddCharacterColumns()
 			end,
 		},
 		{
-			name = L["column_location"],
+			name = Util.Capitalize(SPELL_TARGET_TYPE6_DESC),
 			key = "location",
 			align = "CENTER",
 			cell = function(character)
@@ -603,7 +603,7 @@ function Main:AddRewardToGameTooltip(reward)
 	GameTooltip:AddLine(" ")
 
 	if reward.resetTime then
-		GameTooltip:AddLine(L["reward_time_left"] .. WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime())))
+		GameTooltip:AddLine(BONUS_OBJECTIVE_TIME_LEFT:format(WHITE_FONT_COLOR:WrapTextInColorCode(Util.FormatTimeDuration(reward.resetTime - GetServerTime()))))
 	end
 
 	GameTooltip:AddLine(" ")
