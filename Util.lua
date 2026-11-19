@@ -600,7 +600,7 @@ function Util:ResolveTags(s, autoColor)
 		if type == "npc" then
 			local tooltipData = C_TooltipInfo.GetHyperlink("unit:Creature-0-0-0-0-" .. id .. "-0")
 			if tooltipData and tooltipData.lines and tooltipData.lines[1] then
-				name = tooltipData.lines[1].leftText
+				name = not issecretvalue(tooltipData.lines[1].leftText) and tooltipData.lines[1].leftText or nil
 			end
 		elseif type == "currency" then
 			local info = C_CurrencyInfo.GetCurrencyInfo(id)
