@@ -6,6 +6,7 @@
     <Script file="CharactersButton.lua" />
     <Script file="TrackingButton.lua" />
     <Script file="AutomationButton.lua" />
+    <Script file="TableCells.lua" />
     <Script file="TableRows.lua" />
     <Script file="Main.lua" />
 
@@ -71,4 +72,48 @@
             <KeyValue key="flag" value="utils" type="string" />
         </KeyValues>
     </DropdownButton>
+
+    <Button name="WeeklyRewardsTableCellTemplate" virtual="true">
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+
+    <Button name="WeeklyRewardsTableHeaderCellTemplate" inherits="WeeklyRewardsTableCellTemplate" virtual="true">
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="Icon" hidden="true">
+                    <Size x="14" y="14" />
+                </Texture>
+                <Texture parentKey="Arrow" atlas="auctionhouse-ui-sortarrow" useAtlasSize="true" hidden="true" />
+                <MaskTexture parentKey="CircleMask" atlas="CircleMaskScalable" hWrapMode="CLAMPTOBLACKADDITIVE" vWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.Icon" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.Icon" />
+                    </Anchors>
+                </MaskTexture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString parentKey="Text" inherits="GameFontHighlightSmall">
+                    <Color r="1" g="0.82" b="0" />
+                </FontString>
+            </Layer>
+        </Layers>
+        <HighlightTexture atlas="auctionhouse-ui-row-highlight" alphaMode="ADD" />
+        <Scripts>
+            <OnEnable method="OnEnable" />
+            <OnDisable method="OnDisable" />
+        </Scripts>
+    </Button>
+
+    <Button name="WeeklyRewardsTableHeaderCellCharacterTemplate" inherits="WeeklyRewardsTableHeaderCellTemplate" mixin="WeeklyRewardsTableHeaderCellCharacterMixin" virtual="true">
+        <KeyValues>
+            <KeyValue key="disableIcon" value="true" type="boolean" />
+        </KeyValues>
+    </Button>
+
+    <Button name="WeeklyRewardsTableHeaderCellRewardTemplate" inherits="WeeklyRewardsTableHeaderCellTemplate" mixin="WeeklyRewardsTableHeaderCellRewardMixin" virtual="true" />
 </Ui>

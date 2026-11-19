@@ -206,21 +206,19 @@ function TableHeaderRowMixin:OnLoad()
 	end
 end
 
+function TableHeaderRowMixin:CreateReorderGhost()
+	local ghost = CreateFrame("Button", nil, UIParent, "WeeklyRewardsTableHeaderCellRewardTemplate")
+
+	ghost:SetFrameStrata("TOOLTIP")
+	ghost:SetFrameLevel(10000)
+
+	return ghost
+end
+
 function TableHeaderRowMixin:OnOrderChangeBegin(source, ghost, blocker)
-	if not ghost.text then
-		ghost.text = ghost:CreateFontString(nil, "OVERLAY")
-		ghost.text:SetFontObject("GameFontHighlightSmall")
-		ghost.text:SetPoint("TOPLEFT", ghost, "TOPLEFT", 8, 0)
-		ghost.text:SetPoint("BOTTOMRIGHT", ghost, "BOTTOMRIGHT", -8, 0)
-		ghost.text:SetJustifyH("CENTER")
-
-		ghost.background = ghost:CreateTexture(nil, "BACKGROUND")
-		ghost.background:SetAllPoints()
-		ghost.background:SetColorTexture(0, 0, 0, 1)
-	end
-
+	ghost:Init(source.data)
+	ghost:Layout()
 	ghost:SetScale(self.window:GetScale())
-	ghost.text:SetText(source.text:GetText())
 
 	for _, column in ipairs(self.columns) do
 		column:SetEnabled(false)

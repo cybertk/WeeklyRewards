@@ -7,7 +7,8 @@ local RewardsGroup = {
 namespace.DB.rewardCandidiates["Delve"] = {
 	{
 		id = "delve-map",
-		key = "|A:delves-bountiful:16:16|aMap",
+		key = "Map",
+		texture = 1064187,
 		description = "{item:265714:0}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
@@ -16,7 +17,8 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	},
 	{
 		id = "delve-stash",
-		key = "|A:delves-bountiful:16:16|aStash",
+		key = "Stash",
+		texture = 5872049,
 		description = "{faction:2796:-4:1}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
@@ -25,7 +27,8 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	},
 	{
 		id = "delve-shards",
-		key = "|A:delves-bountiful:16:16|aShards",
+		key = "Shards",
+		texture = 133016,
 		description = "{currency:3310:0}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 80,
@@ -34,7 +37,8 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	},
 	{
 		id = "delve-abundance", -- Weekly abundance made by finding Dundun within delve
-		key = "|A:delves-bountiful:16:16|aAbundance",
+		key = "Abundance",
+		texture = 647701,
 		description = "{faction:2796:-3:1}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
@@ -43,7 +47,8 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	},
 	{
 		id = "delve-crystals",
-		key = "|A:delves-bountiful:16:16|aCrystals",
+		key = "Crystals",
+		texture = 5931199,
 		description = "{currency:3356:0}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
@@ -52,7 +57,8 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	},
 	{
 		id = "delve-souls",
-		key = "|A:delves-bountiful:16:16|aSouls",
+		key = "Souls",
+		texture = 136214,
 		description = "{item:276547} {item:276548}|n|n{faction:2808:-4:1}|n|n{faction:2808:9:1}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
@@ -61,7 +67,8 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	},
 	{
 		id = "delve-hero",
-		key = "|A:delves-bountiful:16:16|aHero",
+		key = "Hero",
+		atlas = "delves-bountiful",
 		description = "{faction:2796:-9:1}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,
@@ -70,7 +77,8 @@ namespace.DB.rewardCandidiates["Delve"] = {
 	},
 	{
 		id = "delve-fragment-m", -- Mythical Soul Fragments
-		key = "|A:overworld-active-64x64:16:16|aFragment",
+		key = "Fragment",
+		atlas = "overworld-active-64x64",
 		description = "{item:285065}",
 		group = RewardsGroup.DELVE,
 		minimumLevel = 90,

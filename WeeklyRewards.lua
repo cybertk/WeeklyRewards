@@ -49,8 +49,8 @@ local defaultSettings = {
 	},
 	candidates = { "vault", "mn-unity", "mn-trailing", "mn-cc-purge", "delve-shards", "delve-abundance", "mn-pquests", "mn-prey-beacon", "mn-prey-m" },
 	hiddenColumns = {},
-	sortColumn = "lastUpdate",
-	sortAscending = true,
+	windowSortColumn = "lastUpdate",
+	windowSortAscending = true,
 	windowPosition = { enabled = false },
 	windowScale = 1,
 	windowMaxRelativeWidth = 0.8,
@@ -157,6 +157,15 @@ function WeeklyRewards:MigrateDB()
 		self.db.global.main = nil
 		self.db.global.utils = nil
 	end
+
+	if WeeklyRewardsSettings.sortColumn ~= nil then
+		WeeklyRewardsSettings.windowSortColumn = WeeklyRewardsSettings.sortColumn
+		WeeklyRewardsSettings.sortColumn = nil
+	end
+	if WeeklyRewardsSettings.sortAscending ~= nil then
+		WeeklyRewardsSettings.windowSortAscending = WeeklyRewardsSettings.sortAscending
+		WeeklyRewardsSettings.sortAscending = nil
+	end
 end
 
 function WeeklyRewards:OnLoaded()
@@ -204,9 +213,9 @@ function WeeklyRewards:Init()
 	local characterStore = CharacterStore.Load(self.db.global.characters)
 
 	do
-		local sortColumn = Settings:Get("sortColumn")
+		local sortColumn = Settings:Get("windowSortColumn")
 		characterStore:SetSortOrder(sortColumn)
-		if Settings:Get("sortAscending") ~= select(2, characterStore:GetSortOrder()) then
+		if Settings:Get("windowSortAscending") ~= select(2, characterStore:GetSortOrder()) then
 			characterStore:SetSortOrder(sortColumn)
 		end
 	end

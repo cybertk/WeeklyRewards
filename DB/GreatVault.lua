@@ -4,6 +4,7 @@ namespace.DB.rewardCandidiates["vault"] = {
 	{
 		id = "vault",
 		key = "GreatVault",
+		atlas = "greatvault-whole-normal",
 		minimumLevel = 90,
 		timeLeft = C_DateAndTime.GetSecondsUntilWeeklyReset,
 		entries = {
