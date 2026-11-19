@@ -296,6 +296,14 @@ function Settings:CreateOptionsTree(key, menu, text, options, tooltipText, respo
 			radio:SetResponse(response)
 		end
 
+		if option.onEnter then
+			radio:SetOnEnter(option.onEnter)
+		end
+
+		if option.onLeave then
+			radio:SetOnLeave(option.onLeave)
+		end
+
 		if option.tooltip then
 			radio:SetTooltip(self:GenerateTooltip(option.tooltip, option.text))
 		end
@@ -304,6 +312,8 @@ function Settings:CreateOptionsTree(key, menu, text, options, tooltipText, respo
 			radio:SetEnabled(Settings:GenerateTableGetter(key, "enabled"))
 		end
 	end
+
+	return rootMenu
 end
 
 function Settings:CreateColorSwatch(key, menu, text)

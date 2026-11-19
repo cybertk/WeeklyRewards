@@ -24,6 +24,7 @@ L["columns_button_description"] = "Вкл./откл. отслеживание н
 L["settings_show_minimap_button"] = "Показывать кнопку у миникарты"
 L["settings_lock_minimap_button"] = "Заблокировать кнопку у миникарты"
 L["settings_window_title"] = "Окно"
+L["settings_column_layout"] = "Расположение колонок"
 L["settings_max_width"] = "Макс. ширина"
 L["settings_max_width_percent"] = "% от полного экрана"
 L["settings_max_rows"] = "Макс. кол-во строк"

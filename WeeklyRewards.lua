@@ -30,6 +30,7 @@ local Changes = {
 	{ r = 7, rewards = { "mn-disruptions", "mn-enemies" } },
 	{ r = 8, utils = { "FastLoot" } },
 	{ r = 9, rewards = { "mn-foe", "mn-ralkala" }, settings = { "windowPosition" } },
+	{ r = 10, settings = { "windowColumnLayout" } },
 }
 
 local defaultDB = {
@@ -52,6 +53,7 @@ local defaultSettings = {
 	windowSortColumn = "lastUpdate",
 	windowSortAscending = true,
 	windowPosition = { enabled = false },
+	windowColumnLayout = "COMPLETE",
 	windowScale = 1,
 	windowMaxRelativeWidth = 0.8,
 	windowMaxRows = 20,

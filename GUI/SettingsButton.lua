@@ -40,6 +40,18 @@ function TitleBarButtonMixin.AddExtraStuffToTooltip(tooltip, description)
 	Flags:Clear(description.flag, entry.key)
 end
 
+function TitleBarButtonMixin:GetFlagClearClosure(key)
+	self.flagClosures = self.flagClosures or {}
+
+	if not self.flagClosures[key] then
+		self.flagClosures[key] = function()
+			Flags:Clear(self.flag, key)
+		end
+	end
+
+	return self.flagClosures[key]
+end
+
 namespace.TitleBarButtonMixin = TitleBarButtonMixin
 
 WeeklyRewardsSettingsButtonMixin = CreateFromMixins(namespace.TitleBarButtonMixin)
@@ -66,6 +78,15 @@ function WeeklyRewardsSettingsButtonMixin:OnLoad()
 		Settings:CreateCheckboxMenu("minimap", rootMenu, L["settings_lock_minimap_button"], "lock")
 
 		rootMenu:CreateTitle(L["settings_window_title"])
+		local menu = Settings:CreateOptionsTree("windowColumnLayout", rootMenu, Flags:Format(L["settings_column_layout"], self.flag, "windowColumnLayout"), {
+			{
+				text = Flags:Format(HUD_EDIT_MODE_SETTING_DAMAGE_METER_NUMBERS_COMPACT, self.flag, "windowColumnLayout"),
+				value = "COMPACT",
+				onEnter = self:GetFlagClearClosure("windowColumnLayout"),
+			},
+			{ text = HUD_EDIT_MODE_SETTING_DAMAGE_METER_NUMBERS_COMPLETE, value = "COMPLETE" },
+		})
+
 		Settings:CreateOptionsTree("windowScale", rootMenu, RENDER_SCALE, { range = { 0.8, 2, 0.1 } })
 		Settings:CreateOptionsTree("windowMaxRelativeWidth", rootMenu, L["settings_max_width"], { range = { 0.2, 1, 0.1 } }, L["settings_max_width_percent"])
 		Settings:CreateOptionsTree("windowMaxRows", rootMenu, L["settings_max_rows"], { range = { 5, 70, 5 }, e = 2 }, HUD_EDIT_MODE_SETTING_ACTION_BAR_NUM_ROWS)
