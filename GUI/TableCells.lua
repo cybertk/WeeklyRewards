@@ -86,6 +86,11 @@ function TableHeaderCellMixin:GetIconTexture() end
 
 function TableHeaderCellMixin:GetIconAtlas() end
 
+function TableHeaderCellMixin:HideColumn()
+	self:OnHideColumn()
+	namespace.GUIMain:Redraw()
+end
+
 function TableHeaderCellMixin:Layout()
 	self:UpdateArrow()
 	self:UpdateIcon()
@@ -201,7 +206,7 @@ function TableHeaderCellCharacterMixin:GetText()
 	return self.data.text
 end
 
-function TableHeaderCellCharacterMixin:HideColumn()
+function TableHeaderCellCharacterMixin:OnHideColumn()
 	Settings:Get("hiddenColumns")[self.data.text] = true
 end
 
@@ -227,7 +232,7 @@ function TableHeaderCellRewardMixin:GetIconAtlas()
 	return self.data.reward.atlas or "quest-recurring-available"
 end
 
-function TableHeaderCellRewardMixin:HideColumn()
+function TableHeaderCellRewardMixin:OnHideColumn()
 	ActiveRewards.Get():ToggleExclusion(self.data.reward:GetCandidateID())
 end
 
