@@ -428,6 +428,7 @@ function Main:AddCharacterColumns()
 	}
 
 	CharacterColumns = columns
+	self.columns = columns -- Used by settings
 end
 
 local Cell = function(character, reward)
